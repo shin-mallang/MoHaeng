@@ -25,6 +25,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	// Record class 모킹하기 위한 dependency
+	testImplementation 'org.mockito:mockito-inline'
 }
 
 tasks.named('test') {
