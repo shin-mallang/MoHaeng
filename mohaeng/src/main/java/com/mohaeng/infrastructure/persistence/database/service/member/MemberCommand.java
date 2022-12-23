@@ -1,5 +1,7 @@
 package com.mohaeng.infrastructure.persistence.database.service.member;
 
+import com.mohaeng.common.member.dto.CreateMemberDto;
+import com.mohaeng.infrastructure.persistence.database.entity.member.MemberJpaEntity;
 import com.mohaeng.infrastructure.persistence.database.repository.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,5 +14,16 @@ public class MemberCommand {
 
     public MemberCommand(final MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
+    }
+
+    public void save(final CreateMemberDto createMemberDto) {
+        MemberJpaEntity memberJpaEntity = new MemberJpaEntity(
+                createMemberDto.username(),
+                createMemberDto.password(),
+                createMemberDto.name(),
+                createMemberDto.age(),
+                createMemberDto.gender()
+        );
+        memberRepository.save(memberJpaEntity);
     }
 }

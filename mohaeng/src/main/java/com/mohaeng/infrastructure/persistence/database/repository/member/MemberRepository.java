@@ -5,4 +5,6 @@ import com.mohaeng.infrastructure.persistence.database.entity.member.MemberJpaEn
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<MemberJpaEntity, Long> {
+
+    boolean existsByUsername(final String username);
 }

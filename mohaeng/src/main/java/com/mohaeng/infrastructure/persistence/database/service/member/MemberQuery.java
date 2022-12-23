@@ -13,4 +13,8 @@ public class MemberQuery {
     public MemberQuery(final MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
+
+    public boolean existsByUsername(final String username) {
+        return memberRepository.existsByUsername(username);
+    }
 }
