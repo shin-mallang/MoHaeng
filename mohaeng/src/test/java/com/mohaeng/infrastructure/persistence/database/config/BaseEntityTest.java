@@ -2,13 +2,15 @@ package com.mohaeng.infrastructure.persistence.database.config;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 @DisplayName("BaseEntity 는 ")
@@ -27,8 +29,10 @@ class BaseEntityTest {
         em.persist(entity);
 
         // then
-        Assertions.assertThat(entity.createdAt()).isNotNull();
-        Assertions.assertThat(entity.lastModifiedAt()).isNotNull();
+        assertAll(
+                () -> assertThat(entity.createdAt()).isNotNull(),
+                () -> assertThat(entity.lastModifiedAt()).isNotNull()
+        );
     }
 
     @Test
@@ -46,8 +50,10 @@ class BaseEntityTest {
         em.clear();
 
         // then
-        Assertions.assertThat(entity.createdAt()).isEqualTo(before);
-        Assertions.assertThat(entity.lastModifiedAt()).isNotEqualTo(before);
+        assertAll(
+                () -> assertThat(entity.createdAt()).isEqualTo(before),
+                () -> assertThat(entity.lastModifiedAt()).isNotEqualTo(before)
+        );
     }
 
     @Entity
