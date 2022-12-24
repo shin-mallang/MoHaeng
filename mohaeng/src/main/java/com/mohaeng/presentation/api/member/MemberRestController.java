@@ -1,6 +1,7 @@
 package com.mohaeng.presentation.api.member;
 
 import com.mohaeng.domain.member.usecase.SignUpUseCase;
+import com.mohaeng.presentation.api.member.mapper.MemberControllerMapper;
 import com.mohaeng.presentation.api.member.request.SignUpRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,14 +22,8 @@ public class MemberRestController {
     public void signUp(
             @Valid @RequestBody final SignUpRequest signUpRequest
     ) {
-        // TODO Mapper 사용
         signUpUseCase.command(
-                new SignUpUseCase.Command(
-                        signUpRequest.username(),
-                        signUpRequest.password(),
-                        signUpRequest.name(),
-                        signUpRequest.age(),
-                        signUpRequest.gender())
+                MemberControllerMapper.toDomainLayerDto(signUpRequest)
         );
     }
 }

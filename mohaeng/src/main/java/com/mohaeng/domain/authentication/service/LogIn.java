@@ -6,7 +6,7 @@ import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationExcept
 import com.mohaeng.domain.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.member.domain.Member;
 import com.mohaeng.domain.member.domain.enums.PasswordMatchResult;
-import com.mohaeng.domain.member.service.mapper.MemberMapper;
+import com.mohaeng.domain.member.service.mapper.MemberDomainMapper;
 import com.mohaeng.infrastructure.persistence.database.entity.member.MemberJpaEntity;
 import com.mohaeng.infrastructure.persistence.database.service.member.MemberQuery;
 import com.mohaeng.infrastructure.persistence.database.service.member.exception.NotFoundMemberException;
@@ -28,7 +28,7 @@ public class LogIn implements LogInUseCase {
 
     @Override
     public AccessToken command(final Command command) {
-        Member member = MemberMapper.toDomainEntity(
+        Member member = MemberDomainMapper.toDomainEntity(
                 findByUsername(command.username())
         );
         // 비밀번호 일치여부 확인

@@ -1,6 +1,6 @@
 package com.mohaeng.infrastructure.persistence.database.service.member;
 
-import com.mohaeng.common.member.dto.CreateMemberDto;
+import com.mohaeng.infrastructure.persistence.database.service.member.dto.CreateMemberDto;
 import com.mohaeng.infrastructure.persistence.database.entity.member.MemberJpaEntity;
 import com.mohaeng.infrastructure.persistence.database.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;

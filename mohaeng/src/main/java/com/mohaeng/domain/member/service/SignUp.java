@@ -1,7 +1,7 @@
 package com.mohaeng.domain.member.service;
 
-import com.mohaeng.common.member.dto.CreateMemberDto;
 import com.mohaeng.domain.member.exception.DuplicateUsernameException;
+import com.mohaeng.domain.member.service.mapper.MemberDomainMapper;
 import com.mohaeng.domain.member.usecase.SignUpUseCase;
 import com.mohaeng.infrastructure.persistence.database.service.member.MemberCommand;
 import com.mohaeng.infrastructure.persistence.database.service.member.MemberQuery;
@@ -26,13 +26,7 @@ public class SignUp implements SignUpUseCase {
         checkDuplicateUsername(command.username());
 
         // TODO 비밀번호 암호화
-        memberCommand.save(new CreateMemberDto(
-                command.username(),
-                command.password(),
-                command.name(),
-                command.age(),
-                command.gender()
-        ));
+        memberCommand.save(MemberDomainMapper.toPersistenceLayerDto(command));
     }
 
     /**
