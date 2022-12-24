@@ -79,7 +79,7 @@ class MemberRestControllerTest {
     @DisplayName("회원가입(signUp)시 중복 아이디인 경우 409를 반환한다.")
     void signUpFailCauseByDuplicatedUsernameWillReturn409() throws Exception {
 
-        doThrow(DuplicateUsernameException.class).when(signUpUseCase).command(any());
+        doThrow(new DuplicateUsernameException()).when(signUpUseCase).command(any());
 
         ResultActions resultActions = mockMvc.perform(
                         post("/api/v1/sign-up")
@@ -90,15 +90,7 @@ class MemberRestControllerTest {
                 .andExpect(status().isConflict());
 
         resultActions.andDo(document("sign-up fail(duplicated username)",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestFields(
-                        fieldWithPath("username").type(STRING).description("username(아이디)"),
-                        fieldWithPath("password").type(STRING).description("password(비밀번호)"),
-                        fieldWithPath("name").type(STRING).description("name(이름)"),
-                        fieldWithPath("age").type(NUMBER).description("age(나이)"),
-                        fieldWithPath("gender").type(STRING).description("gender(성별)")
-                )
+                getDocumentResponse()
         ));
     }
 
@@ -114,15 +106,7 @@ class MemberRestControllerTest {
                 .andExpect(status().isBadRequest());
 
         resultActions.andDo(document("sign-up fail(request fields contains empty value)",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestFields(
-                        fieldWithPath("username").type(STRING).description("username(아이디)"),
-                        fieldWithPath("password").type(STRING).description("password(비밀번호)"),
-                        fieldWithPath("name").type(STRING).description("name(이름)"),
-                        fieldWithPath("age").type(NUMBER).description("age(나이)"),
-                        fieldWithPath("gender").type(STRING).description("gender(성별)")
-                )
+                getDocumentResponse()
         ));
     }
 }
