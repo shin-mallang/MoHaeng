@@ -1,5 +1,6 @@
 package com.mohaeng.presentation.config.aop;
 
+import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.domain.member.exception.DuplicateUsernameException;
 import com.mohaeng.presentation.config.ErrorResponseDto;
 import org.slf4j.Logger;
@@ -13,8 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static java.util.stream.Collectors.joining;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class ApiRestControllerAdvice {
@@ -44,6 +44,16 @@ public class ApiRestControllerAdvice {
     ErrorResponseDto handleException(HttpMessageNotReadableException e) {
         log.error(e.getMessage());
         return new ErrorResponseDto(BAD_REQUEST.name(), "ENUM 매핑 시 오류 발생");
+    }
+
+    /**
+     * 401
+     */
+    @ResponseStatus(UNAUTHORIZED)
+    @ExceptionHandler(IncorrectAuthenticationException.class)
+    ErrorResponseDto handleException(IncorrectAuthenticationException e) {
+        log.error(e.getMessage());
+        return new ErrorResponseDto(UNAUTHORIZED.name(), e.getMessage());
     }
 
     /**
