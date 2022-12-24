@@ -21,6 +21,7 @@ public class MemberRestController {
     public void signUp(
             @Valid @RequestBody final SignUpRequest signUpRequest
     ) {
+        // TODO Mapper 사용
         signUpUseCase.command(
                 new SignUpUseCase.Command(
                         signUpRequest.username(),

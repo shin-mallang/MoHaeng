@@ -3,17 +3,15 @@ package com.mohaeng.domain.authentication.service;
 import com.mohaeng.common.jwt.Claims;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationException;
+import com.mohaeng.domain.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.member.domain.Member;
 import com.mohaeng.domain.member.domain.enums.PasswordMatchResult;
 import com.mohaeng.domain.member.service.mapper.MemberMapper;
-import com.mohaeng.domain.authentication.usecase.LogInUseCase;
 import com.mohaeng.infrastructure.persistence.database.entity.member.MemberJpaEntity;
 import com.mohaeng.infrastructure.persistence.database.service.member.MemberQuery;
 import com.mohaeng.infrastructure.persistence.database.service.member.exception.NotFoundMemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
 
 @Service
 @Transactional(readOnly = true)
@@ -65,9 +63,10 @@ public class LogIn implements LogInUseCase {
      * 회원 정보를 가지고 토큰 생성하기
      */
     private AccessToken createToken(final Member member) {
-        String accessToken = jwtService.createAccessToken(new Claims(new HashMap<>() {{
-            put(MEMBER_ID_CLAIM, String.valueOf(member.id()));
-        }}));
+        Claims claims = new Claims();
+        claims.addClaims(MEMBER_ID_CLAIM, String.valueOf(member.id()));
+
+        String accessToken = jwtService.createAccessToken(claims);
         return new AccessToken(accessToken, member.id());
     }
 }
