@@ -30,27 +30,51 @@ public class JwtServiceImpl implements JwtService {
                 MILLISECONDS.convert(jwtProperties.accessTokenExpirationPeriodDay(), DAYS);
     }
 
+    /**
+     * Access Token 생성
+     */
     @Override
     public String createAccessToken(final Claims claims) {
-        JWTCreator.Builder builder =
-                JWT.create()
-                        .withExpiresAt(
-                                new Date(accessTokenExpirationPeriodDayToMills + System.currentTimeMillis())
-                        );
+        // 만료일 지정
+        JWTCreator.Builder builder = defaultJwtBuilderWithExpire();
 
-        claims.claims()
-                .keySet()
-                .forEach(key -> builder.withClaim(key, claims.get(key)));
+        // Claim 세팅
+        fillClaims(claims, builder);
 
         return builder.sign(algorithm);
     }
 
+    /**
+     * 만료일 설정한 JWT Builder 반환
+     */
+    private JWTCreator.Builder defaultJwtBuilderWithExpire() {
+        return JWT.create()
+                .withExpiresAt(
+                        new Date(accessTokenExpirationPeriodDayToMills + System.currentTimeMillis())
+                );
+    }
+
+    /**
+     * claim 채우기
+     */
+    private void fillClaims(final Claims claims, final JWTCreator.Builder builder) {
+        claims.claims()
+                .keySet()
+                .forEach(key -> builder.withClaim(key, claims.get(key)));
+    }
+
+    /**
+     * Token 으로부터 Claim들 추출
+     */
     @Override
     public Claims getClaims(final String token) {
         DecodedJWT jwt = decodeJwt(token);
         return toClaims(jwt);
     }
 
+    /**
+     * JWT 디코딩
+     */
     private DecodedJWT decodeJwt(final String token) {
         try {
             return JWT.require(algorithm)
@@ -61,6 +85,9 @@ public class JwtServiceImpl implements JwtService {
         }
     }
 
+    /**
+     * JWT를 Claims로 매핑
+     */
     private static Claims toClaims(final DecodedJWT jwt) {
         Map<String, String> collect = jwt.getClaims()
                 .keySet()
