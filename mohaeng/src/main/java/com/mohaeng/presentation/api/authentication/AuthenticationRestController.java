@@ -2,7 +2,7 @@ package com.mohaeng.presentation.api.authentication;
 
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.domain.authentication.usecase.LogInUseCase;
-import com.mohaeng.presentation.api.authentication.mapper.AuthenticationMapper;
+import com.mohaeng.presentation.api.authentication.mapper.AuthenticationControllerMapper;
 import com.mohaeng.presentation.api.authentication.request.LoginRequest;
 import com.mohaeng.presentation.api.authentication.response.TokenResponse;
 import jakarta.validation.Valid;
@@ -30,8 +30,8 @@ public class AuthenticationRestController {
             @Valid @RequestBody final LoginRequest loginRequest
     ) {
         AccessToken token = logInUseCase.command(
-            AuthenticationMapper.toLoginDto(loginRequest)
+                AuthenticationControllerMapper.toDomainLayerDto(loginRequest)
         );
-        return ResponseEntity.ok(AuthenticationMapper.toResponseDto(token));
+        return ResponseEntity.ok(AuthenticationControllerMapper.toResponseDto(token));
     }
 }

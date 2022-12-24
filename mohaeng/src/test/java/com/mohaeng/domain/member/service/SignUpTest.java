@@ -1,7 +1,7 @@
 package com.mohaeng.domain.member.service;
 
 import com.mohaeng.common.member.Gender;
-import com.mohaeng.common.member.dto.CreateMemberDto;
+import com.mohaeng.infrastructure.persistence.database.service.member.dto.CreateMemberDto;
 import com.mohaeng.domain.member.exception.DuplicateUsernameException;
 import com.mohaeng.domain.member.usecase.SignUpUseCase;
 import com.mohaeng.infrastructure.persistence.database.service.member.MemberCommand;

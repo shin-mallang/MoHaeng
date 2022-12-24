@@ -5,9 +5,9 @@ import com.mohaeng.domain.authentication.usecase.LogInUseCase;
 import com.mohaeng.presentation.api.authentication.request.LoginRequest;
 import com.mohaeng.presentation.api.authentication.response.TokenResponse;
 
-public class AuthenticationMapper {
+public class AuthenticationControllerMapper {
 
-    public static LogInUseCase.Command toLoginDto(final LoginRequest loginRequest) {
+    public static LogInUseCase.Command toDomainLayerDto(final LoginRequest loginRequest) {
         return new LogInUseCase.Command(loginRequest.username(), loginRequest.password());
     }
 

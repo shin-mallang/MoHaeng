@@ -1,4 +1,4 @@
-package com.mohaeng.common.member.dto;
+package com.mohaeng.infrastructure.persistence.database.service.member.dto;
 
 import com.mohaeng.common.member.Gender;
 
