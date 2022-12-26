@@ -18,7 +18,7 @@ class CreateTokenTest {
     @DisplayName("Claims를 가지고 JWT를 생성한다.")
     void createJWTByClaims() {
         // given
-        Claims claims = new Claims(new HashMap<>(){{
+        Claims claims = new Claims(new HashMap<>() {{
             put("key1", "value1");
             put("key2", "2");
         }});
