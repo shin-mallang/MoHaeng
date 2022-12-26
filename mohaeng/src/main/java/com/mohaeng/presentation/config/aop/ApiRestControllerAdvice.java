@@ -2,6 +2,8 @@ package com.mohaeng.presentation.config.aop;
 
 import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.domain.member.exception.DuplicateUsernameException;
+import com.mohaeng.domain.authentication.exception.InvalidAccessTokenException;
+import com.mohaeng.infrastructure.authentication.jwt.exception.NotFoundAccessTokenException;
 import com.mohaeng.presentation.config.ErrorResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +54,26 @@ public class ApiRestControllerAdvice {
     @ResponseStatus(UNAUTHORIZED)
     @ExceptionHandler(IncorrectAuthenticationException.class)
     ErrorResponseDto handleException(IncorrectAuthenticationException e) {
+        log.error(e.getMessage());
+        return new ErrorResponseDto(UNAUTHORIZED.name(), e.getMessage());
+    }
+
+    /**
+     * 401
+     */
+    @ResponseStatus(UNAUTHORIZED)
+    @ExceptionHandler(NotFoundAccessTokenException.class)
+    ErrorResponseDto handleException(NotFoundAccessTokenException e) {
+        log.error(e.getMessage());
+        return new ErrorResponseDto(UNAUTHORIZED.name(), e.getMessage());
+    }
+
+    /**
+     * 401
+     */
+    @ResponseStatus(UNAUTHORIZED)
+    @ExceptionHandler(InvalidAccessTokenException.class)
+    ErrorResponseDto handleException(InvalidAccessTokenException e) {
         log.error(e.getMessage());
         return new ErrorResponseDto(UNAUTHORIZED.name(), e.getMessage());
     }
