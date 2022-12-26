@@ -1,9 +1,9 @@
 package com.mohaeng.domain.member.service.mapper;
 
-import com.mohaeng.infrastructure.persistence.database.service.member.dto.CreateMemberDto;
 import com.mohaeng.domain.member.domain.Member;
 import com.mohaeng.domain.member.usecase.SignUpUseCase;
 import com.mohaeng.infrastructure.persistence.database.entity.member.MemberJpaEntity;
+import com.mohaeng.infrastructure.persistence.database.service.member.dto.CreateMemberDto;
 
 public class MemberDomainMapper {
 

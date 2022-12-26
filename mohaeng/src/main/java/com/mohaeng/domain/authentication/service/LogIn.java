@@ -7,6 +7,7 @@ import com.mohaeng.domain.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.member.domain.Member;
 import com.mohaeng.domain.member.domain.enums.PasswordMatchResult;
 import com.mohaeng.domain.member.service.mapper.MemberDomainMapper;
+import com.mohaeng.infrastructure.authentication.jwt.usecase.CreateTokenUseCase;
 import com.mohaeng.infrastructure.persistence.database.entity.member.MemberJpaEntity;
 import com.mohaeng.infrastructure.persistence.database.service.member.MemberQuery;
 import com.mohaeng.infrastructure.persistence.database.service.member.exception.NotFoundMemberException;
@@ -17,13 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class LogIn implements LogInUseCase {
 
-    private static final String MEMBER_ID_CLAIM = "memberId";
-    private final MemberQuery memberQuery;
-    private final JwtService jwtService;
+    public static final String MEMBER_ID_CLAIM = "memberId";
 
-    public LogIn(final MemberQuery memberQuery, final JwtService jwtService) {
+    private final MemberQuery memberQuery;
+    private final CreateTokenUseCase createTokenUseCase;
+
+    public LogIn(final MemberQuery memberQuery, final CreateTokenUseCase createTokenUseCase) {
         this.memberQuery = memberQuery;
-        this.jwtService = jwtService;
+        this.createTokenUseCase = createTokenUseCase;
     }
 
     @Override
@@ -66,7 +68,9 @@ public class LogIn implements LogInUseCase {
         Claims claims = new Claims();
         claims.addClaims(MEMBER_ID_CLAIM, String.valueOf(member.id()));
 
-        String accessToken = jwtService.createAccessToken(claims);
-        return new AccessToken(accessToken, member.id());
+        String accessToken = createTokenUseCase.command(
+                new CreateTokenUseCase.Command(claims)
+        );
+        return new AccessToken(accessToken);
     }
 }

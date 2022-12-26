@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.common.member.Gender;
 import com.mohaeng.domain.member.exception.DuplicateUsernameException;
 import com.mohaeng.domain.member.usecase.SignUpUseCase;
+import com.mohaeng.presentation.api.authentication.argumentresolver.AuthArgumentResolver;
+import com.mohaeng.presentation.api.authentication.interceptor.LogInInterceptor;
 import com.mohaeng.presentation.api.member.request.SignUpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("MemberRestController는 ")
-@WebMvcTest(MemberRestController.class)
+@WebMvcTest(controllers = MemberRestController.class)
 @AutoConfigureRestDocs
 @ExtendWith(RestDocumentationExtension.class)
 class MemberRestControllerTest {
@@ -44,6 +46,12 @@ class MemberRestControllerTest {
 
     @MockBean
     private SignUpUseCase signUpUseCase;
+
+    @MockBean
+    private AuthArgumentResolver authArgumentResolver;
+
+    @MockBean
+    private LogInInterceptor logInInterceptor;
 
     private final SignUpRequest signUpRequest =
             new SignUpRequest("username", "password", "name", 22, Gender.MAN);

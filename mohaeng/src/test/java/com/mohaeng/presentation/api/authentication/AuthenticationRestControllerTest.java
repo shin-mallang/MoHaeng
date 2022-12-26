@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.domain.authentication.usecase.LogInUseCase;
+import com.mohaeng.presentation.api.authentication.argumentresolver.AuthArgumentResolver;
+import com.mohaeng.presentation.api.authentication.interceptor.LogInInterceptor;
 import com.mohaeng.presentation.api.authentication.request.LoginRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +46,13 @@ class AuthenticationRestControllerTest {
     @MockBean
     private LogInUseCase logInUseCase;
 
-    private final LoginRequest loginRequest = new LoginRequest("samepleUsername", "samplePassword");
+    @MockBean
+    private AuthArgumentResolver authArgumentResolver;
+
+    @MockBean
+    private LogInInterceptor logInInterceptor;
+
+    private final LoginRequest loginRequest = new LoginRequest("sampleUsername", "samplePassword");
     private final LoginRequest emptyLoginRequest = new LoginRequest("", "");
     private final String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
@@ -52,7 +60,7 @@ class AuthenticationRestControllerTest {
     @DisplayName("로그인 성공 시 200과 AccessToken을 반환한다.")
     void loginSuccessWillReturn200AndAccessToken() throws Exception {
         when(logInUseCase.command(any()))
-                .thenReturn(new AccessToken(jwt, 1L));
+                .thenReturn(new AccessToken(jwt));
 
         ResultActions resultActions = mockMvc.perform(
                         post("/api/login")

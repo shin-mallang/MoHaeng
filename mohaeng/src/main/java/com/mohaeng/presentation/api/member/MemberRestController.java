@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api")
 public class MemberRestController {
 
+    public static final String SIGN_UP_URL = "/v1/sign-up";
     private final SignUpUseCase signUpUseCase;
 
     public MemberRestController(final SignUpUseCase signUpUseCase) {
@@ -18,7 +19,7 @@ public class MemberRestController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(path = "/v1/sign-up")
+    @PostMapping(path = SIGN_UP_URL)
     public void signUp(
             @Valid @RequestBody final SignUpRequest signUpRequest
     ) {
