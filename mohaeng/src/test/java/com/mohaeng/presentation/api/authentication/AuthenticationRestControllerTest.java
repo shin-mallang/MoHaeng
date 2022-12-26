@@ -44,7 +44,7 @@ class AuthenticationRestControllerTest {
     @MockBean
     private LogInUseCase logInUseCase;
 
-    private final LoginRequest loginRequest = new LoginRequest("samepleUsername", "samplePassword");
+    private final LoginRequest loginRequest = new LoginRequest("sampleUsername", "samplePassword");
     private final LoginRequest emptyLoginRequest = new LoginRequest("", "");
     private final String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 

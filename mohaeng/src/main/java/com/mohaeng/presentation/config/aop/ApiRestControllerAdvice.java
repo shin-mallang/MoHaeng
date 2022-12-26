@@ -1,8 +1,8 @@
 package com.mohaeng.presentation.config.aop;
 
 import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationException;
-import com.mohaeng.domain.member.exception.DuplicateUsernameException;
 import com.mohaeng.domain.authentication.exception.InvalidAccessTokenException;
+import com.mohaeng.domain.member.exception.DuplicateUsernameException;
 import com.mohaeng.infrastructure.authentication.jwt.exception.NotFoundAccessTokenException;
 import com.mohaeng.presentation.config.ErrorResponseDto;
 import org.slf4j.Logger;

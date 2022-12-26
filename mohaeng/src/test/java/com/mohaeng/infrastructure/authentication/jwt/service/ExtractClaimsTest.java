@@ -17,6 +17,7 @@ class ExtractClaimsTest {
 
     private static final String TOKEN =
             "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g";
+
     private final ExtractClaimsUseCase extractClaimsUseCase = new ExtractClaims(new MockJwtProperties());
 
     @Test
