@@ -4,6 +4,7 @@ import com.mohaeng.common.member.Gender;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.domain.authentication.usecase.LogInUseCase;
+import com.mohaeng.infrastructure.authentication.jwt.usecase.CreateTokenUseCase;
 import com.mohaeng.infrastructure.persistence.database.entity.member.MemberJpaEntity;
 import com.mohaeng.infrastructure.persistence.database.service.member.MemberQuery;
 import com.mohaeng.infrastructure.persistence.database.service.member.exception.NotFoundMemberException;
@@ -20,8 +21,8 @@ import static org.mockito.Mockito.*;
 class LogInTest {
 
     private final MemberQuery memberQuery = mock(MemberQuery.class);
-    private final JwtService jwtService = mock(JwtService.class);
-    private final LogInUseCase logInUseCase = new LogIn(memberQuery, jwtService);
+    private final CreateTokenUseCase createTokenUseCase = mock(CreateTokenUseCase.class);
+    private final LogInUseCase logInUseCase = new LogIn(memberQuery, createTokenUseCase);
     private final MemberJpaEntity memberJpaEntity =
             new MemberJpaEntity("username", "password", "name", 10, Gender.MAN);
 
@@ -32,7 +33,7 @@ class LogInTest {
         ReflectionTestUtils.setField(memberJpaEntity, "id", 1L);
         when(memberQuery.findByUsername("username"))
                 .thenReturn(memberJpaEntity);
-        when(jwtService.createAccessToken(any()))
+        when(createTokenUseCase.command(any()))
                 .thenReturn("token");
         // when
         AccessToken token = logInUseCase.command(
