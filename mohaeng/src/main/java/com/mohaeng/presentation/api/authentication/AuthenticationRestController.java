@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api")
 public class AuthenticationRestController {
 
+    public static final String LOGIN_URL = "/login";
+
     private final LogInUseCase logInUseCase;
 
     public AuthenticationRestController(final LogInUseCase logInUseCase) {
@@ -25,7 +27,7 @@ public class AuthenticationRestController {
     /**
      * 로그인
      */
-    @PostMapping(path = "/login")
+    @PostMapping(path = LOGIN_URL)
     public ResponseEntity<TokenResponse> login(
             @Valid @RequestBody final LoginRequest loginRequest
     ) {
