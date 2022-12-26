@@ -6,7 +6,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mohaeng.common.jwt.Claims;
 import com.mohaeng.common.properties.JwtProperties;
-import com.mohaeng.infrastructure.authentication.jwt.exception.AccessTokenInvalidException;
+import com.mohaeng.domain.authentication.domain.AccessToken;
+import com.mohaeng.domain.authentication.exception.InvalidAccessTokenException;
 import com.mohaeng.infrastructure.authentication.jwt.usecase.ExtractClaimsUseCase;
 import org.springframework.stereotype.Component;
 
@@ -32,13 +33,13 @@ public class ExtractClaims implements ExtractClaimsUseCase {
     /**
      * JWT 디코딩
      */
-    private DecodedJWT decodeJwt(final String token) {
+    private DecodedJWT decodeJwt(final AccessToken token) {
         try {
             return JWT.require(algorithm)
                     .build()
-                    .verify(token);
+                    .verify(token.token());
         } catch (JWTVerificationException e) {
-            throw new AccessTokenInvalidException();
+            throw new InvalidAccessTokenException();
         }
     }
 

@@ -52,7 +52,7 @@ class AuthenticationRestControllerTest {
     @DisplayName("로그인 성공 시 200과 AccessToken을 반환한다.")
     void loginSuccessWillReturn200AndAccessToken() throws Exception {
         when(logInUseCase.command(any()))
-                .thenReturn(new AccessToken(jwt, 1L));
+                .thenReturn(new AccessToken(jwt));
 
         ResultActions resultActions = mockMvc.perform(
                         post("/api/login")

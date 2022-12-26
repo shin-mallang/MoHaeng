@@ -42,7 +42,6 @@ class LogInTest {
 
         // then
         assertAll(
-                () -> assertThat(token.memberId()).isEqualTo(1L),
                 () -> assertThat(token.token()).isEqualTo("token"),
                 () -> verify(memberQuery, times(1)).findByUsername("username")
         );

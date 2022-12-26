@@ -2,7 +2,8 @@ package com.mohaeng.infrastructure.authentication.jwt.service;
 
 import com.mohaeng.common.jwt.Claims;
 import com.mohaeng.common.properties.JwtProperties;
-import com.mohaeng.infrastructure.authentication.jwt.exception.AccessTokenInvalidException;
+import com.mohaeng.domain.authentication.domain.AccessToken;
+import com.mohaeng.domain.authentication.exception.InvalidAccessTokenException;
 import com.mohaeng.infrastructure.authentication.jwt.usecase.ExtractClaimsUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class ExtractClaimsTest {
     void returnClaimsWhenGivenToken() {
         // given
         Claims returnClaims = extractClaimsUseCase.command(
-                new ExtractClaimsUseCase.Command(TOKEN)
+                new ExtractClaimsUseCase.Command(new AccessToken(TOKEN))
         );
 
         // then
@@ -37,9 +38,9 @@ class ExtractClaimsTest {
     void throwExceptionWhenInvalidJWT() {
         // when, then
         assertThatThrownBy(() -> extractClaimsUseCase.command(
-                        new ExtractClaimsUseCase.Command("invalid token")
+                        new ExtractClaimsUseCase.Command(new AccessToken("invalid token"))
                 )
-        ).isInstanceOf(AccessTokenInvalidException.class);
+        ).isInstanceOf(InvalidAccessTokenException.class);
     }
 
     private static class MockJwtProperties extends JwtProperties {

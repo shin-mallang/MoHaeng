@@ -18,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class LogIn implements LogInUseCase {
 
-    private static final String MEMBER_ID_CLAIM = "memberId";
+    public static final String MEMBER_ID_CLAIM = "memberId";
+
     private final MemberQuery memberQuery;
     private final CreateTokenUseCase createTokenUseCase;
 
@@ -70,6 +71,6 @@ public class LogIn implements LogInUseCase {
         String accessToken = createTokenUseCase.command(
                 new CreateTokenUseCase.Command(claims)
         );
-        return new AccessToken(accessToken, member.id());
+        return new AccessToken(accessToken);
     }
 }

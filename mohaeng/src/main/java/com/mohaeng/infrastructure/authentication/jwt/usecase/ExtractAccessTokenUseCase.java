@@ -1,14 +1,13 @@
 package com.mohaeng.infrastructure.authentication.jwt.usecase;
 
-import com.mohaeng.common.jwt.Claims;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 
-public interface ExtractClaimsUseCase {
+public interface ExtractAccessTokenUseCase {
 
-    Claims command(final Command command);
+    AccessToken command(final Command command);
 
     record Command(
-            AccessToken token
+            String header
     ) {
     }
 }
