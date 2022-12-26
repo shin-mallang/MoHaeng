@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.domain.authentication.usecase.LogInUseCase;
+import com.mohaeng.presentation.api.authentication.argumentresolver.AuthArgumentResolver;
+import com.mohaeng.presentation.api.authentication.interceptor.LogInInterceptor;
 import com.mohaeng.presentation.api.authentication.request.LoginRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +45,12 @@ class AuthenticationRestControllerTest {
 
     @MockBean
     private LogInUseCase logInUseCase;
+
+    @MockBean
+    private AuthArgumentResolver authArgumentResolver;
+
+    @MockBean
+    private LogInInterceptor logInInterceptor;
 
     private final LoginRequest loginRequest = new LoginRequest("sampleUsername", "samplePassword");
     private final LoginRequest emptyLoginRequest = new LoginRequest("", "");
