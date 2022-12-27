@@ -36,3 +36,21 @@ operation::login fail(username or password miss match)[snippets='http-response']
 
 ==== 필드가 다 채워지지 않은 경우
 operation::login fail(request fields contains empty value)[snippets='http-response']
+
+
+
+[[Club-API]]
+== Club API
+
+[[Club-모임생성]]
+=== 모임생성
+operation::create-club[snippets='http-request,request-body,request-fields,http-response']
+
+=== 생성 요청 시 Header에 AccessToken이 없는 경우
+operation::create-club fail(No Access Token)[snippets='http-response']
+
+==== 필드가 다 채워지지 않은 경우
+operation::create-club fail(request fields contains empty value)[snippets='http-response']
+
+==== content body가 없는 경우
+operation::create-club fail(no content body)[snippets='http-response']
