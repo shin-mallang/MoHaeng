@@ -1,6 +1,6 @@
 package com.mohaeng.presentation.api.member;
 
-import com.mohaeng.domain.member.usecase.SignUpUseCase;
+import com.mohaeng.application.member.usecase.SignUpUseCase;
 import com.mohaeng.presentation.api.member.mapper.MemberControllerMapper;
 import com.mohaeng.presentation.api.member.request.SignUpRequest;
 import jakarta.validation.Valid;

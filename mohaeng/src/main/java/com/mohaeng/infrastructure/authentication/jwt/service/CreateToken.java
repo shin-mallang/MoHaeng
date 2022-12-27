@@ -3,9 +3,9 @@ package com.mohaeng.infrastructure.authentication.jwt.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.mohaeng.common.jwt.Claims;
-import com.mohaeng.common.properties.JwtProperties;
-import com.mohaeng.infrastructure.authentication.jwt.usecase.CreateTokenUseCase;
+import com.mohaeng.application.authentication.usecase.CreateTokenUseCase;
+import com.mohaeng.domain.authentication.domain.Claims;
+import com.mohaeng.infrastructure.authentication.jwt.config.JwtProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

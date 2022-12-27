@@ -1,6 +1,6 @@
 package com.mohaeng.presentation.api.member.request;
 
-import com.mohaeng.common.member.Gender;
+import com.mohaeng.domain.member.domain.enums.Gender;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

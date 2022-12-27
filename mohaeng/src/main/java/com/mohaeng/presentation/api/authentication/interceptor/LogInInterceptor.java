@@ -1,16 +1,16 @@
 package com.mohaeng.presentation.api.authentication.interceptor;
 
-import com.mohaeng.common.jwt.Claims;
+import com.mohaeng.application.authentication.usecase.ExtractAccessTokenUseCase;
+import com.mohaeng.application.authentication.usecase.ExtractClaimsUseCase;
 import com.mohaeng.domain.authentication.domain.AccessToken;
-import com.mohaeng.domain.authentication.exception.InvalidAccessTokenException;
-import com.mohaeng.infrastructure.authentication.jwt.usecase.ExtractAccessTokenUseCase;
-import com.mohaeng.infrastructure.authentication.jwt.usecase.ExtractClaimsUseCase;
+import com.mohaeng.domain.authentication.domain.Claims;
+import com.mohaeng.infrastructure.authentication.jwt.service.exception.InvalidAccessTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import static com.mohaeng.domain.authentication.service.LogIn.MEMBER_ID_CLAIM;
+import static com.mohaeng.application.authentication.service.LogIn.MEMBER_ID_CLAIM;
 import static java.lang.Long.parseLong;
 
 @Component

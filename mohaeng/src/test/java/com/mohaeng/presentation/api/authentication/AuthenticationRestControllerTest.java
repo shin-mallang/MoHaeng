@@ -1,9 +1,9 @@
 package com.mohaeng.presentation.api.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mohaeng.application.authentication.exception.IncorrectAuthenticationException;
+import com.mohaeng.application.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.authentication.domain.AccessToken;
-import com.mohaeng.domain.authentication.exception.IncorrectAuthenticationException;
-import com.mohaeng.domain.authentication.usecase.LogInUseCase;
 import com.mohaeng.presentation.api.authentication.argumentresolver.AuthArgumentResolver;
 import com.mohaeng.presentation.api.authentication.interceptor.LogInInterceptor;
 import com.mohaeng.presentation.api.authentication.request.LoginRequest;

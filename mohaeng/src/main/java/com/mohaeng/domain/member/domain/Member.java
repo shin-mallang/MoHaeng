@@ -1,6 +1,6 @@
 package com.mohaeng.domain.member.domain;
 
-import com.mohaeng.common.member.Gender;
+import com.mohaeng.domain.member.domain.enums.Gender;
 import com.mohaeng.domain.member.domain.enums.PasswordMatchResult;
 
 import java.time.LocalDateTime;

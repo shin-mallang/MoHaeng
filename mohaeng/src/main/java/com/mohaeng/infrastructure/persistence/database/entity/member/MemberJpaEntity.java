@@ -1,6 +1,6 @@
 package com.mohaeng.infrastructure.persistence.database.entity.member;
 
-import com.mohaeng.common.member.Gender;
+import com.mohaeng.domain.member.domain.enums.Gender;
 import com.mohaeng.infrastructure.persistence.database.config.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
