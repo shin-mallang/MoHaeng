@@ -11,6 +11,13 @@ import jakarta.persistence.Table;
 @Table(name = "member")
 public class MemberJpaEntity extends BaseEntity {
 
+    private String username;
+    private String password;
+    private String name;
+    private int age;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     protected MemberJpaEntity() {
     }
 
@@ -27,17 +34,6 @@ public class MemberJpaEntity extends BaseEntity {
         this.age = age;
         this.gender = gender;
     }
-
-    private String username;
-
-    private String password;
-
-    private String name;
-
-    private int age;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
 
     public String username() {
         return username;
