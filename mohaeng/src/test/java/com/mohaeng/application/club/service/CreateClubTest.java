@@ -23,11 +23,12 @@ class CreateClubTest {
         when(clubCommand.save(any(Club.class)))
                 .thenReturn(1L);
 
+        Long presidentId = 10L;
         String name = "sample name";
         String description = "sample description";
         int maxPeopleCount = 100;
         Long clubId = createClubUseCase.command(
-                new CreateClubUseCase.Command(name, description, maxPeopleCount)
+                new CreateClubUseCase.Command(presidentId, name, description, maxPeopleCount)
         );
 
         assertAll(

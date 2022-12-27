@@ -7,6 +7,7 @@ public class ClubApplicationMapper {
 
     public static Club toDomainEntity(final CreateClubUseCase.Command command) {
         return new Club(
+                command.presidentId(),
                 command.name(),
                 command.description(),
                 command.maxPeopleCount()

@@ -6,13 +6,15 @@ public record Club(
         Long id,
         LocalDateTime createdAt,
         LocalDateTime lastModifiedAt,
+
+        Long presidentId,  // 회장 Id
         String name,  // 이름
         String description,  // 설명
         int maxPeopleCount  // 최대 인원수
 ) {
 
-    public Club(final String name, final String description, final int maxPeopleCount) {
+    public Club(final Long presidentId, final String name, final String description, final int maxPeopleCount) {
         this(null, null, null,
-                name, description, maxPeopleCount);
+                presidentId, name, description, maxPeopleCount);
     }
 }

@@ -4,7 +4,11 @@ import com.mohaeng.application.club.mapper.ClubApplicationMapper;
 import com.mohaeng.application.club.usecase.CreateClubUseCase;
 import com.mohaeng.domain.club.domain.Club;
 import com.mohaeng.domain.club.domain.ClubCommand;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class CreateClub implements CreateClubUseCase {
 
     private final ClubCommand clubCommand;
