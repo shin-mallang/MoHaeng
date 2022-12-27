@@ -11,4 +11,8 @@ public record Club(
         int maxPeopleCount  // 최대 인원수
 ) {
 
+    public Club(final String name, final String description, final int maxPeopleCount) {
+        this(null, null, null,
+                name, description, maxPeopleCount);
+    }
 }
