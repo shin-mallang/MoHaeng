@@ -19,7 +19,6 @@ public class MemberRestController {
         this.signUpUseCase = signUpUseCase;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = SIGN_UP_URL)
     public ResponseEntity<Void> signUp(
             @Valid @RequestBody final SignUpRequest signUpRequest
@@ -28,6 +27,6 @@ public class MemberRestController {
                 MemberControllerMapper.toApplicationLayerDto(signUpRequest)
         );
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
