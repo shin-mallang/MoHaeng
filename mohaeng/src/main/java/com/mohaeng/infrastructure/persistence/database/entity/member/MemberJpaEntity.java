@@ -11,33 +11,27 @@ import jakarta.persistence.Table;
 @Table(name = "member")
 public class MemberJpaEntity extends BaseEntity {
 
+    private String username;
+    private String password;
+    private String name;
+    private int age;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     protected MemberJpaEntity() {
     }
 
-    public MemberJpaEntity(
-            final String username,
-            final String password,
-            final String name,
-            final int age,
-            final Gender gender
-    ) {
+    public MemberJpaEntity(final String username,
+                           final String password,
+                           final String name,
+                           final int age,
+                           final Gender gender) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.age = age;
         this.gender = gender;
     }
-
-    private String username;
-
-    private String password;
-
-    private String name;
-
-    private int age;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
 
     public String username() {
         return username;

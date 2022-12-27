@@ -1,22 +1,15 @@
 package com.mohaeng.presentation.api.member;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.application.member.exception.DuplicateUsernameException;
 import com.mohaeng.application.member.usecase.SignUpUseCase;
 import com.mohaeng.domain.member.domain.enums.Gender;
-import com.mohaeng.presentation.api.authentication.argumentresolver.AuthArgumentResolver;
-import com.mohaeng.presentation.api.authentication.interceptor.LogInInterceptor;
+import com.mohaeng.presentation.ControllerTest;
 import com.mohaeng.presentation.api.member.request.SignUpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentRequest;
@@ -32,26 +25,12 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("MemberRestController는 ")
 @WebMvcTest(controllers = MemberRestController.class)
-@AutoConfigureRestDocs
-@ExtendWith(RestDocumentationExtension.class)
-class MemberRestControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+@DisplayName("MemberRestController는 ")
+class MemberRestControllerTest extends ControllerTest {
 
     @MockBean
     private SignUpUseCase signUpUseCase;
-
-    @MockBean
-    private AuthArgumentResolver authArgumentResolver;
-
-    @MockBean
-    private LogInInterceptor logInInterceptor;
 
     private final SignUpRequest signUpRequest =
             new SignUpRequest("username", "password", "name", 22, Gender.MAN);
@@ -70,17 +49,18 @@ class MemberRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        resultActions.andDo(document("sign-up",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestFields(
-                        fieldWithPath("username").type(STRING).description("username(아이디)"),
-                        fieldWithPath("password").type(STRING).description("password(비밀번호)"),
-                        fieldWithPath("name").type(STRING).description("name(이름)"),
-                        fieldWithPath("age").type(NUMBER).description("age(나이)"),
-                        fieldWithPath("gender").type(STRING).description("gender(성별)")
-                )
-        ));
+        resultActions.andDo(
+                document("sign-up",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("username").type(STRING).description("username(아이디)"),
+                                fieldWithPath("password").type(STRING).description("password(비밀번호)"),
+                                fieldWithPath("name").type(STRING).description("name(이름)"),
+                                fieldWithPath("age").type(NUMBER).description("age(나이)"),
+                                fieldWithPath("gender").type(STRING).description("gender(성별)")
+                        )
+                ));
     }
 
     @Test
@@ -97,9 +77,10 @@ class MemberRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict());
 
-        resultActions.andDo(document("sign-up fail(duplicated username)",
-                getDocumentResponse()
-        ));
+        resultActions.andDo(
+                document("sign-up fail(duplicated username)",
+                        getDocumentResponse()
+                ));
     }
 
     @Test
@@ -113,8 +94,9 @@ class MemberRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
-        resultActions.andDo(document("sign-up fail(request fields contains empty value)",
-                getDocumentResponse()
-        ));
+        resultActions.andDo(
+                document("sign-up fail(request fields contains empty value)",
+                        getDocumentResponse()
+                ));
     }
 }

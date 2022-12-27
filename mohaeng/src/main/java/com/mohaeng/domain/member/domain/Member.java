@@ -16,12 +16,11 @@ public record Member(
         Gender gender
 ) {
 
-    public Member(
-            String username,
-            String password,
-            String name,
-            int age,
-            Gender gender
+    public Member(final String username,
+                  final String password,
+                  final String name,
+                  final int age,
+                  final Gender gender
     ) {
         this(null, null, null,
                 username, password, name, age, gender);
