@@ -1,9 +1,9 @@
 package com.mohaeng.presentation.api.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mohaeng.common.member.Gender;
-import com.mohaeng.domain.member.exception.DuplicateUsernameException;
-import com.mohaeng.domain.member.usecase.SignUpUseCase;
+import com.mohaeng.application.member.exception.DuplicateUsernameException;
+import com.mohaeng.application.member.usecase.SignUpUseCase;
+import com.mohaeng.domain.member.domain.enums.Gender;
 import com.mohaeng.presentation.api.authentication.argumentresolver.AuthArgumentResolver;
 import com.mohaeng.presentation.api.authentication.interceptor.LogInInterceptor;
 import com.mohaeng.presentation.api.member.request.SignUpRequest;

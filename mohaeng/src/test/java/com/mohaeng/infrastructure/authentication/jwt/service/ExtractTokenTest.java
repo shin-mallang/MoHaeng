@@ -1,8 +1,8 @@
 package com.mohaeng.infrastructure.authentication.jwt.service;
 
+import com.mohaeng.application.authentication.usecase.ExtractAccessTokenUseCase;
 import com.mohaeng.domain.authentication.domain.AccessToken;
-import com.mohaeng.infrastructure.authentication.jwt.exception.NotFoundAccessTokenException;
-import com.mohaeng.infrastructure.authentication.jwt.usecase.ExtractAccessTokenUseCase;
+import com.mohaeng.domain.authentication.exception.NotFoundAccessTokenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,11 +1,11 @@
 package com.mohaeng.presentation.api.authentication.interceptor;
 
-import com.mohaeng.common.jwt.Claims;
-import com.mohaeng.domain.authentication.exception.InvalidAccessTokenException;
-import com.mohaeng.infrastructure.authentication.jwt.exception.NotFoundAccessTokenException;
+import com.mohaeng.application.authentication.usecase.ExtractAccessTokenUseCase;
+import com.mohaeng.application.authentication.usecase.ExtractClaimsUseCase;
+import com.mohaeng.domain.authentication.domain.Claims;
+import com.mohaeng.domain.authentication.exception.NotFoundAccessTokenException;
 import com.mohaeng.infrastructure.authentication.jwt.service.ExtractAccessToken;
-import com.mohaeng.infrastructure.authentication.jwt.usecase.ExtractAccessTokenUseCase;
-import com.mohaeng.infrastructure.authentication.jwt.usecase.ExtractClaimsUseCase;
+import com.mohaeng.infrastructure.authentication.jwt.service.exception.InvalidAccessTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;

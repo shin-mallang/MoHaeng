@@ -1,7 +1,7 @@
 package com.mohaeng.infrastructure.authentication.jwt.service;
 
-import com.mohaeng.common.jwt.Claims;
-import com.mohaeng.infrastructure.authentication.jwt.usecase.CreateTokenUseCase;
+import com.mohaeng.application.authentication.usecase.CreateTokenUseCase;
+import com.mohaeng.domain.authentication.domain.Claims;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
