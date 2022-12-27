@@ -17,7 +17,6 @@ import static java.lang.Long.parseLong;
 @Component
 public class LogInInterceptor implements HandlerInterceptor {
 
-
     private final ExtractAccessTokenUseCase extractAccessTokenUseCase;
     private final ExtractClaimsUseCase extractClaimsUseCase;
     private final AuthenticationContext authenticationContext;

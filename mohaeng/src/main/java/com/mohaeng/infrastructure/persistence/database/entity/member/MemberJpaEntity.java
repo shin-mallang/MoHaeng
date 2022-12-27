@@ -21,13 +21,11 @@ public class MemberJpaEntity extends BaseEntity {
     protected MemberJpaEntity() {
     }
 
-    public MemberJpaEntity(
-            final String username,
-            final String password,
-            final String name,
-            final int age,
-            final Gender gender
-    ) {
+    public MemberJpaEntity(final String username,
+                           final String password,
+                           final String name,
+                           final int age,
+                           final Gender gender) {
         this.username = username;
         this.password = password;
         this.name = name;

@@ -51,18 +51,19 @@ class ClubRestControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        resultActions.andDo(document("create-club",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
-                ),
-                requestFields(
-                        fieldWithPath("name").type(STRING).description("name(모임 이름)"),
-                        fieldWithPath("description").type(STRING).description("description(모임 설명)"),
-                        fieldWithPath("maxPeopleCount").type(NUMBER).description("maxPeopleCount(모임 최대 수용 인원)")
-                )
-        ));
+        resultActions.andDo(
+                document("create-club",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
+                        ),
+                        requestFields(
+                                fieldWithPath("name").type(STRING).description("name(모임 이름)"),
+                                fieldWithPath("description").type(STRING).description("description(모임 설명)"),
+                                fieldWithPath("maxPeopleCount").type(NUMBER).description("maxPeopleCount(모임 최대 수용 인원)")
+                        )
+                ));
     }
 
     @Test

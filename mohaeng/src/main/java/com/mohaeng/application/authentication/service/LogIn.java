@@ -8,7 +8,6 @@ import com.mohaeng.domain.authentication.domain.Claims;
 import com.mohaeng.domain.member.domain.Member;
 import com.mohaeng.domain.member.domain.MemberQuery;
 import com.mohaeng.domain.member.domain.enums.PasswordMatchResult;
-import com.mohaeng.infrastructure.persistence.database.service.member.MemberJpaQuery;
 import com.mohaeng.infrastructure.persistence.database.service.member.exception.NotFoundMemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

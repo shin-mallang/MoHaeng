@@ -6,6 +6,7 @@ import org.apache.logging.log4j.util.Strings;
 public record AccessToken(
         String token
 ) {
+
     private static final String TOKEN_TYPE = "Bearer ";
     private static final String EMPTY = "";
 

@@ -49,17 +49,18 @@ class MemberRestControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        resultActions.andDo(document("sign-up",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestFields(
-                        fieldWithPath("username").type(STRING).description("username(아이디)"),
-                        fieldWithPath("password").type(STRING).description("password(비밀번호)"),
-                        fieldWithPath("name").type(STRING).description("name(이름)"),
-                        fieldWithPath("age").type(NUMBER).description("age(나이)"),
-                        fieldWithPath("gender").type(STRING).description("gender(성별)")
-                )
-        ));
+        resultActions.andDo(
+                document("sign-up",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("username").type(STRING).description("username(아이디)"),
+                                fieldWithPath("password").type(STRING).description("password(비밀번호)"),
+                                fieldWithPath("name").type(STRING).description("name(이름)"),
+                                fieldWithPath("age").type(NUMBER).description("age(나이)"),
+                                fieldWithPath("gender").type(STRING).description("gender(성별)")
+                        )
+                ));
     }
 
     @Test
@@ -76,9 +77,10 @@ class MemberRestControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict());
 
-        resultActions.andDo(document("sign-up fail(duplicated username)",
-                getDocumentResponse()
-        ));
+        resultActions.andDo(
+                document("sign-up fail(duplicated username)",
+                        getDocumentResponse()
+                ));
     }
 
     @Test
@@ -92,8 +94,9 @@ class MemberRestControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
-        resultActions.andDo(document("sign-up fail(request fields contains empty value)",
-                getDocumentResponse()
-        ));
+        resultActions.andDo(
+                document("sign-up fail(request fields contains empty value)",
+                        getDocumentResponse()
+                ));
     }
 }

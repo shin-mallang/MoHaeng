@@ -49,14 +49,15 @@ class AuthenticationRestControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        resultActions.andDo(document("login",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestFields(
-                        fieldWithPath("username").type(STRING).description("username(아이디)"),
-                        fieldWithPath("password").type(STRING).description("password(비밀번호)")
-                )
-        ));
+        resultActions.andDo(
+                document("login",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("username").type(STRING).description("username(아이디)"),
+                                fieldWithPath("password").type(STRING).description("password(비밀번호)")
+                        )
+                ));
     }
 
     @Test
@@ -73,9 +74,10 @@ class AuthenticationRestControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
 
-        resultActions.andDo(document("login fail(username or password miss match)",
-                getDocumentResponse()
-        ));
+        resultActions.andDo(
+                document("login fail(username or password miss match)",
+                        getDocumentResponse()
+                ));
     }
 
     @Test
@@ -89,8 +91,9 @@ class AuthenticationRestControllerTest extends ControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
-        resultActions.andDo(document("login fail(request fields contains empty value)",
-                getDocumentResponse()
-        ));
+        resultActions.andDo(
+                document("login fail(request fields contains empty value)",
+                        getDocumentResponse()
+                ));
     }
 }

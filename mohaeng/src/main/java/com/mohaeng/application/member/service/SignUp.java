@@ -5,8 +5,6 @@ import com.mohaeng.application.member.mapper.MemberApplicationMapper;
 import com.mohaeng.application.member.usecase.SignUpUseCase;
 import com.mohaeng.domain.member.domain.MemberCommand;
 import com.mohaeng.domain.member.domain.MemberQuery;
-import com.mohaeng.infrastructure.persistence.database.service.member.MemberJpaCommand;
-import com.mohaeng.infrastructure.persistence.database.service.member.MemberJpaQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
