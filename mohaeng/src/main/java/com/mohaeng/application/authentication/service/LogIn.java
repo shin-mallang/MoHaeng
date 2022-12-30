@@ -6,23 +6,22 @@ import com.mohaeng.application.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.domain.authentication.domain.Claims;
 import com.mohaeng.domain.member.domain.Member;
-import com.mohaeng.domain.member.domain.MemberQuery;
+import com.mohaeng.domain.member.domain.MemberRepository;
 import com.mohaeng.domain.member.domain.enums.PasswordMatchResult;
-import com.mohaeng.infrastructure.persistence.database.service.member.exception.NotFoundMemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @Transactional(readOnly = true)
+@Service
 public class LogIn implements LogInUseCase {
 
     public static final String MEMBER_ID_CLAIM = "memberId";
 
-    private final MemberQuery memberQuery;
+    private final MemberRepository memberRepository;
     private final CreateTokenUseCase createTokenUseCase;
 
-    public LogIn(final MemberQuery memberQuery, final CreateTokenUseCase createTokenUseCase) {
-        this.memberQuery = memberQuery;
+    public LogIn(final MemberRepository memberRepository, final CreateTokenUseCase createTokenUseCase) {
+        this.memberRepository = memberRepository;
         this.createTokenUseCase = createTokenUseCase;
     }
 
@@ -41,11 +40,8 @@ public class LogIn implements LogInUseCase {
      * 아이디로 회원을 찾기
      */
     private Member findByUsername(final String username) {
-        try {
-            return memberQuery.findByUsername(username);
-        } catch (NotFoundMemberException e) { // 회원이 없을 때
-            throw new IncorrectAuthenticationException();
-        }
+        return memberRepository.findByUsername(username)
+                .orElseThrow(IncorrectAuthenticationException::new);
     }
 
     /**

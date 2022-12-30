@@ -1,5 +1,6 @@
 package com.mohaeng.infrastructure.persistence.database.config;
 
+import com.mohaeng.domain.config.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
