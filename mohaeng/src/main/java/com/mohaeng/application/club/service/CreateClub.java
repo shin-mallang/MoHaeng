@@ -1,6 +1,5 @@
 package com.mohaeng.application.club.service;
 
-import com.mohaeng.application.club.mapper.ClubApplicationMapper;
 import com.mohaeng.application.club.usecase.CreateClubUseCase;
 import com.mohaeng.domain.club.domain.Club;
 import com.mohaeng.domain.club.domain.ClubCommand;
@@ -19,7 +18,7 @@ public class CreateClub implements CreateClubUseCase {
 
     @Override
     public Long command(final Command command) {
-        Club club = ClubApplicationMapper.toDomainEntity(command);
+        Club club = Club.newClub(command.name(), command.description(), command.maxPeopleCount(), command.presidentId());
         return clubCommand.save(club);
     }
 }

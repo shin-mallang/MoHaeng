@@ -17,6 +17,9 @@ public class ClubJpaEntity extends BaseEntity {
     @OneToMany(mappedBy = "clubJpaEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClubRoleJpaEntity> clubRoleJpaEntities = new ArrayList<>();  // 모임 역할
 
+    @OneToMany(mappedBy = "clubJpaEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubMemberJpaEntity> clubMemberJpaEntities = new ArrayList<>();  // 모임에 참여한 회원
+
     protected ClubJpaEntity() {
     }
 
@@ -26,11 +29,7 @@ public class ClubJpaEntity extends BaseEntity {
         this.maxPeopleCount = maxPeopleCount;
     }
 
-    public void addClubRole(final ClubRoleJpaEntity clubRoleJpaEntity) {
-        clubRoleJpaEntity.confirmClub(this);
-        this.clubRoleJpaEntities.add(clubRoleJpaEntity);
-    }
-
+    //== Getter ==//
     public String name() {
         return name;
     }
@@ -43,7 +42,26 @@ public class ClubJpaEntity extends BaseEntity {
         return maxPeopleCount;
     }
 
-    public List<ClubRoleJpaEntity> clubRoles() {
+    public List<ClubRoleJpaEntity> clubRoleJpaEntities() {
         return clubRoleJpaEntities;
+    }
+
+    public List<ClubMemberJpaEntity> clubMemberJpaEntities() {
+        return clubMemberJpaEntities;
+    }
+
+    //== 연관관계 편의 메서드 ==//
+    public void addClubRole(final ClubRoleJpaEntity clubRoleJpaEntity) {
+        clubRoleJpaEntity.confirmClub(this);
+        this.clubRoleJpaEntities.add(clubRoleJpaEntity);
+    }
+
+    public void addClubMember(final ClubMemberJpaEntity clubMemberJpaEntity) {
+        if (clubMemberJpaEntity.clubRoleJpaEntity() == null
+                || !clubMemberJpaEntity.clubRoleJpaEntity().clubJpaEntity().equals(this)) {
+            throw new IllegalStateException("Club Member의 Club Role이 잘못되었습니다.");
+        }
+        clubMemberJpaEntity.confirmClub(this);
+        this.clubMemberJpaEntities.add(clubMemberJpaEntity);
     }
 }
