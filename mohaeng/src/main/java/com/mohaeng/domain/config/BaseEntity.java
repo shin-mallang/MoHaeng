@@ -1,4 +1,4 @@
-package com.mohaeng.infrastructure.persistence.database.config;
+package com.mohaeng.domain.config;
 
 import jakarta.persistence.*;
 
@@ -15,6 +15,15 @@ public class BaseEntity {
     private LocalDateTime createdAt;
 
     private LocalDateTime lastModifiedAt;
+
+    protected BaseEntity() {
+
+    }
+    public BaseEntity(final Long id, final LocalDateTime createdAt, final LocalDateTime lastModifiedAt) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.lastModifiedAt = lastModifiedAt;
+    }
 
     @PrePersist
     private void prePersist() {

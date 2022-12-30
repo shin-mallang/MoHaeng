@@ -4,9 +4,8 @@ import com.mohaeng.application.member.exception.DuplicateUsernameException;
 import com.mohaeng.application.member.service.SignUp;
 import com.mohaeng.application.member.usecase.SignUpUseCase;
 import com.mohaeng.domain.member.domain.Member;
+import com.mohaeng.domain.member.domain.MemberRepository;
 import com.mohaeng.domain.member.domain.enums.Gender;
-import com.mohaeng.infrastructure.persistence.database.service.member.MemberJpaCommand;
-import com.mohaeng.infrastructure.persistence.database.service.member.MemberJpaQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,22 +17,21 @@ import static org.mockito.Mockito.*;
 @DisplayName("SignUp은 ")
 class SignUpTest {
 
-    private final MemberJpaCommand mockMemberJpaCommand = mock(MemberJpaCommand.class);
-    private final MemberJpaQuery mockMemberJpaQuery = mock(MemberJpaQuery.class);
-    private final SignUpUseCase signUp = new SignUp(mockMemberJpaCommand, mockMemberJpaQuery);
+    private final MemberRepository memberRepository = mock(MemberRepository.class);
+    private final SignUpUseCase signUp = new SignUp(memberRepository);
 
     @Test
     @DisplayName("중복되는 아이디가 있다면 오류를 반환한다.")
     void throwExceptionWhenUsernameDuplicated() {
         // given
-        when(mockMemberJpaQuery.existsByUsername(any())).thenReturn(true);
+        when(memberRepository.existsByUsername(any())).thenReturn(true);
         SignUpUseCase.Command command = SignUpUseCaseCommandFixture.command();
 
         // when, then
         assertAll(
                 () -> assertThatThrownBy(() -> signUp.command(command))
                         .isInstanceOf(DuplicateUsernameException.class),
-                () -> verify(mockMemberJpaCommand, times(0))
+                () -> verify(memberRepository, times(0))
                         .save(any(Member.class))
         );
     }
@@ -47,7 +45,7 @@ class SignUpTest {
         // when, then
         assertAll(
                 () -> assertDoesNotThrow(() -> signUp.command(command)),
-                () -> verify(mockMemberJpaCommand, times(1))
+                () -> verify(memberRepository, times(1))
                         .save(any(Member.class))
         );
     }

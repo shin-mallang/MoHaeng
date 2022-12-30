@@ -5,13 +5,13 @@ import com.mohaeng.application.authentication.usecase.CreateTokenUseCase;
 import com.mohaeng.application.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.domain.member.domain.Member;
+import com.mohaeng.domain.member.domain.MemberRepository;
 import com.mohaeng.domain.member.domain.enums.Gender;
-import com.mohaeng.infrastructure.persistence.database.service.member.MemberJpaQuery;
-import com.mohaeng.infrastructure.persistence.database.service.member.exception.NotFoundMemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,9 +21,9 @@ import static org.mockito.Mockito.*;
 @DisplayName("LogIn은 ")
 class LogInTest {
 
-    private final MemberJpaQuery memberJpaQuery = mock(MemberJpaQuery.class);
+    private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final CreateTokenUseCase createTokenUseCase = mock(CreateTokenUseCase.class);
-    private final LogInUseCase logInUseCase = new LogIn(memberJpaQuery, createTokenUseCase);
+    private final LogInUseCase logInUseCase = new LogIn(memberRepository, createTokenUseCase);
     private final Member member =
             new Member(1L, LocalDateTime.now(), LocalDateTime.now(), "username", "password", "name", 10, Gender.MAN);
 
@@ -31,8 +31,8 @@ class LogInTest {
     @DisplayName("아이디와 비밀번호를 통해 로그인을 진행하고 AccessToken을 반환한다.")
     void loginWithUsernameAndPassword() {
         // given
-        when(memberJpaQuery.findByUsername("username"))
-                .thenReturn(member);
+        when(memberRepository.findByUsername("username"))
+                .thenReturn(Optional.of(member));
         when(createTokenUseCase.command(any()))
                 .thenReturn("token");
         // when
@@ -43,7 +43,7 @@ class LogInTest {
         // then
         assertAll(
                 () -> assertThat(token.token()).isEqualTo("token"),
-                () -> verify(memberJpaQuery, times(1)).findByUsername("username")
+                () -> verify(memberRepository, times(1)).findByUsername("username")
         );
     }
 
@@ -51,8 +51,8 @@ class LogInTest {
     @DisplayName("아이디가 없는 아이디라면 예외를 발생한다.")
     void loginFailCauseByIncorrectUsernameWillReturnException() {
         // given
-        when(memberJpaQuery.findByUsername("username"))
-                .thenThrow(NotFoundMemberException.class);
+        when(memberRepository.findByUsername("username"))
+                .thenReturn(Optional.empty());
 
         // when, then
         assertThatThrownBy(() -> logInUseCase.command(
@@ -64,8 +64,8 @@ class LogInTest {
     @DisplayName("비밀번호가 일치하지 않는다면 예외를 발생한다.")
     void loginFailCauseByIncorrectPasswordWillReturnException() {
         // given
-        when(memberJpaQuery.findByUsername("username"))
-                .thenReturn(member);
+        when(memberRepository.findByUsername("username"))
+                .thenReturn(Optional.of(member));
 
         // when, then
         assertThatThrownBy(() -> logInUseCase.command(

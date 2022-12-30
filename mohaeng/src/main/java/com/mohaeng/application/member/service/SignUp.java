@@ -3,8 +3,7 @@ package com.mohaeng.application.member.service;
 import com.mohaeng.application.member.exception.DuplicateUsernameException;
 import com.mohaeng.application.member.mapper.MemberApplicationMapper;
 import com.mohaeng.application.member.usecase.SignUpUseCase;
-import com.mohaeng.infrastructure.persistence.database.service.member.MemberJpaCommand;
-import com.mohaeng.infrastructure.persistence.database.service.member.MemberJpaQuery;
+import com.mohaeng.domain.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,12 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SignUp implements SignUpUseCase {
 
-    private final MemberJpaCommand memberJpaCommand;
-    private final MemberJpaQuery memberJpaQuery;
+    private final MemberRepository memberRepository;
 
-    public SignUp(final MemberJpaCommand memberJpaCommand, final MemberJpaQuery memberJpaQuery) {
-        this.memberJpaCommand = memberJpaCommand;
-        this.memberJpaQuery = memberJpaQuery;
+    public SignUp(final MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -26,14 +23,14 @@ public class SignUp implements SignUpUseCase {
         checkDuplicateUsername(command.username());
 
         // TODO 비밀번호 암호화
-        memberJpaCommand.save(MemberApplicationMapper.toDomainEntity(command));
+        memberRepository.save(MemberApplicationMapper.toDomainEntity(command));
     }
 
     /**
      * 중복 아이디 검사
      */
     private void checkDuplicateUsername(final String username) {
-        if (memberJpaQuery.existsByUsername(username)) {
+        if (memberRepository.existsByUsername(username)) {
             throw new DuplicateUsernameException();
         }
     }
