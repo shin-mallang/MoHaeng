@@ -7,7 +7,6 @@ import com.mohaeng.domain.authentication.domain.Claims;
 import com.mohaeng.infrastructure.authentication.jwt.service.exception.InvalidAccessTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -16,6 +15,8 @@ import static java.lang.Long.parseLong;
 
 @Component
 public class LogInInterceptor implements HandlerInterceptor {
+
+    private static final String AUTHORIZATION_HEADER = "Authorization";
 
     private final ExtractAccessTokenUseCase extractAccessTokenUseCase;
     private final ExtractClaimsUseCase extractClaimsUseCase;
@@ -34,7 +35,7 @@ public class LogInInterceptor implements HandlerInterceptor {
                              final HttpServletResponse response,
                              final Object handler) {
         AccessToken token = extractAccessTokenUseCase.command(
-                new ExtractAccessTokenUseCase.Command(request.getHeader(HttpHeaders.AUTHORIZATION))
+                new ExtractAccessTokenUseCase.Command(request.getHeader(AUTHORIZATION_HEADER))
         );
         Claims claims = extractClaimsUseCase.command(
                 new ExtractClaimsUseCase.Command(token)
