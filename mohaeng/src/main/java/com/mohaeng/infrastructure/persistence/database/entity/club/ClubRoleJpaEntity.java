@@ -20,12 +20,17 @@ public class ClubRoleJpaEntity extends BaseEntity {
     protected ClubRoleJpaEntity() {
     }
 
-    public ClubRoleJpaEntity(final ClubRoleCategory clubRoleCategory, final String name, final boolean isBasicRole) {
+    public ClubRoleJpaEntity(final ClubRoleCategory clubRoleCategory,
+                             final String name,
+                             final boolean isBasicRole,
+                             final ClubJpaEntity clubJpaEntity) {
         this.clubRoleCategory = clubRoleCategory;
         this.name = name;
         this.isBasicRole = isBasicRole;
+        this.clubJpaEntity = clubJpaEntity;
     }
 
+    //== Getter ==//
     public ClubRoleCategory clubRoleCategory() {
         return clubRoleCategory;
     }
@@ -38,27 +43,10 @@ public class ClubRoleJpaEntity extends BaseEntity {
         return isBasicRole;
     }
 
-    public void changeName(final String name) {
-        this.name = name;
+    public ClubJpaEntity clubJpaEntity() {
+        return clubJpaEntity;
     }
 
-    /**
-     * 기본 역할에서 제거한다.
-     */
-    public void makeGeneralRole() {
-        this.isBasicRole = false;
-    }
-
-    /**
-     * 기본 역할로 만든다.
-     */
-    public void makeBasicRole() {
-        this.isBasicRole = true;
-    }
-
-    /**
-     * Club을 세팅한다.
-     */
     public void confirmClub(final ClubJpaEntity clubJpaEntity) {
         this.clubJpaEntity = clubJpaEntity;
     }
