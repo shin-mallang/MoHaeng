@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
-@DisplayName("MemberQuery는 ")
+@DisplayName("MemberJpaQuery는 ")
 class MemberJpaQueryTest {
 
     private final MemberRepository mockMemberRepository = mock(MemberRepository.class);
