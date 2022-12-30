@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
-@DisplayName("MemberCommand는 ")
+@DisplayName("MemberJpaCommand는 ")
 class MemberJpaCommandTest {
 
     private final MemberRepository mockMemberRepository = mock(MemberRepository.class);
