@@ -45,7 +45,7 @@ public class ApiRestControllerAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ErrorResponseDto handleException(HttpMessageNotReadableException e) {
         log.error(e.getMessage());
-        return new ErrorResponseDto(BAD_REQUEST.name(), "요청 필드가 없거나 잘못되었습니다.");
+        return new ErrorResponseDto(BAD_REQUEST.name(), "ENUM 매핑 시 오류 발생");
     }
 
     /**
