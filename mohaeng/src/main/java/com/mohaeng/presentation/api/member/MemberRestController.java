@@ -5,11 +5,7 @@ import com.mohaeng.presentation.api.member.mapper.MemberControllerMapper;
 import com.mohaeng.presentation.api.member.request.SignUpRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -22,14 +18,13 @@ public class MemberRestController {
         this.signUpUseCase = signUpUseCase;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = SIGN_UP_URL)
-    public ResponseEntity<Void> signUp(
+    public void signUp(
             @Valid @RequestBody final SignUpRequest signUpRequest
     ) {
         signUpUseCase.command(
-                MemberControllerMapper.toApplicationLayerDto(signUpRequest)
+                MemberControllerMapper.toDomainLayerDto(signUpRequest)
         );
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
