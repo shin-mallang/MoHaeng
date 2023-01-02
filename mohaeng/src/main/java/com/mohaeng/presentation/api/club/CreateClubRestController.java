@@ -1,7 +1,7 @@
 package com.mohaeng.presentation.api.club;
 
 import com.mohaeng.application.club.usecase.CreateClubUseCase;
-import com.mohaeng.presentation.api.club.mapper.ClubPersistenceMapper;
+import com.mohaeng.presentation.api.club.mapper.ClubControllerMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -29,7 +29,7 @@ public class CreateClubRestController {
     public ResponseEntity<Void> create(
             @Valid @RequestBody final CreateClubRequest request
     ) {
-        createClubUseCase.command(ClubPersistenceMapper.toApplicationDto(request));
+        createClubUseCase.command(ClubControllerMapper.toApplicationDto(request));
         return status(CREATED).build();
     }
 
