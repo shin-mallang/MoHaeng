@@ -14,7 +14,7 @@ public record AccessToken(
         return new AccessToken(token.replace(TOKEN_TYPE, EMPTY));
     }
 
-    private static void validateToken(String token) {
+    private static void validateToken(final String token) {
         if (token == null) {
             throw new NotFoundAccessTokenException();
         }

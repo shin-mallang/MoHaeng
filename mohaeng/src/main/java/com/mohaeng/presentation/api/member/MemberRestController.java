@@ -24,7 +24,7 @@ public class MemberRestController {
             @Valid @RequestBody final SignUpRequest signUpRequest
     ) {
         signUpUseCase.command(
-                MemberControllerMapper.toDomainLayerDto(signUpRequest)
+                MemberControllerMapper.toApplicationDto(signUpRequest)
         );
     }
 }

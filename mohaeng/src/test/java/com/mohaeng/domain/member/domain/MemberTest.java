@@ -2,13 +2,12 @@ package com.mohaeng.domain.member.domain;
 
 import com.mohaeng.application.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.domain.member.domain.enums.Gender;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Member는 ")
 class MemberTest {

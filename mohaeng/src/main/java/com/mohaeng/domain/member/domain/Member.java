@@ -78,6 +78,7 @@ public class Member extends BaseEntity {
 
     /**
      * 로그인을 수행한다.
+     *
      * @param username 입력받은 아이디
      * @param password 입력받은 비밀번호
      * @throws IncorrectAuthenticationException 아이디 혹은 비밀번호가 일치하지 않은 경우 발생
