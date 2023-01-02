@@ -7,7 +7,6 @@ import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.domain.authentication.domain.Claims;
 import com.mohaeng.domain.member.domain.Member;
 import com.mohaeng.domain.member.domain.MemberRepository;
-import com.mohaeng.domain.member.domain.enums.PasswordMatchResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,7 @@ public class LogIn implements LogInUseCase {
         Member member = findByUsername(command.username());
 
         // 비밀번호 일치여부 확인
-        matchPassword(command.password(), member);
+        member.login(command.username(), command.password());
 
         // AccessToken 생성
         return createToken(member);
@@ -42,16 +41,6 @@ public class LogIn implements LogInUseCase {
     private Member findByUsername(final String username) {
         return memberRepository.findByUsername(username)
                 .orElseThrow(IncorrectAuthenticationException::new);
-    }
-
-    /**
-     * 비밀번호 일치 여부 확인
-     */
-    private static void matchPassword(final String password, final Member member) {
-        PasswordMatchResult result = member.matchPassword(password);
-        if (result == PasswordMatchResult.MISS_MATCH) { // 비밀번호가 일치하지 않을 때
-            throw new IncorrectAuthenticationException();
-        }
     }
 
     /**

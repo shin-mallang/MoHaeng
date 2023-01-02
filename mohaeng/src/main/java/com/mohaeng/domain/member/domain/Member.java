@@ -1,8 +1,8 @@
 package com.mohaeng.domain.member.domain;
 
+import com.mohaeng.application.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.domain.config.BaseEntity;
 import com.mohaeng.domain.member.domain.enums.Gender;
-import com.mohaeng.domain.member.domain.enums.PasswordMatchResult;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,9 +14,19 @@ import java.time.LocalDateTime;
 @Table(name = "member")
 public class Member extends BaseEntity {
 
+    private String username;
+
+    private String password;
+
+    private String name;
+
+    private int age;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     protected Member() {
     }
-
 
     public Member(final Long id,
                   final LocalDateTime createdAt,
@@ -46,17 +56,6 @@ public class Member extends BaseEntity {
         this.gender = gender;
     }
 
-    private String username;
-
-    private String password;
-
-    private String name;
-
-    private int age;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
     public String username() {
         return username;
     }
@@ -77,11 +76,24 @@ public class Member extends BaseEntity {
         return gender;
     }
 
-    public PasswordMatchResult matchPassword(final String password) {
-        // TODO 비밀번호 암호화
-        if (this.password.equals(password)) {
-            return PasswordMatchResult.MATCH;
+    /**
+     * 로그인을 수행한다.
+     * @param username 입력받은 아이디
+     * @param password 입력받은 비밀번호
+     * @throws IncorrectAuthenticationException 아이디 혹은 비밀번호가 일치하지 않은 경우 발생
+     */
+    public void login(final String username, final String password) throws IncorrectAuthenticationException {
+        if (!matchUsername(username) || !matchPassword(password)) {
+            throw new IncorrectAuthenticationException();
         }
-        return PasswordMatchResult.MISS_MATCH;
+    }
+
+    private boolean matchPassword(final String password) {
+        // TODO 비밀번호 암호화
+        return this.password.equals(password);
+    }
+
+    private boolean matchUsername(final String username) {
+        return this.username.equals(username);
     }
 }
