@@ -5,7 +5,7 @@ import com.mohaeng.presentation.api.member.request.SignUpRequest;
 
 public class MemberControllerMapper {
 
-    public static SignUpUseCase.Command toDomainLayerDto(final SignUpRequest signUpRequest) {
+    public static SignUpUseCase.Command toApplicationDto(final SignUpRequest signUpRequest) {
         return new SignUpUseCase.Command(
                 signUpRequest.username(),
                 signUpRequest.password(),
