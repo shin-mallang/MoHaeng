@@ -19,6 +19,7 @@ public class BaseEntity {
     protected BaseEntity() {
 
     }
+
     public BaseEntity(final Long id, final LocalDateTime createdAt, final LocalDateTime lastModifiedAt) {
         this.id = id;
         this.createdAt = createdAt;
