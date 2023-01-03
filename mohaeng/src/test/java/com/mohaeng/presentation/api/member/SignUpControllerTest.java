@@ -4,7 +4,6 @@ import com.mohaeng.application.member.exception.DuplicateUsernameException;
 import com.mohaeng.application.member.usecase.SignUpUseCase;
 import com.mohaeng.domain.member.domain.enums.Gender;
 import com.mohaeng.presentation.ControllerTest;
-import com.mohaeng.presentation.api.member.request.SignUpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.mohaeng.presentation.api.member.SignUpController.SIGN_UP_URL;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,24 +25,24 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = MemberRestController.class)
-@DisplayName("MemberRestController는 ")
-class MemberRestControllerTest extends ControllerTest {
+@WebMvcTest(controllers = SignUpController.class)
+@DisplayName("SignUpController 는 ")
+class SignUpControllerTest extends ControllerTest {
 
     @MockBean
     private SignUpUseCase signUpUseCase;
 
-    private final SignUpRequest signUpRequest =
-            new SignUpRequest("username", "password", "name", 22, Gender.MAN);
+    private final SignUpController.SignUpRequest signUpRequest =
+            new SignUpController.SignUpRequest("username", "password", "name", 22, Gender.MAN);
 
-    private final SignUpRequest nullRequest =
-            new SignUpRequest("", "", "", 0, Gender.MAN);
+    private final SignUpController.SignUpRequest nullRequest =
+            new SignUpController.SignUpRequest("", "", "", 0, Gender.MAN);
 
     @Test
     @DisplayName("회원가입(signUp) 성공 시 201을 반환한다.")
     void signUpSuccessWillReturn201() throws Exception {
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/v1/sign-up")
+                        post(SIGN_UP_URL)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpRequest))
                 )
@@ -70,7 +70,7 @@ class MemberRestControllerTest extends ControllerTest {
         doThrow(new DuplicateUsernameException()).when(signUpUseCase).command(any());
 
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/v1/sign-up")
+                        post(SIGN_UP_URL)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpRequest))
                 )
@@ -87,7 +87,7 @@ class MemberRestControllerTest extends ControllerTest {
     @DisplayName("회원가입(signUp)시 필드가 없는 경우 400을 반환한다.")
     void signUpFailCauseByEmptyRequestFieldWillReturn400() throws Exception {
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/v1/sign-up")
+                        post(SIGN_UP_URL)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(nullRequest))
                 )

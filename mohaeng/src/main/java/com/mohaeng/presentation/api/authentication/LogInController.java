@@ -3,24 +3,21 @@ package com.mohaeng.presentation.api.authentication;
 import com.mohaeng.application.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.presentation.api.authentication.mapper.AuthenticationControllerMapper;
-import com.mohaeng.presentation.api.authentication.request.LoginRequest;
-import com.mohaeng.presentation.api.authentication.response.TokenResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/api")
-public class AuthenticationRestController {
+public class LogInController {
 
-    public static final String LOGIN_URL = "/login";
+    public static final String LOGIN_URL = "/api/login";
 
     private final LogInUseCase logInUseCase;
 
-    public AuthenticationRestController(final LogInUseCase logInUseCase) {
+    public LogInController(final LogInUseCase logInUseCase) {
         this.logInUseCase = logInUseCase;
     }
 
@@ -35,5 +32,19 @@ public class AuthenticationRestController {
                 AuthenticationControllerMapper.toApplicationLayerDto(loginRequest)
         );
         return ResponseEntity.ok(AuthenticationControllerMapper.toResponseDto(token));
+    }
+
+    public record LoginRequest(
+            @NotBlank(message = "아이디가 입력되지 않았습니다.")
+            String username,
+
+            @NotBlank(message = "비밀번호가 입력되지 않았습니다.")
+            String password
+    ) {
+    }
+
+    public record TokenResponse(
+            String token
+    ) {
     }
 }
