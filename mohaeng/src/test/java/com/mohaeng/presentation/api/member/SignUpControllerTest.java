@@ -41,7 +41,7 @@ class SignUpControllerTest extends ControllerTest {
     @DisplayName("회원가입(signUp) 성공 시 201을 반환한다.")
     void signUpSuccessWillReturn201() throws Exception {
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/v1/sign-up")
+                        post("/api/sign-up")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpRequest))
                 )
@@ -69,7 +69,7 @@ class SignUpControllerTest extends ControllerTest {
         doThrow(new DuplicateUsernameException()).when(signUpUseCase).command(any());
 
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/v1/sign-up")
+                        post("/api/sign-up")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpRequest))
                 )
@@ -86,7 +86,7 @@ class SignUpControllerTest extends ControllerTest {
     @DisplayName("회원가입(signUp)시 필드가 없는 경우 400을 반환한다.")
     void signUpFailCauseByEmptyRequestFieldWillReturn400() throws Exception {
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/v1/sign-up")
+                        post("/api/sign-up")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(nullRequest))
                 )
