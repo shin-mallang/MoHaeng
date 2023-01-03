@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-import static com.mohaeng.presentation.api.authentication.AuthenticationRestController.LOGIN_URL;
+import static com.mohaeng.presentation.api.authentication.LogInController.LOGIN_URL;
 import static com.mohaeng.presentation.api.member.SignUpController.SIGN_UP_URL;
 
 @Configuration

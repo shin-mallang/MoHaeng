@@ -6,7 +6,6 @@ import com.mohaeng.application.authentication.exception.IncorrectAuthenticationE
 import com.mohaeng.application.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.presentation.ControllerTest;
-import com.mohaeng.presentation.api.authentication.request.LoginRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,15 +25,15 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = AuthenticationRestController.class)
-@DisplayName("AuthenticationRestController 는 ")
-class AuthenticationRestControllerTest extends ControllerTest {
+@WebMvcTest(controllers = LogInController.class)
+@DisplayName("LogInController는 ")
+class LogInControllerTest extends ControllerTest {
 
     @MockBean
     private LogInUseCase logInUseCase;
 
-    private final LoginRequest loginRequest = new LoginRequest("sampleUsername", "samplePassword");
-    private final LoginRequest emptyLoginRequest = new LoginRequest("", "");
+    private final LogInController.LoginRequest loginRequest = new LogInController.LoginRequest("sampleUsername", "samplePassword");
+    private final LogInController.LoginRequest emptyLoginRequest = new LogInController.LoginRequest("", "");
     private final String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
     @Test
