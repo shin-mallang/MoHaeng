@@ -26,24 +26,24 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("ClubRestController는 ")
-@WebMvcTest(CreateClubRestController.class)
-class CreateClubRestControllerTest extends ControllerTest {
+@DisplayName("CreateClubController 는 ")
+@WebMvcTest(CreateClubController.class)
+class CreateClubControllerTest extends ControllerTest {
 
     @MockBean
     private CreateClubUseCase createClubUseCase;
 
-    private final CreateClubRestController.CreateClubRequest correctRequest =
-            new CreateClubRestController.CreateClubRequest("name", "des", 10);
+    private final CreateClubController.CreateClubRequest correctRequest =
+            new CreateClubController.CreateClubRequest("name", "des", 10);
 
-    private final CreateClubRestController.CreateClubRequest emptyFieldRequest =
-            new CreateClubRestController.CreateClubRequest("   ", "des", 10);
+    private final CreateClubController.CreateClubRequest emptyFieldRequest =
+            new CreateClubController.CreateClubRequest("   ", "des", 10);
 
-    private final CreateClubRestController.CreateClubRequest zeroMaxPeopleCountRequest =
-            new CreateClubRestController.CreateClubRequest("name", "des", 0);
+    private final CreateClubController.CreateClubRequest zeroMaxPeopleCountRequest =
+            new CreateClubController.CreateClubRequest("name", "des", 0);
 
-    private final CreateClubRestController.CreateClubRequest negativeMaxPeopleCountRequest =
-            new CreateClubRestController.CreateClubRequest("name", "des", -1);
+    private final CreateClubController.CreateClubRequest negativeMaxPeopleCountRequest =
+            new CreateClubController.CreateClubRequest("name", "des", -1);
 
     @Test
     @DisplayName("인증된 사용자의 올바른 모임 생성 요청인 경우 모임을 생성하고 201을 반환한다.")

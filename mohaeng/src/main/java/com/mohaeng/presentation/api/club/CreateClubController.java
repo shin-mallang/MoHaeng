@@ -14,11 +14,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
-public class CreateClubRestController {
+public class CreateClubController {
 
     private final CreateClubUseCase createClubUseCase;
 
-    public CreateClubRestController(final CreateClubUseCase createClubUseCase) {
+    public CreateClubController(final CreateClubUseCase createClubUseCase) {
         this.createClubUseCase = createClubUseCase;
     }
 
