@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.mohaeng.presentation.api.club.CreateClubController.CREATE_CLUB_URL;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +55,7 @@ class CreateClubControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/club")
+                        post(CREATE_CLUB_URL)
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(correctRequest))
@@ -89,7 +90,7 @@ class CreateClubControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/club")
+                        post(CREATE_CLUB_URL)
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(zeroMaxPeopleCountRequest))
@@ -116,7 +117,7 @@ class CreateClubControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/club")
+                        post(CREATE_CLUB_URL)
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(emptyFieldRequest))
@@ -141,7 +142,7 @@ class CreateClubControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/club")
+                        post(CREATE_CLUB_URL)
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(negativeMaxPeopleCountRequest))
@@ -165,7 +166,7 @@ class CreateClubControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/club")
+                        post(CREATE_CLUB_URL)
                                 .content(objectMapper.writeValueAsString(correctRequest))
                 )
                 .andDo(print())

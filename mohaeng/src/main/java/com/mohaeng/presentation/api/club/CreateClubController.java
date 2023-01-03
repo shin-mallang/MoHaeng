@@ -16,6 +16,8 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 public class CreateClubController {
 
+    public static final String CREATE_CLUB_URL = "/api/club";
+
     private final CreateClubUseCase createClubUseCase;
 
     public CreateClubController(final CreateClubUseCase createClubUseCase) {
@@ -25,7 +27,7 @@ public class CreateClubController {
     /**
      * 모임을 생성한다.
      */
-    @PostMapping(path = "/api/club")
+    @PostMapping(path = CREATE_CLUB_URL)
     public ResponseEntity<Void> create(
             @Valid @RequestBody final CreateClubRequest request
     ) {
