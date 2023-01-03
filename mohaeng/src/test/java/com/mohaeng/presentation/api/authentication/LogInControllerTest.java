@@ -6,13 +6,13 @@ import com.mohaeng.application.authentication.exception.IncorrectAuthenticationE
 import com.mohaeng.application.authentication.usecase.LogInUseCase;
 import com.mohaeng.domain.authentication.domain.AccessToken;
 import com.mohaeng.presentation.ControllerTest;
-import com.mohaeng.presentation.api.authentication.request.LoginRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.mohaeng.presentation.api.authentication.LogInController.LOGIN_URL;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,15 +26,15 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = AuthenticationRestController.class)
-@DisplayName("AuthenticationRestController 는 ")
-class AuthenticationRestControllerTest extends ControllerTest {
+@WebMvcTest(controllers = LogInController.class)
+@DisplayName("LogInController 는 ")
+class LogInControllerTest extends ControllerTest {
 
     @MockBean
     private LogInUseCase logInUseCase;
 
-    private final LoginRequest loginRequest = new LoginRequest("sampleUsername", "samplePassword");
-    private final LoginRequest emptyLoginRequest = new LoginRequest("", "");
+    private final LogInController.LoginRequest loginRequest = new LogInController.LoginRequest("sampleUsername", "samplePassword");
+    private final LogInController.LoginRequest emptyLoginRequest = new LogInController.LoginRequest("", "");
     private final String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
     @Test
@@ -44,7 +44,7 @@ class AuthenticationRestControllerTest extends ControllerTest {
                 .thenReturn(new AccessToken(jwt));
 
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/login")
+                        post(LOGIN_URL)
                                 .contentType(APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsBytes(loginRequest))
                 )
@@ -69,7 +69,7 @@ class AuthenticationRestControllerTest extends ControllerTest {
                 .thenThrow(new IncorrectAuthenticationException());
 
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/login")
+                        post(LOGIN_URL)
                                 .contentType(APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsBytes(loginRequest))
                 )
@@ -86,7 +86,7 @@ class AuthenticationRestControllerTest extends ControllerTest {
     @DisplayName("요청 필드가 없는 경우 400 예외를 반환한다.")
     void loginFailCauseByEmptyRequestFieldWillReturn400() throws Exception {
         ResultActions resultActions = mockMvc.perform(
-                        post("/api/login")
+                        post(LOGIN_URL)
                                 .contentType(APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsBytes(emptyLoginRequest))
                 )

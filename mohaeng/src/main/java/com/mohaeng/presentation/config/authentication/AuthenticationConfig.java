@@ -9,8 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-import static com.mohaeng.presentation.api.authentication.AuthenticationRestController.LOGIN_URL;
-import static com.mohaeng.presentation.api.member.MemberRestController.SIGN_UP_URL;
+import static com.mohaeng.presentation.api.authentication.LogInController.LOGIN_URL;
+import static com.mohaeng.presentation.api.member.SignUpController.SIGN_UP_URL;
 
 @Configuration
 public class AuthenticationConfig implements WebMvcConfigurer {
@@ -28,9 +28,7 @@ public class AuthenticationConfig implements WebMvcConfigurer {
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(logInInterceptor)
                 .addPathPatterns("/api/**")
-                .excludePathPatterns(
-                        "/api" + SIGN_UP_URL,
-                        "/api" + LOGIN_URL);
+                .excludePathPatterns(SIGN_UP_URL, LOGIN_URL);
     }
 
     @Override
