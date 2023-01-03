@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 import static com.mohaeng.presentation.api.authentication.AuthenticationRestController.LOGIN_URL;
-import static com.mohaeng.presentation.api.member.MemberRestController.SIGN_UP_URL;
+import static com.mohaeng.presentation.api.member.SignUpController.SIGN_UP_URL;
 
 @Configuration
 public class AuthenticationConfig implements WebMvcConfigurer {
