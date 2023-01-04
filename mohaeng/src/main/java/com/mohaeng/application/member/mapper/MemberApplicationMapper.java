@@ -1,7 +1,7 @@
 package com.mohaeng.application.member.mapper;
 
 import com.mohaeng.application.member.usecase.SignUpUseCase;
-import com.mohaeng.domain.member.domain.Member;
+import com.mohaeng.domain.member.model.Member;
 
 public class MemberApplicationMapper {
 

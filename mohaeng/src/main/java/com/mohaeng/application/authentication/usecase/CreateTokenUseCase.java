@@ -1,6 +1,6 @@
 package com.mohaeng.application.authentication.usecase;
 
-import com.mohaeng.domain.authentication.domain.Claims;
+import com.mohaeng.domain.authentication.model.Claims;
 
 public interface CreateTokenUseCase {
 

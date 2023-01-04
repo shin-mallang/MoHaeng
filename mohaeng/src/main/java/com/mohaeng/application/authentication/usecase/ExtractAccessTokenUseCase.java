@@ -1,6 +1,6 @@
 package com.mohaeng.application.authentication.usecase;
 
-import com.mohaeng.domain.authentication.domain.AccessToken;
+import com.mohaeng.domain.authentication.model.AccessToken;
 
 public interface ExtractAccessTokenUseCase {
 

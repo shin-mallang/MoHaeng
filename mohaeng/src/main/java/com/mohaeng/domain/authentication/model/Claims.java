@@ -1,4 +1,4 @@
-package com.mohaeng.domain.authentication.domain;
+package com.mohaeng.domain.authentication.model;
 
 import java.util.Collections;
 import java.util.HashMap;

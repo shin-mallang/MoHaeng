@@ -3,10 +3,10 @@ package com.mohaeng.application.authentication.service;
 import com.mohaeng.application.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.application.authentication.usecase.CreateTokenUseCase;
 import com.mohaeng.application.authentication.usecase.LogInUseCase;
-import com.mohaeng.domain.authentication.domain.AccessToken;
-import com.mohaeng.domain.member.domain.Member;
-import com.mohaeng.domain.member.domain.MemberRepository;
-import com.mohaeng.domain.member.domain.enums.Gender;
+import com.mohaeng.domain.authentication.model.AccessToken;
+import com.mohaeng.domain.member.model.Member;
+import com.mohaeng.domain.member.repository.MemberRepository;
+import com.mohaeng.domain.member.model.enums.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

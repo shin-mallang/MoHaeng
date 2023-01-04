@@ -3,7 +3,7 @@ package com.mohaeng.presentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohaeng.application.authentication.usecase.ExtractAccessTokenUseCase;
 import com.mohaeng.application.authentication.usecase.ExtractClaimsUseCase;
-import com.mohaeng.domain.authentication.domain.Claims;
+import com.mohaeng.domain.authentication.model.Claims;
 import com.mohaeng.infrastructure.authentication.jwt.service.ExtractAccessToken;
 import com.mohaeng.presentation.api.authentication.argumentresolver.AuthArgumentResolver;
 import com.mohaeng.presentation.api.authentication.interceptor.AuthenticationContext;

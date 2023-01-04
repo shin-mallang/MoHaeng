@@ -1,4 +1,4 @@
-package com.mohaeng.domain.member.domain.enums;
+package com.mohaeng.domain.member.model.enums;
 
 public enum Gender {
 

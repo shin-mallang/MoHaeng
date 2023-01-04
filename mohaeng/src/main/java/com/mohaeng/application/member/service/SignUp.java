@@ -3,7 +3,7 @@ package com.mohaeng.application.member.service;
 import com.mohaeng.application.member.exception.DuplicateUsernameException;
 import com.mohaeng.application.member.mapper.MemberApplicationMapper;
 import com.mohaeng.application.member.usecase.SignUpUseCase;
-import com.mohaeng.domain.member.domain.MemberRepository;
+import com.mohaeng.domain.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

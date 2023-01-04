@@ -1,4 +1,6 @@
-package com.mohaeng.domain.member.domain;
+package com.mohaeng.domain.member.repository;
+
+import com.mohaeng.domain.member.model.Member;
 
 import java.util.Optional;
 

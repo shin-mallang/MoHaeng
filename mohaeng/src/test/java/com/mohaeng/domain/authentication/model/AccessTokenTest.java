@@ -1,4 +1,4 @@
-package com.mohaeng.domain.authentication.domain;
+package com.mohaeng.domain.authentication.model;
 
 import com.mohaeng.domain.authentication.exception.NotFoundAccessTokenException;
 import org.junit.jupiter.api.DisplayName;

@@ -1,7 +1,7 @@
 package com.mohaeng.application.club.mapper;
 
 import com.mohaeng.application.club.usecase.CreateClubUseCase;
-import com.mohaeng.domain.club.Club;
+import com.mohaeng.domain.club.model.Club;
 
 public class ClubApplicationMapper {
 
