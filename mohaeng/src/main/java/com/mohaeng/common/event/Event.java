@@ -10,7 +10,7 @@ public class Event {
     private Event() {
     }
 
-    static void setApplicationEventPublisher(final ApplicationEventPublisher applicationEventPublisher) {
+    public static void setApplicationEventPublisher(final ApplicationEventPublisher applicationEventPublisher) {
         Event.applicationEventPublisher = applicationEventPublisher;
     }
 
