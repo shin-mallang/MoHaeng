@@ -5,9 +5,8 @@ import com.mohaeng.domain.club.event.role.CreateDefaultRoleEvent;
 import com.mohaeng.domain.club.model.participant.Participant;
 import com.mohaeng.domain.club.repository.participant.ParticipantRepository;
 import com.mohaeng.domain.config.event.EventHistoryRepository;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 public class RegisterPresidentWithCreateDefaultRoleEventHandler extends EventHandler<CreateDefaultRoleEvent> {
@@ -20,12 +19,11 @@ public class RegisterPresidentWithCreateDefaultRoleEventHandler extends EventHan
         this.participantRepository = participantRepository;
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    @EventListener
     @Override
     public void handle(final CreateDefaultRoleEvent event) {
         Participant participant = new Participant(event.member(), event.club(), event.defaultPresidentRole());
         participantRepository.save(participant);
-
         process(event);
     }
 }

@@ -8,9 +8,8 @@ import com.mohaeng.domain.club.model.role.ClubRole;
 import com.mohaeng.domain.club.model.role.ClubRoleCategory;
 import com.mohaeng.domain.club.repository.role.ClubRoleRepository;
 import com.mohaeng.domain.config.event.EventHistoryRepository;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class CreateDefaultRoleWithCreateClubEventHandler extends EventHandler<Cr
         this.clubRoleRepository = clubRoleRepository;
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    @EventListener
     @Override
     public void handle(final CreateClubEvent event) {
         List<ClubRole> defaultClubRoles = ClubRole.defaultRoles(event.club());
@@ -36,6 +35,7 @@ public class CreateDefaultRoleWithCreateClubEventHandler extends EventHandler<Cr
                 event.member(),
                 event.club(),
                 getDefaultPresidentRole(clubRoles)));
+
         process(event);
     }
 
