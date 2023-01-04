@@ -4,8 +4,8 @@ import com.mohaeng.application.member.exception.DuplicateUsernameException;
 import com.mohaeng.application.member.service.SignUp;
 import com.mohaeng.application.member.usecase.SignUpUseCase;
 import com.mohaeng.domain.member.model.Member;
-import com.mohaeng.domain.member.repository.MemberRepository;
 import com.mohaeng.domain.member.model.enums.Gender;
+import com.mohaeng.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
