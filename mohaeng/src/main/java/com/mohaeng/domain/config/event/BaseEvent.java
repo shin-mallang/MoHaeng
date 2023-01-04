@@ -13,7 +13,7 @@ public abstract class BaseEvent extends ApplicationEvent {
         this.eventDateTime = LocalDateTime.now();
     }
 
-    protected abstract BaseEventHistory history();
+    public abstract BaseEventHistory history();
 
     public LocalDateTime eventDateTime() {
         return eventDateTime;
