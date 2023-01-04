@@ -2,7 +2,7 @@ package com.mohaeng.application.club.service;
 
 import com.mohaeng.application.club.MockClubRepository;
 import com.mohaeng.application.club.usecase.CreateClubUseCase;
-import com.mohaeng.domain.club.repository.ClubRepository;
+import com.mohaeng.domain.club.repository.club.ClubRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
