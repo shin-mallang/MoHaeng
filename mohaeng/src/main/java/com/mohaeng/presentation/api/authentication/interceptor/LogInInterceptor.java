@@ -2,8 +2,8 @@ package com.mohaeng.presentation.api.authentication.interceptor;
 
 import com.mohaeng.application.authentication.usecase.ExtractAccessTokenUseCase;
 import com.mohaeng.application.authentication.usecase.ExtractClaimsUseCase;
-import com.mohaeng.domain.authentication.domain.AccessToken;
-import com.mohaeng.domain.authentication.domain.Claims;
+import com.mohaeng.domain.authentication.model.AccessToken;
+import com.mohaeng.domain.authentication.model.Claims;
 import com.mohaeng.infrastructure.authentication.jwt.service.exception.InvalidAccessTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

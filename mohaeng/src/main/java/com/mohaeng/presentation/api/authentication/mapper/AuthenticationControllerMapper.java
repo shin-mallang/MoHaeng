@@ -1,7 +1,7 @@
 package com.mohaeng.presentation.api.authentication.mapper;
 
 import com.mohaeng.application.authentication.usecase.LogInUseCase;
-import com.mohaeng.domain.authentication.domain.AccessToken;
+import com.mohaeng.domain.authentication.model.AccessToken;
 import com.mohaeng.presentation.api.authentication.LogInController;
 
 public class AuthenticationControllerMapper {

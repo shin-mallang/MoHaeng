@@ -1,7 +1,7 @@
 package com.mohaeng.infrastructure.authentication.jwt.service;
 
 import com.mohaeng.application.authentication.usecase.ExtractAccessTokenUseCase;
-import com.mohaeng.domain.authentication.domain.AccessToken;
+import com.mohaeng.domain.authentication.model.AccessToken;
 import org.springframework.stereotype.Component;
 
 @Component

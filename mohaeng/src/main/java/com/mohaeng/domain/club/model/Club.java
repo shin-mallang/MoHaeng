@@ -1,4 +1,4 @@
-package com.mohaeng.domain.club;
+package com.mohaeng.domain.club.model;
 
 
 import com.mohaeng.domain.config.BaseEntity;

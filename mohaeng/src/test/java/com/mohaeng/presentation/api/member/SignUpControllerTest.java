@@ -2,7 +2,7 @@ package com.mohaeng.presentation.api.member;
 
 import com.mohaeng.application.member.exception.DuplicateUsernameException;
 import com.mohaeng.application.member.usecase.SignUpUseCase;
-import com.mohaeng.domain.member.domain.enums.Gender;
+import com.mohaeng.domain.member.model.enums.Gender;
 import com.mohaeng.presentation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

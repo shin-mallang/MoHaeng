@@ -4,7 +4,7 @@ package com.mohaeng.presentation.api.authentication;
 
 import com.mohaeng.application.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.application.authentication.usecase.LogInUseCase;
-import com.mohaeng.domain.authentication.domain.AccessToken;
+import com.mohaeng.domain.authentication.model.AccessToken;
 import com.mohaeng.presentation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

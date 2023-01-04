@@ -1,7 +1,7 @@
 package com.mohaeng.presentation.api.member;
 
 import com.mohaeng.application.member.usecase.SignUpUseCase;
-import com.mohaeng.domain.member.domain.enums.Gender;
+import com.mohaeng.domain.member.model.enums.Gender;
 import com.mohaeng.presentation.api.member.mapper.MemberControllerMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

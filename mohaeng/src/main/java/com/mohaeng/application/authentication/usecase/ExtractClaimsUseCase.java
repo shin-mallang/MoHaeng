@@ -1,7 +1,7 @@
 package com.mohaeng.application.authentication.usecase;
 
-import com.mohaeng.domain.authentication.domain.AccessToken;
-import com.mohaeng.domain.authentication.domain.Claims;
+import com.mohaeng.domain.authentication.model.AccessToken;
+import com.mohaeng.domain.authentication.model.Claims;
 
 public interface ExtractClaimsUseCase {
 

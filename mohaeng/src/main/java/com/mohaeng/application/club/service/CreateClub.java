@@ -2,7 +2,7 @@ package com.mohaeng.application.club.service;
 
 import com.mohaeng.application.club.mapper.ClubApplicationMapper;
 import com.mohaeng.application.club.usecase.CreateClubUseCase;
-import com.mohaeng.domain.club.ClubRepository;
+import com.mohaeng.domain.club.repository.ClubRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

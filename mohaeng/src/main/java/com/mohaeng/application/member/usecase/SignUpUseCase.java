@@ -1,6 +1,6 @@
 package com.mohaeng.application.member.usecase;
 
-import com.mohaeng.domain.member.domain.enums.Gender;
+import com.mohaeng.domain.member.model.enums.Gender;
 
 public interface SignUpUseCase {
 

@@ -2,7 +2,7 @@ package com.mohaeng.presentation.api.authentication.interceptor;
 
 import com.mohaeng.application.authentication.usecase.ExtractAccessTokenUseCase;
 import com.mohaeng.application.authentication.usecase.ExtractClaimsUseCase;
-import com.mohaeng.domain.authentication.domain.Claims;
+import com.mohaeng.domain.authentication.model.Claims;
 import com.mohaeng.domain.authentication.exception.NotFoundAccessTokenException;
 import com.mohaeng.infrastructure.authentication.jwt.service.ExtractAccessToken;
 import com.mohaeng.infrastructure.authentication.jwt.service.exception.InvalidAccessTokenException;

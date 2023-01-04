@@ -1,7 +1,7 @@
 package com.mohaeng.application.club;
 
-import com.mohaeng.domain.club.Club;
-import com.mohaeng.domain.club.ClubRepository;
+import com.mohaeng.domain.club.model.Club;
+import com.mohaeng.domain.club.repository.ClubRepository;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
