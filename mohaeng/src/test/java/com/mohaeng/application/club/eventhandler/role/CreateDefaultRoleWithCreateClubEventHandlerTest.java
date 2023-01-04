@@ -8,6 +8,8 @@ import com.mohaeng.domain.club.model.club.Club;
 import com.mohaeng.domain.club.model.role.ClubRole;
 import com.mohaeng.domain.club.repository.role.ClubRoleRepository;
 import com.mohaeng.domain.config.event.EventHistoryRepository;
+import com.mohaeng.domain.member.model.Member;
+import com.mohaeng.domain.member.model.enums.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,9 +35,10 @@ class CreateDefaultRoleWithCreateClubEventHandlerTest {
     @DisplayName("클럽 생성 이벤트(CreateClubEvent) 를 받으면 기본 역할을 생성한 후 처리된 이벤트를 저장한다.")
     void createDefaultRole() {
         // given
-        final Long memberId = 1L;
+        final Member member = new Member(1L, LocalDateTime.now(), LocalDateTime.now(),
+                "username", "password", "name", 10, Gender.MAN);
         final Club club = new Club(1L, LocalDateTime.now(), LocalDateTime.now(), "name", "des", 100);
-        CreateClubEvent createClubEvent = new CreateClubEvent(this, memberId, club);
+        CreateClubEvent createClubEvent = new CreateClubEvent(this, member, club);
         List<ClubRole> clubRoles = ClubRole.defaultRoles(club);
         clubRoles.forEach(it -> ReflectionTestUtils.setField(it, "id", 1L));
         when(clubRoleRepository.saveAll(any())).thenReturn(clubRoles);
@@ -55,9 +58,10 @@ class CreateDefaultRoleWithCreateClubEventHandlerTest {
     void publishCreateDefaultRoleEvent() {
         // given
         Event.setApplicationEventPublisher(applicationEventPublisher);
-        final Long memberId = 1L;
+        final Member member = new Member(1L, LocalDateTime.now(), LocalDateTime.now(),
+                "username", "password", "name", 10, Gender.MAN);
         final Club club = new Club(1L, LocalDateTime.now(), LocalDateTime.now(), "name", "des", 100);
-        CreateClubEvent createClubEvent = new CreateClubEvent(this, memberId, club);
+        CreateClubEvent createClubEvent = new CreateClubEvent(this, member, club);
         List<ClubRole> clubRoles = ClubRole.defaultRoles(club);
         clubRoles.forEach(it -> ReflectionTestUtils.setField(it, "id", 1L));
         when(clubRoleRepository.saveAll(any())).thenReturn(clubRoles);
