@@ -2,9 +2,10 @@
 
 package com.mohaeng.presentation.api.authentication;
 
-import com.mohaeng.application.authentication.exception.IncorrectAuthenticationException;
-import com.mohaeng.application.authentication.usecase.LogInUseCase;
-import com.mohaeng.domain.authentication.model.AccessToken;
+import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.application.usecase.LogInUseCase;
+import com.mohaeng.authentication.domain.model.AccessToken;
+import com.mohaeng.authentication.presentation.LogInController;
 import com.mohaeng.presentation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.mohaeng.presentation.api.authentication.LogInController.LOGIN_URL;
+import static com.mohaeng.authentication.presentation.LogInController.LOGIN_URL;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;

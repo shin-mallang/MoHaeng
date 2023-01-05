@@ -1,6 +1,6 @@
 package com.mohaeng.infrastructure.authentication.jwt.service;
 
-import com.mohaeng.infrastructure.authentication.jwt.config.JwtProperties;
+import com.mohaeng.authentication.infrastructure.jwt.config.JwtProperties;
 
 public class MockJwtProperties extends JwtProperties {
     public MockJwtProperties() {

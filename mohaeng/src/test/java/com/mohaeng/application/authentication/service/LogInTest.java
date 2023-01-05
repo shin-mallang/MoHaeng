@@ -1,12 +1,13 @@
 package com.mohaeng.application.authentication.service;
 
-import com.mohaeng.application.authentication.exception.IncorrectAuthenticationException;
-import com.mohaeng.application.authentication.usecase.CreateTokenUseCase;
-import com.mohaeng.application.authentication.usecase.LogInUseCase;
-import com.mohaeng.domain.authentication.model.AccessToken;
-import com.mohaeng.domain.member.model.Member;
-import com.mohaeng.domain.member.model.enums.Gender;
-import com.mohaeng.domain.member.repository.MemberRepository;
+import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.application.usecase.CreateTokenUseCase;
+import com.mohaeng.authentication.application.usecase.LogInUseCase;
+import com.mohaeng.authentication.application.service.LogIn;
+import com.mohaeng.authentication.domain.model.AccessToken;
+import com.mohaeng.member.domain.model.Member;
+import com.mohaeng.member.domain.model.enums.Gender;
+import com.mohaeng.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

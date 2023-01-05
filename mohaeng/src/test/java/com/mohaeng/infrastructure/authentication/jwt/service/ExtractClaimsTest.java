@@ -1,10 +1,11 @@
 package com.mohaeng.infrastructure.authentication.jwt.service;
 
-import com.mohaeng.application.authentication.usecase.ExtractClaimsUseCase;
-import com.mohaeng.domain.authentication.model.AccessToken;
-import com.mohaeng.domain.authentication.model.Claims;
-import com.mohaeng.infrastructure.authentication.jwt.config.JwtProperties;
-import com.mohaeng.infrastructure.authentication.jwt.service.exception.InvalidAccessTokenException;
+import com.mohaeng.authentication.application.usecase.ExtractClaimsUseCase;
+import com.mohaeng.authentication.domain.model.AccessToken;
+import com.mohaeng.authentication.domain.model.Claims;
+import com.mohaeng.authentication.infrastructure.jwt.config.JwtProperties;
+import com.mohaeng.authentication.infrastructure.jwt.service.ExtractClaims;
+import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

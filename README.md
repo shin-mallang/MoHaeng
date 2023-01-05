@@ -1,7 +1,5 @@
 # 모임 관리 서비스
 
+패키지 간 의존성
 
-
-
-# 발생했던 오류 혹은 기록할 것들
-PreUpdate, PrePersist는 접근 제어자가 무엇이던 상관없다.
+![](image/dependency.png)

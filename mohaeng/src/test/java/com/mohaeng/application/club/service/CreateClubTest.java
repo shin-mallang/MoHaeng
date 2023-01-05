@@ -1,13 +1,14 @@
 package com.mohaeng.application.club.service;
 
 import com.mohaeng.application.club.MockClubRepository;
-import com.mohaeng.application.club.usecase.CreateClubUseCase;
-import com.mohaeng.common.event.Event;
-import com.mohaeng.domain.club.event.club.CreateClubEvent;
-import com.mohaeng.domain.club.repository.club.ClubRepository;
-import com.mohaeng.domain.member.model.Member;
-import com.mohaeng.domain.member.model.enums.Gender;
-import com.mohaeng.domain.member.repository.MemberRepository;
+import com.mohaeng.club.application.service.CreateClub;
+import com.mohaeng.club.application.usecase.CreateClubUseCase;
+import com.mohaeng.common.event.Events;
+import com.mohaeng.club.domain.event.CreateClubEvent;
+import com.mohaeng.club.domain.repository.ClubRepository;
+import com.mohaeng.member.domain.model.Member;
+import com.mohaeng.member.domain.model.enums.Gender;
+import com.mohaeng.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ class CreateClubTest {
     @DisplayName("모임을 생성시 이벤트를 발행한다.")
     void publishEventTest() {
         // given
-        Event.setApplicationEventPublisher(applicationEventPublisher);
+        Events.setApplicationEventPublisher(applicationEventPublisher);
         final Long memberId = 1L;
         final String name = "name";
         final String description = "description";

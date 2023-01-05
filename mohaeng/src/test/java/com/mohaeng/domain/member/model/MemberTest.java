@@ -1,7 +1,8 @@
 package com.mohaeng.domain.member.model;
 
-import com.mohaeng.application.authentication.exception.IncorrectAuthenticationException;
-import com.mohaeng.domain.member.model.enums.Gender;
+import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
+import com.mohaeng.member.domain.model.Member;
+import com.mohaeng.member.domain.model.enums.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,7 @@
 package com.mohaeng.domain.club.model.role;
 
-import com.mohaeng.domain.club.model.club.Club;
+import com.mohaeng.club.domain.model.Club;
+import com.mohaeng.clubrole.domain.model.ClubRole;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
