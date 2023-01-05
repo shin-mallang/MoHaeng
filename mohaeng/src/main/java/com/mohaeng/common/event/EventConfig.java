@@ -16,6 +16,6 @@ public class EventConfig {
 
     @EventListener(ApplicationReadyEvent.class)
     public void intiEvent() {
-        Event.setApplicationEventPublisher(applicationContext);
+        Events.setApplicationEventPublisher(applicationContext);
     }
 }

@@ -1,6 +1,7 @@
 package com.mohaeng.presentation.api.club;
 
-import com.mohaeng.application.club.usecase.CreateClubUseCase;
+import com.mohaeng.club.application.usecase.CreateClubUseCase;
+import com.mohaeng.club.presentation.CreateClubController;
 import com.mohaeng.presentation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.mohaeng.presentation.api.club.CreateClubController.CREATE_CLUB_URL;
+import static com.mohaeng.club.presentation.CreateClubController.CREATE_CLUB_URL;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.util.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
