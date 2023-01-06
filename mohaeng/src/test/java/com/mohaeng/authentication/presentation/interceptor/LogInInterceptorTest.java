@@ -2,7 +2,7 @@ package com.mohaeng.authentication.presentation.interceptor;
 
 import com.mohaeng.authentication.application.usecase.ExtractAccessTokenUseCase;
 import com.mohaeng.authentication.application.usecase.ExtractClaimsUseCase;
-import com.mohaeng.authentication.domain.exception.NotFoundAccessTokenException;
+import com.mohaeng.authentication.exception.NotFoundAccessTokenException;
 import com.mohaeng.authentication.domain.model.Claims;
 import com.mohaeng.authentication.infrastructure.jwt.service.ExtractAccessToken;
 import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
@@ -28,15 +28,6 @@ class LogInInterceptorTest {
 
     private final HttpServletRequest request = mock(HttpServletRequest.class);
 
-    /**
-     * 1. Header에 값이 존재하지 않을 때
-     * <p>
-     * 2. Bearer로 시작하지 않을 땨
-     * <p>
-     * 3. 토큰의 클레임에 MEMBER_ID_CLAIM 이 없을 때
-     * <p>
-     * 모두 있다면 AuthenticationContext의 setContext에 MEMBER_ID_CLAIM 저장
-     */
     @Test
     @DisplayName("Authorization 헤더에 값이 존재하지 않으면 예외를 발생시킨다.")
     void throwExceptionWhenNotExistAuthorizationHeader() {

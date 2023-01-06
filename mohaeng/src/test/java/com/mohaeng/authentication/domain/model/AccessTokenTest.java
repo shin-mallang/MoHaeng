@@ -1,6 +1,6 @@
 package com.mohaeng.authentication.domain.model;
 
-import com.mohaeng.authentication.domain.exception.NotFoundAccessTokenException;
+import com.mohaeng.authentication.exception.NotFoundAccessTokenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

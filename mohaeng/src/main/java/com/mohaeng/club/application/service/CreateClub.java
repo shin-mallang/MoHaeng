@@ -6,7 +6,7 @@ import com.mohaeng.club.domain.event.CreateClubEvent;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.common.event.Events;
-import com.mohaeng.member.application.exception.NotFoundMemberException;
+import com.mohaeng.member.exception.NotFoundMemberException;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import org.springframework.stereotype.Service;

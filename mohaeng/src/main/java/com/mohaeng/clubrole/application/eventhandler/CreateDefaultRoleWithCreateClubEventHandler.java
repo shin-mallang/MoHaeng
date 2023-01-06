@@ -24,7 +24,6 @@ public class CreateDefaultRoleWithCreateClubEventHandler extends EventHandler<Cr
     private final ClubRoleRepository clubRoleRepository;
     private final ClubRepository clubRepository;
 
-
     public CreateDefaultRoleWithCreateClubEventHandler(final EventHistoryRepository eventHistoryRepository,
                                                        final ClubRepository clubRepository,
                                                        final ClubRoleRepository clubRoleRepository) {

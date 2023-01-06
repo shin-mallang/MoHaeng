@@ -1,11 +1,9 @@
 package com.mohaeng.member.domain.model;
 
-import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.enums.Gender;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")

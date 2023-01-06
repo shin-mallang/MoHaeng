@@ -1,7 +1,7 @@
 package com.mohaeng.member.application.service;
 
 import com.mohaeng.common.annotation.ApplicationTest;
-import com.mohaeng.member.application.exception.DuplicateUsernameException;
+import com.mohaeng.member.exception.DuplicateUsernameException;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;

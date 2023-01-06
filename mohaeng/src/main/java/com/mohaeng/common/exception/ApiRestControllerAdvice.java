@@ -1,9 +1,9 @@
 package com.mohaeng.common.exception;
 
-import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
-import com.mohaeng.authentication.domain.exception.NotFoundAccessTokenException;
+import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.exception.NotFoundAccessTokenException;
 import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
-import com.mohaeng.member.application.exception.DuplicateUsernameException;
+import com.mohaeng.member.exception.DuplicateUsernameException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;

@@ -2,13 +2,12 @@ package com.mohaeng.club.application.mapper;
 
 import com.mohaeng.club.application.usecase.CreateClubUseCase;
 import com.mohaeng.club.domain.model.Club;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.mohaeng.common.fixtures.ClubFixture.createClubUseCaseCommand;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("ClubApplicationMapper 는 ")
 class ClubApplicationMapperTest {

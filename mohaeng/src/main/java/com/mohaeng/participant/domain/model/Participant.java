@@ -18,7 +18,6 @@ public class Participant extends BaseEntity {
     @JoinColumn(name = "club_id")
     private Club club;  // 가입된 club
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_role_id")
     private ClubRole clubRole;  // 모임에서의 역할

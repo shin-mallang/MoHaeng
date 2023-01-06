@@ -1,6 +1,6 @@
 package com.mohaeng.member.application.service;
 
-import com.mohaeng.member.application.exception.DuplicateUsernameException;
+import com.mohaeng.member.exception.DuplicateUsernameException;
 import com.mohaeng.member.application.mapper.MemberApplicationMapper;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.repository.MemberRepository;
