@@ -1,9 +1,10 @@
 package com.mohaeng.member.application.service;
 
 import com.mohaeng.common.annotation.ApplicationTest;
-import com.mohaeng.member.exception.DuplicateUsernameException;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
+import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
+import com.mohaeng.member.exception.DuplicateUsernameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,12 @@ class SignUpTest {
     @DisplayName("중복되는 아이디가 있다면 오류를 반환한다.")
     void throwExceptionWhenUsernameDuplicated() {
         // given
-        memberRepository.save(member(null));
+        Member member = member(null);
+        memberRepository.save(member);
 
         // when, then
         assertAll(
-                () -> assertThatThrownBy(() -> signUp.command(signUpUseCaseCommand()))
+                () -> assertThatThrownBy(() -> signUp.command(new SignUpUseCase.Command(member.username(), member.password(), member.name(), member.age(), member.gender())))
                         .isInstanceOf(DuplicateUsernameException.class)
         );
     }
