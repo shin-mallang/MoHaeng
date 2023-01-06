@@ -26,12 +26,8 @@ public class Participant extends BaseEntity {
     protected Participant() {
     }
 
-    public Participant(final Member member,
-                       final Club club,
-                       final ClubRole clubRole) {
+    public Participant(final Member member) {
         this.member = member;
-        this.club = club;
-        this.clubRole = clubRole;
     }
 
     public Member member() {
@@ -44,5 +40,11 @@ public class Participant extends BaseEntity {
 
     public ClubRole clubRole() {
         return clubRole;
+    }
+
+    public void joinClub(final Club club, final ClubRole clubRole) {
+        this.club = club;
+        this.clubRole = clubRole;
+        club.participantCountUp();
     }
 }

@@ -1,6 +1,7 @@
 package com.mohaeng.club.domain.model;
 
 
+import com.mohaeng.club.exception.ClubFullException;
 import com.mohaeng.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -14,6 +15,8 @@ public class Club extends BaseEntity {
     private String description;
 
     private int maxParticipantCount;
+
+    private int currentParticipantCount;  // 현재 가입한 인원 수
 
     protected Club() {
     }
@@ -34,5 +37,16 @@ public class Club extends BaseEntity {
 
     public int maxParticipantCount() {
         return maxParticipantCount;
+    }
+
+    public int currentParticipantCount() {
+        return currentParticipantCount;
+    }
+
+    public void participantCountUp() {
+        if (maxParticipantCount < currentParticipantCount + 1) {
+            throw new ClubFullException();
+        }
+        currentParticipantCount++;
     }
 }

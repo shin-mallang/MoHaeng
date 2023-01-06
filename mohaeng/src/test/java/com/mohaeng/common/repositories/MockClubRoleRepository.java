@@ -7,6 +7,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class MockClubRoleRepository implements ClubRoleRepository {
 
@@ -24,6 +25,11 @@ public class MockClubRoleRepository implements ClubRoleRepository {
         return defaultClubRoles.stream()
                 .map(this::save)
                 .toList();
+    }
+
+    @Override
+    public Optional<ClubRole> findById(Long id) {
+        return Optional.ofNullable(store.get(id));
     }
 
     public List<ClubRole> findAll() {

@@ -6,6 +6,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class MockClubRepository implements ClubRepository {
 
@@ -17,5 +18,10 @@ public class MockClubRepository implements ClubRepository {
         ReflectionTestUtils.setField(club, "id", ++sequence);
         store.put(club.id(), club);
         return club;
+    }
+
+    @Override
+    public Optional<Club> findById(Long id) {
+        return Optional.ofNullable(store.get(id));
     }
 }

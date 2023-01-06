@@ -1,41 +1,38 @@
 package com.mohaeng.clubrole.domain.event;
 
-import com.mohaeng.club.domain.model.Club;
-import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.common.event.BaseEvent;
 import com.mohaeng.common.event.BaseEventHistory;
-import com.mohaeng.member.domain.model.Member;
 
 public class CreateDefaultRoleEvent extends BaseEvent {
 
-    private final Member member;
-    private final Club club;
-    private final ClubRole defaultPresidentRole;  // 기본 회장 역할
+    private final Long memberId;
+    private final Long clubId;
+    private final Long defaultPresidentRoleId;  // 기본 회장 역할
 
     public CreateDefaultRoleEvent(final Object source,
-                                  final Member member,
-                                  final Club club,
-                                  final ClubRole defaultPresidentRole) {
+                                  final Long memberId,
+                                  final Long clubId,
+                                  final Long defaultPresidentRoleId) {
         super(source);
-        this.member = member;
-        this.club = club;
-        this.defaultPresidentRole = defaultPresidentRole;
+        this.memberId = memberId;
+        this.clubId = clubId;
+        this.defaultPresidentRoleId = defaultPresidentRoleId;
     }
 
     @Override
     public BaseEventHistory history() {
-        return new CreateDefaultRoleHistory(eventDateTime, member.id(), club.id(), defaultPresidentRole.id());
+        return new CreateDefaultRoleHistory(eventDateTime, memberId, clubId, defaultPresidentRoleId);
     }
 
-    public Member member() {
-        return member;
+    public Long memberId() {
+        return memberId;
     }
 
-    public Club club() {
-        return club;
+    public Long clubId() {
+        return clubId;
     }
 
-    public ClubRole defaultPresidentRole() {
-        return defaultPresidentRole;
+    public Long defaultPresidentRoleId() {
+        return defaultPresidentRoleId;
     }
 }

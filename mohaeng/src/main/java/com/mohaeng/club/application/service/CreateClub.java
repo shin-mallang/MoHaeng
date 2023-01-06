@@ -33,7 +33,7 @@ public class CreateClub implements CreateClubUseCase {
         Club club = clubRepository.save(ClubApplicationMapper.toDomainEntity(command));
 
         // CreateClubEvent 를 받으면 -> 모임 기본 역할 등록(등록 이후 모임 생성한 사람을 회장으로 만들기)
-        Events.raise(new CreateClubEvent(this, member, club));
+        Events.raise(new CreateClubEvent(this, member.id(), club.id()));
 
         return club.id();
     }
