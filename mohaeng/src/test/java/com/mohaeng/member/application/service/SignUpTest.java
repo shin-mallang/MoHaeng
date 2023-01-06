@@ -1,36 +1,39 @@
 package com.mohaeng.member.application.service;
 
+import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.member.application.exception.DuplicateUsernameException;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
-import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.mohaeng.common.fixtures.MemberFixture.signUpUseCaseCommand;
+import static com.mohaeng.common.fixtures.MemberFixture.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.Mockito.*;
 
+@ApplicationTest
 @DisplayName("SignUp은 ")
 class SignUpTest {
 
-    private final MemberRepository memberRepository = mock(MemberRepository.class);
-    private final SignUpUseCase signUp = new SignUp(memberRepository);
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private SignUpUseCase signUp;
 
     @Test
     @DisplayName("중복되는 아이디가 있다면 오류를 반환한다.")
     void throwExceptionWhenUsernameDuplicated() {
         // given
-        when(memberRepository.existsByUsername(any())).thenReturn(true);
+        memberRepository.save(member(null));
 
         // when, then
         assertAll(
                 () -> assertThatThrownBy(() -> signUp.command(signUpUseCaseCommand()))
-                        .isInstanceOf(DuplicateUsernameException.class),
-                () -> verify(memberRepository, times(0))
-                        .save(any(Member.class))
+                        .isInstanceOf(DuplicateUsernameException.class)
         );
     }
 
@@ -40,8 +43,7 @@ class SignUpTest {
         // when, then
         assertAll(
                 () -> assertDoesNotThrow(() -> signUp.command(signUpUseCaseCommand())),
-                () -> verify(memberRepository, times(1))
-                        .save(any(Member.class))
+                () -> assertThat(memberRepository.findByUsername(USERNAME)).isNotNull()
         );
     }
     // TODO 비밀번호 암호화 되는 테스트

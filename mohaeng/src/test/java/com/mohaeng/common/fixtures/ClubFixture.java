@@ -7,8 +7,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class ClubFixture {
 
-    public static final Long MEMBER_ID = 1L;
-
     public static final String NAME = "name";
     public static final String DESCRIPTION = "des";
     public static final int MAX_PEOPLE_COUNT = 100;
@@ -19,8 +17,8 @@ public class ClubFixture {
         return club;
     }
 
-    public static CreateClubUseCase.Command createClubUseCaseCommand() {
-        return new CreateClubUseCase.Command(MEMBER_ID, NAME, DESCRIPTION, MAX_PEOPLE_COUNT);
+    public static CreateClubUseCase.Command createClubUseCaseCommand(Long id) {
+        return new CreateClubUseCase.Command(id, NAME, DESCRIPTION, MAX_PEOPLE_COUNT);
     }
 
     public static CreateClubController.CreateClubRequest createClubRequest(String name, String des, int maxParticipantCount) {

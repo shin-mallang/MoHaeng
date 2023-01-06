@@ -4,11 +4,13 @@ import com.mohaeng.club.domain.event.CreateClubEvent;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
 import com.mohaeng.clubrole.domain.model.ClubRole;
-import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.EventHandlerTest;
 import com.mohaeng.common.event.Events;
 import com.mohaeng.common.fixtures.MemberFixture;
+import com.mohaeng.common.repositories.MockClubRoleRepository;
 import com.mohaeng.member.domain.model.Member;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,7 +25,7 @@ import static org.mockito.Mockito.*;
 @DisplayName("CreateDefaultRoleWithCreateClubEventHandler 는 ")
 class CreateDefaultRoleWithCreateClubEventsHandlerTest extends EventHandlerTest {
 
-    private final ClubRoleRepository clubRoleRepository = mock(ClubRoleRepository.class);
+    private final MockClubRoleRepository clubRoleRepository = new MockClubRoleRepository();
     private final ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
 
     private final CreateDefaultRoleWithCreateClubEventHandler eventHandler =
@@ -37,14 +39,13 @@ class CreateDefaultRoleWithCreateClubEventsHandlerTest extends EventHandlerTest 
         final Club club = club(1L);
         CreateClubEvent createClubEvent = new CreateClubEvent(this, member, club);
         List<ClubRole> clubRoles = clubRolesWithId(club);
-        when(clubRoleRepository.saveAll(any())).thenReturn(clubRoles);
 
         // when
         eventHandler.handle(createClubEvent);
 
         // then
         assertAll(
-                () -> verify(clubRoleRepository, times(1)).saveAll(any())
+                () -> Assertions.assertThat(clubRoleRepository.findAll().size()).isEqualTo(clubRoles.size())
         );
     }
 
@@ -57,14 +58,13 @@ class CreateDefaultRoleWithCreateClubEventsHandlerTest extends EventHandlerTest 
         Club club = club(1L);
         CreateClubEvent createClubEvent = new CreateClubEvent(this, member, club);
         List<ClubRole> clubRoles = clubRolesWithId(club);
-        when(clubRoleRepository.saveAll(any())).thenReturn(clubRoles);
 
         // when
         eventHandler.handle(createClubEvent);
 
         // then
         assertAll(
-                () -> verify(clubRoleRepository, times(1)).saveAll(any()),
+                () -> Assertions.assertThat(clubRoleRepository.findAll().size()).isEqualTo(clubRoles.size()),
                 () -> verify(applicationEventPublisher, times(1)).publishEvent(any(CreateDefaultRoleEvent.class))
         );
     }

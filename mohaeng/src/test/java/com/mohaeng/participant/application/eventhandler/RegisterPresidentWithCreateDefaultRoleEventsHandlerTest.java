@@ -4,9 +4,9 @@ import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.common.EventHandlerTest;
+import com.mohaeng.common.repositories.MockParticipantRepository;
 import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.participant.domain.model.Participant;
-import com.mohaeng.participant.domain.repository.ParticipantRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,12 +14,11 @@ import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.ClubRoleFixture.presidentRole;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.*;
 
 @DisplayName("RegisterPresidentWithCreateDefaultRoleEventHandler 는 ")
 class RegisterPresidentWithCreateDefaultRoleEventsHandlerTest extends EventHandlerTest {
 
-    private final ParticipantRepository participantRepository = mock(ParticipantRepository.class);
+    private final MockParticipantRepository participantRepository = new MockParticipantRepository();
 
     private final RegisterPresidentWithCreateDefaultRoleEventHandler handler =
             new RegisterPresidentWithCreateDefaultRoleEventHandler(eventHistoryRepository, participantRepository);
@@ -38,7 +37,7 @@ class RegisterPresidentWithCreateDefaultRoleEventsHandlerTest extends EventHandl
 
         // then
         assertAll(
-                () -> verify(participantRepository, times(1)).save(any(Participant.class))
+                () -> Assertions.assertThat(participantRepository.findAll().size()).isEqualTo(1)
         );
     }
 }
