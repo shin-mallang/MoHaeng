@@ -1,0 +1,45 @@
+package com.mohaeng.authentication.infrastructure.jwt.service;
+
+import com.mohaeng.authentication.application.usecase.ExtractClaimsUseCase;
+import com.mohaeng.authentication.domain.model.Claims;
+import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
+import com.mohaeng.common.fixtures.AuthenticationFixture;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static com.mohaeng.common.fixtures.AuthenticationFixture.accessToken;
+import static com.mohaeng.common.fixtures.AuthenticationFixture.invalidAccessToken;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
+@DisplayName("ExtractClaims 은 ")
+class ExtractClaimsTest {
+
+
+    private final ExtractClaimsUseCase extractClaimsUseCase = new ExtractClaims(new AuthenticationFixture.MockJwtProperties());
+
+    @Test
+    @DisplayName("토큰을 받으면 해당 토큰의 클레임을 반환한다.")
+    void returnClaimsWhenGivenToken() {
+        // given
+        Claims returnClaims = extractClaimsUseCase.command(
+                new ExtractClaimsUseCase.Command(accessToken())
+        );
+
+        // then
+        assertAll(
+                () -> assertThat(returnClaims.claims()).isNotEmpty()
+        );
+    }
+
+    @Test
+    @DisplayName("토큰이 올바르지 않다면 예외를 발생시킨다.")
+    void throwExceptionWhenInvalidJWT() {
+        // when, then
+        assertThatThrownBy(() -> extractClaimsUseCase.command(
+                        new ExtractClaimsUseCase.Command(invalidAccessToken())
+                )
+        ).isInstanceOf(InvalidAccessTokenException.class);
+    }
+}

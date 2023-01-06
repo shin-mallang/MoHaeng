@@ -12,5 +12,5 @@ public interface MemberRepository {
 
     Optional<Member> findByUsername(final String username);
 
-    Optional<Member> findById(final Long memberId);
+    Optional<Member> findById(final Long id);
 }

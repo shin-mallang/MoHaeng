@@ -3,10 +3,7 @@ package com.mohaeng.member.domain.model;
 import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.enums.Gender;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "member")
 public class Member extends BaseEntity {
 
+    @Column(unique = true)
     private String username;
 
     private String password;
@@ -26,22 +24,6 @@ public class Member extends BaseEntity {
     private Gender gender;
 
     protected Member() {
-    }
-
-    public Member(final Long id,
-                  final LocalDateTime createdAt,
-                  final LocalDateTime lastModifiedAt,
-                  final String username,
-                  final String password,
-                  final String name,
-                  final int age,
-                  final Gender gender) {
-        super(id, createdAt, lastModifiedAt);
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
     }
 
     public Member(final String username,

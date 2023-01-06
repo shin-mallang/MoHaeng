@@ -11,6 +11,6 @@ public class ClubControllerMapper {
                 memberId,
                 request.name(),
                 request.description(),
-                request.maxPeopleCount());
+                request.maxParticipantCount());
     }
 }

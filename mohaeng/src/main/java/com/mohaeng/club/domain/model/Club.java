@@ -1,11 +1,10 @@
 package com.mohaeng.club.domain.model;
 
 
+import com.mohaeng.club.exception.ClubFullException;
 import com.mohaeng.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "club")
@@ -15,27 +14,17 @@ public class Club extends BaseEntity {
 
     private String description;
 
-    private int maxPeopleCount;
+    private int maxParticipantCount;
+
+    private int currentParticipantCount;  // 현재 가입한 인원 수
 
     protected Club() {
     }
 
-    public Club(final Long id,
-                final LocalDateTime createdAt,
-                final LocalDateTime lastModifiedAt,
-                final String name,
-                final String description,
-                final int maxPeopleCount) {
-        super(id, createdAt, lastModifiedAt);
+    public Club(final String name, final String description, final int maxParticipantCount) {
         this.name = name;
         this.description = description;
-        this.maxPeopleCount = maxPeopleCount;
-    }
-
-    public Club(final String name, final String description, final int maxPeopleCount) {
-        this.name = name;
-        this.description = description;
-        this.maxPeopleCount = maxPeopleCount;
+        this.maxParticipantCount = maxParticipantCount;
     }
 
     public String name() {
@@ -46,7 +35,18 @@ public class Club extends BaseEntity {
         return description;
     }
 
-    public int maxPeopleCount() {
-        return maxPeopleCount;
+    public int maxParticipantCount() {
+        return maxParticipantCount;
+    }
+
+    public int currentParticipantCount() {
+        return currentParticipantCount;
+    }
+
+    public void participantCountUp() {
+        if (maxParticipantCount < currentParticipantCount + 1) {
+            throw new ClubFullException();
+        }
+        currentParticipantCount++;
     }
 }

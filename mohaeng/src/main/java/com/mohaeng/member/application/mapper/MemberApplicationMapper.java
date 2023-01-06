@@ -5,7 +5,7 @@ import com.mohaeng.member.domain.model.Member;
 
 public class MemberApplicationMapper {
 
-    public static Member toDomainEntity(SignUpUseCase.Command command) {
+    public static Member toDomainEntity(final SignUpUseCase.Command command) {
         return new Member(
                 command.username(),
                 command.password(),

@@ -1,31 +1,29 @@
 package com.mohaeng.club.domain.event;
 
-import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.common.event.BaseEvent;
 import com.mohaeng.common.event.BaseEventHistory;
-import com.mohaeng.member.domain.model.Member;
 
 public class CreateClubEvent extends BaseEvent {
 
-    private final Member member;
-    private final Club club;
+    private final Long memberId;
+    private final Long clubId;
 
-    public CreateClubEvent(final Object source, final Member member, final Club club) {
+    public CreateClubEvent(final Object source, final Long memberId, final Long clubId) {
         super(source);
-        this.member = member;
-        this.club = club;
+        this.memberId = memberId;
+        this.clubId = clubId;
     }
 
     @Override
     public BaseEventHistory history() {
-        return new CreateClubEventHistory(eventDateTime, member.id(), club.id());
+        return new CreateClubEventHistory(eventDateTime, memberId, clubId);
     }
 
-    public Member member() {
-        return member;
+    public Long memberId() {
+        return memberId;
     }
 
-    public Club club() {
-        return club;
+    public Long clubId() {
+        return clubId;
     }
 }

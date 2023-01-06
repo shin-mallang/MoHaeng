@@ -9,6 +9,6 @@ public class ExtractAccessToken implements ExtractAccessTokenUseCase {
 
     @Override
     public AccessToken command(final Command command) {
-        return AccessToken.fromTypeToken(command.header());
+        return AccessToken.fromBearerTypeToken(command.header());
     }
 }
