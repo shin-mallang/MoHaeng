@@ -5,8 +5,6 @@ import com.mohaeng.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "club")
 public class Club extends BaseEntity {
@@ -15,16 +13,15 @@ public class Club extends BaseEntity {
 
     private String description;
 
-    // TODO maxParticipantCount
-    private int maxPeopleCount;
+    private int maxParticipantCount;
 
     protected Club() {
     }
 
-    public Club(final String name, final String description, final int maxPeopleCount) {
+    public Club(final String name, final String description, final int maxParticipantCount) {
         this.name = name;
         this.description = description;
-        this.maxPeopleCount = maxPeopleCount;
+        this.maxParticipantCount = maxParticipantCount;
     }
 
     public String name() {
@@ -35,7 +32,7 @@ public class Club extends BaseEntity {
         return description;
     }
 
-    public int maxPeopleCount() {
-        return maxPeopleCount;
+    public int maxParticipantCount() {
+        return maxParticipantCount;
     }
 }

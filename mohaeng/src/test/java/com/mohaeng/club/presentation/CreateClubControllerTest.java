@@ -74,7 +74,7 @@ class CreateClubControllerTest extends ControllerTest {
                         requestFields(
                                 fieldWithPath("name").type(STRING).description("name(모임 이름)"),
                                 fieldWithPath("description").type(STRING).description("description(모임 설명)"),
-                                fieldWithPath("maxPeopleCount").type(NUMBER).description("maxPeopleCount(최대 인원)")
+                                fieldWithPath("maxParticipantCount").type(NUMBER).description("maxParticipantCount(최대 인원)")
                         )
                 )
         );

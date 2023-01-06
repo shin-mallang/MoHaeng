@@ -44,14 +44,14 @@ public class CreateClubController {
             @NotBlank(message = "모임의 설명은 필수입니다.")
             String description,
             @Min(0)
-            int maxPeopleCount  // 0인 경우 최대로 설정
+            int maxParticipantCount  // 0인 경우 최대로 설정
     ) {
         @Override
-        public int maxPeopleCount() {
-            if (maxPeopleCount == 0) {
+        public int maxParticipantCount() {
+            if (maxParticipantCount == 0) {
                 return Integer.MAX_VALUE;
             }
-            return maxPeopleCount;
+            return maxParticipantCount;
         }
     }
 }

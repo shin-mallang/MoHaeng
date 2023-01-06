@@ -9,16 +9,16 @@ public class ClubFixture {
 
     public static final String NAME = "name";
     public static final String DESCRIPTION = "des";
-    public static final int MAX_PEOPLE_COUNT = 100;
+    public static final int MAX_PARTICIPANT_COUNT = 100;
 
     public static Club club(final Long clubId) {
-        Club club = new Club(NAME, DESCRIPTION, MAX_PEOPLE_COUNT);
+        Club club = new Club(NAME, DESCRIPTION, MAX_PARTICIPANT_COUNT);
         ReflectionTestUtils.setField(club, "id", clubId);
         return club;
     }
 
     public static CreateClubUseCase.Command createClubUseCaseCommand(Long id) {
-        return new CreateClubUseCase.Command(id, NAME, DESCRIPTION, MAX_PEOPLE_COUNT);
+        return new CreateClubUseCase.Command(id, NAME, DESCRIPTION, MAX_PARTICIPANT_COUNT);
     }
 
     public static CreateClubController.CreateClubRequest createClubRequest(String name, String des, int maxParticipantCount) {
