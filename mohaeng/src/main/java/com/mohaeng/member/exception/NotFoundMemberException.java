@@ -1,4 +1,4 @@
-package com.mohaeng.member.application.exception;
+package com.mohaeng.member.exception;
 
 import static java.lang.String.format;
 

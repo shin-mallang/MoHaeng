@@ -1,4 +1,4 @@
-package com.mohaeng.authentication.domain.exception;
+package com.mohaeng.authentication.exception;
 
 public class NotFoundAccessTokenException extends RuntimeException {
 

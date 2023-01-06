@@ -1,4 +1,4 @@
-package com.mohaeng.participant.application.eventhandler;
+package com.mohaeng.clubrole.exception;
 
 import static java.lang.String.format;
 
