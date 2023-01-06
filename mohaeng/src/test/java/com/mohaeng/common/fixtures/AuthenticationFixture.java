@@ -3,8 +3,12 @@ package com.mohaeng.common.fixtures;
 import com.mohaeng.authentication.domain.model.AccessToken;
 import com.mohaeng.authentication.domain.model.Claims;
 import com.mohaeng.authentication.infrastructure.jwt.config.JwtProperties;
+import com.mohaeng.authentication.presentation.LogInController;
 
 import java.util.HashMap;
+
+import static com.mohaeng.common.fixtures.MemberFixture.PASSWORD;
+import static com.mohaeng.common.fixtures.MemberFixture.USERNAME;
 
 public class AuthenticationFixture {
 
@@ -39,5 +43,9 @@ public class AuthenticationFixture {
 
     public static AccessToken invalidAccessToken() {
         return new AccessToken("INVALID");
+    }
+
+    public static LogInController.LoginRequest loginRequest() {
+        return new LogInController.LoginRequest(USERNAME, PASSWORD);
     }
 }

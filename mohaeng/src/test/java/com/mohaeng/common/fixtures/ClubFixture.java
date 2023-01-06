@@ -17,8 +17,8 @@ public class ClubFixture {
         return club;
     }
 
-    public static CreateClubUseCase.Command createClubUseCaseCommand(Long id) {
-        return new CreateClubUseCase.Command(id, NAME, DESCRIPTION, MAX_PARTICIPANT_COUNT);
+    public static CreateClubUseCase.Command createClubUseCaseCommand(Long memberId) {
+        return new CreateClubUseCase.Command(memberId, NAME, DESCRIPTION, MAX_PARTICIPANT_COUNT);
     }
 
     public static CreateClubController.CreateClubRequest createClubRequest(String name, String des, int maxParticipantCount) {
