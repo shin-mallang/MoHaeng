@@ -1,6 +1,6 @@
 package com.mohaeng.authentication.domain.model;
 
-import com.mohaeng.authentication.domain.exception.NotFoundAccessTokenException;
+import com.mohaeng.authentication.exception.NotFoundAccessTokenException;
 import org.apache.logging.log4j.util.Strings;
 
 public record AccessToken(

@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("ExtractClaims 은 ")
 class ExtractClaimsTest {
 
-
     private final ExtractClaimsUseCase extractClaimsUseCase = new ExtractClaims(new AuthenticationFixture.MockJwtProperties());
 
     @Test

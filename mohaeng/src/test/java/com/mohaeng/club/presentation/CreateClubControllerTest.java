@@ -2,7 +2,6 @@ package com.mohaeng.club.presentation;
 
 import com.mohaeng.club.application.usecase.CreateClubUseCase;
 import com.mohaeng.common.ControllerTest;
-import com.mohaeng.common.fixtures.AuthenticationFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -105,7 +104,6 @@ class CreateClubControllerTest extends ControllerTest {
                 )
         );
     }
-
 
     @Test
     @DisplayName("모임 생성 시 필드가 없는 경우 400을 반환한다.")

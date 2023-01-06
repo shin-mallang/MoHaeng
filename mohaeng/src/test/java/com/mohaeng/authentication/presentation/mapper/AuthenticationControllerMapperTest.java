@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("AuthenticationControllerMapper 는 ")
 class AuthenticationControllerMapperTest {
-    
+
     @DisplayName("LoginRequest -> LogInUseCase.Command로 변환한다.")
     @Test
     void loginRequestToLogInUseCaseCommand() {

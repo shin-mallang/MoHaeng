@@ -1,6 +1,5 @@
 package com.mohaeng.common.domain;
 
-import com.mohaeng.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;

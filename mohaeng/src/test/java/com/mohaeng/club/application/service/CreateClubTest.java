@@ -2,7 +2,6 @@ package com.mohaeng.club.application.service;
 
 import com.mohaeng.club.application.usecase.CreateClubUseCase;
 import com.mohaeng.clubrole.domain.model.ClubRole;
-import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
@@ -20,10 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ApplicationTest
 @DisplayName("CreateClub은 ")
 class CreateClubTest {
-
-
-    @Autowired
-    private ClubRoleRepository clubRoleRepository;
 
     @Autowired
     private EntityManager em;

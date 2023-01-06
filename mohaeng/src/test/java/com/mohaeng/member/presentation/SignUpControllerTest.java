@@ -1,10 +1,9 @@
 package com.mohaeng.member.presentation;
 
-import com.mohaeng.member.application.exception.DuplicateUsernameException;
+import com.mohaeng.common.ControllerTest;
+import com.mohaeng.member.exception.DuplicateUsernameException;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.model.enums.Gender;
-import com.mohaeng.member.presentation.SignUpController;
-import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,10 +11,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.mohaeng.common.fixtures.MemberFixture.signUpRequest;
-import static com.mohaeng.member.presentation.SignUpController.SIGN_UP_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
+import static com.mohaeng.common.fixtures.MemberFixture.signUpRequest;
+import static com.mohaeng.member.presentation.SignUpController.SIGN_UP_URL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;

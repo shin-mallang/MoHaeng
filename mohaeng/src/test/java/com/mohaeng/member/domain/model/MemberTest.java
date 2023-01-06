@@ -1,6 +1,6 @@
 package com.mohaeng.member.domain.model;
 
-import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.common.fixtures.MemberFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

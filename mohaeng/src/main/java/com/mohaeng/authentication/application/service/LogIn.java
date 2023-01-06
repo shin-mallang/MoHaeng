@@ -1,6 +1,6 @@
 package com.mohaeng.authentication.application.service;
 
-import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.authentication.application.usecase.CreateTokenUseCase;
 import com.mohaeng.authentication.application.usecase.LogInUseCase;
 import com.mohaeng.authentication.domain.model.AccessToken;

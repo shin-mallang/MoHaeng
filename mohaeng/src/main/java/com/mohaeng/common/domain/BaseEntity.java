@@ -17,7 +17,6 @@ public class BaseEntity {
     private LocalDateTime lastModifiedAt;
 
     protected BaseEntity() {
-
     }
 
     public BaseEntity(final Long id, final LocalDateTime createdAt, final LocalDateTime lastModifiedAt) {

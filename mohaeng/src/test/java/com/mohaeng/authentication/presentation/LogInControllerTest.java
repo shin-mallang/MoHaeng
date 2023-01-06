@@ -2,7 +2,7 @@
 
 package com.mohaeng.authentication.presentation;
 
-import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.authentication.application.usecase.LogInUseCase;
 import com.mohaeng.authentication.domain.model.AccessToken;
 import com.mohaeng.common.ControllerTest;

@@ -1,4 +1,4 @@
-package com.mohaeng.authentication.application.exception;
+package com.mohaeng.authentication.exception;
 
 public class IncorrectAuthenticationException extends RuntimeException {
 

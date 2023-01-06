@@ -8,7 +8,6 @@ import com.mohaeng.authentication.infrastructure.jwt.service.ExtractAccessToken;
 import com.mohaeng.authentication.presentation.argumentresolver.AuthArgumentResolver;
 import com.mohaeng.authentication.presentation.interceptor.AuthenticationContext;
 import com.mohaeng.authentication.presentation.interceptor.LogInInterceptor;
-import com.mohaeng.common.MockMvcConfig;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

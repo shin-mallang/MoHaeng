@@ -31,5 +31,4 @@ class MemberControllerMapperTest {
                 () -> assertThat(signUpRequest.gender()).isEqualTo(command.gender())
         );
     }
-
 }
