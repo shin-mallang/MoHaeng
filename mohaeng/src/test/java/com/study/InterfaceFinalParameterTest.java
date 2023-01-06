@@ -1,8 +1,10 @@
 package com.study;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@Disabled("Study Test 제외")
 public class InterfaceFinalParameterTest {
 
 
