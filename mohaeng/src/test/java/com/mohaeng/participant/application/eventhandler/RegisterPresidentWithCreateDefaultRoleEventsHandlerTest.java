@@ -2,9 +2,8 @@ package com.mohaeng.participant.application.eventhandler;
 
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
-import com.mohaeng.clubrole.domain.event.CreateDefaultRoleHistory;
 import com.mohaeng.clubrole.domain.model.ClubRole;
-import com.mohaeng.common.event.EventHistoryRepository;
+import com.mohaeng.common.EventHandlerTest;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
@@ -18,16 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
 @DisplayName("RegisterPresidentWithCreateDefaultRoleEventHandler 는 ")
-class RegisterPresidentWithCreateDefaultRoleEventsHandlerTest {
+class RegisterPresidentWithCreateDefaultRoleEventsHandlerTest extends EventHandlerTest {
 
-    private final EventHistoryRepository eventHistoryRepository = mock(EventHistoryRepository.class);
     private final ParticipantRepository participantRepository = mock(ParticipantRepository.class);
 
     private final RegisterPresidentWithCreateDefaultRoleEventHandler handler =
             new RegisterPresidentWithCreateDefaultRoleEventHandler(eventHistoryRepository, participantRepository);
 
     @Test
-    @DisplayName("기본 역할 생성 이벤트(CreateDefaultRoleEvent) 를 받으면 모임을 생성한 회원을 회장으로 등록하고, 이벤트 기록을 저장한다.")
+    @DisplayName("기본 역할 생성 이벤트(CreateDefaultRoleEvent) 를 받으면 모임을 생성한 회원을 회장으로 등록한다.")
     void test() {
         // given
         final Member member = member(1L);
@@ -40,8 +38,7 @@ class RegisterPresidentWithCreateDefaultRoleEventsHandlerTest {
 
         // then
         assertAll(
-                () -> verify(participantRepository, times(1)).save(any(Participant.class)),
-                () -> verify(eventHistoryRepository, times(1)).save(any(CreateDefaultRoleHistory.class))
+                () -> verify(participantRepository, times(1)).save(any(Participant.class))
         );
     }
 }
