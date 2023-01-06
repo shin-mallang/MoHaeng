@@ -1,7 +1,5 @@
 package com.mohaeng.authentication.presentation.argumentresolver;
 
-import com.mohaeng.authentication.presentation.argumentresolver.Auth;
-import com.mohaeng.authentication.presentation.argumentresolver.AuthArgumentResolver;
 import com.mohaeng.authentication.presentation.interceptor.AuthenticationContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

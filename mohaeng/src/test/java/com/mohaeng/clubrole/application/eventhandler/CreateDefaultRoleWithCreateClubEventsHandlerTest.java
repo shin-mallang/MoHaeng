@@ -1,16 +1,15 @@
 package com.mohaeng.clubrole.application.eventhandler;
 
-import com.mohaeng.clubrole.application.eventhandler.CreateDefaultRoleWithCreateClubEventHandler;
-import com.mohaeng.common.event.Events;
 import com.mohaeng.club.domain.event.CreateClubEvent;
 import com.mohaeng.club.domain.event.CreateClubEventHistory;
-import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
 import com.mohaeng.club.domain.model.Club;
+import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.event.EventHistoryRepository;
+import com.mohaeng.common.event.Events;
+import com.mohaeng.common.fixtures.MemberFixture;
 import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.model.enums.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,6 +18,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.mohaeng.common.fixtures.ClubFixture.club;
+import static com.mohaeng.common.fixtures.ClubRoleFixture.clubRolesWithId;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
@@ -36,12 +37,10 @@ class CreateDefaultRoleWithCreateClubEventsHandlerTest {
     @DisplayName("클럽 생성 이벤트(CreateClubEvent) 를 받으면 기본 역할을 생성한 후 처리된 이벤트를 저장한다.")
     void createDefaultRole() {
         // given
-        final Member member = new Member(1L, LocalDateTime.now(), LocalDateTime.now(),
-                "username", "password", "name", 10, Gender.MAN);
-        final Club club = new Club(1L, LocalDateTime.now(), LocalDateTime.now(), "name", "des", 100);
+        final Member member = MemberFixture.member(1L);
+        final Club club = club(1L);
         CreateClubEvent createClubEvent = new CreateClubEvent(this, member, club);
-        List<ClubRole> clubRoles = ClubRole.defaultRoles(club);
-        clubRoles.forEach(it -> ReflectionTestUtils.setField(it, "id", 1L));
+        List<ClubRole> clubRoles = clubRolesWithId(club);
         when(clubRoleRepository.saveAll(any())).thenReturn(clubRoles);
 
         // when
@@ -59,12 +58,10 @@ class CreateDefaultRoleWithCreateClubEventsHandlerTest {
     void publishCreateDefaultRoleEvent() {
         // given
         Events.setApplicationEventPublisher(applicationEventPublisher);
-        final Member member = new Member(1L, LocalDateTime.now(), LocalDateTime.now(),
-                "username", "password", "name", 10, Gender.MAN);
-        final Club club = new Club(1L, LocalDateTime.now(), LocalDateTime.now(), "name", "des", 100);
+        final Member member = MemberFixture.member(1L);
+        Club club = club(1L);
         CreateClubEvent createClubEvent = new CreateClubEvent(this, member, club);
-        List<ClubRole> clubRoles = ClubRole.defaultRoles(club);
-        clubRoles.forEach(it -> ReflectionTestUtils.setField(it, "id", 1L));
+        List<ClubRole> clubRoles = clubRolesWithId(club);
         when(clubRoleRepository.saveAll(any())).thenReturn(clubRoles);
 
         // when

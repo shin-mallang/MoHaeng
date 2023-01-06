@@ -1,12 +1,12 @@
 package com.mohaeng.clubrole.domain.model;
 
 import com.mohaeng.club.domain.model.Club;
-import com.mohaeng.clubrole.domain.model.ClubRole;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -17,7 +17,7 @@ class ClubRoleTest {
     @DisplayName("회장, 임원, 일반 분류에 속하는 기본 역할 하나씩을 생성한다.")
     void defaultRoles() {
         // given
-        Club club = new Club("name", "des", 10);
+        Club club = club(1L);
 
         // when
         List<ClubRole> clubRoles = ClubRole.defaultRoles(club);

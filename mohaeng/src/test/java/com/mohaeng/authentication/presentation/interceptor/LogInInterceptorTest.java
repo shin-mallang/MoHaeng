@@ -6,13 +6,12 @@ import com.mohaeng.authentication.domain.exception.NotFoundAccessTokenException;
 import com.mohaeng.authentication.domain.model.Claims;
 import com.mohaeng.authentication.infrastructure.jwt.service.ExtractAccessToken;
 import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
-import com.mohaeng.authentication.presentation.interceptor.AuthenticationContext;
-import com.mohaeng.authentication.presentation.interceptor.LogInInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.mohaeng.common.fixtures.AuthenticationFixture.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -20,7 +19,6 @@ import static org.mockito.Mockito.when;
 
 class LogInInterceptorTest {
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
 
     private final ExtractAccessTokenUseCase extractAccessTokenUseCase = new ExtractAccessToken();
     private final ExtractClaimsUseCase extractClaimsUseCase = mock(ExtractClaimsUseCase.class);
@@ -51,7 +49,7 @@ class LogInInterceptorTest {
     @Test
     @DisplayName("토큰이 Bearer로 시작하지 않으면 예외를 발생시킨다.")
     void throwExceptionWhenTokenNotStartedBearer() {
-        when(request.getHeader(AUTHORIZATION_HEADER)).thenReturn("token");
+        when(request.getHeader(AUTHORIZATION_HEADER)).thenReturn(ACCESS_TOKEN);
 
         assertThatThrownBy(() -> logInInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class)))
                 .isInstanceOf(NotFoundAccessTokenException.class);
@@ -60,7 +58,7 @@ class LogInInterceptorTest {
     @Test
     @DisplayName("토큰의 클레임에 MEMBER_ID_CLAIM 이 없으면 예외를 발생시킨다.")
     void throwExceptionWhenTokenNotContainsMemberIdClaim() {
-        when(request.getHeader(AUTHORIZATION_HEADER)).thenReturn("Bearer token");
+        when(request.getHeader(AUTHORIZATION_HEADER)).thenReturn(BEARER_ACCESS_TOKEN);
         when(extractClaimsUseCase.command(any())).thenReturn(new Claims());
 
         assertThatThrownBy(() -> logInInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class)))

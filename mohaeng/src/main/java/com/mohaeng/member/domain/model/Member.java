@@ -28,22 +28,6 @@ public class Member extends BaseEntity {
     protected Member() {
     }
 
-    public Member(final Long id,
-                  final LocalDateTime createdAt,
-                  final LocalDateTime lastModifiedAt,
-                  final String username,
-                  final String password,
-                  final String name,
-                  final int age,
-                  final Gender gender) {
-        super(id, createdAt, lastModifiedAt);
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-    }
-
     public Member(final String username,
                   final String password,
                   final String name,

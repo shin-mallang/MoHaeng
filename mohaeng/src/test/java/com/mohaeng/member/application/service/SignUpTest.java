@@ -1,14 +1,13 @@
 package com.mohaeng.member.application.service;
 
 import com.mohaeng.member.application.exception.DuplicateUsernameException;
-import com.mohaeng.member.application.service.SignUp;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.model.enums.Gender;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.mohaeng.common.fixtures.MemberFixture.signUpUseCaseCommand;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -25,11 +24,10 @@ class SignUpTest {
     void throwExceptionWhenUsernameDuplicated() {
         // given
         when(memberRepository.existsByUsername(any())).thenReturn(true);
-        SignUpUseCase.Command command = SignUpUseCaseCommandFixture.command();
 
         // when, then
         assertAll(
-                () -> assertThatThrownBy(() -> signUp.command(command))
+                () -> assertThatThrownBy(() -> signUp.command(signUpUseCaseCommand()))
                         .isInstanceOf(DuplicateUsernameException.class),
                 () -> verify(memberRepository, times(0))
                         .save(any(Member.class))
@@ -39,30 +37,12 @@ class SignUpTest {
     @Test
     @DisplayName("문제가 없는 경우 회원 가입을 진행한다.")
     void success() {
-        // given
-        SignUpUseCase.Command command = SignUpUseCaseCommandFixture.command();
-
         // when, then
         assertAll(
-                () -> assertDoesNotThrow(() -> signUp.command(command)),
+                () -> assertDoesNotThrow(() -> signUp.command(signUpUseCaseCommand())),
                 () -> verify(memberRepository, times(1))
                         .save(any(Member.class))
         );
     }
     // TODO 비밀번호 암호화 되는 테스트
-
-
-    private static class SignUpUseCaseCommandFixture {
-        private static String username = "username";
-        private static String password = "password";
-        private static String name = "name";
-        private static int age = 10;
-        private static Gender gender = Gender.MAN;
-
-        public static SignUpUseCase.Command command() {
-            return new SignUpUseCase.Command(
-                    username, password, name, age, gender
-            );
-        }
-    }
 }

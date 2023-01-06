@@ -1,11 +1,12 @@
 package com.mohaeng.authentication.infrastructure.jwt.service;
 
 import com.mohaeng.authentication.application.usecase.ExtractAccessTokenUseCase;
-import com.mohaeng.authentication.domain.model.AccessToken;
 import com.mohaeng.authentication.domain.exception.NotFoundAccessTokenException;
+import com.mohaeng.authentication.domain.model.AccessToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_TOKEN_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -13,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("ExtractAccessToken 은 ")
 class ExtractAccessTokenTest {
 
-    private static final String TOKEN_TYPE = "Bearer ";
     private final ExtractAccessTokenUseCase extractAccessTokenUseCase = new ExtractAccessToken();
 
     @Test
@@ -30,10 +30,10 @@ class ExtractAccessTokenTest {
     void throwExceptionCauseByInvalidToken() {
         assertAll(
                 () -> assertThatThrownBy(() -> extractAccessTokenUseCase.command(
-                        new ExtractAccessTokenUseCase.Command(TOKEN_TYPE)
+                        new ExtractAccessTokenUseCase.Command(BEARER_TOKEN_TYPE)
                 )).isInstanceOf(NotFoundAccessTokenException.class),
                 () -> assertThatThrownBy(() -> extractAccessTokenUseCase.command(
-                        new ExtractAccessTokenUseCase.Command(TOKEN_TYPE + " ")
+                        new ExtractAccessTokenUseCase.Command(BEARER_TOKEN_TYPE + " ")
                 )).isInstanceOf(NotFoundAccessTokenException.class)
         );
     }
@@ -42,7 +42,7 @@ class ExtractAccessTokenTest {
     @DisplayName("토큰이 정상적으로 존재한다면 해당 토큰을 반환한다.")
     void returnTokenWhenTokenCorrect() {
         AccessToken token = extractAccessTokenUseCase.command(
-                new ExtractAccessTokenUseCase.Command(TOKEN_TYPE + "token")
+                new ExtractAccessTokenUseCase.Command(BEARER_TOKEN_TYPE + "token")
         );
 
         assertThat(token.token()).isEqualTo("token");

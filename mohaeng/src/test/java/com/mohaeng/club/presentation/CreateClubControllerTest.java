@@ -2,6 +2,7 @@ package com.mohaeng.club.presentation;
 
 import com.mohaeng.club.application.usecase.CreateClubUseCase;
 import com.mohaeng.common.ControllerTest;
+import com.mohaeng.common.fixtures.AuthenticationFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +14,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.mohaeng.club.presentation.CreateClubController.CREATE_CLUB_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
+import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;
+import static com.mohaeng.common.fixtures.ClubFixture.createClubRequest;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -34,17 +37,13 @@ class CreateClubControllerTest extends ControllerTest {
     @MockBean
     private CreateClubUseCase createClubUseCase;
 
-    private final CreateClubController.CreateClubRequest correctRequest =
-            new CreateClubController.CreateClubRequest("name", "des", 10);
+    private final CreateClubController.CreateClubRequest correctRequest = createClubRequest("name", "dex", 10);
 
-    private final CreateClubController.CreateClubRequest emptyFieldRequest =
-            new CreateClubController.CreateClubRequest("   ", "des", 10);
+    private final CreateClubController.CreateClubRequest emptyFieldRequest = createClubRequest(" ", "dex", 10);
 
-    private final CreateClubController.CreateClubRequest zeroMaxPeopleCountRequest =
-            new CreateClubController.CreateClubRequest("name", "des", 0);
+    private final CreateClubController.CreateClubRequest zeroMaxPeopleCountRequest = createClubRequest("name", "dex", 0);
 
-    private final CreateClubController.CreateClubRequest negativeMaxPeopleCountRequest =
-            new CreateClubController.CreateClubRequest("name", "des", -1);
+    private final CreateClubController.CreateClubRequest negativeMaxPeopleCountRequest = createClubRequest("name", "dex", -1);
 
     @Test
     @DisplayName("인증된 사용자의 올바른 모임 생성 요청인 경우 모임을 생성하고 201을 반환한다.")
@@ -56,7 +55,7 @@ class CreateClubControllerTest extends ControllerTest {
         // when & then
         ResultActions resultActions = mockMvc.perform(
                         post(CREATE_CLUB_URL)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(correctRequest))
                 )
@@ -91,7 +90,7 @@ class CreateClubControllerTest extends ControllerTest {
         // when & then
         ResultActions resultActions = mockMvc.perform(
                         post(CREATE_CLUB_URL)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(zeroMaxPeopleCountRequest))
                 )
@@ -118,7 +117,7 @@ class CreateClubControllerTest extends ControllerTest {
         // when & then
         ResultActions resultActions = mockMvc.perform(
                         post(CREATE_CLUB_URL)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(emptyFieldRequest))
                 )
@@ -143,7 +142,7 @@ class CreateClubControllerTest extends ControllerTest {
         // when & then
         ResultActions resultActions = mockMvc.perform(
                         post(CREATE_CLUB_URL)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(negativeMaxPeopleCountRequest))
                 )

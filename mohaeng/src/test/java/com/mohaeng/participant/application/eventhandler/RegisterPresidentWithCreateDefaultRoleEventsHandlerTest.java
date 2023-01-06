@@ -4,17 +4,16 @@ import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
 import com.mohaeng.clubrole.domain.event.CreateDefaultRoleHistory;
 import com.mohaeng.clubrole.domain.model.ClubRole;
-import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.common.event.EventHistoryRepository;
 import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.model.enums.Gender;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
+import static com.mohaeng.common.fixtures.ClubFixture.club;
+import static com.mohaeng.common.fixtures.ClubRoleFixture.presidentRole;
+import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
@@ -31,10 +30,9 @@ class RegisterPresidentWithCreateDefaultRoleEventsHandlerTest {
     @DisplayName("기본 역할 생성 이벤트(CreateDefaultRoleEvent) 를 받으면 모임을 생성한 회원을 회장으로 등록하고, 이벤트 기록을 저장한다.")
     void test() {
         // given
-        final Member member = new Member(1L, LocalDateTime.now(), LocalDateTime.now(),
-                "username", "password", "name", 10, Gender.MAN);
-        final Club club = new Club(1L, LocalDateTime.now(), LocalDateTime.now(), "name", "des", 100);
-        final ClubRole role = new ClubRole("회장", ClubRoleCategory.PRESIDENT, club);
+        final Member member = member(1L);
+        final Club club = club(1L);
+        final ClubRole role = presidentRole("회장", club);
 
         CreateDefaultRoleEvent createDefaultRoleEvent = new CreateDefaultRoleEvent(this, member, club, role);
         // when

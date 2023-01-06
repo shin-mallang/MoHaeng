@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.mohaeng.common.fixtures.MemberFixture.signUpRequest;
 import static com.mohaeng.member.presentation.SignUpController.SIGN_UP_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
@@ -33,11 +34,9 @@ class SignUpControllerTest extends ControllerTest {
     @MockBean
     private SignUpUseCase signUpUseCase;
 
-    private final SignUpController.SignUpRequest signUpRequest =
-            new SignUpController.SignUpRequest("username", "password", "name", 22, Gender.MAN);
+    private final SignUpController.SignUpRequest signUpRequest = signUpRequest("username", "password", "name", 22, Gender.MAN);
 
-    private final SignUpController.SignUpRequest nullRequest =
-            new SignUpController.SignUpRequest("", "", "", 0, Gender.MAN);
+    private final SignUpController.SignUpRequest nullRequest = signUpRequest("", "", "", 0, Gender.MAN);
 
     @Test
     @DisplayName("회원가입(signUp) 성공 시 201을 반환한다.")

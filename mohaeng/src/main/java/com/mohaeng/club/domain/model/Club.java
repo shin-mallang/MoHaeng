@@ -15,21 +15,10 @@ public class Club extends BaseEntity {
 
     private String description;
 
+    // TODO maxParticipantCount
     private int maxPeopleCount;
 
     protected Club() {
-    }
-
-    public Club(final Long id,
-                final LocalDateTime createdAt,
-                final LocalDateTime lastModifiedAt,
-                final String name,
-                final String description,
-                final int maxPeopleCount) {
-        super(id, createdAt, lastModifiedAt);
-        this.name = name;
-        this.description = description;
-        this.maxPeopleCount = maxPeopleCount;
     }
 
     public Club(final String name, final String description, final int maxPeopleCount) {

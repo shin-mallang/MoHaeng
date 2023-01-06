@@ -3,15 +3,13 @@ package com.mohaeng.authentication.application.service;
 import com.mohaeng.authentication.application.exception.IncorrectAuthenticationException;
 import com.mohaeng.authentication.application.usecase.CreateTokenUseCase;
 import com.mohaeng.authentication.application.usecase.LogInUseCase;
-import com.mohaeng.authentication.application.service.LogIn;
 import com.mohaeng.authentication.domain.model.AccessToken;
+import com.mohaeng.common.fixtures.MemberFixture;
 import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.model.enums.Gender;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,8 +23,7 @@ class LogInTest {
     private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final CreateTokenUseCase createTokenUseCase = mock(CreateTokenUseCase.class);
     private final LogInUseCase logInUseCase = new LogIn(memberRepository, createTokenUseCase);
-    private final Member member =
-            new Member(1L, LocalDateTime.now(), LocalDateTime.now(), "username", "password", "name", 10, Gender.MAN);
+    private final Member member = MemberFixture.member(1L);
 
     @Test
     @DisplayName("아이디와 비밀번호를 통해 로그인을 진행하고 AccessToken을 반환한다.")
