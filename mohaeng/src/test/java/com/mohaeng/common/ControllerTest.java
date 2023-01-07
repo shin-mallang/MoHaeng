@@ -53,6 +53,9 @@ public abstract class ControllerTest {
     @MockBean
     protected AuthenticationContext authenticationContext;
 
+    /**
+     * 인증된 회원이 필요한 경우 헤당 메서드를 사용하고, ACCESS TOKEN을 HEADER에 세팅한다.
+     */
     protected void setAuthentication(final Long id) {
         Claims claims = new Claims(new HashMap<>() {{
             put(MEMBER_ID_CLAIM, String.valueOf(id));
