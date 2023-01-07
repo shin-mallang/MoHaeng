@@ -1,5 +1,7 @@
 package com.mohaeng.common.repositories;
 
+import com.mohaeng.club.domain.model.Club;
+import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -18,6 +20,11 @@ public class MockParticipantRepository implements ParticipantRepository {
         ReflectionTestUtils.setField(participant, "id", ++sequence);
         store.put(participant.id(), participant);
         return participant;
+    }
+
+    @Override
+    public boolean existsByMemberAndClub(Member member, Club club) {
+        return store.values().stream().anyMatch(it -> it.member().id().equals(member.id()) && it.club().id().equals(club.id()));
     }
 
     public List<Participant> findAll() {

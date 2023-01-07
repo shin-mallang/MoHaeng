@@ -54,3 +54,18 @@ operation::create-club fail(request fields contains empty value)[snippets='http-
 
 ==== 인원을 0으로 설정한 경우(-> 최대 인원으로 설정)
 operation::create-club(max people count is 0 then setting MAX)[snippets='request-body,http-response']
+
+
+
+[[Club-모임-가입-신청]]
+=== 모임 가입 신청
+operation::request-join-club[snippets='http-request,path-parameters,http-response']
+
+=== 이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우
+operation::request-join-club fail(already request join club)[snippets='http-response']
+
+=== 이미 모임에 가입된 회원이 같은 모임에 또다시 가입 신청을 보낸 경우
+operation::request-join-club fail(member already joined club)[snippets='http-response']
+
+==== 요청 시 Header에 AccessToken이 없는 경우
+operation::request-join-club fail(No Access Token)[snippets='http-response']

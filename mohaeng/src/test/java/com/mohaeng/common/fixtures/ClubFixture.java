@@ -11,6 +11,10 @@ public class ClubFixture {
     public static final String DESCRIPTION = "des";
     public static final int MAX_PARTICIPANT_COUNT = 100;
 
+    public static Club clubWithMaxParticipantCount(final int maxParticipantCount) {
+        return new Club(NAME, DESCRIPTION, maxParticipantCount);
+    }
+
     public static Club club(final Long clubId) {
         Club club = new Club(NAME, DESCRIPTION, MAX_PARTICIPANT_COUNT);
         ReflectionTestUtils.setField(club, "id", clubId);
