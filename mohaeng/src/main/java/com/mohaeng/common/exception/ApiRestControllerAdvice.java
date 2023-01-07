@@ -1,5 +1,8 @@
 package com.mohaeng.common.exception;
 
+import com.mohaeng.applicationform.exception.AlreadyJoinedMemberException;
+import com.mohaeng.applicationform.exception.AlreadyProcessedApplicationFormException;
+import com.mohaeng.applicationform.exception.AlreadyRequestJoinClubException;
 import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.authentication.exception.NotFoundAccessTokenException;
 import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
@@ -45,6 +48,17 @@ public class ApiRestControllerAdvice {
     ErrorResponseDto handleException(HttpMessageNotReadableException e) {
         log.error(e.getMessage());
         return new ErrorResponseDto(BAD_REQUEST.name(), "ENUM 매핑 시 오류 발생");
+    }
+
+    /**
+     * 400
+     * 모임 가입 신청 시 발생
+     */
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler({AlreadyJoinedMemberException.class, AlreadyProcessedApplicationFormException.class, AlreadyRequestJoinClubException.class})
+    ErrorResponseDto handleException(RuntimeException e) {
+        log.error(e.getMessage());
+        return new ErrorResponseDto(BAD_REQUEST.name(), e.getMessage());
     }
 
     /**
