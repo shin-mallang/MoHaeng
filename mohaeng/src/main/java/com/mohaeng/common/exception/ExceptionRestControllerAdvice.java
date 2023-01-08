@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
-public class ApiRestControllerAdvice {
+public class ExceptionRestControllerAdvice {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
