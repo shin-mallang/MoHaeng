@@ -3,7 +3,7 @@ package com.mohaeng.clubrole.application.eventhandler;
 import com.mohaeng.club.domain.event.CreateClubEvent;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
-import com.mohaeng.club.exception.NotFoundClubException;
+import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.mohaeng.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 
 @Component
 public class CreateDefaultRoleWithCreateClubEventHandler extends EventHandler<CreateClubEvent> {
@@ -36,7 +38,7 @@ public class CreateDefaultRoleWithCreateClubEventHandler extends EventHandler<Cr
     @EventListener
     @Override
     public void handle(final CreateClubEvent event) {
-        Club club = clubRepository.findById(event.clubId()).orElseThrow(() -> new NotFoundClubException(event.clubId()));
+        Club club = clubRepository.findById(event.clubId()).orElseThrow(() -> new ClubException(NOT_FOUND_CLUB));
 
         List<ClubRole> defaultClubRoles = ClubRole.defaultRoles(club);
         List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultClubRoles);

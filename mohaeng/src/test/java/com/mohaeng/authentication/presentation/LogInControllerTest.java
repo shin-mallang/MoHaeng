@@ -2,9 +2,9 @@
 
 package com.mohaeng.authentication.presentation;
 
-import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.authentication.application.usecase.LogInUseCase;
 import com.mohaeng.authentication.domain.model.AccessToken;
+import com.mohaeng.authentication.exception.AuthenticationException;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INCORRECT_AUTHENTICATION;
 import static com.mohaeng.authentication.presentation.LogInController.LOGIN_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
@@ -66,7 +67,7 @@ class LogInControllerTest extends ControllerTest {
     @DisplayName("로그인 실패 시 401 예외를 반환한다.")
     void loginFailWillReturn401() throws Exception {
         when(logInUseCase.command(any()))
-                .thenThrow(new IncorrectAuthenticationException());
+                .thenThrow(new AuthenticationException(INCORRECT_AUTHENTICATION));
 
         ResultActions resultActions = mockMvc.perform(
                         post(LOGIN_URL)

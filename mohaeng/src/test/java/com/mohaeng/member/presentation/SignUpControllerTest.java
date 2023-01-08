@@ -1,9 +1,9 @@
 package com.mohaeng.member.presentation;
 
 import com.mohaeng.common.ControllerTest;
-import com.mohaeng.member.exception.DuplicateUsernameException;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.model.enums.Gender;
+import com.mohaeng.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.MemberFixture.signUpRequest;
+import static com.mohaeng.member.exception.MemberExceptionType.DUPLICATE_USERNAME;
 import static com.mohaeng.member.presentation.SignUpController.SIGN_UP_URL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -66,7 +67,7 @@ class SignUpControllerTest extends ControllerTest {
     @DisplayName("회원가입(signUp)시 중복 아이디인 경우 409를 반환한다.")
     void signUpFailCauseByDuplicatedUsernameWillReturn409() throws Exception {
 
-        doThrow(new DuplicateUsernameException()).when(signUpUseCase).command(any());
+        doThrow(new MemberException(DUPLICATE_USERNAME)).when(signUpUseCase).command(any());
 
         ResultActions resultActions = mockMvc.perform(
                         post(SIGN_UP_URL)

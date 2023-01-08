@@ -4,13 +4,14 @@ import com.mohaeng.authentication.application.usecase.ExtractAccessTokenUseCase;
 import com.mohaeng.authentication.application.usecase.ExtractClaimsUseCase;
 import com.mohaeng.authentication.domain.model.AccessToken;
 import com.mohaeng.authentication.domain.model.Claims;
-import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
+import com.mohaeng.authentication.exception.AuthenticationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import static com.mohaeng.authentication.application.service.LogIn.MEMBER_ID_CLAIM;
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INVALID_ACCESS_TOKEN;
 import static java.lang.Long.parseLong;
 
 @Component
@@ -48,13 +49,13 @@ public class LogInInterceptor implements HandlerInterceptor {
     private void validateClaims(final Claims claims) {
         // 클레임이 있는지 검사
         if (claims.get(MEMBER_ID_CLAIM) == null) {
-            throw new InvalidAccessTokenException();
+            throw new AuthenticationException(INVALID_ACCESS_TOKEN);
         }
         // 클레임이 Long으로 파싱될 수 있는지 검사
         try {
             parseLong(claims.get(MEMBER_ID_CLAIM));
         } catch (NumberFormatException e) {
-            throw new InvalidAccessTokenException();
+            throw new AuthenticationException(INVALID_ACCESS_TOKEN);
         }
     }
 }

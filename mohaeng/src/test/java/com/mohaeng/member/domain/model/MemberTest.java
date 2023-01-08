@@ -1,13 +1,15 @@
 package com.mohaeng.member.domain.model;
 
-import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.exception.AuthenticationException;
 import com.mohaeng.common.fixtures.MemberFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INCORRECT_AUTHENTICATION;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Member는 ")
 class MemberTest {
@@ -32,9 +34,26 @@ class MemberTest {
 
         // when & then
         assertAll(
-                () -> assertThatThrownBy(() -> member.login(member.username(), "wrong")).isInstanceOf(IncorrectAuthenticationException.class),
-                () -> assertThatThrownBy(() -> member.login("wrong", member.password())).isInstanceOf(IncorrectAuthenticationException.class),
-                () -> assertThatThrownBy(() -> member.login("wrong", "wrong")).isInstanceOf(IncorrectAuthenticationException.class)
+                () -> assertThat(assertThrows(AuthenticationException.class,
+
+                        () -> member.login(member.username(), "wrong"))
+
+                        .exceptionType())
+                        .isEqualTo(INCORRECT_AUTHENTICATION),
+
+                () -> assertThat(assertThrows(AuthenticationException.class,
+
+                        () -> member.login("wrong", member.password()))
+
+                        .exceptionType())
+                        .isEqualTo(INCORRECT_AUTHENTICATION),
+
+                () -> assertThat(assertThrows(AuthenticationException.class,
+
+                        () -> member.login("wrong", "wrong"))
+
+                        .exceptionType())
+                        .isEqualTo(INCORRECT_AUTHENTICATION)
         );
     }
 }

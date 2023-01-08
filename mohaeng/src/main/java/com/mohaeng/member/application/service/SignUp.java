@@ -1,11 +1,13 @@
 package com.mohaeng.member.application.service;
 
-import com.mohaeng.member.exception.DuplicateUsernameException;
 import com.mohaeng.member.application.mapper.MemberApplicationMapper;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.repository.MemberRepository;
+import com.mohaeng.member.exception.MemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.mohaeng.member.exception.MemberExceptionType.DUPLICATE_USERNAME;
 
 @Service
 @Transactional
@@ -31,7 +33,7 @@ public class SignUp implements SignUpUseCase {
      */
     private void checkDuplicateUsername(final String username) {
         if (memberRepository.existsByUsername(username)) {
-            throw new DuplicateUsernameException();
+            throw new MemberException(DUPLICATE_USERNAME);
         }
     }
 }

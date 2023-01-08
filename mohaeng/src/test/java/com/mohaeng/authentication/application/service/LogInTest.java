@@ -1,9 +1,10 @@
 package com.mohaeng.authentication.application.service;
 
-import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.authentication.application.usecase.LogInUseCase;
 import com.mohaeng.authentication.domain.model.AccessToken;
+import com.mohaeng.authentication.exception.AuthenticationException;
 import com.mohaeng.common.annotation.ApplicationTest;
+import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.common.fixtures.MemberFixture;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
@@ -11,9 +12,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INCORRECT_AUTHENTICATION;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ApplicationTest
 @DisplayName("LogIn은 ")
@@ -48,9 +50,11 @@ class LogInTest {
     @DisplayName("아이디가 없는 아이디라면 예외를 발생한다.")
     void loginFailCauseByIncorrectUsernameWillReturnException() {
         // when, then
-        assertThatThrownBy(() -> logInUseCase.command(
-                new LogInUseCase.Command(member.username(), member.password())
-        )).isInstanceOf(IncorrectAuthenticationException.class);
+        BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
+                () -> logInUseCase.command(
+                        new LogInUseCase.Command(member.username(), member.password())
+                )).exceptionType();
+        assertThat(baseExceptionType).isEqualTo(INCORRECT_AUTHENTICATION);
     }
 
     @Test
@@ -60,8 +64,10 @@ class LogInTest {
         memberRepository.save(member);
 
         // when, then
-        assertThatThrownBy(() -> logInUseCase.command(
-                new LogInUseCase.Command(member.username(), "incorrectPassword")
-        )).isInstanceOf(IncorrectAuthenticationException.class);
+        BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
+                () -> logInUseCase.command(
+                        new LogInUseCase.Command(member.username(), "incorrectPassword")
+                )).exceptionType();
+        assertThat(baseExceptionType).isEqualTo(INCORRECT_AUTHENTICATION);
     }
 }
