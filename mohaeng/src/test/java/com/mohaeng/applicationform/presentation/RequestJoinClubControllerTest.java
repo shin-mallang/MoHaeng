@@ -1,8 +1,7 @@
 package com.mohaeng.applicationform.presentation;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
-import com.mohaeng.applicationform.exception.AlreadyJoinedMemberException;
-import com.mohaeng.applicationform.exception.AlreadyRequestJoinClubException;
+import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_REQUEST_JOIN_CLUB;
 import static com.mohaeng.applicationform.presentation.RequestJoinClubController.REQUEST_JOIN_CLUB_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
@@ -71,7 +71,7 @@ class RequestJoinClubControllerTest extends ControllerTest {
     @DisplayName("이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우 400을 반환한다.")
     void test2() throws Exception {
         // given
-        when(requestJoinClubUseCase.command(any())).thenThrow(new AlreadyRequestJoinClubException());
+        when(requestJoinClubUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
         final Long memberId = 1L;
         setAuthentication(memberId);
         final Long clubId = 1L;
@@ -96,7 +96,7 @@ class RequestJoinClubControllerTest extends ControllerTest {
     @DisplayName("이미 모임에 가입한 사람의 경우 400을 반환한다.")
     void test3() throws Exception {
         // given
-        when(requestJoinClubUseCase.command(any())).thenThrow(new AlreadyJoinedMemberException());
+        when(requestJoinClubUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
         final Long memberId = 1L;
         setAuthentication(memberId);
         final Long clubId = 1L;

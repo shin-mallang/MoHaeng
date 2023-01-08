@@ -4,16 +4,16 @@ import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
-import com.mohaeng.member.exception.DuplicateUsernameException;
+import com.mohaeng.member.exception.MemberException;
+import com.mohaeng.member.exception.MemberExceptionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.mohaeng.common.fixtures.MemberFixture.*;
+import static com.mohaeng.member.exception.MemberExceptionType.DUPLICATE_USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ApplicationTest
 @DisplayName("SignUp은 ")
@@ -33,10 +33,9 @@ class SignUpTest {
         memberRepository.save(member);
 
         // when, then
-        assertAll(
-                () -> assertThatThrownBy(() -> signUp.command(new SignUpUseCase.Command(member.username(), member.password(), member.name(), member.age(), member.gender())))
-                        .isInstanceOf(DuplicateUsernameException.class)
-        );
+        assertThat(assertThrows(MemberException.class,
+                () -> signUp.command(new SignUpUseCase.Command(member.username(), member.password(), member.name(), member.age(), member.gender()))
+        ).exceptionType()).isEqualTo(DUPLICATE_USERNAME);
     }
 
     @Test

@@ -1,17 +1,18 @@
 package com.mohaeng.applicationform.domain;
 
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
-import com.mohaeng.applicationform.exception.AlreadyProcessedApplicationFormException;
+import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("ApplicationForm 은 ")
 class ApplicationFormTest {
@@ -62,8 +63,8 @@ class ApplicationFormTest {
         applicationForm.process();
 
         // then
-        assertAll(
-                () -> assertThatThrownBy(() -> applicationForm.process()).isInstanceOf(AlreadyProcessedApplicationFormException.class)
-        );
+        assertThat(assertThrows(ApplicationFormException.class,
+                applicationForm::process
+        ).exceptionType()).isEqualTo(ALREADY_PROCESSED_APPLICATION_FORM);
     }
 }

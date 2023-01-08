@@ -4,18 +4,22 @@ import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
 import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
-import com.mohaeng.applicationform.exception.AlreadyJoinedMemberException;
-import com.mohaeng.applicationform.exception.AlreadyRequestJoinClubException;
+import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
-import com.mohaeng.club.exception.NotFoundClubException;
+import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
-import com.mohaeng.member.exception.NotFoundMemberException;
+import com.mohaeng.member.exception.MemberException;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_REQUEST_JOIN_CLUB;
+import static com.mohaeng.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
+import static com.mohaeng.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 
 @Service
 @Transactional
@@ -39,9 +43,9 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
     @Override
     public Long command(final Command command) {
         Member member = memberRepository.findById(command.applicantId())
-                .orElseThrow(() -> new NotFoundMemberException(command.applicantId()));
+                .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
         Club club = clubRepository.findById(command.targetClubId())
-                .orElseThrow(() -> new NotFoundClubException(command.targetClubId()));
+                .orElseThrow(() -> new ClubException(NOT_FOUND_CLUB));
 
         // 이미 가입된 회원이거나, 이미 가입 신청을 한 회원이라면 오류
         validate(member, club);
@@ -58,10 +62,10 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
     /**
      * 이미 가입된 모임이거나, 이미 가입 신청을 한 회원인지 확인
      *
-     * @throws AlreadyJoinedMemberException    이미 회원이 모임에 가입되어 있는 경우
-     * @throws AlreadyRequestJoinClubException 이미 가입 신청한 경우
+     * @throws ApplicationFormException - (ALREADY_MEMBER_JOINED_CLUB) 이미 회원이 모임에 가입되어 있는 경우
+     *                                  - (ALREADY_REQUEST_JOIN_CLUB) 이미 가입 신청한 경우
      */
-    private void validate(final Member member, final Club club) throws AlreadyJoinedMemberException, AlreadyRequestJoinClubException {
+    private void validate(final Member member, final Club club) throws ApplicationFormException {
         // 이미 가입되어있는지 확인
         validateAlreadyJoinedMember(member, club);
 
@@ -72,22 +76,22 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
     /**
      * 이미 회원이 모임에 가입되어 있는지 검증
      *
-     * @throws AlreadyJoinedMemberException 이미 회원이 모임에 가입되어 있는 경우
+     * @throws ApplicationFormException (ALREADY_MEMBER_JOINED_CLUB) 이미 회원이 모임에 가입되어 있는 경우
      */
-    private void validateAlreadyJoinedMember(final Member member, final Club club) throws AlreadyJoinedMemberException {
+    private void validateAlreadyJoinedMember(final Member member, final Club club) throws ApplicationFormException {
         if (participantRepository.existsByMemberAndClub(member, club)) {
-            throw new AlreadyJoinedMemberException();
+            throw new ApplicationFormException(ALREADY_MEMBER_JOINED_CLUB);
         }
     }
 
     /**
      * 이미 가입 신청한 모임인지 확인
      *
-     * @throws AlreadyRequestJoinClubException 이미 가입 신청한 경우
+     * @throws ApplicationFormException (ALREADY_REQUEST_JOIN_CLUB) 이미 가입 신청한 경우
      */
-    private void validateAlreadyRequested(final Member member, final Club club) throws AlreadyRequestJoinClubException {
+    private void validateAlreadyRequested(final Member member, final Club club) throws ApplicationFormException {
         if (applicationFormRepository.existsByApplicantAndTarget(member, club)) {
-            throw new AlreadyRequestJoinClubException();
+            throw new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB);
         }
     }
 }

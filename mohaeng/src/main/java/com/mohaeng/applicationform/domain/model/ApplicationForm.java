@@ -1,12 +1,14 @@
 package com.mohaeng.applicationform.domain.model;
 
-import com.mohaeng.applicationform.exception.AlreadyProcessedApplicationFormException;
+import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
 
 /**
  * 가입 신청서
@@ -53,11 +55,12 @@ public class ApplicationForm extends BaseEntity {
 
     /**
      * 가입 신청서 처리
-     * @throws AlreadyProcessedApplicationFormException 이미 처리된 신청서를 또다시 처리하려는 경우
+     *
+     * @throws ApplicationFormException (ALREADY_PROCESSED_APPLICATION_FORM) 이미 처리된 신청서를 또다시 처리하려는 경우
      */
-    public void process() throws AlreadyProcessedApplicationFormException {
+    public void process() throws ApplicationFormException {
         if (this.processed) {
-            throw new AlreadyProcessedApplicationFormException();
+            throw new ApplicationFormException(ALREADY_PROCESSED_APPLICATION_FORM);
         }
         this.processed = true;
     }

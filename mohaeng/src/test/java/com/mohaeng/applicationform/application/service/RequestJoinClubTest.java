@@ -3,8 +3,7 @@ package com.mohaeng.applicationform.application.service;
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
 import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
-import com.mohaeng.applicationform.exception.AlreadyJoinedMemberException;
-import com.mohaeng.applicationform.exception.AlreadyRequestJoinClubException;
+import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.clubrole.domain.model.ClubRole;
@@ -24,12 +23,14 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_REQUEST_JOIN_CLUB;
 import static com.mohaeng.common.fixtures.ApplicationForeFixture.requestJoinClubUseCaseCommand;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMaxParticipantCount;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ApplicationTest
@@ -91,8 +92,10 @@ class RequestJoinClubTest {
         general.joinClub(club, generalRole);
 
         // when & then
-        assertThatThrownBy(() -> requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(generalMember.id(), club.id())))
-                .isInstanceOf(AlreadyJoinedMemberException.class);
+        assertThat(assertThrows(ApplicationFormException.class,
+                () -> requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(generalMember.id(), club.id())))
+                .exceptionType())
+                .isEqualTo(ALREADY_MEMBER_JOINED_CLUB);
     }
 
 
@@ -105,8 +108,10 @@ class RequestJoinClubTest {
         requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
         // when & then
-        assertThatThrownBy(() -> requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id())))
-                .isInstanceOf(AlreadyRequestJoinClubException.class);
+        assertThat(assertThrows(ApplicationFormException.class,
+                () -> requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id())))
+                .exceptionType())
+                .isEqualTo(ALREADY_REQUEST_JOIN_CLUB);
     }
 
     @Test

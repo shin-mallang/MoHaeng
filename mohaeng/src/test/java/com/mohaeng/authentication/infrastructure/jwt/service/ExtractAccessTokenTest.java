@@ -1,15 +1,17 @@
 package com.mohaeng.authentication.infrastructure.jwt.service;
 
 import com.mohaeng.authentication.application.usecase.ExtractAccessTokenUseCase;
-import com.mohaeng.authentication.exception.NotFoundAccessTokenException;
 import com.mohaeng.authentication.domain.model.AccessToken;
+import com.mohaeng.authentication.exception.AuthenticationException;
+import com.mohaeng.common.exception.BaseExceptionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.NOT_FOUND_ACCESS_TOKEN;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_TOKEN_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("ExtractAccessToken 은 ")
 class ExtractAccessTokenTest {
@@ -19,22 +21,26 @@ class ExtractAccessTokenTest {
     @Test
     @DisplayName("토큰이 Bearer로 시작하지 않으면 예외를 발생시킨다.")
     void throwExceptionCauseByTokenNotStartedBearer() {
-        assertThatThrownBy(
+        BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
                 () -> extractAccessTokenUseCase.command(
                         new ExtractAccessTokenUseCase.Command("aa.bb.cc")
-                )).isInstanceOf(NotFoundAccessTokenException.class);
+                )).exceptionType();
+        assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ACCESS_TOKEN);
     }
 
     @Test
     @DisplayName("토큰이 올바르지 않은 형식일 경우 예외를 발생시킨다.")
     void throwExceptionCauseByInvalidToken() {
         assertAll(
-                () -> assertThatThrownBy(() -> extractAccessTokenUseCase.command(
-                        new ExtractAccessTokenUseCase.Command(BEARER_TOKEN_TYPE)
-                )).isInstanceOf(NotFoundAccessTokenException.class),
-                () -> assertThatThrownBy(() -> extractAccessTokenUseCase.command(
-                        new ExtractAccessTokenUseCase.Command(BEARER_TOKEN_TYPE + " ")
-                )).isInstanceOf(NotFoundAccessTokenException.class)
+                () -> assertThat(assertThrows(AuthenticationException.class,
+                        () -> extractAccessTokenUseCase.command(
+                                new ExtractAccessTokenUseCase.Command(BEARER_TOKEN_TYPE)
+                        )).exceptionType()).isEqualTo(NOT_FOUND_ACCESS_TOKEN),
+
+                () -> assertThat(assertThrows(AuthenticationException.class,
+                        () -> extractAccessTokenUseCase.command(
+                                new ExtractAccessTokenUseCase.Command(BEARER_TOKEN_TYPE + " ")
+                        )).exceptionType()).isEqualTo(NOT_FOUND_ACCESS_TOKEN)
         );
     }
 

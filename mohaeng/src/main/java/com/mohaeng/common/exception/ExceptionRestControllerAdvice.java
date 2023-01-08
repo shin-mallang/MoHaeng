@@ -1,14 +1,8 @@
 package com.mohaeng.common.exception;
 
-import com.mohaeng.applicationform.exception.AlreadyJoinedMemberException;
-import com.mohaeng.applicationform.exception.AlreadyProcessedApplicationFormException;
-import com.mohaeng.applicationform.exception.AlreadyRequestJoinClubException;
-import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
-import com.mohaeng.authentication.exception.NotFoundAccessTokenException;
-import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
-import com.mohaeng.member.exception.DuplicateUsernameException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -18,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static java.util.stream.Collectors.joining;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 public class ExceptionRestControllerAdvice {
@@ -50,54 +44,12 @@ public class ExceptionRestControllerAdvice {
         return new ErrorResponseDto(BAD_REQUEST.name(), "ENUM 매핑 시 오류 발생");
     }
 
-    /**
-     * 400
-     * 모임 가입 신청 시 발생
-     */
-    @ResponseStatus(BAD_REQUEST)
-    @ExceptionHandler({AlreadyJoinedMemberException.class, AlreadyProcessedApplicationFormException.class, AlreadyRequestJoinClubException.class})
-    ErrorResponseDto handleException(RuntimeException e) {
-        log.error(e.getMessage());
-        return new ErrorResponseDto(BAD_REQUEST.name(), e.getMessage());
-    }
-
-    /**
-     * 401
-     */
-    @ResponseStatus(UNAUTHORIZED)
-    @ExceptionHandler(IncorrectAuthenticationException.class)
-    ErrorResponseDto handleException(IncorrectAuthenticationException e) {
-        log.error(e.getMessage());
-        return new ErrorResponseDto(UNAUTHORIZED.name(), e.getMessage());
-    }
-
-    /**
-     * 401
-     */
-    @ResponseStatus(UNAUTHORIZED)
-    @ExceptionHandler(NotFoundAccessTokenException.class)
-    ErrorResponseDto handleException(NotFoundAccessTokenException e) {
-        log.error(e.getMessage());
-        return new ErrorResponseDto(UNAUTHORIZED.name(), e.getMessage());
-    }
-
-    /**
-     * 401
-     */
-    @ResponseStatus(UNAUTHORIZED)
-    @ExceptionHandler(InvalidAccessTokenException.class)
-    ErrorResponseDto handleException(InvalidAccessTokenException e) {
-        log.error(e.getMessage());
-        return new ErrorResponseDto(UNAUTHORIZED.name(), e.getMessage());
-    }
-
-    /**
-     * 409
-     */
-    @ResponseStatus(CONFLICT)
-    @ExceptionHandler(DuplicateUsernameException.class)
-    ErrorResponseDto handleException(DuplicateUsernameException e) {
-        log.error(e.getMessage());
-        return new ErrorResponseDto(CONFLICT.name(), e.getMessage());
+    @ExceptionHandler(BaseException.class)
+    ResponseEntity<ErrorResponseDto> handleException(BaseException e) {
+        BaseExceptionType type = e.exceptionType();
+        log.error("[ERROR] MESSAGE: {}, CAUSE: {}", type.errorMessage(), e.getCause());
+        return new ResponseEntity<>(
+                new ErrorResponseDto(String.valueOf(type.errorCode()), type.errorMessage()),
+                type.httpStatus());
     }
 }

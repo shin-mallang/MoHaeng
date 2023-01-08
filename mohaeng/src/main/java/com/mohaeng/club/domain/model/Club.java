@@ -1,10 +1,12 @@
 package com.mohaeng.club.domain.model;
 
 
-import com.mohaeng.club.exception.ClubFullException;
+import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.common.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import static com.mohaeng.club.exception.ClubExceptionType.CLUB_IS_FULL;
 
 @Entity
 @Table(name = "club")
@@ -45,7 +47,7 @@ public class Club extends BaseEntity {
 
     public void participantCountUp() {
         if (maxParticipantCount < currentParticipantCount + 1) {
-            throw new ClubFullException();
+            throw new ClubException(CLUB_IS_FULL);
         }
         currentParticipantCount++;
     }

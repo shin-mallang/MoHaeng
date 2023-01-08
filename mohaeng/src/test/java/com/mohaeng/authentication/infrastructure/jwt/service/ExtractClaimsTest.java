@@ -2,16 +2,17 @@ package com.mohaeng.authentication.infrastructure.jwt.service;
 
 import com.mohaeng.authentication.application.usecase.ExtractClaimsUseCase;
 import com.mohaeng.authentication.domain.model.Claims;
-import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
+import com.mohaeng.authentication.exception.AuthenticationException;
 import com.mohaeng.common.fixtures.AuthenticationFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INVALID_ACCESS_TOKEN;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.accessToken;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.invalidAccessToken;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("ExtractClaims 은 ")
 class ExtractClaimsTest {
@@ -36,9 +37,9 @@ class ExtractClaimsTest {
     @DisplayName("토큰이 올바르지 않다면 예외를 발생시킨다.")
     void throwExceptionWhenInvalidJWT() {
         // when, then
-        assertThatThrownBy(() -> extractClaimsUseCase.command(
+        org.assertj.core.api.Assertions.assertThat(assertThrows(AuthenticationException.class,
+                () -> extractClaimsUseCase.command(
                         new ExtractClaimsUseCase.Command(invalidAccessToken())
-                )
-        ).isInstanceOf(InvalidAccessTokenException.class);
+                )).exceptionType()).isEqualTo(INVALID_ACCESS_TOKEN);
     }
 }

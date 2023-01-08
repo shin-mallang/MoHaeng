@@ -7,12 +7,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mohaeng.authentication.application.usecase.ExtractClaimsUseCase;
 import com.mohaeng.authentication.domain.model.AccessToken;
 import com.mohaeng.authentication.domain.model.Claims;
+import com.mohaeng.authentication.exception.AuthenticationException;
 import com.mohaeng.authentication.infrastructure.jwt.config.JwtProperties;
-import com.mohaeng.authentication.infrastructure.jwt.service.exception.InvalidAccessTokenException;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INVALID_ACCESS_TOKEN;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 
 @Component
@@ -39,7 +40,7 @@ public class ExtractClaims implements ExtractClaimsUseCase {
                     .build()
                     .verify(token.token());
         } catch (JWTVerificationException e) {
-            throw new InvalidAccessTokenException();
+            throw new AuthenticationException(INVALID_ACCESS_TOKEN);
         }
     }
 

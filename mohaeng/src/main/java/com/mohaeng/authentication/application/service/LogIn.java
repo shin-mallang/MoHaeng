@@ -1,14 +1,16 @@
 package com.mohaeng.authentication.application.service;
 
-import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
 import com.mohaeng.authentication.application.usecase.CreateTokenUseCase;
 import com.mohaeng.authentication.application.usecase.LogInUseCase;
 import com.mohaeng.authentication.domain.model.AccessToken;
 import com.mohaeng.authentication.domain.model.Claims;
+import com.mohaeng.authentication.exception.AuthenticationException;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INCORRECT_AUTHENTICATION;
 
 @Transactional(readOnly = true)
 @Service
@@ -40,7 +42,7 @@ public class LogIn implements LogInUseCase {
      */
     private Member findByUsername(final String username) {
         return memberRepository.findByUsername(username)
-                .orElseThrow(IncorrectAuthenticationException::new);
+                .orElseThrow(() -> new AuthenticationException(INCORRECT_AUTHENTICATION));
     }
 
     /**

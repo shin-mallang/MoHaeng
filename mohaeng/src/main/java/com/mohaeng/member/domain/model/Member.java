@@ -1,9 +1,11 @@
 package com.mohaeng.member.domain.model;
 
-import com.mohaeng.authentication.exception.IncorrectAuthenticationException;
+import com.mohaeng.authentication.exception.AuthenticationException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.enums.Gender;
 import jakarta.persistence.*;
+
+import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INCORRECT_AUTHENTICATION;
 
 @Entity
 @Table(name = "member")
@@ -61,11 +63,11 @@ public class Member extends BaseEntity {
      *
      * @param username 입력받은 아이디
      * @param password 입력받은 비밀번호
-     * @throws IncorrectAuthenticationException 아이디 혹은 비밀번호가 일치하지 않은 경우 발생
+     * @throws AuthenticationException (TYPE : INCORRECT_AUTHENTICATION) 아이디 혹은 비밀번호가 일치하지 않은 경우 발생
      */
-    public void login(final String username, final String password) throws IncorrectAuthenticationException {
+    public void login(final String username, final String password) throws AuthenticationException {
         if (!matchUsername(username) || !matchPassword(password)) {
-            throw new IncorrectAuthenticationException();
+            throw new AuthenticationException(INCORRECT_AUTHENTICATION);
         }
     }
 
