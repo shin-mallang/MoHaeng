@@ -31,9 +31,7 @@ public class MockParticipantRepository implements ParticipantRepository {
     }
 
     /**
-     * @param clubId
-     * @return
-     * @Query("select p from Participant p join fetch p.member where p.clubRole.clubRoleCategory = 'PRESIDENT' or p.clubRole.clubRoleCategory = 'OFFICER'")
+     * "select p from Participant p join fetch p.member where p.clubRole.clubRoleCategory = 'PRESIDENT' or p.clubRole.clubRoleCategory = 'OFFICER'"
      */
     @Override
     public List<Participant> findAllWithMemberByClubIdWhereClubRoleIsPresidentOrOfficer(Long clubId) {

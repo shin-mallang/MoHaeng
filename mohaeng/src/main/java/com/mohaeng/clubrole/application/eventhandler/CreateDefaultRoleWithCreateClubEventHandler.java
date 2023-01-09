@@ -52,7 +52,7 @@ public class CreateDefaultRoleWithCreateClubEventHandler extends EventHandler<Cr
         process(event);
     }
 
-    private Long getDefaultPresidentRoleId(List<ClubRole> clubs) {
+    private Long getDefaultPresidentRoleId(final List<ClubRole> clubs) {
         return clubs.stream()
                 .filter(it -> it.clubRoleCategory() == ClubRoleCategory.PRESIDENT)
                 .map(BaseEntity::id)

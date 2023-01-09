@@ -16,11 +16,11 @@ public class AlarmMessage {
         this.content = content;
     }
 
-    public String content() {
-        return content;
-    }
-
     public String title() {
         return title;
+    }
+
+    public String content() {
+        return content;
     }
 }

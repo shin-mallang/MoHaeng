@@ -23,4 +23,8 @@ public class Receiver {
     public static Receiver of(final Member member) {
         return new Receiver(member);
     }
+
+    public Member receiver() {
+        return receiver;
+    }
 }

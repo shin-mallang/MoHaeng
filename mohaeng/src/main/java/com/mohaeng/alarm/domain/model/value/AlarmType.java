@@ -11,12 +11,12 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 
 public enum AlarmType {
 
-    // 클럽 가입 신청 이벤트에 대한 알람
-    REQUEST_CLUB_JOIN(RequestJoinClubEvent.class),
+    REQUEST_CLUB_JOIN(RequestJoinClubEvent.class),  // 클럽 가입 신청 이벤트에 대한 알람
     ;
 
     private static final Map<Class<? extends BaseEvent>, AlarmType> EVENT_CLASS_MAPPING =
             stream(values()).collect(toUnmodifiableMap(AlarmType::mappedEventClass, it -> it));
+
 
     private final Class<? extends BaseEvent> mappedEventClass;
 
@@ -24,12 +24,12 @@ public enum AlarmType {
         this.mappedEventClass = mappedEventClass;
     }
 
-    public Class<? extends BaseEvent> mappedEventClass() {
-        return mappedEventClass;
-    }
-
     public static AlarmType ofEvent(Class<? extends BaseEvent> event) {
         return ofNullable(EVENT_CLASS_MAPPING.get(event))
                 .orElseThrow(() -> new IllegalArgumentException("해당 이벤트에 대응되는 알람 타입이 없습니다."));
+    }
+
+    public Class<? extends BaseEvent> mappedEventClass() {
+        return mappedEventClass;
     }
 }

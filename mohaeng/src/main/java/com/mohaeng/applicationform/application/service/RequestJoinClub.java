@@ -51,6 +51,7 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
         // 이미 가입된 회원이거나, 이미 가입 신청을 한 회원이라면 오류
         validate(member, club);
 
+        // 가입 신청서 저장
         ApplicationForm applicationForm = ApplicationForm.create(member, club);
         applicationFormRepository.save(applicationForm);
 

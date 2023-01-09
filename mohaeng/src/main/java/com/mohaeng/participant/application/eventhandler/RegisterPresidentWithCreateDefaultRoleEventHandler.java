@@ -46,12 +46,9 @@ public class RegisterPresidentWithCreateDefaultRoleEventHandler extends EventHan
     @EventListener
     @Override
     public void handle(final CreateDefaultRoleEvent event) {
-        Club club = clubRepository.findById(event.clubId())
-                .orElseThrow(() -> new ClubException(NOT_FOUND_CLUB));
-        Member member = memberRepository.findById(event.memberId())
-                .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
-        ClubRole clubRole = clubRoleRepository.findById(event.defaultPresidentRoleId())
-                .orElseThrow(() -> new ClubRoleException(NOT_FOUND_CLUB_ROLE));
+        Club club = clubRepository.findById(event.clubId()).orElseThrow(() -> new ClubException(NOT_FOUND_CLUB));
+        Member member = memberRepository.findById(event.memberId()).orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
+        ClubRole clubRole = clubRoleRepository.findById(event.defaultPresidentRoleId()).orElseThrow(() -> new ClubRoleException(NOT_FOUND_CLUB_ROLE));
 
         Participant participant = new Participant(member);
 

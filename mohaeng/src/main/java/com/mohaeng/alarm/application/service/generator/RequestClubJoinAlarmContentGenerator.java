@@ -21,10 +21,10 @@ import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType
 public class RequestClubJoinAlarmContentGenerator implements AlarmMessageGenerator {
 
     private static final String TITLE = "모임 가입 신청이 왔습니다.";
-    private static final String NAME_WITH_ID_FORMAT = "%s({%s})";  // ex: 신동훈({1})
+
     // ex: 신동훈({1})님이 ANA({2})모임에 가입 신청을 보냈습니다.
     private static final String MESSAGE_FORMAT = "%s님이 %s모임에 가입 신청을 보냈습니다. (ApplicationFormId:{%d})";
-
+    private static final String NAME_WITH_ID_FORMAT = "%s({%s})";  // ex: 신동훈({1})
 
     private final ApplicationFormRepository applicationFormRepository;
 

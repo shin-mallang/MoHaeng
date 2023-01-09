@@ -5,7 +5,6 @@ import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.member.exception.MemberException;
-import com.mohaeng.member.exception.MemberExceptionType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

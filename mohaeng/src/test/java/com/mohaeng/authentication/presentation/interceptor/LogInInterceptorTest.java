@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 
 class LogInInterceptorTest {
 
-
     private final ExtractAccessTokenUseCase extractAccessTokenUseCase = new ExtractAccessToken();
     private final ExtractClaimsUseCase extractClaimsUseCase = mock(ExtractClaimsUseCase.class);
     private final AuthenticationContext authenticationContext = mock(AuthenticationContext.class);

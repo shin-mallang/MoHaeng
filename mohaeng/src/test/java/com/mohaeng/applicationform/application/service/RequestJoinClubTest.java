@@ -58,7 +58,6 @@ class RequestJoinClubTest {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-
     @Test
     @DisplayName("모임에 가입되지 않은 사람많이 가입 신청을 할 수 있다.")
     void test() {
@@ -98,7 +97,6 @@ class RequestJoinClubTest {
                 .isEqualTo(ALREADY_MEMBER_JOINED_CLUB);
     }
 
-
     @Test
     @DisplayName("이미 신청하였고, 아직 처리되지 않은 경우 다시 신청할 수 없다.")
     void test2() {
@@ -124,7 +122,6 @@ class RequestJoinClubTest {
 
         // 가입 처리
         applicationFormRepository.findById(applicationFormId).orElse(null).process();
-
 
         // when
         Long reApplicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
@@ -169,7 +166,6 @@ class RequestJoinClubTest {
         verify(publisher, times(1)).publishEvent(any(RequestJoinClubEvent.class));
         Events.setApplicationEventPublisher(applicationEventPublisher);  // 안해주면 오류
     }
-
 
     // TODO 알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정
     @Disabled("알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정")

@@ -29,16 +29,15 @@ public class Alarm extends BaseEntity {
 
     public Alarm(final Receiver receiver,
                  final AlarmMessage alarmMessage,
-                 final AlarmType alarmType,
-                 final boolean isRead) {
+                 final AlarmType alarmType) {
         this.receiver = receiver;
         this.alarmMessage = alarmMessage;
         this.alarmType = alarmType;
-        this.isRead = isRead;
+        this.isRead = false;
     }
 
     public static Alarm of(final Receiver receiver, final AlarmMessage alarmMessage, final AlarmType alarmType) {
-        return new Alarm(receiver, alarmMessage, alarmType, false);
+        return new Alarm(receiver, alarmMessage, alarmType);
     }
 
     public Receiver receiver() {

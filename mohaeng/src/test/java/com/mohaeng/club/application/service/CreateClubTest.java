@@ -29,7 +29,6 @@ class CreateClubTest {
     @Autowired
     private CreateClubUseCase clubUseCase;
 
-
     @Test
     @DisplayName("회원 id, 모임 이름, 모임 설명, 최대 인원수를 가지고 모임을 생성한 후, 이벤트를 통해 모임의 기본 역할을 저장한 뒤, 모임을 생성한 회원을 회장으로 만든다.")
     void createTest() {

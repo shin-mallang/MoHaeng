@@ -31,7 +31,6 @@ class MemberTest {
         // given
         Member member = MemberFixture.member(null);
 
-
         // when & then
         assertAll(
                 () -> assertThat(assertThrows(AuthenticationException.class,
