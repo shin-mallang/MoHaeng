@@ -185,14 +185,13 @@ class RequestJoinClubTest {
         Events.setApplicationEventPublisher(applicationEventPublisher);  // 안해주면 오류
     }
 
-    // TODO 알림 기능 만들고 테스트 추가
-    @Disabled("TODO 알림 기능 만들고 테스트 추가")
+
+    // TODO 알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정
+    @Disabled("알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정")
     @Test
     @DisplayName("가입 신청을 하게되면 `회장`과 `관리자` 에게 알림이 전송된다.")
     void test6() {
 
-        throw new IllegalStateException("TODO: 알림 기능을 만든 이후 테스트를 작성한다.");
-        // TODO 알림 기능 만들고 테스트 추가
-
+        throw new IllegalStateException("알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정");
     }
 }
