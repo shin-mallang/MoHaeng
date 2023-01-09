@@ -6,9 +6,9 @@ import com.mohaeng.club.domain.event.CreateClubEvent;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.common.event.Events;
-import com.mohaeng.member.exception.NotFoundMemberException;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
+import com.mohaeng.member.exception.NotFoundMemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,6 @@ public class CreateClub implements CreateClubUseCase {
         this.clubRepository = clubRepository;
         this.memberRepository = memberRepository;
     }
-
 
     @Override
     public Long command(final Command command) {

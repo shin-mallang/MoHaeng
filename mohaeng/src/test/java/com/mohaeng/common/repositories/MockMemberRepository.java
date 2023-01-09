@@ -5,6 +5,7 @@ import com.mohaeng.member.domain.repository.MemberRepository;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,5 +37,11 @@ public class MockMemberRepository implements MemberRepository {
     @Override
     public Optional<Member> findById(final Long id) {
         return Optional.ofNullable(store.get(id));
+    }
+
+    @Override
+    public List<Member> findByIdIn(List<Long> memberIds) {
+        return store.values().stream().filter(it -> memberIds.contains(it.id()))
+                .toList();
     }
 }

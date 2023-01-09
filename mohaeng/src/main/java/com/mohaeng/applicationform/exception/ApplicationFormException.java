@@ -8,11 +8,12 @@ public class ApplicationFormException extends BaseException {
     private final ApplicationFormExceptionType exceptionType;
 
     public ApplicationFormException(final ApplicationFormExceptionType exceptionType) {
+        super(exceptionType.errorMessage());
         this.exceptionType = exceptionType;
     }
 
     public ApplicationFormException(final ApplicationFormExceptionType exceptionType, final Throwable cause) {
-        super(cause);
+        super(exceptionType.errorMessage(), cause);
         this.exceptionType = exceptionType;
     }
 

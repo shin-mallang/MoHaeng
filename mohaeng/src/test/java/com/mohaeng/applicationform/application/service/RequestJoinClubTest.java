@@ -58,7 +58,6 @@ class RequestJoinClubTest {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-
     @Test
     @DisplayName("모임에 가입되지 않은 사람많이 가입 신청을 할 수 있다.")
     void test() {
@@ -98,7 +97,6 @@ class RequestJoinClubTest {
                 .isEqualTo(ALREADY_MEMBER_JOINED_CLUB);
     }
 
-
     @Test
     @DisplayName("이미 신청하였고, 아직 처리되지 않은 경우 다시 신청할 수 없다.")
     void test2() {
@@ -124,7 +122,6 @@ class RequestJoinClubTest {
 
         // 가입 처리
         applicationFormRepository.findById(applicationFormId).orElse(null).process();
-
 
         // when
         Long reApplicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
@@ -159,23 +156,8 @@ class RequestJoinClubTest {
         // given
         ApplicationEventPublisher publisher = mock(ApplicationEventPublisher.class);
         Events.setApplicationEventPublisher(publisher);
-
         Club club = clubRepository.save(club(null));
-        ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
-        ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
-        ClubRole generalRole = ClubRoleFixture.generalRole("일반", club);
-        clubRoleRepository.saveAll(List.of(presidentRole, officerRole, generalRole));
-
-        Participant officer1 = new Participant(memberRepository.save(member(null)));
-        Participant officer2 = new Participant(memberRepository.save(member(null)));
-        Participant president = new Participant(memberRepository.save(member(null)));
-        Participant general = new Participant(memberRepository.save(member(null)));
         Member applicant = memberRepository.save(member(null));
-
-        officer1.joinClub(club, officerRole);
-        officer2.joinClub(club, officerRole);
-        president.joinClub(club, presidentRole);
-        general.joinClub(club, generalRole);
 
         // when
         Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(applicant.id(), club.id()));
@@ -185,14 +167,12 @@ class RequestJoinClubTest {
         Events.setApplicationEventPublisher(applicationEventPublisher);  // 안해주면 오류
     }
 
-    // TODO 알림 기능 만들고 테스트 추가
-    @Disabled("TODO 알림 기능 만들고 테스트 추가")
+    // TODO 알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정
+    @Disabled("알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정")
     @Test
     @DisplayName("가입 신청을 하게되면 `회장`과 `관리자` 에게 알림이 전송된다.")
     void test6() {
 
-        throw new IllegalStateException("TODO: 알림 기능을 만든 이후 테스트를 작성한다.");
-        // TODO 알림 기능 만들고 테스트 추가
-
+        throw new IllegalStateException("알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정");
     }
 }

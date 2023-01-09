@@ -37,7 +37,6 @@ public class CreateClubController {
         return status(CREATED).build();
     }
 
-
     public record CreateClubRequest(
             @NotBlank(message = "모임의 이름은 필수입니다.")
             String name,

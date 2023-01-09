@@ -8,6 +8,7 @@ import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.club.exception.ClubException;
+import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
@@ -15,6 +16,8 @@ import com.mohaeng.member.exception.MemberException;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_REQUEST_JOIN_CLUB;
@@ -42,19 +45,18 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
 
     @Override
     public Long command(final Command command) {
-        Member member = memberRepository.findById(command.applicantId())
-                .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
-        Club club = clubRepository.findById(command.targetClubId())
-                .orElseThrow(() -> new ClubException(NOT_FOUND_CLUB));
+        Member member = memberRepository.findById(command.applicantId()).orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
+        Club club = clubRepository.findById(command.targetClubId()).orElseThrow(() -> new ClubException(NOT_FOUND_CLUB));
 
         // 이미 가입된 회원이거나, 이미 가입 신청을 한 회원이라면 오류
         validate(member, club);
 
+        // 가입 신청서 저장
         ApplicationForm applicationForm = ApplicationForm.create(member, club);
         applicationFormRepository.save(applicationForm);
 
         // 모임 가입 신청 요청 이벤트 발행 -> 회장과 임원진에게 알림 보내기
-        Events.raise(new RequestJoinClubEvent(this, member.id(), club.id(), applicationForm.id()));
+        raiseEvent(member, club, applicationForm);
 
         return applicationForm.id();
     }
@@ -93,5 +95,27 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
         if (applicationFormRepository.existsByApplicantAndTarget(member, club)) {
             throw new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB);
         }
+    }
+
+    /**
+     * 이벤트를 발행한다.
+     */
+    private void raiseEvent(final Member applicant, final Club club, final ApplicationForm applicationForm) {
+        Events.raise(new RequestJoinClubEvent(this,
+                applicant.id(),  // 가입 신청자
+                club.id(),  // 대상 모임
+                applicationForm.id(),  // 생성된 가입 신청서
+                getOfficerAndPresidentIdsOfClub(club))  // 대상 모임의 임원진과 회장 Id
+        );
+    }
+
+    /**
+     * 모임의 임원진과 회장 Id를 반환한다.
+     */
+    private List<Long> getOfficerAndPresidentIdsOfClub(final Club club) {
+        return participantRepository.findAllWithMemberByClubIdWhereClubRoleIsPresidentOrOfficer(club.id())
+                .stream()
+                .map(BaseEntity::id)
+                .toList();
     }
 }

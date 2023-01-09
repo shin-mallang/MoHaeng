@@ -1,10 +1,14 @@
 package com.mohaeng.applicationform.domain.event;
 
 
-import com.mohaeng.common.event.BaseEvent;
+import com.mohaeng.common.alarm.AlarmEvent;
 import com.mohaeng.common.event.BaseEventHistory;
 
-public class RequestJoinClubEvent extends BaseEvent {
+import java.util.List;
+
+import static java.util.stream.Collectors.joining;
+
+public class RequestJoinClubEvent extends AlarmEvent {
 
     private Long applicantId;  // 가입 신청자 ID
     private Long targetClubId;  // 모임 ID
@@ -13,8 +17,9 @@ public class RequestJoinClubEvent extends BaseEvent {
     public RequestJoinClubEvent(final Object source,
                                 final Long applicantId,
                                 final Long targetClubId,
-                                final Long applicationFormId) {
-        super(source);
+                                final Long applicationFormId,
+                                final List<Long> receiverIds) {
+        super(source, receiverIds);
         this.applicantId = applicantId;
         this.targetClubId = targetClubId;
         this.applicationFormId = applicationFormId;
@@ -35,5 +40,18 @@ public class RequestJoinClubEvent extends BaseEvent {
     @Override
     public BaseEventHistory history() {
         return new RequestJoinClubEventHistory(eventDateTime, applicantId, targetClubId, applicationFormId);
+    }
+
+
+    @Override
+    public String toString() {
+        return "RequestJoinClubEvent{" +
+                "applicantId=" + applicantId +
+                ", targetClubId=" + targetClubId +
+                ", applicationFormId=" + applicationFormId +
+                ", receiverIds=" + receiverIds.stream()
+                .map(String::valueOf)
+                .collect(joining(",")) +
+                '}';
     }
 }
