@@ -11,12 +11,12 @@ import com.mohaeng.common.alarm.AlarmEvent;
 import com.mohaeng.common.event.EventHandler;
 import com.mohaeng.common.event.EventHistoryRepository;
 import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
