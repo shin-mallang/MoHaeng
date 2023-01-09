@@ -47,6 +47,8 @@ public class AlarmEventHandler extends EventHandler<AlarmEvent> {
         log.info("[ALARM EVENT] {}", event);
 
         alarmRepository.saveAll(makeAlarms(event));
+
+        process(event);
     }
 
     private List<Alarm> makeAlarms(AlarmEvent event) {
