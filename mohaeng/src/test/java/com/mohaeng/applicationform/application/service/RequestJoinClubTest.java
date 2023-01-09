@@ -159,23 +159,8 @@ class RequestJoinClubTest {
         // given
         ApplicationEventPublisher publisher = mock(ApplicationEventPublisher.class);
         Events.setApplicationEventPublisher(publisher);
-
         Club club = clubRepository.save(club(null));
-        ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
-        ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
-        ClubRole generalRole = ClubRoleFixture.generalRole("일반", club);
-        clubRoleRepository.saveAll(List.of(presidentRole, officerRole, generalRole));
-
-        Participant officer1 = new Participant(memberRepository.save(member(null)));
-        Participant officer2 = new Participant(memberRepository.save(member(null)));
-        Participant president = new Participant(memberRepository.save(member(null)));
-        Participant general = new Participant(memberRepository.save(member(null)));
         Member applicant = memberRepository.save(member(null));
-
-        officer1.joinClub(club, officerRole);
-        officer2.joinClub(club, officerRole);
-        president.joinClub(club, presidentRole);
-        general.joinClub(club, generalRole);
 
         // when
         Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(applicant.id(), club.id()));
