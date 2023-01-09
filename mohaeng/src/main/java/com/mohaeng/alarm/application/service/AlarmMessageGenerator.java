@@ -2,11 +2,11 @@ package com.mohaeng.alarm.application.service;
 
 import com.mohaeng.alarm.domain.model.value.AlarmMessage;
 import com.mohaeng.alarm.domain.model.value.AlarmType;
-import com.mohaeng.common.event.BaseEvent;
+import com.mohaeng.common.alarm.AlarmEvent;
 
-public interface AlarmMessageGenerator<T extends BaseEvent> {
+public interface AlarmMessageGenerator {
 
-    AlarmMessage generate(final T event);
+    AlarmMessage generate(final AlarmEvent event);
 
     AlarmType alarmType();
 }
