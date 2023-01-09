@@ -16,16 +16,16 @@ public enum AlarmType {
     ;
 
     private static final Map<Class<? extends BaseEvent>, AlarmType> EVENT_CLASS_MAPPING =
-            stream(values()).collect(toUnmodifiableMap(AlarmType::mappedEvent, it -> it));
+            stream(values()).collect(toUnmodifiableMap(AlarmType::mappedEventClass, it -> it));
 
-    private Class<? extends BaseEvent> mappedEvent;
+    private final Class<? extends BaseEvent> mappedEventClass;
 
-    AlarmType(Class<? extends BaseEvent> mappedEvent) {
-        this.mappedEvent = mappedEvent;
+    AlarmType(Class<? extends BaseEvent> mappedEventClass) {
+        this.mappedEventClass = mappedEventClass;
     }
 
-    public Class<? extends BaseEvent> mappedEvent() {
-        return mappedEvent;
+    public Class<? extends BaseEvent> mappedEventClass() {
+        return mappedEventClass;
     }
 
     public static AlarmType ofEvent(Class<? extends BaseEvent> event) {

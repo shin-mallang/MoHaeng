@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 @Component
 public class AlarmMessageGenerateFactory {
 
-    private Map<AlarmType, AlarmMessageGenerator> generators;
+    private final Map<AlarmType, AlarmMessageGenerator> generators;
 
     public AlarmMessageGenerateFactory(final Set<AlarmMessageGenerator> generators) {
         this.generators = generators.stream()
