@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.OFFICER;
+import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
+
 public class MockParticipantRepository implements ParticipantRepository {
 
     private final Map<Long, Participant> store = new HashMap<>();
@@ -25,6 +28,19 @@ public class MockParticipantRepository implements ParticipantRepository {
     @Override
     public boolean existsByMemberAndClub(Member member, Club club) {
         return store.values().stream().anyMatch(it -> it.member().id().equals(member.id()) && it.club().id().equals(club.id()));
+    }
+
+    /**
+     * @param clubId
+     * @return
+     * @Query("select p from Participant p join fetch p.member where p.clubRole.clubRoleCategory = 'PRESIDENT' or p.clubRole.clubRoleCategory = 'OFFICER'")
+     */
+    @Override
+    public List<Participant> findAllWithMemberByClubIdWhereClubRoleIsPresidentOrOfficer(Long clubId) {
+        return store.values().stream().
+                filter(it -> it.clubRole().clubRoleCategory().equals(PRESIDENT)
+                        || it.clubRole().clubRoleCategory().equals(OFFICER))
+                .toList();
     }
 
     public List<Participant> findAll() {
