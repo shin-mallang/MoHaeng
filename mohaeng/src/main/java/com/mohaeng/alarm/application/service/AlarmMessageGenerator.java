@@ -6,7 +6,7 @@ import com.mohaeng.common.alarm.AlarmEvent;
 
 public interface AlarmMessageGenerator {
 
-    AlarmMessage generate(final AlarmEvent event);
+    AlarmMessage generate(final AlarmEvent alarmEvent);
 
     AlarmType alarmType();
 }
