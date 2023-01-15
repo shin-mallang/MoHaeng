@@ -48,9 +48,22 @@ class QueryAlarmByIdTest {
                 () -> assertThat(query.createdAt()).isEqualTo(save.createdAt()),
                 () -> assertThat(query.title()).isEqualTo(save.alarmMessage().title()),
                 () -> assertThat(query.content()).isEqualTo(save.alarmMessage().content()),
-                () -> assertThat(query.alarmType()).isEqualTo(save.alarmType().name()),
-                () -> assertThat(query.isRead()).isTrue()
+                () -> assertThat(query.alarmType()).isEqualTo(save.alarmType().name())
         );
+    }
+
+    @Test
+    @DisplayName("알람 조회 시 읽음 처리를 수행한다.")
+    void success_test_2() {
+        // given
+        Member member = memberRepository.save(member(null));
+        Alarm save = alarmRepository.save(AlarmFixture.alarmWithMember(member));
+
+        // when
+        AlarmDto query = queryAlarmByIdUseCase.query(new QueryAlarmByIdUseCase.Query(save.id(), member.id()));
+
+        // then
+        assertThat(query.isRead()).isTrue();
     }
 
     @Test
