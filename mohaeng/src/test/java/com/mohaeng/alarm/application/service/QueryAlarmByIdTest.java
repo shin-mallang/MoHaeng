@@ -8,11 +8,14 @@ import com.mohaeng.alarm.exception.AlarmException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.common.fixtures.AlarmFixture;
+import com.mohaeng.member.domain.model.Member;
+import com.mohaeng.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.mohaeng.alarm.exception.AlarmExceptionType.NOT_FOUND_APPLICATION_FORM;
+import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,14 +30,18 @@ class QueryAlarmByIdTest {
     @Autowired
     private AlarmRepository alarmRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     @Test
     @DisplayName("id가 일치하는 알람이 존재한다면, 조회한다.")
     void success_test_1() {
         // given
-        Alarm save = alarmRepository.save(AlarmFixture.alarm());
+        Member member = memberRepository.save(member(null));
+        Alarm save = alarmRepository.save(AlarmFixture.alarmWithMember(member));
 
         // when
-        AlarmDto query = queryAlarmByIdUseCase.query(new QueryAlarmByIdUseCase.Query(save.id()));
+        AlarmDto query = queryAlarmByIdUseCase.query(new QueryAlarmByIdUseCase.Query(save.id(), member.id()));
 
         // then
         assertAll(
@@ -51,7 +58,7 @@ class QueryAlarmByIdTest {
     void fail_test_1() {
         // when & then
         BaseExceptionType baseExceptionType = assertThrows(AlarmException.class,
-                () -> queryAlarmByIdUseCase.query(new QueryAlarmByIdUseCase.Query(1L)))
+                () -> queryAlarmByIdUseCase.query(new QueryAlarmByIdUseCase.Query(1L, 1L)))
                 .exceptionType();
 
         assertThat(baseExceptionType).isEqualTo(NOT_FOUND_APPLICATION_FORM);

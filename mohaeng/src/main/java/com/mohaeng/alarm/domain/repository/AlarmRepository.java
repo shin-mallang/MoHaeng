@@ -12,6 +12,8 @@ public interface AlarmRepository {
 
     Optional<Alarm> findById(final Long id);
 
+    Optional<Alarm> findByIdAndReceiverId(final Long alarmId, final Long receiverId);
+
     List<Alarm> findByReceiver(final Receiver receiver);
 
     List<Alarm> findAll();

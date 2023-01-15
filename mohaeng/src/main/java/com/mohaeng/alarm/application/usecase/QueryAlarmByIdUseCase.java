@@ -7,7 +7,8 @@ public interface QueryAlarmByIdUseCase {
     AlarmDto query(final Query query);
 
     record Query(
-            Long id
+            Long alarmId,
+            Long memberId
     ) {
     }
 }

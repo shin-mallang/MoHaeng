@@ -23,7 +23,7 @@ public class QueryAlarmById implements QueryAlarmByIdUseCase {
 
     @Override
     public AlarmDto query(final Query query) {
-        Alarm alarm = alarmRepository.findById(query.id()).orElseThrow(() -> new AlarmException(NOT_FOUND_APPLICATION_FORM));
+        Alarm alarm = alarmRepository.findByIdAndReceiverId(query.alarmId(), query.memberId()).orElseThrow(() -> new AlarmException(NOT_FOUND_APPLICATION_FORM));
 
         alarm.read();  // 알림 읽음 처리
 
