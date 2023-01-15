@@ -1,6 +1,6 @@
 package com.mohaeng.alarm.application.eventhandler;
 
-import com.mohaeng.alarm.application.service.AlarmMessageGenerateFactory;
+import com.mohaeng.alarm.domain.model.AlarmMessageGenerateFactory;
 import com.mohaeng.alarm.domain.repository.AlarmRepository;
 import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
 import com.mohaeng.common.EventHandlerTest;

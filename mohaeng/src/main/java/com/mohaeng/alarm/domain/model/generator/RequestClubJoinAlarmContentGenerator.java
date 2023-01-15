@@ -1,7 +1,7 @@
-package com.mohaeng.alarm.application.service.generator;
+package com.mohaeng.alarm.domain.model.generator;
 
-import com.mohaeng.alarm.application.service.AlarmMessageGenerator;
 import com.mohaeng.alarm.domain.model.value.AlarmMessage;
+import com.mohaeng.alarm.domain.model.AlarmMessageGenerator;
 import com.mohaeng.alarm.domain.model.value.AlarmType;
 import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
