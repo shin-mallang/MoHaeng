@@ -1,4 +1,4 @@
-package com.mohaeng.alarm.application.service;
+package com.mohaeng.alarm.domain.model;
 
 import com.mohaeng.alarm.domain.model.value.AlarmType;
 import org.springframework.stereotype.Component;

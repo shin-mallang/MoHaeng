@@ -1,6 +1,6 @@
 package com.mohaeng.common.alarm;
 
-import com.mohaeng.alarm.application.service.AlarmMessageGenerator;
+import com.mohaeng.alarm.domain.model.AlarmMessageGenerator;
 import com.mohaeng.alarm.domain.model.value.AlarmMessage;
 import com.mohaeng.alarm.domain.model.value.AlarmType;
 

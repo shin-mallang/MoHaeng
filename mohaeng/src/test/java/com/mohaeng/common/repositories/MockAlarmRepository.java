@@ -28,6 +28,11 @@ public class MockAlarmRepository implements AlarmRepository {
     }
 
     @Override
+    public Optional<Alarm> findByIdAndReceiverId(Long id, Long receiverId) {
+        return Optional.empty();
+    }
+
+    @Override
     public List<Alarm> findByReceiver(Receiver receiver) {
         return store.values().stream().filter(it -> it.receiver().equals(receiver)).toList();
     }

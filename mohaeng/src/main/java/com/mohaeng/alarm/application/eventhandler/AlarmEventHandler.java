@@ -1,7 +1,7 @@
 package com.mohaeng.alarm.application.eventhandler;
 
-import com.mohaeng.alarm.application.service.AlarmMessageGenerateFactory;
-import com.mohaeng.alarm.application.service.AlarmMessageGenerator;
+import com.mohaeng.alarm.domain.model.AlarmMessageGenerateFactory;
+import com.mohaeng.alarm.domain.model.AlarmMessageGenerator;
 import com.mohaeng.alarm.domain.model.Alarm;
 import com.mohaeng.alarm.domain.model.value.AlarmMessage;
 import com.mohaeng.alarm.domain.model.value.AlarmType;
