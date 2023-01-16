@@ -52,6 +52,16 @@ public class MockParticipantRepository implements ParticipantRepository {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<Participant> findById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Participant> findWithMemberById(Long id) {
+        return Optional.empty();
+    }
+
     public List<Participant> findAll() {
         return store.values().stream().toList();
     }

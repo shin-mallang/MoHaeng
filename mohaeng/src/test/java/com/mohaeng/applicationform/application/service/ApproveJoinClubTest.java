@@ -146,4 +146,8 @@ class ApproveJoinClubTest {
 
         assertThat(baseExceptionType).isEqualTo(ALREADY_MEMBER_JOINED_CLUB);
     }
+
+    // TODO 회장이 한 경우 이벤트 한개만 발행
+
+    // TODO 임원진이 한 경우 이벤트 두 개 발행
 }

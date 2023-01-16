@@ -7,35 +7,31 @@ import java.util.List;
 
 public class ApproveJoinClubEvent extends AlarmEvent {
 
-    private final Long managerId;  // 관리자 ID (Participant Id)
-    private final Long applicantId;  // 가입된 회원 ID (ParticipantId)
-    private final Long applicationFormId;  // 처리된 가입 신청서 ID
+    private final Long clubId;
 
     /**
-     * @param receiverId 모임의 회장의 Member ID
+     * @param receiverId 가입된 회원 ID
      */
     public ApproveJoinClubEvent(final Object source,
                                 final Long receiverId,
-                                final Long managerId,
-                                final Long applicantId,
-                                final Long applicationFormId) {
+                                final Long clubId) {
         super(source, List.of(receiverId));
-        this.managerId = managerId;
-        this.applicantId = applicantId;
-        this.applicationFormId = applicationFormId;
+        this.clubId = clubId;
     }
 
     @Override
     public String toString() {
         return "ApproveJoinClubEvent{" +
-                "managerId=" + managerId +
-                ", applicantId=" + applicantId +
-                ", applicationFormId=" + applicationFormId +
+                "clubId=" + clubId +
                 '}';
     }
 
     @Override
     public BaseEventHistory history() {
-        return new ApproveJoinClubEventHistory(eventDateTime, managerId, applicantId, applicationFormId);
+        return new ApproveJoinClubEventHistory(eventDateTime, clubId);
+    }
+
+    public Long clubId() {
+        return clubId;
     }
 }

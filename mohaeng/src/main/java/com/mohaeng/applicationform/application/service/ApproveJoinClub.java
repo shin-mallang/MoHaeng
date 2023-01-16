@@ -2,6 +2,7 @@ package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
 import com.mohaeng.applicationform.domain.event.ApproveJoinClubEvent;
+import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -64,12 +65,7 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
         Participant president = participantRepository.findPresidentWithMemberByClub(manager.club())
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
 
-        Events.raise(new ApproveJoinClubEvent(this,
-                president.member().id(),
-                manager.id(),
-                applicant.id(),
-                applicationForm.id())
-        );
+        raiseEvent(applicationForm, manager, applicant, president);
     }
 
     /**
@@ -80,6 +76,31 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
     private void checkApplicantAlreadyJoinClub(final Member applicant, final Club target) throws ApplicationFormException {
         if (participantRepository.existsByMemberAndClub(applicant, target)) {
             throw new ApplicationFormException(ALREADY_MEMBER_JOINED_CLUB);
+        }
+    }
+
+    /**
+     * 이벤트를 발행한다.
+     */
+    private void raiseEvent(final ApplicationForm applicationForm,
+                            final Participant manager,
+                            final Participant applicant,
+                            final Participant president) {
+
+        // 모임 가입 요청 승인 이벤트 -> 가입된 회원에게 가입되었다는 알림 전송
+        Events.raise(new ApproveJoinClubEvent(this,
+                applicant.id(),
+                applicationForm.target().id())
+        );
+
+        // 처리자가 회장이 아닌 경우 회장에게 알림 전송을 위한 이벤트 발행
+        if (!president.equals(manager)) {
+            Events.raise(new OfficerApproveClubJoinApplicationEvent(this,
+                    president.member().id(),
+                    manager.id(),
+                    applicant.id(),
+                    applicationForm.id())
+            );
         }
     }
 }

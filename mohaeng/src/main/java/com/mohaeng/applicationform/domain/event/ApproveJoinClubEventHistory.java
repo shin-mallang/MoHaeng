@@ -6,32 +6,19 @@ import java.time.LocalDateTime;
 
 public class ApproveJoinClubEventHistory extends BaseEventHistory {
 
-    private Long managerId;  // 관리자 ID (Participant Id)
-    private Long applicantId;  // 가입된 회원 ID (ParticipantId)
-    private Long applicationFormId;  // 처리된 가입 신청서 ID
+    private final Long clubId;
 
     protected ApproveJoinClubEventHistory() {
+        this.clubId = null;
     }
 
     public ApproveJoinClubEventHistory(final LocalDateTime eventDateTime,
-                                       final Long managerId,
-                                       final Long applicantId,
-                                       final Long applicationFormId) {
+                                       final Long clubId) {
         super(eventDateTime);
-        this.managerId = managerId;
-        this.applicantId = applicantId;
-        this.applicationFormId = applicationFormId;
+        this.clubId = clubId;
     }
 
-    public Long managerId() {
-        return managerId;
-    }
-
-    public Long applicantId() {
-        return applicantId;
-    }
-
-    public Long applicationFormId() {
-        return applicationFormId;
+    public Long clubId() {
+        return clubId;
     }
 }
