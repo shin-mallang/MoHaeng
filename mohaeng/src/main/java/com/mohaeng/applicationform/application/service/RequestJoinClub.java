@@ -13,6 +13,7 @@ import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.member.exception.MemberException;
+import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,11 +111,12 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
     }
 
     /**
-     * 모임의 임원진과 회장 Id를 반환한다.
+     * 모임의 임원진과 회장의 Member Id를 반환한다.
      */
     private List<Long> getOfficerAndPresidentIdsOfClub(final Club club) {
         return participantRepository.findAllWithMemberByClubIdWhereClubRoleIsPresidentOrOfficer(club.id())
                 .stream()
+                .map(Participant::member)
                 .map(BaseEntity::id)
                 .toList();
     }
