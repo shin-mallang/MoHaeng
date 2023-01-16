@@ -1,18 +1,18 @@
 package com.mohaeng.alarm.domain.model;
 
-import com.mohaeng.alarm.domain.model.value.AlarmMessage;
 import com.mohaeng.alarm.domain.model.generator.RequestClubJoinAlarmContentGenerator;
+import com.mohaeng.alarm.domain.model.value.AlarmMessage;
 import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
-import com.mohaeng.common.fixtures.ApplicationForeFixture;
+import com.mohaeng.common.fixtures.ApplicationFormFixture;
 import com.mohaeng.common.repositories.MockApplicationFormRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.mohaeng.common.fixtures.ApplicationForeFixture.applicationForm;
+import static com.mohaeng.common.fixtures.ApplicationFormFixture.applicationForm;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -37,7 +37,7 @@ class RequestClubJoinAlarmContentGeneratorTest {
         final Long clubId = 123L;
         ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(memberId, clubId, null));
 
-        RequestJoinClubEvent requestJoinClubEvent = ApplicationForeFixture.requestJoinClubEvent(List.of(1L));
+        RequestJoinClubEvent requestJoinClubEvent = ApplicationFormFixture.requestJoinClubEvent(List.of(1L));
 
         // when
         AlarmMessage alarmMessage = clubJoinAlarmContentGenerator.generate(requestJoinClubEvent);

@@ -10,7 +10,7 @@ import java.util.List;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 
-public class ApplicationForeFixture {
+public class ApplicationFormFixture {
 
     public static RequestJoinClubUseCase.Command requestJoinClubUseCaseCommand(final Long applicantId, final Long targetClubId) {
         return new RequestJoinClubUseCase.Command(applicantId, targetClubId);

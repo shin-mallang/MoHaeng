@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.mohaeng.common.fixtures.ApplicationForeFixture.requestJoinClubEvent;
+import static com.mohaeng.common.fixtures.ApplicationFormFixture.requestJoinClubEvent;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static java.util.stream.Stream.of;
 import static org.mockito.ArgumentMatchers.any;

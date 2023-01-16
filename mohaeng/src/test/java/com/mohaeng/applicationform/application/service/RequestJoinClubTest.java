@@ -25,7 +25,7 @@ import java.util.List;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_REQUEST_JOIN_CLUB;
-import static com.mohaeng.common.fixtures.ApplicationForeFixture.requestJoinClubUseCaseCommand;
+import static com.mohaeng.common.fixtures.ApplicationFormFixture.requestJoinClubUseCaseCommand;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMaxParticipantCount;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
