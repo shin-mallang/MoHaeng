@@ -13,4 +13,8 @@ public interface JpaApplicationFormRepository extends JpaRepository<ApplicationF
     @Override
     @Query("select af from ApplicationForm af join fetch af.applicant join fetch af.target where af.id = :id")
     Optional<ApplicationForm> findWithMemberAndClubById(@Param("id") final Long id);
+
+    @Override
+    @Query("select af from ApplicationForm af join fetch af.target where af.id = :id")
+    Optional<ApplicationForm> findWithClubById(@Param("id") final Long id);
 }

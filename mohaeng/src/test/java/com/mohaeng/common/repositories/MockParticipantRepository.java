@@ -9,6 +9,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.OFFICER;
 import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
@@ -39,6 +40,11 @@ public class MockParticipantRepository implements ParticipantRepository {
                 filter(it -> it.clubRole().clubRoleCategory().equals(PRESIDENT)
                         || it.clubRole().clubRoleCategory().equals(OFFICER))
                 .toList();
+    }
+
+    @Override
+    public Optional<Participant> findWithClubRoleByMemberIdAndClub(Long managerId, Club club) {
+        return Optional.empty();
     }
 
     public List<Participant> findAll() {

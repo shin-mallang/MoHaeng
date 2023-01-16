@@ -18,4 +18,6 @@ public interface ApplicationFormRepository {
     boolean existsByApplicantAndTarget(final Member applicant, final Club target);
 
     Optional<ApplicationForm> findWithMemberAndClubById(final Long id);
+
+    Optional<ApplicationForm> findWithClubById(final Long id);
 }

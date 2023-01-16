@@ -68,4 +68,12 @@ public class ClubRole extends BaseEntity {
     public Club club() {
         return club;
     }
+
+    /**
+     * 관리자(회장, 임원)역할인지 확인
+     */
+    public boolean isManagerRole() {
+        // 일반 역할만 아니면 관리자다
+        return this.clubRoleCategory != ClubRoleCategory.GENERAL;
+    }
 }

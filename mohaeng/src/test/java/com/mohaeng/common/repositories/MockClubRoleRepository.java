@@ -1,5 +1,6 @@
 package com.mohaeng.common.repositories;
 
+import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -30,6 +31,11 @@ public class MockClubRoleRepository implements ClubRoleRepository {
     @Override
     public Optional<ClubRole> findById(Long id) {
         return Optional.ofNullable(store.get(id));
+    }
+
+    @Override
+    public Optional<ClubRole> findDefaultGeneralRoleByClub(Club club) {
+        return Optional.empty();
     }
 
     public List<ClubRole> findAll() {
