@@ -1,6 +1,5 @@
 package com.mohaeng.applicationform.domain.event;
 
-
 import com.mohaeng.common.alarm.AlarmEvent;
 import com.mohaeng.common.event.BaseEventHistory;
 
@@ -10,9 +9,9 @@ import static java.util.stream.Collectors.joining;
 
 public class RequestJoinClubEvent extends AlarmEvent {
 
-    private Long applicantId;  // 가입 신청자 ID
-    private Long targetClubId;  // 모임 ID
-    private Long applicationFormId;  // 가입 신청서 ID
+    private final Long applicantId;  // 가입 신청자 ID
+    private final Long targetClubId;  // 모임 ID
+    private final Long applicationFormId;  // 가입 신청서 ID
 
     public RequestJoinClubEvent(final Object source,
                                 final Long applicantId,
@@ -41,7 +40,6 @@ public class RequestJoinClubEvent extends AlarmEvent {
     public BaseEventHistory history() {
         return new RequestJoinClubEventHistory(eventDateTime, applicantId, targetClubId, applicationFormId);
     }
-
 
     @Override
     public String toString() {

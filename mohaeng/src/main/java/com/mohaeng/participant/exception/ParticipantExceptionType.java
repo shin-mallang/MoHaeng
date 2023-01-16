@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 public enum ParticipantExceptionType implements BaseExceptionType {
 
     NOT_FOUND_PARTICIPANT(600, HttpStatus.NOT_FOUND, "참여자가 존재하지 않습니다."),
+    NOT_FOUND_PRESIDENT(601, HttpStatus.NOT_FOUND, "주어진 모임의 회장이 없습니다. (발생하면 안되는 오류입니다.)"),
     ;
 
     private final int errorCode;

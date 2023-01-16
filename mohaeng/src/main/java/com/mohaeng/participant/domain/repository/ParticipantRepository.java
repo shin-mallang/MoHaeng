@@ -20,4 +20,9 @@ public interface ParticipantRepository {
      * Club에서 해당 Member의 Participant ID를 조회
      */
     Optional<Participant> findWithClubRoleByMemberIdAndClub(final Long managerId, final Club club);
+
+    /**
+     * 해당 모임의 회장을 조회
+     */
+    Optional<Participant> findPresidentWithMemberByClub(final Club club);
 }

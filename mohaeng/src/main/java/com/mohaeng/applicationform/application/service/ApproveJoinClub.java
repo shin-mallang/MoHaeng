@@ -1,6 +1,7 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
+import com.mohaeng.applicationform.domain.event.ApproveJoinClubEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -9,6 +10,7 @@ import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.clubrole.exception.ClubRoleException;
 import com.mohaeng.clubrole.exception.ClubRoleExceptionType;
+import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NOT_FOUND_APPLICATION_FORM;
 import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOUND_PRESIDENT;
 
 @Service
 @Transactional
@@ -38,7 +41,7 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
 
     @Override
     public void command(final Command command) {
-        // 가입 신청서 조회 TODO 쿼리 계산 후 findByMemberAndClub
+        // 가입 신청서 조회
         ApplicationForm applicationForm = applicationFormRepository.findWithClubById(command.applicationFormId())
                 .orElseThrow(() -> new ApplicationFormException(NOT_FOUND_APPLICATION_FORM));
 
@@ -56,6 +59,17 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
         // 가입 신청 승인 -> 모임에 가입시키기
         Participant applicant = manager.acceptJoinClub(applicationForm, defaultGeneralRole);
         participantRepository.save(applicant);
+
+        // 알림 전송을 위해 모임의 회장 조회하기
+        Participant president = participantRepository.findPresidentWithMemberByClub(manager.club())
+                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
+
+        Events.raise(new ApproveJoinClubEvent(this,
+                president.member().id(),
+                manager.id(),
+                applicant.id(),
+                applicationForm.id())
+        );
     }
 
     /**
