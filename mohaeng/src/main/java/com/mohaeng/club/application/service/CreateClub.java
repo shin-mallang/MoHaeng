@@ -8,9 +8,11 @@ import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
-import com.mohaeng.member.exception.NotFoundMemberException;
+import com.mohaeng.member.exception.MemberException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.mohaeng.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 
 @Transactional
 @Service
@@ -27,7 +29,7 @@ public class CreateClub implements CreateClubUseCase {
 
     @Override
     public Long command(final Command command) {
-        Member member = memberRepository.findById(command.memberId()).orElseThrow(NotFoundMemberException::new);
+        Member member = memberRepository.findById(command.memberId()).orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
 
         Club club = clubRepository.save(ClubApplicationMapper.toDomainEntity(command));
 
