@@ -86,6 +86,30 @@ class ApproveJoinClubTest {
         assertThat(member.clubRole().clubRoleCategory()).isEqualTo(ClubRoleCategory.GENERAL);
     }
 
+    // TODO 회장이 한 경우 이벤트 한개만 발행
+    @Test
+    @DisplayName("해당 테스트부터 작성한다")
+    void success_test_2() {
+        // given
+        throw new IllegalArgumentException("TODO 회장이 한 경우 이벤트 한개만 발행");
+
+        // when
+
+        // then
+    }
+
+    // TODO 임원진이 한 경우 이벤트 두 개 발행
+    @Test
+    @DisplayName("해당 테스트부터 작성한다2")
+    void success_test_3() {
+        // given
+        throw new IllegalArgumentException("TODO 임원진이 한 경우 이벤트 두 개 발행");
+
+        // when
+
+        // then
+    }
+
     @Test
     @DisplayName("관리자가 아닌 경우 회원을 모임에 가입시킬 수 없다.")
     void fail_test_1() {
@@ -146,8 +170,4 @@ class ApproveJoinClubTest {
 
         assertThat(baseExceptionType).isEqualTo(ALREADY_MEMBER_JOINED_CLUB);
     }
-
-    // TODO 회장이 한 경우 이벤트 한개만 발행
-
-    // TODO 임원진이 한 경우 이벤트 두 개 발행
 }

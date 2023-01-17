@@ -2,10 +2,9 @@ package com.mohaeng.alarm.application.eventhandler;
 
 import com.mohaeng.alarm.domain.model.AlarmMessageGenerateFactory;
 import com.mohaeng.alarm.domain.repository.AlarmRepository;
-import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
+import com.mohaeng.applicationform.domain.event.ApproveJoinClubEvent;
 import com.mohaeng.common.EventHandlerTest;
 import com.mohaeng.common.alarm.MockAlarmMessageGenerator;
-import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.common.repositories.MockAlarmRepository;
 import com.mohaeng.common.repositories.MockMemberRepository;
 import com.mohaeng.member.domain.model.Member;
@@ -15,9 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.mohaeng.common.fixtures.ApplicationFormFixture.requestJoinClubEvent;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static java.util.stream.Stream.of;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,14 +42,12 @@ class AlarmEventHandlerTest extends EventHandlerTest {
     @DisplayName("AlarmEvent를 받아 이를 Alram으로 만들어 저장한다.")
     void test() {
         // given
-        Member member1 = memberRepository.save(member(null));
-        Member member2 = memberRepository.save(member(null));
-        RequestJoinClubEvent requestJoinClubEvent = requestJoinClubEvent(of(member1, member2).map(BaseEntity::id).toList());
+        ApproveJoinClubEvent approveJoinClubEvent = new ApproveJoinClubEvent(this, 1L, 1L);
 
         // when
-        alarmEventHandler.handle(requestJoinClubEvent);
+        alarmEventHandler.handle(approveJoinClubEvent);
 
         // then
-        Assertions.assertThat(alarmRepository.findAll().size()).isEqualTo(2);
+        Assertions.assertThat(alarmRepository.findAll().size()).isEqualTo(1);
     }
 }

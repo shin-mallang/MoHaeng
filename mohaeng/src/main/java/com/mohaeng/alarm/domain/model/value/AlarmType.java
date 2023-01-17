@@ -2,7 +2,6 @@ package com.mohaeng.alarm.domain.model.value;
 
 import com.mohaeng.applicationform.domain.event.ApproveJoinClubEvent;
 import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
-import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
 import com.mohaeng.common.event.BaseEvent;
 
 import java.util.Map;
@@ -13,7 +12,6 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 
 public enum AlarmType {
 
-    REQUEST_CLUB_JOIN(RequestJoinClubEvent.class),  // 모암 가입 신청 이벤트에 대한 알림
     APPROVE_JOIN_CLUB(ApproveJoinClubEvent.class),  // 모임 가입 신청 수락 이벤트에 대한 알림
     OFFICER_APPROVE_CLUB_JOIN_APPLICATION(OfficerApproveClubJoinApplicationEvent.class),  // 임원진이 모임 가입 신청을 수락한 것에 대한 알림
     ;

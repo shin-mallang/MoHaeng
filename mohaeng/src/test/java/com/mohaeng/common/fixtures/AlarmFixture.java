@@ -15,11 +15,11 @@ public class AlarmFixture {
     private static final AlarmMessage ALARM_MESSAGE = new AlarmMessage("알람 제목", "알람 메세지");
 
     public static Alarm alarm() {
-        return Alarm.of(RECEIVER, ALARM_MESSAGE, AlarmType.REQUEST_CLUB_JOIN);
+        return Alarm.of(RECEIVER, ALARM_MESSAGE, AlarmType.APPROVE_JOIN_CLUB);
     }
 
     public static Alarm alarmWithMember(final Member member) {
-        return Alarm.of(Receiver.of(member), ALARM_MESSAGE, AlarmType.REQUEST_CLUB_JOIN);
+        return Alarm.of(Receiver.of(member), ALARM_MESSAGE, AlarmType.APPROVE_JOIN_CLUB);
     }
 
     public static AlarmDto alarmDto() {
@@ -27,7 +27,7 @@ public class AlarmFixture {
                 LocalDateTime.now(),
                 "알림 제목",
                 "알림 내용",
-                AlarmType.REQUEST_CLUB_JOIN.name(),
+                AlarmType.APPROVE_JOIN_CLUB.name(),
                 true
         );
     }

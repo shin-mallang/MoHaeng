@@ -1,7 +1,6 @@
 package com.mohaeng.common.fixtures;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -14,10 +13,6 @@ public class ApplicationFormFixture {
 
     public static RequestJoinClubUseCase.Command requestJoinClubUseCaseCommand(final Long applicantId, final Long targetClubId) {
         return new RequestJoinClubUseCase.Command(applicantId, targetClubId);
-    }
-
-    public static RequestJoinClubEvent requestJoinClubEvent(final List<Long> receiverIds) {
-        return new RequestJoinClubEvent("", 1L, 1L, 1L, receiverIds);
     }
 
     public static ApplicationForm applicationForm(final Long memberId, final Long clubId, final Long applicationFormId) {
