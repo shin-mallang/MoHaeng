@@ -149,7 +149,7 @@ class RequestJoinClubTest {
     }
 
     @Test
-    @DisplayName("가입 신청을 하게되면 가입 요청 알람이 저장된다.")
+    @DisplayName("가입 신청을 하게되면 가입 요청 알림이 저장된다.")
     void test5() {
         // given
         Club club = clubRepository.save(club(null));
