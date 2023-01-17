@@ -17,6 +17,8 @@ public class ApplicationRequestAlarm extends BaseEntity {
 
     private Long receiverId;  // 해당 알림을 받은 Member ID
 
+    private boolean isRead;  // 알람 읽음 여부
+
     protected ApplicationRequestAlarm() {
     }
 
@@ -28,6 +30,7 @@ public class ApplicationRequestAlarm extends BaseEntity {
         this.clubId = clubId;
         this.applicationFormId = applicationFormId;
         this.receiverId = receiverId;
+        this.isRead = false;
     }
 
     public Long applicantId() {
@@ -44,5 +47,13 @@ public class ApplicationRequestAlarm extends BaseEntity {
 
     public Long receiverId() {
         return receiverId;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void read() {
+        this.isRead = true;
     }
 }
