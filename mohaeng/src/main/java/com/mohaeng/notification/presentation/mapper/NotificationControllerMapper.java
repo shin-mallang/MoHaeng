@@ -21,17 +21,17 @@ public class NotificationControllerMapper {
 
         /* 가입 요청 처리 */
         if (notificationDto instanceof ApplicationProcessedNotificationDto dto) {
-            new ApplicationProcessedNotificationResponse(dto.id(), dto.createdAt(), dto.isRead(), dto.getClass().getSimpleName(), dto.clubId(), dto.isApproved());
+            return new ApplicationProcessedNotificationResponse(dto.id(), dto.createdAt(), dto.isRead(), dto.getClass().getSimpleName(), dto.clubId(), dto.isApproved());
         }
 
         /* 임원의 가입 요청 수락 */
         if (notificationDto instanceof OfficerApproveApplicationNotificationDto dto) {
-            new OfficerApproveApplicationNotificationResponse(dto.id(), dto.createdAt(), dto.isRead(), dto.getClass().getSimpleName(), dto.officerMemberId(), dto.officerParticipantId(), dto.applicantMemberId(), dto.applicantParticipantId());
+            return new OfficerApproveApplicationNotificationResponse(dto.id(), dto.createdAt(), dto.isRead(), dto.getClass().getSimpleName(), dto.officerMemberId(), dto.officerParticipantId(), dto.applicantMemberId(), dto.applicantParticipantId());
         }
 
         /* 임원의 가입 요청 거절 */
         if (notificationDto instanceof OfficerRejectApplicationNotificationDto dto) {
-            new OfficerRejectApplicationNotificationResponse(dto.id(), dto.createdAt(), dto.isRead(), dto.getClass().getSimpleName(), dto.officerMemberId(), dto.officerParticipantId(), dto.applicantMemberId());
+            return new OfficerRejectApplicationNotificationResponse(dto.id(), dto.createdAt(), dto.isRead(), dto.getClass().getSimpleName(), dto.officerMemberId(), dto.officerParticipantId(), dto.applicantMemberId());
         }
         throw new IllegalArgumentException("매핑되는 알림이 없습니다.");
 
