@@ -1,12 +1,11 @@
 package com.mohaeng.notification.application.eventhandler;
 
-import com.mohaeng.notification.domain.model.Notification;
-import com.mohaeng.notification.domain.model.value.Receiver;
-import com.mohaeng.notification.domain.repository.NotificationRepository;
-import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.common.event.EventHandler;
 import com.mohaeng.common.event.EventHistoryRepository;
-import com.mohaeng.member.domain.repository.MemberRepository;
+import com.mohaeng.common.notification.NotificationEvent;
+import com.mohaeng.notification.application.mapper.NotificationApplicationMapper;
+import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.repository.NotificationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -22,14 +21,11 @@ public class NotificationEventHandler extends EventHandler<NotificationEvent> {
     private static final Logger log = LoggerFactory.getLogger(NotificationEventHandler.class);
 
     private final NotificationRepository notificationRepository;
-    private final MemberRepository memberRepository;
 
     protected NotificationEventHandler(final EventHistoryRepository eventHistoryRepository,
-                                       final NotificationRepository notificationRepository,
-                                       final MemberRepository memberRepository) {
+                                       final NotificationRepository notificationRepository) {
         super(eventHistoryRepository);
         this.notificationRepository = notificationRepository;
-        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -44,31 +40,10 @@ public class NotificationEventHandler extends EventHandler<NotificationEvent> {
         process(event);
     }
 
-    private List<Notification> makeAlarms(NotificationEvent event) {
+    private List<Notification> makeAlarms(final NotificationEvent event) {
         // 알람 타입 가져오기
-        AlarmType alarmType = AlarmType.ofEvent(event.getClass());
+        List<Notification> notifications = NotificationApplicationMapper.mapByEventToNotification(event);
 
-        // 알람 이벤트 타입에 맞는 알람 메세지 생성
-        AlarmMessage alarmMessage = generateMessage(event, alarmType);
-
-        // 수신자 조회
-        List<Receiver> receivers = getReceivers(event);
-
-        // 알람 만들어 반환
-        return receivers.stream()
-                .map(it -> Notification.of(it, alarmMessage, alarmType))
-                .toList();
-    }
-
-    private AlarmMessage generateMessage(final NotificationEvent event, final AlarmType alarmType) {
-        AlarmMessageGenerator generator = alarmMessageGenerateFactory.getGenerator(alarmType);
-        return generator.generate(event);
-    }
-
-    private List<Receiver> getReceivers(final NotificationEvent event) {
-        return memberRepository.findByIdIn(event.receiverIds())
-                .stream()
-                .map(Receiver::of)
-                .toList();
+        return notificationRepository.saveAll(notifications);
     }
 }
