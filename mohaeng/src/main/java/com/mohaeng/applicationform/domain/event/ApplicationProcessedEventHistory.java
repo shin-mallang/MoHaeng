@@ -1,9 +1,13 @@
 package com.mohaeng.applicationform.domain.event;
 
 import com.mohaeng.common.event.BaseEventHistory;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
 
+@Entity
+@DiscriminatorValue("ApplicationProcessedEvent")
 public class ApplicationProcessedEventHistory extends BaseEventHistory {
 
     private final Long applicationFormId;

@@ -1,7 +1,11 @@
 package com.mohaeng.applicationform.domain.event;
 
 import com.mohaeng.common.event.BaseEventHistory;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
+@Entity
+@DiscriminatorValue("OfficerApproveClubJoinApplicationEvent")
 public class OfficerApproveClubJoinApplicationEventHistory extends BaseEventHistory {
 
     private final Long managerMemberId;  // 관리자 ID (Member Id)

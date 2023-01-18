@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "event_history")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "event_type")
+@DiscriminatorColumn(name = "event_type", length = 60)
 public abstract class BaseEventHistory extends BaseEntity {
 
     protected LocalDateTime eventDateTime;  // 이벤트 발행 시간
