@@ -1,18 +1,18 @@
 package com.mohaeng.notification.application.mapper;
 
 import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.applicationform.domain.event.ClubJoinApplicationRequestedEvent;
+import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.applicationform.domain.event.OfficerRejectClubJoinApplicationEvent;
 import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.notification.application.usecase.dto.NotificationDto;
 import com.mohaeng.notification.application.usecase.dto.kind.ApplicationProcessedNotificationDto;
-import com.mohaeng.notification.application.usecase.dto.kind.ClubJoinApplicationRequestedNotificationDto;
+import com.mohaeng.notification.application.usecase.dto.kind.ClubJoinApplicationCreatedNotificationDto;
 import com.mohaeng.notification.application.usecase.dto.kind.OfficerApproveApplicationNotificationDto;
 import com.mohaeng.notification.application.usecase.dto.kind.OfficerRejectApplicationNotificationDto;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
-import com.mohaeng.notification.domain.model.kind.ClubJoinApplicationRequestedNotification;
+import com.mohaeng.notification.domain.model.kind.ClubJoinApplicationCreatedNotification;
 import com.mohaeng.notification.domain.model.kind.OfficerApproveApplicationNotification;
 import com.mohaeng.notification.domain.model.kind.OfficerRejectApplicationNotification;
 import com.mohaeng.notification.domain.model.value.Receiver;
@@ -23,9 +23,9 @@ public class NotificationApplicationMapper {
 
     public static List<Notification> mapByEventToNotification(final NotificationEvent event) {
         /* 가입 요청 생성 */
-        if (event instanceof ClubJoinApplicationRequestedEvent e) {
+        if (event instanceof ClubJoinApplicationCreatedEvent e) {
             return e.receiverIds().stream()
-                    .map(id -> (Notification) new ClubJoinApplicationRequestedNotification(Receiver.of(id), e.clubId(), e.applicantId(), e.applicationFormId()))
+                    .map(id -> (Notification) new ClubJoinApplicationCreatedNotification(Receiver.of(id), e.clubId(), e.applicantId(), e.applicationFormId()))
                     .toList();
         }
 
@@ -72,8 +72,8 @@ public class NotificationApplicationMapper {
 
     public static NotificationDto toPresentationDto(final Notification notification) {
         /* 가입 요청 생성 */
-        if (notification instanceof ClubJoinApplicationRequestedNotification n) {
-            return new ClubJoinApplicationRequestedNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.clubId(), n.applicantId(), n.applicationFormId());
+        if (notification instanceof ClubJoinApplicationCreatedNotification n) {
+            return new ClubJoinApplicationCreatedNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.clubId(), n.applicantId(), n.applicationFormId());
         }
 
         /* 가입 요청 처리 */

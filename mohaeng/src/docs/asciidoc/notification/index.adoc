@@ -55,7 +55,7 @@ operation::notification-query-by-id(applicationProcessedNotification)[snippets='
 
 === 알림 조회 - 가입 요청 생성에 대한 알림 (ClubJoinApplicationRequestedNotification)
 
-operation::notification-query-by-id(clubJoinApplicationRequestedNotification)[snippets='http-response,response-fields']
+operation::notification-query-by-id(clubJoinApplicationCreatedNotificationDto)[snippets='http-response,response-fields']
 
 [%hardbreaks]
 .

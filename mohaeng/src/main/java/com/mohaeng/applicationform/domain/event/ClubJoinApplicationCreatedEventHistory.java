@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @DiscriminatorValue("ClubJoinApplicationRequestedEvent")
-public class ClubJoinApplicationRequestedEventHistory extends BaseEventHistory {
+public class ClubJoinApplicationCreatedEventHistory extends BaseEventHistory {
 
     private Long clubId;  // 가입을 요청한 모임 ID
 
@@ -16,13 +16,13 @@ public class ClubJoinApplicationRequestedEventHistory extends BaseEventHistory {
 
     private Long applicationFormId;  // 가입 신청서 ID
 
-    protected ClubJoinApplicationRequestedEventHistory() {
+    protected ClubJoinApplicationCreatedEventHistory() {
     }
 
-    public ClubJoinApplicationRequestedEventHistory(final LocalDateTime eventDateTime,
-                                                    final Long clubId,
-                                                    final Long applicantId,
-                                                    final Long applicationFormId) {
+    public ClubJoinApplicationCreatedEventHistory(final LocalDateTime eventDateTime,
+                                                  final Long clubId,
+                                                  final Long applicantId,
+                                                  final Long applicationFormId) {
         super(eventDateTime);
         this.clubId = clubId;
         this.applicantId = applicantId;

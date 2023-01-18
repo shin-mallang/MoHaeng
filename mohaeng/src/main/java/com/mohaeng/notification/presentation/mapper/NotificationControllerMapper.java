@@ -2,12 +2,12 @@ package com.mohaeng.notification.presentation.mapper;
 
 import com.mohaeng.notification.application.usecase.dto.NotificationDto;
 import com.mohaeng.notification.application.usecase.dto.kind.ApplicationProcessedNotificationDto;
-import com.mohaeng.notification.application.usecase.dto.kind.ClubJoinApplicationRequestedNotificationDto;
+import com.mohaeng.notification.application.usecase.dto.kind.ClubJoinApplicationCreatedNotificationDto;
 import com.mohaeng.notification.application.usecase.dto.kind.OfficerApproveApplicationNotificationDto;
 import com.mohaeng.notification.application.usecase.dto.kind.OfficerRejectApplicationNotificationDto;
 import com.mohaeng.notification.presentation.response.NotificationResponse;
 import com.mohaeng.notification.presentation.response.kind.ApplicationProcessedNotificationResponse;
-import com.mohaeng.notification.presentation.response.kind.ClubJoinApplicationRequestedNotificationResponse;
+import com.mohaeng.notification.presentation.response.kind.ClubJoinApplicationCreatedNotificationResponse;
 import com.mohaeng.notification.presentation.response.kind.OfficerApproveApplicationNotificationResponse;
 import com.mohaeng.notification.presentation.response.kind.OfficerRejectApplicationNotificationResponse;
 
@@ -15,8 +15,8 @@ public class NotificationControllerMapper {
 
     public static NotificationResponse toResponseDto(final NotificationDto notificationDto) {
         /* 가입 요청 생성 */
-        if (notificationDto instanceof ClubJoinApplicationRequestedNotificationDto dto) {
-            return new ClubJoinApplicationRequestedNotificationResponse(dto.id(), dto.createdAt(), dto.isRead(), dto.type(), dto.clubId(), dto.applicantId(), dto.applicationFormId());
+        if (notificationDto instanceof ClubJoinApplicationCreatedNotificationDto dto) {
+            return new ClubJoinApplicationCreatedNotificationResponse(dto.id(), dto.createdAt(), dto.isRead(), dto.type(), dto.clubId(), dto.applicantId(), dto.applicationFormId());
         }
 
         /* 가입 요청 처리 */

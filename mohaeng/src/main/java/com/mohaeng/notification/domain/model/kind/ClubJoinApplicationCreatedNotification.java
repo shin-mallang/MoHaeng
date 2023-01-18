@@ -12,7 +12,7 @@ import jakarta.persistence.Entity;
  */
 @DiscriminatorValue(value = "club_join_application_request_notification")
 @Entity
-public class ClubJoinApplicationRequestedNotification extends Notification {
+public class ClubJoinApplicationCreatedNotification extends Notification {
 
     @Column(nullable = false)
     private Long clubId;  // 가입을 요청한 모임 ID
@@ -23,13 +23,13 @@ public class ClubJoinApplicationRequestedNotification extends Notification {
     @Column(nullable = false)
     private Long applicationFormId;  // 가입 신청서 ID
 
-    protected ClubJoinApplicationRequestedNotification() {
+    protected ClubJoinApplicationCreatedNotification() {
     }
 
-    public ClubJoinApplicationRequestedNotification(final Receiver receiver,
-                                                    final Long clubId,
-                                                    final Long applicantId,
-                                                    final Long applicationFormId) {
+    public ClubJoinApplicationCreatedNotification(final Receiver receiver,
+                                                  final Long clubId,
+                                                  final Long applicantId,
+                                                  final Long applicationFormId) {
         super(receiver);
         this.clubId = clubId;
         this.applicantId = applicantId;

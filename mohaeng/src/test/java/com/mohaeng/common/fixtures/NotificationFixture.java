@@ -1,11 +1,11 @@
 package com.mohaeng.common.fixtures;
 
 import com.mohaeng.notification.application.usecase.dto.kind.ApplicationProcessedNotificationDto;
-import com.mohaeng.notification.application.usecase.dto.kind.ClubJoinApplicationRequestedNotificationDto;
+import com.mohaeng.notification.application.usecase.dto.kind.ClubJoinApplicationCreatedNotificationDto;
 import com.mohaeng.notification.application.usecase.dto.kind.OfficerApproveApplicationNotificationDto;
 import com.mohaeng.notification.application.usecase.dto.kind.OfficerRejectApplicationNotificationDto;
 import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
-import com.mohaeng.notification.domain.model.kind.ClubJoinApplicationRequestedNotification;
+import com.mohaeng.notification.domain.model.kind.ClubJoinApplicationCreatedNotification;
 import com.mohaeng.notification.domain.model.kind.OfficerApproveApplicationNotification;
 import com.mohaeng.notification.domain.model.kind.OfficerRejectApplicationNotification;
 
@@ -23,11 +23,11 @@ public class NotificationFixture {
         );
     }
 
-    public static ClubJoinApplicationRequestedNotificationDto clubJoinApplicationRequestedNotificationDto(final Long id) {
-        return new ClubJoinApplicationRequestedNotificationDto(id,
+    public static ClubJoinApplicationCreatedNotificationDto clubJoinApplicationCreatedNotificationDto(final Long id) {
+        return new ClubJoinApplicationCreatedNotificationDto(id,
                 LocalDateTime.now(),
                 true,
-                ClubJoinApplicationRequestedNotification.class.getSimpleName(),
+                ClubJoinApplicationCreatedNotification.class.getSimpleName(),
                 1L,
                 2L,
                 3L

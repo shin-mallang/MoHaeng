@@ -79,12 +79,12 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (clubJoinApplicationRequestedNotificationDto)")
+    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (clubJoinApplicationCreatedNotificationDto)")
     void success_test_2_clubJoinApplicationRequestedNotificationDto() throws Exception {
         // given
         final Long memberId = 1L;
         final Long alarmId = 1L;
-        when(queryNotificationByIdUseCase.query(any())).thenReturn(clubJoinApplicationRequestedNotificationDto(1L));
+        when(queryNotificationByIdUseCase.query(any())).thenReturn(clubJoinApplicationCreatedNotificationDto(1L));
         setAuthentication(memberId);
 
         // when & then
@@ -98,7 +98,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         verify(queryNotificationByIdUseCase, times(1)).query(any());
 
         resultActions.andDo(
-                document("notification-query-by-id(clubJoinApplicationRequestedNotification)",
+                document("notification-query-by-id(clubJoinApplicationCreatedNotificationDto)",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
