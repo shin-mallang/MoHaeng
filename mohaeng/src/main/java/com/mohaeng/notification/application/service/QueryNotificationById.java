@@ -28,6 +28,6 @@ public class QueryNotificationById implements QueryNotificationByIdUseCase {
 
         notification.read();  // 알림 읽음 처리
 
-        return NotificationApplicationMapper.toPresentationDto(notification);
+        return NotificationApplicationMapper.toApplicationDto(notification);
     }
 }

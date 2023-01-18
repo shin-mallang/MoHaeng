@@ -21,7 +21,7 @@ import java.util.List;
 
 public class NotificationApplicationMapper {
 
-    public static List<Notification> mapByEventToNotification(final NotificationEvent event) {
+    public static List<Notification> mapEventToNotification(final NotificationEvent event) {
         /* 가입 요청 생성 */
         if (event instanceof ClubJoinApplicationCreatedEvent e) {
             return e.receiverIds().stream()
@@ -70,7 +70,7 @@ public class NotificationApplicationMapper {
          */
     }
 
-    public static NotificationDto toPresentationDto(final Notification notification) {
+    public static NotificationDto toApplicationDto(final Notification notification) {
         /* 가입 요청 생성 */
         if (notification instanceof ClubJoinApplicationCreatedNotification n) {
             return new ClubJoinApplicationCreatedNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.clubId(), n.applicantId(), n.applicationFormId());

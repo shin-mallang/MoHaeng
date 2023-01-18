@@ -42,7 +42,7 @@ public class NotificationEventHandler extends EventHandler<NotificationEvent> {
 
     private List<Notification> makeAlarms(final NotificationEvent event) {
         // 알람 타입 가져오기
-        List<Notification> notifications = NotificationApplicationMapper.mapByEventToNotification(event);
+        List<Notification> notifications = NotificationApplicationMapper.mapEventToNotification(event);
 
         return notificationRepository.saveAll(notifications);
     }
