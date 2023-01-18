@@ -1,29 +1,29 @@
-package com.mohaeng.notification.application.usecase.dto;
+package com.mohaeng.notification.presentation.response;
 
 import java.time.LocalDateTime;
 
-public abstract class NotificationDto {
+public abstract class NotificationResponse {
 
     private Long id;
     private LocalDateTime createdAt;  // 알람 발송일
     private boolean isRead;  // 알람 읽음 여부
     private String type;
 
-    public NotificationDto(final Long id,
-                           final LocalDateTime createdAt,
-                           final boolean isRead,
-                           final String type) {
+    public NotificationResponse(final Long id,
+                                final LocalDateTime createdAt,
+                                final boolean isRead,
+                                final String type) {
         this.id = id;
         this.createdAt = createdAt;
         this.isRead = isRead;
         this.type = type;
     }
 
-    public Long id() {
+    public Long getId() {
         return id;
     }
 
-    public LocalDateTime createdAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
@@ -31,7 +31,7 @@ public abstract class NotificationDto {
         return isRead;
     }
 
-    public String type() {
+    public String getType() {
         return type;
     }
 }

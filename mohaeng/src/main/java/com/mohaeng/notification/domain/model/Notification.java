@@ -1,15 +1,16 @@
 package com.mohaeng.notification.domain.model;
 
-import com.mohaeng.notification.domain.model.value.Receiver;
 import com.mohaeng.common.domain.BaseEntity;
+import com.mohaeng.notification.domain.model.value.Receiver;
 import jakarta.persistence.*;
 
 /**
  * 알림이 필요하면 해당 클래스를 상속받는다.
  */
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "alarm_type")
-@Table(name = "alarm")
+@DiscriminatorColumn(name = "notification_type")
+@Entity
+@Table(name = "notification")
 public abstract class Notification extends BaseEntity {
 
     @Embedded
