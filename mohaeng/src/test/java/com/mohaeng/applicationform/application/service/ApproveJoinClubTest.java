@@ -19,6 +19,8 @@ import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,17 @@ class ApproveJoinClubTest {
 
     private ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
 
+    @BeforeEach
+    void before() {
+        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
+    }
+
+    @AfterEach
+    void after() {
+        Events.setApplicationEventPublisher(applicationEventPublisher);
+    }
+
+
     @Test
     @DisplayName("회원을 모임에 기본 역할로 가입시킨다.")
     void success_test_1() {
@@ -105,7 +118,6 @@ class ApproveJoinClubTest {
     @DisplayName("회장이 가입 신청을 처리한 경우 이벤트는 한개만 발행한다.")
     void success_test_2() {
         // given
-        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
         Club target = clubRepository.save(club(null));
         List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
         Member presidentMember = memberRepository.save(member(null));
@@ -130,14 +142,12 @@ class ApproveJoinClubTest {
                 () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
                 () -> verify(mockApplicationEventPublisher, times(0)).publishEvent(any(OfficerApproveClubJoinApplicationEvent.class))
         );
-        Events.setApplicationEventPublisher(applicationEventPublisher);
     }
 
     @Test
     @DisplayName("임원진이 가입 신청을 처리한 경우 이벤트는 두개가 발행한다.")
     void success_test_3() {
         // given
-        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
         Club target = clubRepository.save(club(null));
         List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
         Member presidentMember = memberRepository.save(member(null));
@@ -166,7 +176,6 @@ class ApproveJoinClubTest {
                 () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
                 () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(OfficerApproveClubJoinApplicationEvent.class))
         );
-        Events.setApplicationEventPublisher(applicationEventPublisher);
     }
 
     @Test

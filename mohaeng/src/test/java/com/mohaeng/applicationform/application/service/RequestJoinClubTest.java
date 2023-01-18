@@ -1,7 +1,7 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.ClubJoinApplicationRequestedEvent;
+import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
@@ -16,10 +16,7 @@ import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -64,6 +61,16 @@ class RequestJoinClubTest {
     private ApplicationEventPublisher applicationEventPublisher;
 
     private final ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
+
+    @BeforeEach
+    void before() {
+        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
+    }
+
+    @AfterEach
+    void after() {
+        Events.setApplicationEventPublisher(applicationEventPublisher);
+    }
 
     @Test
     @DisplayName("모임에 가입되지 않은 사람많이 가입 신청을 할 수 있다.")
@@ -160,7 +167,6 @@ class RequestJoinClubTest {
     @DisplayName("TODO 가입 신청을 하게되면 가입 신청 이벤트가 발행된다.")
     void test5() {
         // given
-        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
         Club club = clubRepository.save(club(null));
         Member member = memberRepository.save(member(null));
 
@@ -170,7 +176,7 @@ class RequestJoinClubTest {
         // then
         Assertions.assertAll(
                 () -> assertThat(applicationFormId).isNotNull(),
-                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ClubJoinApplicationRequestedEvent.class))
+                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ClubJoinApplicationCreatedEvent.class))
         );
     }
 

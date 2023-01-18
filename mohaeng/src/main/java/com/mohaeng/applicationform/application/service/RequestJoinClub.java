@@ -1,7 +1,7 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.ClubJoinApplicationRequestedEvent;
+import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -102,7 +102,7 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
      * 이벤트 발행 -> 모임 가입 신청 요청에 대하여 회장과 임원진에게 알림 보내기
      */
     private void raiseEvents(final Member applicant, final Club club, final ApplicationForm applicationForm) {
-        Events.raise(new ClubJoinApplicationRequestedEvent(
+        Events.raise(new ClubJoinApplicationCreatedEvent(
                 this,
                 getOfficerAndPresidentIdsOfClub(club),
                 club.id(),
