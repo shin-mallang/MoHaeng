@@ -10,21 +10,24 @@
 
 
 
-[[Alarm-API]]
-== Alarm API
+[[Notification-API]]
+== Notification API
 
-[[Alarm-알림-조회]]
+[[Notification-알림-조회]]
 === 알림 조회
-operation::alarm-query-by-id[snippets='http-request,path-parameters,request-headers,http-response']
+
+operation::notification-query-by-id[snippets='http-request,path-parameters,request-headers,http-response']
 
 
 ==== 요청 시 Header에 AccessToken이 없는 경우
-operation::alarm-query-by-id fail(No Access Token)[snippets='http-response']
 
+operation::notification-query-by-id fail(No Access Token)[snippets='http-response']
 
-==== 알람의 ID는 존재하지만 회원 자신이 받은 알림이 아닌 경우
-operation::alarm-query-by-id fail(alarm's receiver id is not matched login member id)[snippets='http-response']
+==== 알림의 ID는 존재하지만 회원 자신이 받은 알림이 아닌 경우
 
-==== 알람의 ID가 존재하지 않는 경우 경우
-operation::alarm-query-by-id fail(alarm does not exist)[snippets='http-response']
+operation::notification-query-by-id fail(notification's receiver id is not matched login member id)[snippets='http-response']
+
+==== 알림의 ID가 존재하지 않는 경우 경우
+
+operation::notification-query-by-id fail(notification does not exist)[snippets='http-response']
 

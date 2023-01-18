@@ -1,4 +1,4 @@
-package com.mohaeng.common.alarm;
+package com.mohaeng.common.notification;
 
 import com.mohaeng.common.event.BaseEvent;
 
@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * 알람 발행을 위한 이벤트는 BaseEvent 대신 해당 클래스를 상속받는다.
  */
-public abstract class AlarmEvent extends BaseEvent {
+public abstract class NotificationEvent extends BaseEvent {
 
     protected List<Long> receiverIds;
 
-    public AlarmEvent(final Object source, final List<Long> receiverIds) {
+    public NotificationEvent(final Object source, final List<Long> receiverIds) {
         super(source);
         this.receiverIds = receiverIds;
     }
