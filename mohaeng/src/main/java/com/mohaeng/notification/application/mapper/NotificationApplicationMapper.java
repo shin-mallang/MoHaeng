@@ -61,7 +61,7 @@ public class NotificationApplicationMapper {
          return List.of(new OfficerApproveApplicationNotification(new Receiver(e.receiverId()), e.officerMemberId(), e.officerParticipantId(), e.applicantMemberId(), e.applicantParticipantId()));
          }
 
-         case OfficerRejectClubJoinApplicationEvent e -> {
+         case OfficerRejectClbJoinApplicationEvent e -> {
          return List.of(new OfficerRejectApplicationNotification(new Receiver(e.receiverId()), e.officerMemberId(), e.officerParticipantId(), e.applicantMemberId()));
          }
 
@@ -78,17 +78,17 @@ public class NotificationApplicationMapper {
 
         /* 가입 요청 처리 */
         if (notification instanceof ApplicationProcessedNotification n) {
-            new ApplicationProcessedNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.clubId(), n.isApproved());
+            return new ApplicationProcessedNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.clubId(), n.isApproved());
         }
 
         /* 임원의 가입 요청 수락 */
         if (notification instanceof OfficerApproveApplicationNotification n) {
-            new OfficerApproveApplicationNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.officerMemberId(), n.officerParticipantId(), n.applicantMemberId(), n.applicantParticipantId());
+            return new OfficerApproveApplicationNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.officerMemberId(), n.officerParticipantId(), n.applicantMemberId(), n.applicantParticipantId());
         }
 
         /* 임원의 가입 요청 거절 */
         if (notification instanceof OfficerRejectApplicationNotification n) {
-            new OfficerRejectApplicationNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.officerMemberId(), n.officerParticipantId(), n.applicantMemberId());
+            return new OfficerRejectApplicationNotificationDto(n.id(), n.createdAt(), n.isRead(), n.getClass().getSimpleName(), n.officerMemberId(), n.officerParticipantId(), n.applicantMemberId());
         }
         throw new IllegalArgumentException("매핑되는 알림이 없습니다.");
 
