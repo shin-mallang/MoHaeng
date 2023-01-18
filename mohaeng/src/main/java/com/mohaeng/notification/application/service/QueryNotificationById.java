@@ -24,7 +24,7 @@ public class QueryNotificationById implements QueryNotificationByIdUseCase {
 
     @Override
     public NotificationDto query(final Query query) {
-        Notification notification = notificationRepository.findByIdAndReceiver(query.alarmId(), Receiver.of(query.memberId())).orElseThrow(() -> new NotificationException(NOT_FOUND_APPLICATION_FORM));
+        Notification notification = notificationRepository.findByIdAndReceiver(query.notificationId(), Receiver.of(query.memberId())).orElseThrow(() -> new NotificationException(NOT_FOUND_APPLICATION_FORM));
 
         notification.read();  // 알림 읽음 처리
 
