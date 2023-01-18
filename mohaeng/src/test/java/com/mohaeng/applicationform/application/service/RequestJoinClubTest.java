@@ -1,6 +1,7 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
+import com.mohaeng.applicationform.domain.event.ClubJoinApplicationRequestedEvent;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
@@ -8,16 +9,19 @@ import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
+import com.mohaeng.common.event.Events;
 import com.mohaeng.common.fixtures.ClubRoleFixture;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -29,6 +33,7 @@ import static com.mohaeng.common.fixtures.ClubFixture.clubWithMaxParticipantCoun
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ApplicationTest
 @DisplayName("RequestJoinClub 은 ")
@@ -54,6 +59,11 @@ class RequestJoinClubTest {
 
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    private final ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
 
     @Test
     @DisplayName("모임에 가입되지 않은 사람많이 가입 신청을 할 수 있다.")
@@ -147,37 +157,22 @@ class RequestJoinClubTest {
         assertThat(reApplicationFormId).isNotNull();
     }
 
-//    @Test
-//    @DisplayName("가입 신청을 하게되면 가입 요청 알림이 저장된다.")
-//    void test5() {
-//        // given
-//        Club club = clubRepository.save(club(null));
-//        ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
-//        ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
-//        ClubRole generalRole = ClubRoleFixture.generalRole("일반", club);
-//        clubRoleRepository.saveAll(List.of(presidentRole, officerRole, generalRole));
-//
-//        Member applicant = memberRepository.save(member(null));
-//        Participant president = new Participant(memberRepository.save(member(null)));
-//        Participant officer = new Participant(memberRepository.save(member(null)));
-//        participantRepository.save(president);
-//        participantRepository.save(officer);
-//
-//        president.joinClub(club, presidentRole);
-//        officer.joinClub(club, officerRole);
-//
-//        // when
-//        requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(applicant.id(), club.id()));
-//        em.flush();
-//        em.clear();
-//
-//        // then
-//        int size = em.createQuery("select a from Notification a", Notification.class)
-//                .getResultList().size();
-//
-//        // 회장1 + 임원진 1
-//        assertThat(size).isEqualTo(2);
-//    }
+    @DisplayName("TODO 가입 신청을 하게되면 가입 신청 이벤트가 발행된다.")
+    void test5() {
+        // given
+        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
+        Club club = clubRepository.save(club(null));
+        Member member = memberRepository.save(member(null));
+
+        // when
+        Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
+
+        // then
+        Assertions.assertAll(
+                () -> assertThat(applicationFormId).isNotNull(),
+                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ClubJoinApplicationRequestedEvent.class))
+        );
+    }
 
     // TODO 알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정
     @Disabled("알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정")
