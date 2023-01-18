@@ -73,7 +73,7 @@ class QueryNotificationByIdTest {
 
         Notification find = notificationRepository.findById(notification.id()).orElse(null);
         assertAll(
-                () -> assertThat(baseExceptionType).isEqualTo(NotificationExceptionType.NOT_FOUND_APPLICATION_FORM),
+                () -> assertThat(baseExceptionType).isEqualTo(NotificationExceptionType.NOT_FOUND_NOTIFICATION),
                 () -> assertThat(find.isRead()).isFalse()
         );
     }
@@ -87,7 +87,7 @@ class QueryNotificationByIdTest {
         )).exceptionType();
 
         assertAll(
-                () -> assertThat(baseExceptionType).isEqualTo(NotificationExceptionType.NOT_FOUND_APPLICATION_FORM)
+                () -> assertThat(baseExceptionType).isEqualTo(NotificationExceptionType.NOT_FOUND_NOTIFICATION)
         );
     }
 }

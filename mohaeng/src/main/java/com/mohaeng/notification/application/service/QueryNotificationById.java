@@ -10,7 +10,7 @@ import com.mohaeng.notification.exception.NotificationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.mohaeng.notification.exception.NotificationExceptionType.NOT_FOUND_APPLICATION_FORM;
+import static com.mohaeng.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,7 +24,7 @@ public class QueryNotificationById implements QueryNotificationByIdUseCase {
 
     @Override
     public NotificationDto query(final Query query) {
-        Notification notification = notificationRepository.findByIdAndReceiver(query.notificationId(), Receiver.of(query.memberId())).orElseThrow(() -> new NotificationException(NOT_FOUND_APPLICATION_FORM));
+        Notification notification = notificationRepository.findByIdAndReceiver(query.notificationId(), Receiver.of(query.memberId())).orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
 
         notification.read();  // 알림 읽음 처리
 

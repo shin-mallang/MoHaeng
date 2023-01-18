@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public enum NotificationExceptionType implements BaseExceptionType {
 
-    NOT_FOUND_APPLICATION_FORM(500, HttpStatus.NOT_FOUND, "찾으시는 알람이 존재하지 않습니다.");
+    NOT_FOUND_NOTIFICATION(500, HttpStatus.NOT_FOUND, "찾으시는 알람이 존재하지 않습니다.");
 
     private final int errorCode;
     private final HttpStatus httpStatus;

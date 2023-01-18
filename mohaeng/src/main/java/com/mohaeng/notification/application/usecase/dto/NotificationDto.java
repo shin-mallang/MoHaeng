@@ -7,7 +7,7 @@ public abstract class NotificationDto {
     private Long id;
     private LocalDateTime createdAt;  // 알람 발송일
     private boolean isRead;  // 알람 읽음 여부
-    private String type;
+    private String type;  // getClass().getSimpleName();
 
     public NotificationDto(final Long id,
                            final LocalDateTime createdAt,
