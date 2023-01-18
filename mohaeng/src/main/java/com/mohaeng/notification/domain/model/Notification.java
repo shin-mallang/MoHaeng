@@ -8,7 +8,7 @@ import jakarta.persistence.*;
  * 알림이 필요하면 해당 클래스를 상속받는다.
  */
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "notification_type")
+@DiscriminatorColumn(name = "notification_type", length = 60)
 @Entity
 @Table(name = "notification")
 public abstract class Notification extends BaseEntity {
