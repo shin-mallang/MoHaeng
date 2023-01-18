@@ -1,6 +1,8 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
+import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
+import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -10,6 +12,7 @@ import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
+import com.mohaeng.common.event.Events;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
@@ -19,6 +22,7 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -29,7 +33,9 @@ import static com.mohaeng.common.fixtures.ApplicationFormFixture.applicationForm
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ApplicationTest
 @DisplayName("ApproveJoinClub 은 ")
@@ -56,8 +62,13 @@ class ApproveJoinClubTest {
     @Autowired
     private ParticipantRepository participantRepository;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    private ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
+
     @Test
-    @DisplayName("회원을 모임에 가입시킨다.")
+    @DisplayName("회원을 모임에 기본 역할로 가입시킨다.")
     void success_test_1() {
         // given
         Club target = clubRepository.save(club(null));
@@ -72,7 +83,6 @@ class ApproveJoinClubTest {
 
         em.flush();
         em.clear();
-        System.out.println("-------------------SETTING-------------------");
 
         // when
         approveJoinClubUseCase.command(
@@ -83,31 +93,80 @@ class ApproveJoinClubTest {
         Participant member = em.createQuery("select p from Participant p where p.member = :member", Participant.class)
                 .setParameter("member", applicant)
                 .getSingleResult();
-        assertThat(member.clubRole().clubRoleCategory()).isEqualTo(ClubRoleCategory.GENERAL);
+
+        ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
+        assertAll(
+                () -> assertThat(member.clubRole().clubRoleCategory()).isEqualTo(ClubRoleCategory.GENERAL),
+                () -> assertThat(findApplicationForm.processed()).isTrue()
+        );
     }
 
-    // TODO 회장이 한 경우 이벤트 한개만 발행
     @Test
-    @DisplayName("해당 테스트부터 작성한다")
+    @DisplayName("회장이 가입 신청을 처리한 경우 이벤트는 한개만 발행한다.")
     void success_test_2() {
         // given
-        throw new IllegalArgumentException("TODO 회장이 한 경우 이벤트 한개만 발행");
+        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
+        Club target = clubRepository.save(club(null));
+        List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+        Member presidentMember = memberRepository.save(member(null));
+        Participant president = new Participant(presidentMember);
+        president.joinClub(target, clubRoles.get(0));  // 회장으로 가입
+        participantRepository.save(president);
+
+        Member applicant = memberRepository.save(member(null));
+        ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+
+        em.flush();
+        em.clear();
 
         // when
+        approveJoinClubUseCase.command(
+                new ApproveJoinClubUseCase.Command(applicationForm.id(), presidentMember.id())
+        );
 
         // then
+        assertAll(
+                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any()),
+                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
+                () -> verify(mockApplicationEventPublisher, times(0)).publishEvent(any(OfficerApproveClubJoinApplicationEvent.class))
+        );
+        Events.setApplicationEventPublisher(applicationEventPublisher);
     }
 
-    // TODO 임원진이 한 경우 이벤트 두 개 발행
     @Test
-    @DisplayName("해당 테스트부터 작성한다2")
+    @DisplayName("임원진이 가입 신청을 처리한 경우 이벤트는 두개가 발행한다.")
     void success_test_3() {
         // given
-        throw new IllegalArgumentException("TODO 임원진이 한 경우 이벤트 두 개 발행");
+        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
+        Club target = clubRepository.save(club(null));
+        List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+        Member presidentMember = memberRepository.save(member(null));
+        Member officerMember = memberRepository.save(member(null));
+        Participant president = new Participant(presidentMember);
+        Participant officer = new Participant(officerMember);
+        president.joinClub(target, clubRoles.get(0));  // 회장으로 가입
+        officer.joinClub(target, clubRoles.get(1));  // 회장으로 가입
+        participantRepository.save(president);
+        participantRepository.save(officer);
+
+        Member applicant = memberRepository.save(member(null));
+        ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+
+        em.flush();
+        em.clear();
 
         // when
+        approveJoinClubUseCase.command(
+                new ApproveJoinClubUseCase.Command(applicationForm.id(), officerMember.id())
+        );
 
         // then
+        assertAll(
+                () -> verify(mockApplicationEventPublisher, times(2)).publishEvent(any()),
+                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
+                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(OfficerApproveClubJoinApplicationEvent.class))
+        );
+        Events.setApplicationEventPublisher(applicationEventPublisher);
     }
 
     @Test
@@ -126,7 +185,6 @@ class ApproveJoinClubTest {
 
         em.flush();
         em.clear();
-        System.out.println("-------------------SETTING-------------------");
 
         // when
         BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
@@ -135,7 +193,11 @@ class ApproveJoinClubTest {
                 )
         ).exceptionType();
 
-        assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
+        ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
+        assertAll(
+                () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION_FORM),
+                () -> assertThat(findApplicationForm.processed()).isFalse()
+        );
     }
 
     @Test
@@ -159,7 +221,6 @@ class ApproveJoinClubTest {
 
         em.flush();
         em.clear();
-        System.out.println("-------------------SETTING-------------------");
 
         // when
         BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
@@ -168,6 +229,10 @@ class ApproveJoinClubTest {
                 )
         ).exceptionType();
 
-        assertThat(baseExceptionType).isEqualTo(ALREADY_MEMBER_JOINED_CLUB);
+        ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
+        assertAll(
+                () -> assertThat(baseExceptionType).isEqualTo(ALREADY_MEMBER_JOINED_CLUB),
+                () -> assertThat(findApplicationForm.processed()).isFalse()
+        );
     }
 }
