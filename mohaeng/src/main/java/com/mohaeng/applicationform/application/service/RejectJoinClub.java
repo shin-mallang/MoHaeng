@@ -13,7 +13,6 @@ import com.mohaeng.participant.exception.ParticipantException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.mohaeng.applicationform.application.helper.ApplicantAlreadyJoinClubCheckHelper.checkApplicantAlreadyJoinClub;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NOT_FOUND_APPLICATION_FORM;
 import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOUND_PRESIDENT;
@@ -41,10 +40,7 @@ public class RejectJoinClub implements RejectJoinClubUseCase {
         Participant manager = participantRepository.findWithClubRoleByMemberIdAndClub(command.managerId(), applicationForm.target())
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
 
-        // 신청자가 이미 모임에 가입되어 있는지 체크
-        checkApplicantAlreadyJoinClub(participantRepository, applicationForm.applicant(), applicationForm.target());
-
-        // 가입 신청 거절
+        // 가입 신청 거절 처리
         applicationForm.reject(manager);
 
         // 알림 전송을 위해 모임의 회장 조회하기

@@ -3,7 +3,9 @@ package com.mohaeng.applicationform.domain;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
+import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.member.domain.model.Member;
+import com.mohaeng.participant.domain.model.Participant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +15,8 @@ import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @DisplayName("ApplicationForm 은 ")
 class ApplicationFormTest {
@@ -41,9 +45,11 @@ class ApplicationFormTest {
         Member member = member(1L);
         Club club = club(1L);
         ApplicationForm applicationForm = ApplicationForm.create(member, club);
+        Participant participant = mock(Participant.class);
+        when(participant.isManager()).thenReturn(true);
 
         // when
-        applicationForm.process();
+        applicationForm.approve(participant, mock(ClubRole.class));
 
         // then
         assertAll(
@@ -58,13 +64,15 @@ class ApplicationFormTest {
         Member member = member(1L);
         Club club = club(1L);
         ApplicationForm applicationForm = ApplicationForm.create(member, club);
+        Participant participant = mock(Participant.class);
+        when(participant.isManager()).thenReturn(true);
 
         // when
-        applicationForm.process();
+        applicationForm.approve(participant, mock(ClubRole.class));
 
         // then
         assertThat(assertThrows(ApplicationFormException.class,
-                applicationForm::process
+                () -> applicationForm.approve(participant, mock(ClubRole.class))
         ).exceptionType()).isEqualTo(ALREADY_PROCESSED_APPLICATION_FORM);
     }
 }

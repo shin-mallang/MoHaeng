@@ -61,7 +61,7 @@ public class ApplicationForm extends BaseEntity {
      *
      * @throws ApplicationFormException (ALREADY_PROCESSED_APPLICATION_FORM) 이미 처리된 신청서를 또다시 처리하려는 경우
      */
-    public void process() throws ApplicationFormException {
+    private void process() throws ApplicationFormException {
         if (this.processed) {
             throw new ApplicationFormException(ALREADY_PROCESSED_APPLICATION_FORM);
         }

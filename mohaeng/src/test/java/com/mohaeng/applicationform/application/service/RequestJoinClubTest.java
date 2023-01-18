@@ -2,6 +2,7 @@ package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
 import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
+import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
@@ -19,6 +20,7 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
@@ -135,7 +137,8 @@ class RequestJoinClubTest {
         Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
         // 가입 처리
-        applicationFormRepository.findById(applicationFormId).orElse(null).process();
+        ApplicationForm applicationForm = applicationFormRepository.findById(applicationFormId).orElse(null);
+        ReflectionTestUtils.setField(applicationForm, "processed", true);
 
         // when
         Long reApplicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
@@ -155,7 +158,8 @@ class RequestJoinClubTest {
         Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
         // 가입 처리
-        applicationFormRepository.findById(applicationFormId).orElse(null).process();
+        ApplicationForm applicationForm = applicationFormRepository.findById(applicationFormId).orElse(null);
+        ReflectionTestUtils.setField(applicationForm, "processed", true);
 
         // when
         Long reApplicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));

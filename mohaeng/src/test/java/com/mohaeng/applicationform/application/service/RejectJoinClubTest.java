@@ -28,7 +28,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
-import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NOT_FOUND_APPLICATION_FORM;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
 import static com.mohaeng.clubrole.domain.model.ClubRole.defaultRoles;
 import static com.mohaeng.common.fixtures.ApplicationFormFixture.applicationForm;
@@ -209,7 +209,7 @@ class RejectJoinClubTest {
     }
 
     @Test
-    @DisplayName("이미 가입된 회원의 경우 가입을 거절할 수 없다.")
+    @DisplayName("이미 처리된 신청서의 경우 또다시 처리될 수 없다.")
     void fail_test_2() {
         // given
         Club target = clubRepository.save(club(null));
@@ -220,12 +220,10 @@ class RejectJoinClubTest {
         participantRepository.save(manager);
 
         Member applicantMember = memberRepository.save(member(null));
-        Participant applicant = new Participant(applicantMember);
-        applicant.joinClub(target, clubRoles.get(2));  // 일반
-        participantRepository.save(applicant);
-
         ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicantMember.id(), target.id(), null));
-
+        rejectJoinClubUseCase.command(
+                new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+        );
         em.flush();
         em.clear();
 
@@ -236,10 +234,8 @@ class RejectJoinClubTest {
                 )
         ).exceptionType();
 
-        ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
         assertAll(
-                () -> assertThat(baseExceptionType).isEqualTo(ALREADY_MEMBER_JOINED_CLUB),
-                () -> assertThat(findApplicationForm.processed()).isFalse()
+                () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_APPLICATION_FORM)
         );
     }
 }
