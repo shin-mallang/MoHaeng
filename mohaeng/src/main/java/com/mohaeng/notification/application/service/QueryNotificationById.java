@@ -4,6 +4,7 @@ import com.mohaeng.notification.application.mapper.NotificationApplicationMapper
 import com.mohaeng.notification.application.usecase.QueryNotificationByIdUseCase;
 import com.mohaeng.notification.application.usecase.dto.NotificationDto;
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.model.value.Receiver;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
 import com.mohaeng.notification.exception.NotificationException;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class QueryNotificationById implements QueryNotificationByIdUseCase {
 
     @Override
     public NotificationDto query(final Query query) {
-        Notification notification = notificationRepository.findByIdAndReceiverId(query.alarmId(), query.memberId()).orElseThrow(() -> new NotificationException(NOT_FOUND_APPLICATION_FORM));
+        Notification notification = notificationRepository.findByIdAndReceiver(query.alarmId(), Receiver.of(query.memberId())).orElseThrow(() -> new NotificationException(NOT_FOUND_APPLICATION_FORM));
 
         notification.read();  // 알림 읽음 처리
 

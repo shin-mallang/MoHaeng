@@ -1,30 +1,26 @@
 package com.mohaeng.notification.domain.model.value;
 
-import com.mohaeng.member.domain.model.Member;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 @Embeddable
 public class Receiver {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")
-    private Member receiver;
+    @Column(name = "receiverId", nullable = false)
+    private Long receiverId;
 
     protected Receiver() {
     }
 
-    public Receiver(final Member receiver) {
-        this.receiver = receiver;
+    private Receiver(final Long receiverId) {
+        this.receiverId = receiverId;
     }
 
-    public static Receiver of(final Member member) {
-        return new Receiver(member);
+    public static Receiver of(final Long receiverId) {
+        return new Receiver(receiverId);
     }
 
-    public Member receiver() {
-        return receiver;
+    public Long receiverId() {
+        return receiverId;
     }
 }

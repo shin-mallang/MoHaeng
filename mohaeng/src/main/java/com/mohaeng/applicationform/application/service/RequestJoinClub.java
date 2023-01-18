@@ -1,15 +1,15 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
+import com.mohaeng.applicationform.domain.event.ClubJoinApplicationRequestedEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
-import com.mohaeng.applicationform.domain.model.ApplicationRequestAlarm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
-import com.mohaeng.applicationform.domain.repository.ApplicationRequestAlarmRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.common.domain.BaseEntity;
+import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.member.exception.MemberException;
@@ -33,18 +33,15 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
     private final MemberRepository memberRepository;
     private final ParticipantRepository participantRepository;
     private final ApplicationFormRepository applicationFormRepository;
-    private final ApplicationRequestAlarmRepository applicationRequestAlarmRepository;
 
     public RequestJoinClub(final ClubRepository clubRepository,
                            final MemberRepository memberRepository,
                            final ParticipantRepository participantRepository,
-                           final ApplicationFormRepository applicationFormRepository,
-                           final ApplicationRequestAlarmRepository applicationRequestAlarmRepository) {
+                           final ApplicationFormRepository applicationFormRepository) {
         this.clubRepository = clubRepository;
         this.memberRepository = memberRepository;
         this.participantRepository = participantRepository;
         this.applicationFormRepository = applicationFormRepository;
-        this.applicationRequestAlarmRepository = applicationRequestAlarmRepository;
     }
 
     @Override
@@ -59,8 +56,8 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
         ApplicationForm applicationForm = ApplicationForm.create(member, club);
         applicationFormRepository.save(applicationForm);
 
-        // 모임 가입 신청 요청에 대하여 회장과 임원진에게 알림 보내기
-        sendAlarmToPresidentAndOfficer(member, club, applicationForm);
+        // 이벤트 발행 -> 모임 가입 신청 요청에 대하여 회장과 임원진에게 알림 보내기
+        raiseEvents(member, club, applicationForm);
 
         return applicationForm.id();
     }
@@ -102,14 +99,16 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
     }
 
     /**
-     * 모임 가입 신청 요청에 대하여 회장과 임원진에게 알림 보내기
+     * 이벤트 발행 -> 모임 가입 신청 요청에 대하여 회장과 임원진에게 알림 보내기
      */
-    private void sendAlarmToPresidentAndOfficer(final Member applicant, final Club club, final ApplicationForm applicationForm) {
-        applicationRequestAlarmRepository.saveAll(getOfficerAndPresidentIdsOfClub(club)
-                .stream()
-                .map(receiverId -> new ApplicationRequestAlarm(applicant.id(), club.id(), applicationForm.id(), receiverId))
-                .toList()
-        );
+    private void raiseEvents(final Member applicant, final Club club, final ApplicationForm applicationForm) {
+        Events.raise(new ClubJoinApplicationRequestedEvent(
+                this,
+                getOfficerAndPresidentIdsOfClub(club),
+                club.id(),
+                applicant.id(),
+                applicationForm.id()
+        ));
     }
 
     /**

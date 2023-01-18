@@ -1,10 +1,9 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.ApplicationCompleteEvent;
+import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
 import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
-import com.mohaeng.applicationform.domain.model.enums.ApplicationProcessStatus;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.clubrole.domain.model.ClubRole;
@@ -77,11 +76,10 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
                             final Participant president) {
 
         // 모임 가입 요청 승인 이벤트 -> 가입된 회원에게 가입되었다는 알림 전송 & 해당 ApplicationForm과 연관된 알림 다른 임원진에게서 모두 제거하기
-        Events.raise(new ApplicationCompleteEvent(this,
+        Events.raise(ApplicationProcessedEvent.approve(this,
                 applicationForm.applicant().id(),
                 applicationForm.id(),
-                applicationForm.target().id(),
-                ApplicationProcessStatus.APPROVE)
+                applicationForm.target().id())
         );
 
         // 처리자가 회장이 아닌 경우 회장에게 알림 전송을 위한 이벤트 발행

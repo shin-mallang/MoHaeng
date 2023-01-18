@@ -1,10 +1,9 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RejectJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.ApplicationCompleteEvent;
+import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
 import com.mohaeng.applicationform.domain.event.OfficerRejectClubJoinApplicationEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
-import com.mohaeng.applicationform.domain.model.enums.ApplicationProcessStatus;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.common.event.Events;
@@ -63,11 +62,10 @@ public class RejectJoinClub implements RejectJoinClubUseCase {
                             final Participant president) {
 
         // 모임 가입 요청 거절 이벤트 -> 거절된 회원에게 거절되었다는 알림 전송
-        Events.raise(new ApplicationCompleteEvent(this,
+        Events.raise(ApplicationProcessedEvent.reject(this,
                 applicationForm.applicant().id(),
                 applicationForm.id(),
-                applicationForm.target().id(),
-                ApplicationProcessStatus.REJECT)
+                applicationForm.target().id())
         );
 
         // 처리자가 회장이 아닌 경우 회장에게 알림 전송을 위한 이벤트 발행

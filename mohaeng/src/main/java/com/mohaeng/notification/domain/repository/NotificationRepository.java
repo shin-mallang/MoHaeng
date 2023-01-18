@@ -12,7 +12,7 @@ public interface NotificationRepository {
 
     Optional<Notification> findById(final Long id);
 
-    Optional<Notification> findByIdAndReceiverId(final Long alarmId, final Long receiverId);
+    Optional<Notification> findByIdAndReceiver(final Long id, final Receiver receiver);
 
     List<Notification> findByReceiver(final Receiver receiver);
 
