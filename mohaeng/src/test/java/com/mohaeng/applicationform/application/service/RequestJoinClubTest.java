@@ -168,7 +168,8 @@ class RequestJoinClubTest {
         assertThat(reApplicationFormId).isNotNull();
     }
 
-    @DisplayName("TODO 가입 신청을 하게되면 가입 신청 이벤트가 발행된다.")
+    @Test
+    @DisplayName("가입 신청을 하게되면 가입 신청 이벤트가 발행된다.")
     void test5() {
         // given
         Club club = clubRepository.save(club(null));
