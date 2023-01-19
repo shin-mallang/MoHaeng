@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ClubRoleExceptionType implements BaseExceptionType {
 
-    NOT_FOUND_CLUB_ROLE(300, HttpStatus.NOT_FOUND, "찾으시는 역할이 없습니다. (id = %d)"),
+    NOT_FOUND_CLUB_ROLE(400, HttpStatus.NOT_FOUND, "찾으시는 역할이 없습니다. (id = %d)"),
     ;
 
     private final int errorCode;

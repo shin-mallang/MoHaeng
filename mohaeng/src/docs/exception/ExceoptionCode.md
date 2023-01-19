@@ -1,0 +1,25 @@
+## 예외 코드 정리
+
+### ApplicationForm 관련
+- `700` 번때
+
+### Authentication 관련
+- `200` 번때
+
+### Club 관련
+- `300` 번때
+
+### ClubRole 관련
+- `400` 번때
+
+### Member 관련
+- `100` 번때
+
+### Notification 관련
+- `500` 번때
+
+### Participant 관련
+- `600` 번때
+
+### 요청 필드 오류 관련
+- `1000` 번
