@@ -1,9 +1,8 @@
 package com.mohaeng.notification.application.service;
 
-import com.mohaeng.notification.application.mapper.NotificationApplicationMapper;
 import com.mohaeng.notification.application.usecase.QueryNotificationByIdUseCase;
-import com.mohaeng.notification.application.usecase.dto.NotificationDto;
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
 import com.mohaeng.notification.exception.NotificationException;
@@ -28,6 +27,6 @@ public class QueryNotificationById implements QueryNotificationByIdUseCase {
 
         notification.read();  // 알림 읽음 처리
 
-        return NotificationApplicationMapper.toApplicationDto(notification);
+        return notification.toDto();
     }
 }

@@ -1,5 +1,7 @@
 package com.mohaeng.notification.domain.model.kind;
 
+import com.mohaeng.notification.application.dto.NotificationDto;
+import com.mohaeng.notification.application.dto.kind.ApplicationProcessedNotificationDto;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import jakarta.persistence.Column;
@@ -33,5 +35,17 @@ public class ApplicationProcessedNotification extends Notification {
 
     public boolean isApproved() {
         return isApproved;
+    }
+
+    @Override
+    public NotificationDto toDto() {
+        return new ApplicationProcessedNotificationDto(
+                id(),
+                createdAt(),
+                isRead(),
+                getClass().getSimpleName(),
+                clubId(),
+                isApproved()
+        );
     }
 }

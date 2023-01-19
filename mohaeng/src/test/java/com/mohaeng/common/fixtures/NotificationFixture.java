@@ -1,9 +1,9 @@
 package com.mohaeng.common.fixtures;
 
-import com.mohaeng.notification.application.usecase.dto.kind.ApplicationProcessedNotificationDto;
-import com.mohaeng.notification.application.usecase.dto.kind.ClubJoinApplicationCreatedNotificationDto;
-import com.mohaeng.notification.application.usecase.dto.kind.OfficerApproveApplicationNotificationDto;
-import com.mohaeng.notification.application.usecase.dto.kind.OfficerRejectApplicationNotificationDto;
+import com.mohaeng.notification.application.dto.kind.ApplicationProcessedNotificationDto;
+import com.mohaeng.notification.application.dto.kind.ClubJoinApplicationCreatedNotificationDto;
+import com.mohaeng.notification.application.dto.kind.OfficerApproveApplicationNotificationDto;
+import com.mohaeng.notification.application.dto.kind.OfficerRejectApplicationNotificationDto;
 import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
 import com.mohaeng.notification.domain.model.kind.ClubJoinApplicationCreatedNotification;
 import com.mohaeng.notification.domain.model.kind.OfficerApproveApplicationNotification;

@@ -1,6 +1,8 @@
-package com.mohaeng.notification.application.usecase.dto.kind;
+package com.mohaeng.notification.application.dto.kind;
 
-import com.mohaeng.notification.application.usecase.dto.NotificationDto;
+import com.mohaeng.notification.application.dto.NotificationDto;
+import com.mohaeng.notification.presentation.response.NotificationResponse;
+import com.mohaeng.notification.presentation.response.kind.ApplicationProcessedNotificationResponse;
 
 import java.time.LocalDateTime;
 
@@ -26,5 +28,10 @@ public class ApplicationProcessedNotificationDto extends NotificationDto {
 
     public boolean isApproved() {
         return isApproved;
+    }
+
+    @Override
+    public NotificationResponse toResponse() {
+        return new ApplicationProcessedNotificationResponse(id(), createdAt(), isRead(), type(), clubId(), isApproved());
     }
 }

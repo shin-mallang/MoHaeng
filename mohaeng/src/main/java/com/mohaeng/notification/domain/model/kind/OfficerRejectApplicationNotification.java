@@ -1,6 +1,8 @@
 package com.mohaeng.notification.domain.model.kind;
 
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.application.dto.NotificationDto;
+import com.mohaeng.notification.application.dto.kind.OfficerRejectApplicationNotificationDto;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -51,5 +53,18 @@ public class OfficerRejectApplicationNotification extends Notification {
 
     public Long applicantMemberId() {
         return applicantMemberId;
+    }
+
+    @Override
+    public NotificationDto toDto() {
+        return new OfficerRejectApplicationNotificationDto(
+                id(),
+                createdAt(),
+                isRead(),
+                getClass().getSimpleName(),
+                officerMemberId(),
+                officerParticipantId(),
+                applicantMemberId()
+        );
     }
 }

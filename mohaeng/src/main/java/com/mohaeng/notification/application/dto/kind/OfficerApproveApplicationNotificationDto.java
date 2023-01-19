@@ -1,6 +1,8 @@
-package com.mohaeng.notification.application.usecase.dto.kind;
+package com.mohaeng.notification.application.dto.kind;
 
-import com.mohaeng.notification.application.usecase.dto.NotificationDto;
+import com.mohaeng.notification.application.dto.NotificationDto;
+import com.mohaeng.notification.presentation.response.NotificationResponse;
+import com.mohaeng.notification.presentation.response.kind.OfficerApproveApplicationNotificationResponse;
 
 import java.time.LocalDateTime;
 
@@ -40,5 +42,10 @@ public class OfficerApproveApplicationNotificationDto extends NotificationDto {
 
     public Long applicantParticipantId() {
         return applicantParticipantId;
+    }
+
+    @Override
+    public NotificationResponse toResponse() {
+        return new OfficerApproveApplicationNotificationResponse(id(), createdAt(), isRead(), type(), officerMemberId(), officerParticipantId(), applicantMemberId(), applicantParticipantId());
     }
 }

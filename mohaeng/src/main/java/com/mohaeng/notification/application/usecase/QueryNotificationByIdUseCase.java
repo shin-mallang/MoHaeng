@@ -1,6 +1,6 @@
 package com.mohaeng.notification.application.usecase;
 
-import com.mohaeng.notification.application.usecase.dto.NotificationDto;
+import com.mohaeng.notification.application.dto.NotificationDto;
 
 public interface QueryNotificationByIdUseCase {
 

@@ -1,6 +1,7 @@
 package com.mohaeng.notification.domain.model;
 
 import com.mohaeng.common.domain.BaseEntity;
+import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import jakarta.persistence.*;
 
@@ -37,4 +38,6 @@ public abstract class Notification extends BaseEntity {
     public void read() {
         this.isRead = true;
     }
+
+    public abstract NotificationDto toDto();
 }
