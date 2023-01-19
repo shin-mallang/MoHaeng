@@ -14,6 +14,8 @@ import com.mohaeng.common.event.Events;
 import com.mohaeng.common.fixtures.ClubRoleFixture;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
+import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.repository.NotificationRepository;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
@@ -185,12 +187,38 @@ class RequestJoinClubTest {
         );
     }
 
-    // TODO 알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정
-    @Disabled("알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정")
-    @Test
-    @DisplayName("가입 신청을 하게되면 `회장`과 `관리자` 에게 알림이 전송된다.")
-    void test6() {
+    @Nested
+    @DisplayName("RequestJoinClub + 이벤트 핸들러 테스트 ")
+    public class RequestJoinClubWithEventHandlerTest {
 
-        throw new IllegalStateException("알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정");
+        @Autowired
+        private NotificationRepository notificationRepository;
+
+        @Test
+        @DisplayName("가입 신청을 하게되면 `회장`과 `관리자` 에게 알림이 전송된다.")
+        void test6() {
+            Events.setApplicationEventPublisher(applicationEventPublisher);  // 핸들러 정상 세팅
+
+            Club club = clubRepository.save(club(null));
+            ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
+            ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
+            ClubRole generalRole = ClubRoleFixture.generalRole("일반", club);
+            clubRoleRepository.saveAll(List.of(presidentRole, officerRole, generalRole));
+
+            Member generalMember = memberRepository.save(member(null));
+            Participant president = new Participant(memberRepository.save(member(null)));
+            Participant officer = new Participant(memberRepository.save(member(null)));
+            participantRepository.save(president);
+            participantRepository.save(officer);
+
+            president.joinClub(club, presidentRole);
+            officer.joinClub(club, officerRole);
+
+            requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(generalMember.id(), club.id()));
+
+            // then
+            List<Notification> all = notificationRepository.findAll();
+            assertThat(all.size()).isEqualTo(2);  // 회원 1 + 임원 1
+        }
     }
 }

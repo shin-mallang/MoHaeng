@@ -1,6 +1,8 @@
-package com.mohaeng.notification.application.usecase.dto.kind;
+package com.mohaeng.notification.application.dto.kind;
 
-import com.mohaeng.notification.application.usecase.dto.NotificationDto;
+import com.mohaeng.notification.application.dto.NotificationDto;
+import com.mohaeng.notification.presentation.response.NotificationResponse;
+import com.mohaeng.notification.presentation.response.kind.ClubJoinApplicationCreatedNotificationResponse;
 
 import java.time.LocalDateTime;
 
@@ -33,5 +35,10 @@ public class ClubJoinApplicationCreatedNotificationDto extends NotificationDto {
 
     public Long applicationFormId() {
         return applicationFormId;
+    }
+
+    @Override
+    public NotificationResponse toResponse() {
+        return new ClubJoinApplicationCreatedNotificationResponse(id(), createdAt(), isRead(), type(), clubId(), applicantId(), applicationFormId());
     }
 }

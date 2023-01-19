@@ -1,4 +1,6 @@
-package com.mohaeng.notification.application.usecase.dto;
+package com.mohaeng.notification.application.dto;
+
+import com.mohaeng.notification.presentation.response.NotificationResponse;
 
 import java.time.LocalDateTime;
 
@@ -34,4 +36,6 @@ public abstract class NotificationDto {
     public String type() {
         return type;
     }
+
+    public abstract NotificationResponse toResponse();
 }

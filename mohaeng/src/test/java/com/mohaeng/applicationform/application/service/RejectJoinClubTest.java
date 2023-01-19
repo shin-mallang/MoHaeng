@@ -15,14 +15,15 @@ import com.mohaeng.common.event.Events;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
+import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
+import com.mohaeng.notification.domain.model.kind.OfficerRejectApplicationNotification;
+import com.mohaeng.notification.domain.repository.NotificationRepository;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -154,7 +155,7 @@ class RejectJoinClubTest {
         Participant president = new Participant(presidentMember);
         Participant officer = new Participant(officerMember);
         president.joinClub(target, clubRoles.get(0));  // 회장으로 가입
-        officer.joinClub(target, clubRoles.get(1));  // 회장으로 가입
+        officer.joinClub(target, clubRoles.get(1));  // 임원으로 가입
         participantRepository.save(president);
         participantRepository.save(officer);
 
@@ -237,5 +238,49 @@ class RejectJoinClubTest {
         assertAll(
                 () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_APPLICATION_FORM)
         );
+    }
+
+    @Nested
+    @DisplayName("RejectJoinClub + 이벤트 핸들러 테스트 ")
+    public class RejectJoinClubTestWithEventHandlerTest {
+
+        @Autowired
+        private NotificationRepository notificationRepository;
+
+        @Test
+        @DisplayName("임원이 가입 거절을 하게되면 `신청자`에게는 거절되었다는 알림이, `회장`에게는 임원진이 가입 신청을 처리했다는 알림이 전송된다.")
+        void test6() {
+            Events.setApplicationEventPublisher(applicationEventPublisher);  // 핸들러 정상 세팅
+
+            Club target = clubRepository.save(club(null));
+            List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+            Member presidentMember = memberRepository.save(member(null));
+            Member officerMember = memberRepository.save(member(null));
+            Participant president = new Participant(presidentMember);
+            Participant officer = new Participant(officerMember);
+            president.joinClub(target, clubRoles.get(0));  // 회장으로 가입
+            officer.joinClub(target, clubRoles.get(1));  // 임원으로 가입
+            participantRepository.save(president);
+            participantRepository.save(officer);
+
+            Member applicant = memberRepository.save(member(null));
+            ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+
+            em.flush();
+            em.clear();
+
+            // when
+            rejectJoinClubUseCase.command(
+                    new RejectJoinClubUseCase.Command(applicationForm.id(), officerMember.id())
+            );
+
+            // then
+            List<Notification> all = notificationRepository.findAll();
+            Assertions.assertAll(
+                    () -> assertThat(all.size()).isEqualTo(2),  // 회원 1 + 임원 1
+                    () -> assertThat(all.stream().filter(it -> it.getClass().equals(OfficerRejectApplicationNotification.class)).count()).isEqualTo(1),
+                    () -> assertThat(all.stream().filter(it -> it.getClass().equals(ApplicationProcessedNotification.class)).count()).isEqualTo(1)
+            );
+        }
     }
 }

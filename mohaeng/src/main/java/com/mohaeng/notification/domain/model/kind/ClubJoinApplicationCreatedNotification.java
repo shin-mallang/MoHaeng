@@ -1,5 +1,7 @@
 package com.mohaeng.notification.domain.model.kind;
 
+import com.mohaeng.notification.application.dto.NotificationDto;
+import com.mohaeng.notification.application.dto.kind.ClubJoinApplicationCreatedNotificationDto;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import jakarta.persistence.Column;
@@ -46,5 +48,18 @@ public class ClubJoinApplicationCreatedNotification extends Notification {
 
     public Long applicationFormId() {
         return applicationFormId;
+    }
+
+    @Override
+    public NotificationDto toDto() {
+        return new ClubJoinApplicationCreatedNotificationDto(
+                id(),
+                createdAt(),
+                isRead(),
+                getClass().getSimpleName(),
+                clubId(),
+                applicantId(),
+                applicationFormId()
+        );
     }
 }

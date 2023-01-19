@@ -1,9 +1,8 @@
 package com.mohaeng.notification.presentation;
 
 import com.mohaeng.authentication.presentation.argumentresolver.Auth;
+import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.application.usecase.QueryNotificationByIdUseCase;
-import com.mohaeng.notification.application.usecase.dto.NotificationDto;
-import com.mohaeng.notification.presentation.mapper.NotificationControllerMapper;
 import com.mohaeng.notification.presentation.response.NotificationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +27,6 @@ public class QueryNotificationByIdController {
     ) {
         NotificationDto notificationDto = queryNotificationByIdUseCase.query(new QueryNotificationByIdUseCase.Query(id, memberId));
 
-        return ResponseEntity.ok(NotificationControllerMapper.toResponseDto(notificationDto));
+        return ResponseEntity.ok(notificationDto.toResponse());
     }
 }
