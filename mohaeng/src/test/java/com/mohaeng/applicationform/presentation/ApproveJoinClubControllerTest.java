@@ -30,16 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = ApproveJoinClubController.class)
 class ApproveJoinClubControllerTest extends ControllerTest {
 
-    /**
-     * 모임 가입 신청 수락 성공
-     * <p>
-     * 모임 가입 신청 수락 실패 1 : AccessToken 없음
-     * 모임 가입 신청 수락 실패 2 : 임원진이 아님
-     * 모임 가입 신청 수락 실패 3 : 이미 가입된 회원임
-     * 모임 가입 신청 수락 실패 4 : 이미 처리된 신청서임
-     * 모임 가입 신청 수락 실패 5 : 신청서 없음
-     */
-
     @MockBean
     private ApproveJoinClubUseCase approveJoinClubUseCase;
 
