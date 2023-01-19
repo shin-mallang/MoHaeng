@@ -10,7 +10,7 @@ plugins {
 
 group = 'com.mohaeng'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '19'
 
 configurations {
 	asciidoctorExtensions // dependencies 에서 적용한 것 추가

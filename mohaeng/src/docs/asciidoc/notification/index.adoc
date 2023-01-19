@@ -1,0 +1,75 @@
+= MoHeang API Docs
+:doctype: book
+:icons: font
+// 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:source-highlighter: highlightjs
+// toc (Table Of Contents)를 문서의 좌측에 두기
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+
+[[Notification-API]]
+== Notification API
+
+[[Notification-알림-조회]]
+=== 알림 조회 기본 형식
+
+operation::notification-query-by-id(applicationProcessedNotification)[snippets='http-request,path-parameters,request-headers,http-response']
+
+[%hardbreaks]
+.
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::notification-query-by-id fail(No Access Token)[snippets='http-response']
+
+[%hardbreaks]
+.
+
+==== - 알림의 ID는 존재하지만 회원 자신이 받은 알림이 아닌 경우
+
+operation::notification-query-by-id fail(notification's receiver id is not matched login member id)[snippets='http-response']
+
+[%hardbreaks]
+.
+
+==== - 알림의 ID가 존재하지 않는 경우 경우
+
+operation::notification-query-by-id fail(notification does not exist)[snippets='http-response']
+
+[%hardbreaks]
+.
+.
+.
+.
+
+[[Notification-알림-조회-종류별]]
+=== 알림 조회 - 가입 신청 수락/거절에 대한 알림 (ApplicationProcessedNotification)
+
+operation::notification-query-by-id(applicationProcessedNotification)[snippets='http-response,response-fields']
+
+[%hardbreaks]
+.
+
+=== 알림 조회 - 가입 요청 생성에 대한 알림 (ClubJoinApplicationRequestedNotification)
+
+operation::notification-query-by-id(clubJoinApplicationCreatedNotificationDto)[snippets='http-response,response-fields']
+
+[%hardbreaks]
+.
+
+=== 알림 조회 - 관리자가 가입 신청을 수락한 것에 대한 알림 (OfficerApproveApplicationNotification)
+
+operation::notification-query-by-id(officerApproveApplicationNotification)[snippets='http-response,response-fields']
+
+[%hardbreaks]
+.
+
+=== 알림 조회 - 관리자가 가입 신청을 거절한 것에 대한 알림 (OfficerRejectApplicationNotification)
+
+operation::notification-query-by-id(officerRejectApplicationNotification)[snippets='http-response,response-fields']
+
+[%hardbreaks]
+.

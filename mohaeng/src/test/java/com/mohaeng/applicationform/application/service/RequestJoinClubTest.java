@@ -1,7 +1,8 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
+import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
+import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
@@ -15,17 +16,17 @@ import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_REQUEST_JOIN_CLUB;
-import static com.mohaeng.common.fixtures.ApplicationForeFixture.requestJoinClubUseCaseCommand;
+import static com.mohaeng.common.fixtures.ApplicationFormFixture.requestJoinClubUseCaseCommand;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMaxParticipantCount;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
@@ -56,7 +57,22 @@ class RequestJoinClubTest {
     private ClubRepository clubRepository;
 
     @Autowired
+    private EntityManager em;
+
+    @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
+
+    private final ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
+
+    @BeforeEach
+    void before() {
+        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
+    }
+
+    @AfterEach
+    void after() {
+        Events.setApplicationEventPublisher(applicationEventPublisher);
+    }
 
     @Test
     @DisplayName("모임에 가입되지 않은 사람많이 가입 신청을 할 수 있다.")
@@ -121,7 +137,8 @@ class RequestJoinClubTest {
         Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
         // 가입 처리
-        applicationFormRepository.findById(applicationFormId).orElse(null).process();
+        ApplicationForm applicationForm = applicationFormRepository.findById(applicationFormId).orElse(null);
+        ReflectionTestUtils.setField(applicationForm, "processed", true);
 
         // when
         Long reApplicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
@@ -141,7 +158,8 @@ class RequestJoinClubTest {
         Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
         // 가입 처리
-        applicationFormRepository.findById(applicationFormId).orElse(null).process();
+        ApplicationForm applicationForm = applicationFormRepository.findById(applicationFormId).orElse(null);
+        ReflectionTestUtils.setField(applicationForm, "processed", true);
 
         // when
         Long reApplicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
@@ -151,20 +169,20 @@ class RequestJoinClubTest {
     }
 
     @Test
-    @DisplayName("가입 신청을 하게되면 가입 요청 이벤트가 발행된다.")
+    @DisplayName("가입 신청을 하게되면 가입 신청 이벤트가 발행된다.")
     void test5() {
         // given
-        ApplicationEventPublisher publisher = mock(ApplicationEventPublisher.class);
-        Events.setApplicationEventPublisher(publisher);
         Club club = clubRepository.save(club(null));
-        Member applicant = memberRepository.save(member(null));
+        Member member = memberRepository.save(member(null));
 
         // when
-        Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(applicant.id(), club.id()));
+        Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
         // then
-        verify(publisher, times(1)).publishEvent(any(RequestJoinClubEvent.class));
-        Events.setApplicationEventPublisher(applicationEventPublisher);  // 안해주면 오류
+        Assertions.assertAll(
+                () -> assertThat(applicationFormId).isNotNull(),
+                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ClubJoinApplicationCreatedEvent.class))
+        );
     }
 
     // TODO 알림이 비동기라 테스트하면 트랜잭션 때문에 오류가 발생. 해결방법 모르겠구.. 찾으면 수정

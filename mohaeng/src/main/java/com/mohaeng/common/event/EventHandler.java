@@ -16,7 +16,7 @@ public abstract class EventHandler<EVENT extends BaseEvent> {
     /**
      * handle 이후 반드시 호출
      */
-    public void process(final EVENT event) {
+    protected void process(final EVENT event) {
         BaseEventHistory history = event.history();
         history.process();
         eventHistoryRepository.save(history);

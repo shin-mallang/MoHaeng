@@ -1,7 +1,7 @@
 package com.mohaeng.applicationform.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.RequestJoinClubEvent;
+import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -13,6 +13,7 @@ import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.member.exception.MemberException;
+import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +29,19 @@ import static com.mohaeng.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 @Transactional
 public class RequestJoinClub implements RequestJoinClubUseCase {
 
-    private final ApplicationFormRepository applicationFormRepository;
-    private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
+    private final MemberRepository memberRepository;
     private final ParticipantRepository participantRepository;
+    private final ApplicationFormRepository applicationFormRepository;
 
-    public RequestJoinClub(final ApplicationFormRepository applicationFormRepository,
+    public RequestJoinClub(final ClubRepository clubRepository,
                            final MemberRepository memberRepository,
-                           final ClubRepository clubRepository,
-                           final ParticipantRepository participantRepository) {
-        this.applicationFormRepository = applicationFormRepository;
-        this.memberRepository = memberRepository;
+                           final ParticipantRepository participantRepository,
+                           final ApplicationFormRepository applicationFormRepository) {
         this.clubRepository = clubRepository;
+        this.memberRepository = memberRepository;
         this.participantRepository = participantRepository;
+        this.applicationFormRepository = applicationFormRepository;
     }
 
     @Override
@@ -55,8 +56,8 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
         ApplicationForm applicationForm = ApplicationForm.create(member, club);
         applicationFormRepository.save(applicationForm);
 
-        // 모임 가입 신청 요청 이벤트 발행 -> 회장과 임원진에게 알림 보내기
-        raiseEvent(member, club, applicationForm);
+        // 이벤트 발행 -> 모임 가입 신청 요청에 대하여 회장과 임원진에게 알림 보내기
+        raiseEvents(member, club, applicationForm);
 
         return applicationForm.id();
     }
@@ -98,23 +99,25 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
     }
 
     /**
-     * 이벤트를 발행한다.
+     * 이벤트 발행 -> 모임 가입 신청 요청에 대하여 회장과 임원진에게 알림 보내기
      */
-    private void raiseEvent(final Member applicant, final Club club, final ApplicationForm applicationForm) {
-        Events.raise(new RequestJoinClubEvent(this,
-                applicant.id(),  // 가입 신청자
-                club.id(),  // 대상 모임
-                applicationForm.id(),  // 생성된 가입 신청서
-                getOfficerAndPresidentIdsOfClub(club))  // 대상 모임의 임원진과 회장 Id
-        );
+    private void raiseEvents(final Member applicant, final Club club, final ApplicationForm applicationForm) {
+        Events.raise(new ClubJoinApplicationCreatedEvent(
+                this,
+                getOfficerAndPresidentIdsOfClub(club),
+                club.id(),
+                applicant.id(),
+                applicationForm.id()
+        ));
     }
 
     /**
-     * 모임의 임원진과 회장 Id를 반환한다.
+     * 모임의 임원진과 회장의 Member Id를 반환한다.
      */
     private List<Long> getOfficerAndPresidentIdsOfClub(final Club club) {
         return participantRepository.findAllWithMemberByClubIdWhereClubRoleIsPresidentOrOfficer(club.id())
                 .stream()
+                .map(Participant::member)
                 .map(BaseEntity::id)
                 .toList();
     }

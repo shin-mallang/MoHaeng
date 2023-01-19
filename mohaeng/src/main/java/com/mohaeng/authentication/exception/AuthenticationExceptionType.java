@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 
 public enum AuthenticationExceptionType implements BaseExceptionType {
 
-    INCORRECT_AUTHENTICATION(400, HttpStatus.UNAUTHORIZED, "인증 정보가 올바르지 않아 로그인에 실패하였습니다."),
-    NOT_FOUND_ACCESS_TOKEN(401, HttpStatus.UNAUTHORIZED, "AccessToken이 존재하지 않습니다."),
-    INVALID_ACCESS_TOKEN(401, HttpStatus.UNAUTHORIZED, "AccessToken이 유효하지 않습니다."),
+    INCORRECT_AUTHENTICATION(200, HttpStatus.UNAUTHORIZED, "인증 정보가 올바르지 않아 로그인에 실패하였습니다."),
+    NOT_FOUND_ACCESS_TOKEN(201, HttpStatus.UNAUTHORIZED, "AccessToken이 존재하지 않습니다."),
+    INVALID_ACCESS_TOKEN(201, HttpStatus.UNAUTHORIZED, "AccessToken이 유효하지 않습니다."),
     ;
 
     private final int errorCode;

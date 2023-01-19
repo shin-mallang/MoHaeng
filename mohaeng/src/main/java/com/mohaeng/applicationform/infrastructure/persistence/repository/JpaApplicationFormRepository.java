@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface JpaApplicationFormRepository extends JpaRepository<ApplicationForm, Long>, ApplicationFormRepository {
 
     @Override
-    @Query("select af from ApplicationForm af join fetch af.applicant join fetch af.target where af.id = :id")
-    Optional<ApplicationForm> findWithMemberAndClubById(@Param("id") final Long id);
+    @Query("select af from ApplicationForm af join fetch af.target where af.id = :id")
+    Optional<ApplicationForm> findWithClubById(@Param("id") final Long id);
 }

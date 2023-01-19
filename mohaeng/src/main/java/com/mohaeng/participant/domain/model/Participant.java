@@ -46,4 +46,11 @@ public class Participant extends BaseEntity {
         this.clubRole = clubRole;
         club.participantCountUp();
     }
+
+    /**
+     * 관리자(회장, 임원)인지 확인
+     */
+    public boolean isManager() {
+        return clubRole().isManagerRole();
+    }
 }
