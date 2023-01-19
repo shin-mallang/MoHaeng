@@ -29,7 +29,6 @@ public class RejectJoinClubController {
         rejectJoinClubUseCase.command(
                 new RejectJoinClubUseCase.Command(applicationFormId, memberId)
         );
-
         return ResponseEntity.ok().build();
     }
 }

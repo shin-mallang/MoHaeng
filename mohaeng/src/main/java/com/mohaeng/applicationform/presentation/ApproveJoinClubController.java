@@ -29,7 +29,6 @@ public class ApproveJoinClubController {
         approveJoinClubUseCase.command(
                 new ApproveJoinClubUseCase.Command(applicationFormId, memberId)
         );
-
         return ResponseEntity.ok().build();
     }
 }

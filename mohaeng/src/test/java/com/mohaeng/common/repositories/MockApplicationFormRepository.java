@@ -40,11 +40,6 @@ public class MockApplicationFormRepository implements ApplicationFormRepository 
     }
 
     @Override
-    public Optional<ApplicationForm> findWithMemberAndClubById(final Long id) {
-        return Optional.ofNullable(store.get(id));
-    }
-
-    @Override
     public Optional<ApplicationForm> findWithClubById(Long id) {
         return Optional.empty();
     }
