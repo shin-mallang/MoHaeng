@@ -2,10 +2,8 @@ package com.mohaeng.notification.application.eventhandler;
 
 import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.common.annotation.ApplicationTest;
-import com.mohaeng.common.event.EventHistoryRepository;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ApplicationTest
 @DisplayName("NotificationEventHandler 는 ")
-class NotificationEventHandlerTest {
+class NotificationEventHandlerAsyncTest {
 
     @Autowired
     private NotificationRepository repository;
 
     @Autowired
-    private EventHistoryRepository eventHistoryRepository;
-
-    @Autowired
-    private NotificationMakeStrategies notificationMakeStrategies;
-
-    // Autowired로 받으면 Async라 다른 테스트에서 오류 발생
     private NotificationEventHandler eventHandler;
-
-    @BeforeEach
-    void init() {
-        eventHandler = new NotificationEventHandler(eventHistoryRepository, repository, notificationMakeStrategies);
-    }
 
     @Test
     @DisplayName("알림 관련 이벤트를 받아 알림을 생성하여 저장한다.")
