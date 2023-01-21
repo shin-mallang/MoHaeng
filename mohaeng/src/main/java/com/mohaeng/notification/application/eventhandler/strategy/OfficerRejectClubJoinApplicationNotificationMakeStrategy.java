@@ -1,7 +1,6 @@
 package com.mohaeng.notification.application.eventhandler.strategy;
 
 import com.mohaeng.applicationform.domain.event.OfficerRejectClubJoinApplicationEvent;
-import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.notification.application.eventhandler.NotificationMakeStrategy;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.kind.OfficerRejectApplicationNotification;
@@ -14,17 +13,10 @@ import java.util.List;
  * 회장 대신 임원진이 가입 신청을 거절락한 경우 회장에게 알리기 위함
  */
 @Component
-public class OfficerRejectClubJoinApplicationNotificationMakeStrategy extends NotificationMakeStrategy {
+public class OfficerRejectClubJoinApplicationNotificationMakeStrategy extends NotificationMakeStrategy<OfficerRejectClubJoinApplicationEvent> {
 
     @Override
-    public Class<? extends NotificationEvent> supportEvent() {
-        return OfficerRejectClubJoinApplicationEvent.class;
-    }
-
-    @Override
-    public List<Notification> make(final NotificationEvent notificationEvent) {
-        OfficerRejectClubJoinApplicationEvent event = (OfficerRejectClubJoinApplicationEvent) notificationEvent;
-
+    public List<Notification> makeNotifications(OfficerRejectClubJoinApplicationEvent event) {
         return List.of(
                 new OfficerRejectApplicationNotification(
                         Receiver.of(event.receiverId()),

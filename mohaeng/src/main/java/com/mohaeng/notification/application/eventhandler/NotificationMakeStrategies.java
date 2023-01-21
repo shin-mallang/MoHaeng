@@ -13,9 +13,9 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 @Component
 public class NotificationMakeStrategies {
 
-    private final Map<Class<? extends NotificationEvent>, NotificationMakeStrategy> map;
+    private final Map<Class<? extends NotificationEvent>, NotificationMakeStrategy<? extends NotificationEvent>> map;
 
-    public NotificationMakeStrategies(final Set<NotificationMakeStrategy> notificationMakeStrategies) {
+    public NotificationMakeStrategies(final Set<NotificationMakeStrategy<? extends NotificationEvent>> notificationMakeStrategies) {
         map = notificationMakeStrategies.stream()
                 .collect(toUnmodifiableMap(NotificationMakeStrategy::supportEvent, it -> it));
     }
