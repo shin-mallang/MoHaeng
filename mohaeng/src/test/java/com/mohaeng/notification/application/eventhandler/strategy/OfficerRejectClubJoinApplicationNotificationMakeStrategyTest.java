@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @DisplayName("OfficerRejectClubJoinApplicationNotificationMakeStrategy 는 ")
 class OfficerRejectClubJoinApplicationNotificationMakeStrategyTest {
@@ -25,11 +24,11 @@ class OfficerRejectClubJoinApplicationNotificationMakeStrategyTest {
     void success_test_1() {
         // then
         Assertions.assertAll(
-                () -> assertThat(strategy.support(mock(OfficerRejectClubJoinApplicationEvent.class))).isTrue(),
-                () -> assertThat(strategy.support(mock(OfficerApproveClubJoinApplicationEvent.class))).isFalse(),
-                () -> assertThat(strategy.support(mock(ApplicationProcessedEvent.class))).isFalse(),
-                () -> assertThat(strategy.support(mock(ClubJoinApplicationCreatedEvent.class))).isFalse(),
-                () -> assertThat(strategy.support(mock(NotificationEvent.class))).isFalse()
+                () -> assertThat(strategy.supportEvent()).isEqualTo(OfficerRejectClubJoinApplicationEvent.class),
+                () -> assertThat(strategy.supportEvent()).isNotEqualTo(ClubJoinApplicationCreatedEvent.class),
+                () -> assertThat(strategy.supportEvent()).isNotEqualTo(ApplicationProcessedEvent.class),
+                () -> assertThat(strategy.supportEvent()).isNotEqualTo(OfficerApproveClubJoinApplicationEvent.class),
+                () -> assertThat(strategy.supportEvent()).isNotEqualTo(NotificationEvent.class)
         );
     }
 

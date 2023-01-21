@@ -5,23 +5,22 @@ import com.mohaeng.notification.domain.model.Notification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toUnmodifiableMap;
 
 @Component
 public class NotificationMakeStrategies {
 
-    private final Set<NotificationMakeStrategy> notificationMakeStrategies;
+    private final Map<Class<? extends NotificationEvent>, NotificationMakeStrategy<? extends NotificationEvent>> map;
 
-    public NotificationMakeStrategies(final Set<NotificationMakeStrategy> notificationMakeStrategies) {
-        this.notificationMakeStrategies = notificationMakeStrategies;
+    public NotificationMakeStrategies(final Set<NotificationMakeStrategy<? extends NotificationEvent>> notificationMakeStrategies) {
+        map = notificationMakeStrategies.stream()
+                .collect(toUnmodifiableMap(NotificationMakeStrategy::supportEvent, it -> it));
     }
 
     public List<Notification> make(final NotificationEvent event) {
-        return notificationMakeStrategies
-                .stream()
-                .filter(it -> it.support(event))  // 처리할 수 있는 경우
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("이벤트에 대응되는 알림을 생성할 수 없습니다."))
-                .make(event);  // 처리
+        return map.get(event.getClass()).make(event);
     }
 }

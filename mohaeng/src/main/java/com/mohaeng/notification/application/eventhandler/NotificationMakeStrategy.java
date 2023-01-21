@@ -3,16 +3,28 @@ package com.mohaeng.notification.application.eventhandler;
 import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.notification.domain.model.Notification;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-public abstract class NotificationMakeStrategy {
+public abstract class NotificationMakeStrategy<T extends NotificationEvent> {
 
     /**
-     * 처리할 수 있는지 여부
-     *
-     * EX: return (notificationEvent) instanceOf (**Event);
+     * 처리할 수 있는 이벤트 클래스
+     * - Overriding 하지 말 것
+     * <p>
+     * [EX]
+     * class Sample extends NotificationMakeStrategy<SampleEvent> {} 인 경우
+     * -> Class<SampleEvent> 반환
      */
-    public abstract boolean support(final NotificationEvent notificationEvent);
+    @SuppressWarnings("unchecked")
+    public final Class<T> supportEvent() {
+        return (Class<T>) (((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+    }
 
-    public abstract List<Notification> make(final NotificationEvent notificationEvent);
+    public final List<Notification> make(final NotificationEvent notificationEvent) {
+        T event = (T) notificationEvent;
+        return makeNotifications(event);
+    }
+
+    protected abstract List<Notification> makeNotifications(T event);
 }
