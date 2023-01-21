@@ -39,6 +39,6 @@ class NotificationMakeStrategiesTest {
     void fail_test_1() {
         // when & then
         Assertions.assertThatThrownBy(() -> notificationMakeStrategies.make(mock(NotificationEvent.class)))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NullPointerException.class);
     }
 }

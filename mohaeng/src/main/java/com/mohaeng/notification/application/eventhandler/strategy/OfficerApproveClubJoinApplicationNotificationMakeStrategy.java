@@ -17,8 +17,8 @@ import java.util.List;
 public class OfficerApproveClubJoinApplicationNotificationMakeStrategy extends NotificationMakeStrategy {
 
     @Override
-    public boolean support(final NotificationEvent notificationEvent) {
-        return notificationEvent instanceof OfficerApproveClubJoinApplicationEvent;
+    public Class<? extends NotificationEvent> supportEvent() {
+        return OfficerApproveClubJoinApplicationEvent.class;
     }
 
     @Override

@@ -17,8 +17,8 @@ import java.util.List;
 public class ApplicationProcessedNotificationMakeStrategy extends NotificationMakeStrategy {
 
     @Override
-    public boolean support(final NotificationEvent notificationEvent) {
-        return notificationEvent instanceof ApplicationProcessedEvent;
+    public Class<? extends NotificationEvent> supportEvent() {
+        return ApplicationProcessedEvent.class;
     }
 
     @Override
