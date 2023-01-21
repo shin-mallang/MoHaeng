@@ -10,6 +10,10 @@ spring:
         default_batch_fetch_size: 100
     open-in-view: false
 
+  web:
+    resources:
+      add-mappings: false
+
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:mohaeng-local;MODE=MYSQL;DB_CLOSE_DELAY=-1
