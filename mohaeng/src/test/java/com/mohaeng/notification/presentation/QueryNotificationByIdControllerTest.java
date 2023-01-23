@@ -15,7 +15,7 @@ import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;
 import static com.mohaeng.common.fixtures.NotificationFixture.*;
 import static com.mohaeng.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
-import static com.mohaeng.notification.presentation.QueryNotificationByIdController.QUERY_ALARM_BY_ID;
+import static com.mohaeng.notification.presentation.QueryNotificationByIdController.QUERY_ALARM_BY_ID_URL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -48,7 +48,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -89,7 +89,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -131,7 +131,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -174,7 +174,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -215,7 +215,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         setAuthentication(memberId);
 
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                 )
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -241,7 +241,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         setAuthentication(memberId);
 
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -268,7 +268,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         setAuthentication(memberId);
 
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class QueryNotificationByIdController {
 
-    public static final String QUERY_ALARM_BY_ID = "/api/alarm/{id}";
+    public static final String QUERY_ALARM_BY_ID_URL = "/api/alarm/{id}";
 
     private final QueryNotificationByIdUseCase queryNotificationByIdUseCase;
 
@@ -20,7 +20,7 @@ public class QueryNotificationByIdController {
         this.queryNotificationByIdUseCase = queryNotificationByIdUseCase;
     }
 
-    @GetMapping(path = QUERY_ALARM_BY_ID)
+    @GetMapping(path = QUERY_ALARM_BY_ID_URL)
     public ResponseEntity<NotificationResponse> queryById(
             @Auth Long memberId,
             @PathVariable("id") Long id
