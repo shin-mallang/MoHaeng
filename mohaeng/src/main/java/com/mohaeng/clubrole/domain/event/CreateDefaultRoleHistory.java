@@ -10,11 +10,14 @@ import java.time.LocalDateTime;
 @DiscriminatorValue("CreateDefaultRoleEvent")
 public class CreateDefaultRoleHistory extends BaseEventHistory {
 
-    private Long memberId;
-    private Long clubId;
-    private Long defaultPresidentRoleId;  // 기본 회장 역할 ID
+    private final Long memberId;
+    private final Long clubId;
+    private final Long defaultPresidentRoleId;  // 기본 회장 역할 ID
 
     protected CreateDefaultRoleHistory() {
+        this.memberId = null;
+        this.clubId = null;
+        this.defaultPresidentRoleId = null;
     }
 
     public CreateDefaultRoleHistory(final LocalDateTime eventDateTime,

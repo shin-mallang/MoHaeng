@@ -9,7 +9,7 @@ import java.util.List;
  */
 public abstract class NotificationEvent extends BaseEvent {
 
-    protected List<Long> receiverIds;
+    protected final List<Long> receiverIds;
 
     public NotificationEvent(final Object source, final List<Long> receiverIds) {
         super(source);

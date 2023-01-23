@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public abstract class BaseEvent extends ApplicationEvent {
 
-    protected LocalDateTime eventDateTime;
+    protected final LocalDateTime eventDateTime;
 
     public BaseEvent(final Object source) {
         super(source);

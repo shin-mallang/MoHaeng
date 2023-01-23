@@ -10,10 +10,12 @@ import java.time.LocalDateTime;
 @DiscriminatorValue("CreateClubEvent")
 public class CreateClubEventHistory extends BaseEventHistory {
 
-    private Long memberId;
-    private Long clubId;
+    private final Long memberId;
+    private final Long clubId;
 
     protected CreateClubEventHistory() {
+        this.memberId = null;
+        this.clubId = null;
     }
 
     public CreateClubEventHistory(final LocalDateTime eventDateTime,
