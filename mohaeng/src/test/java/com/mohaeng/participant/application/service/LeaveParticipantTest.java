@@ -30,8 +30,7 @@ import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static com.mohaeng.common.fixtures.ParticipantFixture.participant;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -74,7 +73,7 @@ class LeaveParticipantTest {
 
             // when
             leaveParticipant.command(
-                    new LeaveParticipantUseCase.Command(member.id(), club.id())
+                    new LeaveParticipantUseCase.Command(member.id(), participant.id())
             );
 
             // then
@@ -99,7 +98,7 @@ class LeaveParticipantTest {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     leaveParticipant.command(
-                            new LeaveParticipantUseCase.Command(member.id(), club.id())
+                            new LeaveParticipantUseCase.Command(member.id(), 1L)
                     )).exceptionType();
 
             assertAll(
@@ -114,35 +113,45 @@ class LeaveParticipantTest {
             // given
             Member member = saveMember();
             Club club = saveClub();
+            Map<ClubRoleCategory, ClubRole> clubRoleCategoryClubRoleMap = saveDefaultClubRoles(club);
+            Participant participant = saveParticipant(member, club, clubRoleCategoryClubRoleMap.get(PRESIDENT));
             int currentParticipantCount = club.currentParticipantCount();
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     leaveParticipant.command(
-                            new LeaveParticipantUseCase.Command(member.id(), club.id())
+                            new LeaveParticipantUseCase.Command(100L, participant.id())
                     )).exceptionType();
 
             assertAll(
-                    () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT),
+                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_LEAVE_PARTICIPANT_REQUEST),
                     () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(currentParticipantCount)
             );
         }
 
         @Test
-        @DisplayName("모임이 존재하지 않는 경우 예외를 발생시킨다.")
+        @DisplayName("참여자(Participant)의 Member ID와 요청자의 MemberId가 일치하지 않으면 오류가 발생한다.")
         void fail_test_3() {
             // given
             Member member = saveMember();
+            Member member2 = saveMember();
+            Member other = saveMember();
+
             Club club = saveClub();
+            Map<ClubRoleCategory, ClubRole> clubRoleCategoryClubRoleMap = saveDefaultClubRoles(club);
+
+            Participant participant = saveParticipant(member, club, clubRoleCategoryClubRoleMap.get(GENERAL));
+            saveParticipant(member2, club, clubRoleCategoryClubRoleMap.get(PRESIDENT));
+
             int currentParticipantCount = club.currentParticipantCount();
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     leaveParticipant.command(
-                            new LeaveParticipantUseCase.Command(member.id(), club.id())
+                            new LeaveParticipantUseCase.Command(other.id(), participant.id())
                     )).exceptionType();
             assertAll(
-                    () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT),
+                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_LEAVE_PARTICIPANT_REQUEST),
                     () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(currentParticipantCount)
             );
         }
@@ -162,7 +171,7 @@ class LeaveParticipantTest {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     leaveParticipant.command(
-                            new LeaveParticipantUseCase.Command(presidentMember.id(), club.id())
+                            new LeaveParticipantUseCase.Command(presidentMember.id(), president.id())
                     )).exceptionType();
 
             // then
@@ -187,7 +196,7 @@ class LeaveParticipantTest {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubException.class, () ->
                     leaveParticipant.command(
-                            new LeaveParticipantUseCase.Command(member.id(), club.id())
+                            new LeaveParticipantUseCase.Command(member.id(), participant.id())
                     )).exceptionType();
 
             // then
