@@ -1,9 +1,10 @@
-package com.mohaeng.notification.application.eventhandler;
+package com.mohaeng.notification.domain.model;
 
 import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.model.NotificationMakeStrategies;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

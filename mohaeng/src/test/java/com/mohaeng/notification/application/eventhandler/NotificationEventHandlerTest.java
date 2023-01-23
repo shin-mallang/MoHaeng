@@ -4,6 +4,7 @@ import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.event.EventHistoryRepository;
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.model.NotificationMakeStrategies;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
