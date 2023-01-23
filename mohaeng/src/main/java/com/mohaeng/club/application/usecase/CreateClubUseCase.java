@@ -4,9 +4,11 @@ public interface CreateClubUseCase {
 
     Long command(final Command command);
 
-    record Command(Long memberId,
-                   String name,
-                   String description,
-                   int maxPeopleCount) {
+    record Command(
+            Long memberId,
+            String name,
+            String description,
+            int maxPeopleCount
+    ) {
     }
 }

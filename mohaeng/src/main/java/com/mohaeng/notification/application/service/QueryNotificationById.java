@@ -1,8 +1,8 @@
 package com.mohaeng.notification.application.service;
 
+import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.application.usecase.QueryNotificationByIdUseCase;
 import com.mohaeng.notification.domain.model.Notification;
-import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
 import com.mohaeng.notification.exception.NotificationException;

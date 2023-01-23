@@ -6,7 +6,6 @@ import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicatio
 import com.mohaeng.applicationform.domain.event.OfficerRejectClubJoinApplicationEvent;
 import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.notification.domain.model.Notification;
-import com.mohaeng.notification.domain.model.strategy.ClubJoinApplicationCreatedNotificationMakeStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

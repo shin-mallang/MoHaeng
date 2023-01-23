@@ -1,8 +1,8 @@
 package com.mohaeng.notification.domain.model.strategy;
 
 import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.notification.domain.model.NotificationMakeStrategy;
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.model.NotificationMakeStrategy;
 import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.List;
 public class ApplicationProcessedNotificationMakeStrategy extends NotificationMakeStrategy<ApplicationProcessedEvent> {
 
     @Override
-    public List<Notification> makeNotifications(ApplicationProcessedEvent event) {
+    public List<Notification> makeNotifications(final ApplicationProcessedEvent event) {
         return List.of(new ApplicationProcessedNotification(Receiver.of(event.receiverId()), event.clubId(), event.isApproved()));
     }
 }

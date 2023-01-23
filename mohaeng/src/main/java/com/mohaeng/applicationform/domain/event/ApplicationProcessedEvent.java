@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class ApplicationProcessedEvent extends NotificationEvent {
 
-    private final Long applicationFormId;
-    private final Long clubId;
-    private final boolean isApproved;
+    private final Long applicationFormId;  // 가입 신청서 ID
+    private final Long clubId;  // 모임 ID
+    private final boolean isApproved;  // 수락됐는지 여부
 
     /**
      * @param receiverId 가입 혹은 거절된 회원 ID (Member ID)

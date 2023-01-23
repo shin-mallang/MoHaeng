@@ -40,8 +40,10 @@ public class CreateClubController {
     public record CreateClubRequest(
             @NotBlank(message = "모임의 이름은 필수입니다.")
             String name,
+
             @NotBlank(message = "모임의 설명은 필수입니다.")
             String description,
+
             @Min(0)
             int maxParticipantCount  // 0인 경우 최대로 설정
     ) {
