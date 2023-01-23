@@ -8,6 +8,7 @@ import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
+import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
@@ -31,6 +32,7 @@ import java.util.List;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NOT_FOUND_APPLICATION_FORM;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
+import static com.mohaeng.club.exception.ClubExceptionType.CLUB_IS_FULL;
 import static com.mohaeng.clubrole.domain.model.ClubRole.defaultRoles;
 import static com.mohaeng.common.fixtures.ApplicationFormFixture.applicationForm;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
@@ -245,7 +247,36 @@ class ApproveJoinClubTest {
     @Test
     @DisplayName("모임이 가득 찬 경우 더이상 회원을 받을 수 없다.")
     void fail_test_3() {
-        throw new IllegalArgumentException("TODO !!!");
+        // given
+        Club target = clubRepository.save(new Club("name", "des", 2));
+        List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+        Member managerMember = memberRepository.save(member(null));
+        target.participantCountUp();
+        Participant participant = new Participant(managerMember);
+        participant.joinClub(target, clubRoles.get(0));  // 회장으로 가입
+        participantRepository.save(participant);
+
+        Member applicant = memberRepository.save(member(null));
+        ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+
+        em.flush();
+        em.clear();
+
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ClubException.class, () ->
+                approveJoinClubUseCase.command(
+                        new ApproveJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+                )
+        ).exceptionType();
+
+        // then
+        ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
+        Club club = clubRepository.findById(target.id()).get();
+        assertAll(
+                () -> assertThat(baseExceptionType).isEqualTo(CLUB_IS_FULL),
+                () -> assertThat(findApplicationForm.processed()).isFalse(),
+                () -> assertThat(club.currentParticipantCount()).isEqualTo(club.maxParticipantCount())
+        );
     }
 
     @Nested
