@@ -30,7 +30,7 @@ public class CreateClubController {
      */
     @PostMapping(path = CREATE_CLUB_URL)
     public ResponseEntity<Void> create(
-            @Auth Long memberId,
+            @Auth final Long memberId,
             @Valid @RequestBody final CreateClubRequest request
     ) {
         createClubUseCase.command(ClubControllerMapper.toApplicationDto(memberId, request));

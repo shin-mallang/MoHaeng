@@ -22,8 +22,8 @@ public class QueryNotificationByIdController {
 
     @GetMapping(path = QUERY_ALARM_BY_ID_URL)
     public ResponseEntity<NotificationResponse> queryById(
-            @Auth Long memberId,
-            @PathVariable("id") Long id
+            @Auth final Long memberId,
+            @PathVariable("id") final Long id
     ) {
         NotificationDto notificationDto = queryNotificationByIdUseCase.query(new QueryNotificationByIdUseCase.Query(id, memberId));
 

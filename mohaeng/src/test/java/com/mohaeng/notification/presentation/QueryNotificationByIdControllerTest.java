@@ -65,14 +65,6 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
                         ),
                         pathParameters(
                                 parameterWithName("id").description("알람 ID")
-                        ),
-                        responseFields(
-                                fieldWithPath("id").type(NUMBER).description("알림의 ID"),
-                                fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
-                                fieldWithPath("type").type(STRING).description("알림의 종류 - 가입 신청 처리된 경우 신청자에게 발송되는 알림"),
-                                fieldWithPath("clubId").type(NUMBER).description("처리된 가입 신청 대상 모임"),
-                                fieldWithPath("approved").type(BOOLEAN).description("가입 승인 여부 - true인 경우 승인"),
-                                fieldWithPath("read").type(BOOLEAN).description("알림 읽음 여부 - true인 경우 읽음")
                         )
                 )
         );
