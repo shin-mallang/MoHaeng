@@ -7,11 +7,9 @@ import java.util.List;
 
 public class ClubJoinApplicationCreatedEvent extends NotificationEvent {
 
-    private Long clubId;  // 가입을 요청한 모임 ID
-
-    private Long applicantId;  // 가입 신청자의 Member ID
-
-    private Long applicationFormId;  // 가입 신청서 ID
+    private final Long clubId;  // 가입을 요청한 모임 ID
+    private final Long applicantId;  // 가입 신청자의 Member ID
+    private final Long applicationFormId;  // 가입 신청서 ID
 
     public ClubJoinApplicationCreatedEvent(final Object source,
                                            final List<Long> receiverIds,

@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 public abstract class NotificationResponse {
 
-    private Long id;
-    private LocalDateTime createdAt;  // 알람 발송일
-    private boolean isRead;  // 알람 읽음 여부
-    private String type;
+    private final Long id;
+    private final LocalDateTime createdAt;  // 알람 발송일
+    private final boolean isRead;  // 알람 읽음 여부
+    private final String type;
 
     public NotificationResponse(final Long id,
                                 final LocalDateTime createdAt,

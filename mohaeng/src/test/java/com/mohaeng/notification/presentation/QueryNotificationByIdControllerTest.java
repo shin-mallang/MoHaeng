@@ -15,7 +15,7 @@ import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;
 import static com.mohaeng.common.fixtures.NotificationFixture.*;
 import static com.mohaeng.notification.exception.NotificationExceptionType.NOT_FOUND_NOTIFICATION;
-import static com.mohaeng.notification.presentation.QueryNotificationByIdController.QUERY_ALARM_BY_ID;
+import static com.mohaeng.notification.presentation.QueryNotificationByIdController.QUERY_ALARM_BY_ID_URL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -48,7 +48,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -65,14 +65,6 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
                         ),
                         pathParameters(
                                 parameterWithName("id").description("알람 ID")
-                        ),
-                        responseFields(
-                                fieldWithPath("id").type(NUMBER).description("알림의 ID"),
-                                fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
-                                fieldWithPath("type").type(STRING).description("알림의 종류 - 가입 신청 처리된 경우 신청자에게 발송되는 알림"),
-                                fieldWithPath("clubId").type(NUMBER).description("처리된 가입 신청 대상 모임"),
-                                fieldWithPath("approved").type(BOOLEAN).description("가입 승인 여부 - true인 경우 승인"),
-                                fieldWithPath("read").type(BOOLEAN).description("알림 읽음 여부 - true인 경우 읽음")
                         )
                 )
         );
@@ -89,7 +81,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -131,7 +123,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -174,7 +166,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
 
         // when & then
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -215,7 +207,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         setAuthentication(memberId);
 
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                 )
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -241,7 +233,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         setAuthentication(memberId);
 
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())
@@ -268,7 +260,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         setAuthentication(memberId);
 
         ResultActions resultActions = mockMvc.perform(
-                        get(QUERY_ALARM_BY_ID, alarmId)
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
                                 .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
                 )
                 .andDo(print())

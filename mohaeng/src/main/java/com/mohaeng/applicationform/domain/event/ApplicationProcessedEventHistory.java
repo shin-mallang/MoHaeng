@@ -12,7 +12,6 @@ public class ApplicationProcessedEventHistory extends BaseEventHistory {
 
     private final Long applicationFormId;
     private final Long clubId;
-
     private final boolean isApproved;
 
     protected ApplicationProcessedEventHistory() {

@@ -12,11 +12,11 @@ import java.util.Optional;
 public interface JpaClubRoleRepository extends JpaRepository<ClubRole, Long>, ClubRoleRepository {
 
     @Override
-    default List<ClubRole> saveAll(List<ClubRole> entities) {
+    default List<ClubRole> saveAll(final List<ClubRole> entities) {
         return saveAll((Iterable<ClubRole>) entities);
     }
 
     @Override
     @Query("select cr from ClubRole cr where cr.clubRoleCategory = 'GENERAL'")
-    Optional<ClubRole> findDefaultGeneralRoleByClub(Club club);
+    Optional<ClubRole> findDefaultGeneralRoleByClub(final Club club);
 }

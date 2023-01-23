@@ -79,12 +79,13 @@ public class ApplicationForm extends BaseEntity {
         // 권한 확인
         checkAuthorityToProcessApplication(manager);
 
-        // 가입 신청서 처리
-        process();
-
         // 모임에 가입시키기
         Participant applicant = new Participant(this.applicant());
         applicant.joinClub(this.target(), defaultGeneralRole);
+
+        // 가입 신청서 처리
+        process();
+
         return applicant;
     }
 

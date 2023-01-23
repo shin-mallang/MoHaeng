@@ -13,9 +13,9 @@ public interface ApplicationFormRepository {
 
     Optional<ApplicationForm> findById(final Long id);
 
+    Optional<ApplicationForm> findWithClubById(final Long id);
+
     List<ApplicationForm> findAll();
 
     boolean existsByApplicantAndTarget(final Member applicant, final Club target);
-
-    Optional<ApplicationForm> findWithClubById(final Long id);
 }

@@ -1,8 +1,8 @@
 package com.mohaeng.notification.domain.model.strategy;
 
 import com.mohaeng.applicationform.domain.event.OfficerRejectClubJoinApplicationEvent;
-import com.mohaeng.notification.domain.model.NotificationMakeStrategy;
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.model.NotificationMakeStrategy;
 import com.mohaeng.notification.domain.model.kind.OfficerRejectApplicationNotification;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.List;
 public class OfficerRejectClubJoinApplicationNotificationMakeStrategy extends NotificationMakeStrategy<OfficerRejectClubJoinApplicationEvent> {
 
     @Override
-    public List<Notification> makeNotifications(OfficerRejectClubJoinApplicationEvent event) {
+    public List<Notification> makeNotifications(final OfficerRejectClubJoinApplicationEvent event) {
         return List.of(
                 new OfficerRejectApplicationNotification(
                         Receiver.of(event.receiverId()),

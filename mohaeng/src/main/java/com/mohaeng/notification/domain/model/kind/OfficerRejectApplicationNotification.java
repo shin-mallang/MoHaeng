@@ -1,8 +1,8 @@
 package com.mohaeng.notification.domain.model.kind;
 
-import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.application.dto.kind.OfficerRejectApplicationNotificationDto;
+import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.value.Receiver;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;

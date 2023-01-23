@@ -13,7 +13,9 @@ public interface ParticipantRepository {
 
     boolean existsByMemberAndClub(final Member member, final Club club);
 
-    List<Participant> findAllWithMemberByClubIdWhereClubRoleIsPresidentOrOfficer(final Long clubId);
+    Optional<Participant> findById(final Long id);
+
+    Optional<Participant> findWithMemberAndClubById(final Long id);
 
     /**
      * 주어진 Club과, Member의 ID를 통해,
@@ -26,7 +28,13 @@ public interface ParticipantRepository {
      */
     Optional<Participant> findPresidentWithMemberByClub(final Club club);
 
-    Optional<Participant> findById(final Long id);
+    List<Participant> findAllWithMemberByClubIdWhereClubRoleIsPresidentOrOfficer(final Long clubId);
 
-    Optional<Participant> findWithMemberById(final Long id);
+    /**
+     * memberId와 clubId로 Participant 단일 조회
+     * <p>
+     * (Member 와 Club 으로 조회할 수 있으나, 그럼 Member 조회 + Club 조회를 위한 Select 쿼리가 2번 발생하며 ID만을 사용하도록 함)
+     */
+
+    void delete(final Participant participant);
 }

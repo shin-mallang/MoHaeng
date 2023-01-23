@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 
 public class OfficerApproveApplicationNotificationDto extends NotificationDto {
 
-    private Long officerMemberId;  // 처리한 임원진 Member ID
-    private Long officerParticipantId;  // 처리한 임원진 Participant ID (Member랑 Participant랑 뭘 줘야할 지 몰라서 둘 다 줌)
-    private Long applicantMemberId;  // 가입된 회원의 Member ID
-    private Long applicantParticipantId;  // 가입된 회원의 Participant ID
+    private final Long officerMemberId;  // 처리한 임원진 Member ID
+    private final Long officerParticipantId;  // 처리한 임원진 Participant ID (Member랑 Participant랑 뭘 줘야할 지 몰라서 둘 다 줌)
+    private final Long applicantMemberId;  // 가입된 회원의 Member ID
+    private final Long applicantParticipantId;  // 가입된 회원의 Participant ID
 
     public OfficerApproveApplicationNotificationDto(final Long id,
                                                     final LocalDateTime createdAt,
