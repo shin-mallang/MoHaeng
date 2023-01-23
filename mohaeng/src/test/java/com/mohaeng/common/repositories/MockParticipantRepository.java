@@ -43,6 +43,11 @@ public class MockParticipantRepository implements ParticipantRepository {
     }
 
     @Override
+    public Optional<Participant> findByMemberIdAndClubId(Long memberId, Long clubId) {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Participant> findWithClubRoleByMemberIdAndClub(Long managerId, Club club) {
         return Optional.empty();
     }
@@ -60,6 +65,11 @@ public class MockParticipantRepository implements ParticipantRepository {
     @Override
     public Optional<Participant> findWithMemberById(Long id) {
         return Optional.empty();
+    }
+
+    @Override
+    public void delete(Participant participant) {
+
     }
 
     public List<Participant> findAll() {

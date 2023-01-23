@@ -242,6 +242,12 @@ class ApproveJoinClubTest {
         );
     }
 
+    @Test
+    @DisplayName("모임이 가득 찬 경우 더이상 회원을 받을 수 없다.")
+    void fail_test_3() {
+        throw new IllegalArgumentException("TODO !!!");
+    }
+
     @Nested
     @DisplayName("ApproveJoinClub + 이벤트 핸들러 테스트 ")
     public class ApproveJoinClubTestWithEventHandlerTest {

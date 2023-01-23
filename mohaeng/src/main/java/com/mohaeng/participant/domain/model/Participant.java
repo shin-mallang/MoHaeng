@@ -4,6 +4,8 @@ import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
+import com.mohaeng.participant.exception.ParticipantException;
+import com.mohaeng.participant.exception.ParticipantExceptionType;
 import jakarta.persistence.*;
 
 @Entity
@@ -52,5 +54,32 @@ public class Participant extends BaseEntity {
      */
     public boolean isManager() {
         return clubRole().isManagerRole();
+    }
+
+    /**
+     * 모임에서 탈퇴
+     */
+    public void leaveFromClub() {
+        // 회장인지 확인
+        checkCanLeaveFromClub();
+
+        club.participantCountDown();
+    }
+
+    /**
+     * 모임에서 탈퇴할 수 있는지 확인한다.
+     * (회장은 모임에서 탈퇴할 수 없다.)
+     */
+    private void checkCanLeaveFromClub() {
+        if (this.isPresident()) {
+            throw new ParticipantException(ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB);
+        }
+    }
+
+    /**
+     * 회장인지 확인
+     */
+    private boolean isPresident() {
+        return clubRole().isPresidentRole();
     }
 }
