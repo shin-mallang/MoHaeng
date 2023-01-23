@@ -244,6 +244,7 @@ class ApproveJoinClubTest {
         );
     }
 
+    // TODO : 테스트에 존재하는 @Transactional로 묶여서, 롤백이 정상적으로 수행되는지 확인할 수 없다. 어카징.. (일단 코드 순서 재배치를 통해 해결).
     @Test
     @DisplayName("모임이 가득 찬 경우 더이상 회원을 받을 수 없다.")
     void fail_test_3() {

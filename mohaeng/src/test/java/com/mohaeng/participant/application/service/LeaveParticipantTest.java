@@ -173,6 +173,7 @@ class LeaveParticipantTest {
             );
         }
 
+        // TODO : 테스트에 존재하는 @Transactional로 묶여서, 롤백이 정상적으로 수행되는지 확인할 수 없다. 어카징.. (일단 코드 순서 재배치를 통해 해결)
         @Test
         @DisplayName("모임의 인원이 1명인 경우 탈퇴할 수 없다. (회장은 탈퇴할 수 없으므로, 일반적으로 회장이 탈퇴하는 요청을 보낸 게 아닌 이상 발생해서는 안되는 케이스이다.)")
         void fail_test_5() {
