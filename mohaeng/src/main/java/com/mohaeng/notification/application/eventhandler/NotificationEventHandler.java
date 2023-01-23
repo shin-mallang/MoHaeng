@@ -3,6 +3,7 @@ package com.mohaeng.notification.application.eventhandler;
 import com.mohaeng.common.event.EventHandler;
 import com.mohaeng.common.event.EventHistoryRepository;
 import com.mohaeng.common.notification.NotificationEvent;
+import com.mohaeng.notification.domain.model.NotificationMakeStrategies;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

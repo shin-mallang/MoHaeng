@@ -1,7 +1,7 @@
-package com.mohaeng.notification.application.eventhandler.strategy;
+package com.mohaeng.notification.domain.model.strategy;
 
 import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
-import com.mohaeng.notification.application.eventhandler.NotificationMakeStrategy;
+import com.mohaeng.notification.domain.model.NotificationMakeStrategy;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.kind.ClubJoinApplicationCreatedNotification;
 import com.mohaeng.notification.domain.model.value.Receiver;

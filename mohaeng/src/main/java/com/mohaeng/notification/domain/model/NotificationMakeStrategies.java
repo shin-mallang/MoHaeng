@@ -1,7 +1,6 @@
-package com.mohaeng.notification.application.eventhandler;
+package com.mohaeng.notification.domain.model;
 
 import com.mohaeng.common.notification.NotificationEvent;
-import com.mohaeng.notification.domain.model.Notification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
