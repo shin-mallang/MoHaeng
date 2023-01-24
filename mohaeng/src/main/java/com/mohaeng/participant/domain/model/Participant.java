@@ -60,7 +60,7 @@ public class Participant extends BaseEntity {
      * 모임에서 탈퇴
      */
     public void leaveFromClub() {
-        // 회장인지 확인
+        // 모임에서 탈퇴할 수 있는지 확인한다.
         checkCanLeaveFromClub();
 
         club.participantCountDown();
