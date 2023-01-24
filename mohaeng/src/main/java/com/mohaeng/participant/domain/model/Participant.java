@@ -77,6 +77,26 @@ public class Participant extends BaseEntity {
     }
 
     /**
+     * 대상을 모임에서 추방시킨다.
+     */
+    public void expelFromClub(final Participant target) {
+        // 추방시킬 권한 확인
+        checkAuthorityExpel();
+
+        target.club().participantCountDown();
+    }
+
+    /**
+     * 회원을 추방시킬 권한이 있는지 확인한다.
+     * (회장이 아니면 추방시킬 수 없다.)
+     */
+    private void checkAuthorityExpel() {
+        if (!this.isPresident()) {
+            throw new ParticipantException(ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT);
+        }
+    }
+
+    /**
      * 회장인지 확인
      */
     private boolean isPresident() {
