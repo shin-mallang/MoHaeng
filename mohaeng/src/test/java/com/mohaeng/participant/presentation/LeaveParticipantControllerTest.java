@@ -134,7 +134,7 @@ class LeaveParticipantControllerTest extends ControllerTest {
             // given
             final Long participantId = 1L;
             final Long memberId = 1L;
-            doThrow(new ParticipantException(NO_AUTHORITY_LEAVE_PARTICIPANT_REQUEST))
+            doThrow(new ParticipantException(MISMATCH_BETWEEN_PARTICIPANT_AND_MEMBER))
                     .when(leaveParticipantUseCase).command(any());
 
             setAuthentication(memberId);

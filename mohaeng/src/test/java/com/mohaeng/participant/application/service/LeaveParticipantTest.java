@@ -124,7 +124,7 @@ class LeaveParticipantTest {
                     )).exceptionType();
 
             assertAll(
-                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_LEAVE_PARTICIPANT_REQUEST),
+                    () -> assertThat(baseExceptionType).isEqualTo(MISMATCH_BETWEEN_PARTICIPANT_AND_MEMBER),
                     () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(currentParticipantCount)
             );
         }
@@ -151,7 +151,7 @@ class LeaveParticipantTest {
                             new LeaveParticipantUseCase.Command(other.id(), participant.id())
                     )).exceptionType();
             assertAll(
-                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_LEAVE_PARTICIPANT_REQUEST),
+                    () -> assertThat(baseExceptionType).isEqualTo(MISMATCH_BETWEEN_PARTICIPANT_AND_MEMBER),
                     () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(currentParticipantCount)
             );
         }
