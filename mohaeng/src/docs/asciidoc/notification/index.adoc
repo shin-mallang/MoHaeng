@@ -73,3 +73,10 @@ operation::notification-query-by-id(officerRejectApplicationNotification)[snippe
 
 [%hardbreaks]
 .
+
+=== 알림 조회 - 모임에서 추방된 것에 대한 알림 (ExpelParticipantNotification)
+
+operation::notification-query-by-id(ExpelParticipantNotification)[snippets='http-response,response-fields']
+
+[%hardbreaks]
+.

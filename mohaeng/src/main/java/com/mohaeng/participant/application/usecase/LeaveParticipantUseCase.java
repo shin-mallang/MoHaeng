@@ -1,7 +1,7 @@
 package com.mohaeng.participant.application.usecase;
 
 /**
- * 참가자가 모임에서 탈퇴시킨다.
+ * 참가자가 모임에서 탈퇴시 사용.
  */
 public interface LeaveParticipantUseCase {
 

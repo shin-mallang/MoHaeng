@@ -37,7 +37,7 @@ public class LeaveParticipant implements LeaveParticipantUseCase {
 
     private void validateParticipantIsRequester(final Long memberId, final Participant participant) {
         if (!participant.member().id().equals(memberId)) {
-            throw new ParticipantException(ParticipantExceptionType.NO_AUTHORITY_LEAVE_PARTICIPANT_REQUEST);
+            throw new ParticipantException(ParticipantExceptionType.MISMATCH_BETWEEN_PARTICIPANT_AND_MEMBER);
         }
     }
 }
