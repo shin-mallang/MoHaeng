@@ -33,7 +33,7 @@ public class ExpelParticipant implements ExpelParticipantUseCase {
         Participant president = participantRepository.findPresidentWithMemberByClub(target.club())
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
 
-        // 요청한 Member 가 Participant와 일치하는지 확인
+        // 요청한 Member 가 회장인지 확인
         validatePresidentIsRequester(command.requesterMemberId(), president);
 
         // 모임에서 추방
@@ -47,9 +47,7 @@ public class ExpelParticipant implements ExpelParticipantUseCase {
     }
 
     /**
-     * 요청한 Member 가 Participant와 일치하는지 확인한다.
-     * <p>
-     * TODO : LeaveParticipant 와 중복 코드
+     * 요청한 Member 가 회장인지 확인한다.
      */
     private void validatePresidentIsRequester(final Long memberId, final Participant participant) {
         if (!participant.member().id().equals(memberId)) {
