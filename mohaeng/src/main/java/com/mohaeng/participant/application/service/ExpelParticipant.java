@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOUND_PRESIDENT;
 
 @Service
 @Transactional
@@ -24,19 +25,19 @@ public class ExpelParticipant implements ExpelParticipantUseCase {
 
     @Override
     public void command(final Command command) {
-        // 요청자 조회
-        Participant requester = participantRepository.findWithMemberAndClubById(command.requesterParticipantId())
-                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
-
         // 추방 대상 조회
         Participant target = participantRepository.findWithMemberAndClubById(command.targetParticipantId())
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
 
+        // 해당 모임의 회장 조회
+        Participant president = participantRepository.findPresidentWithMemberByClub(target.club())
+                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
+
         // 요청한 Member 가 Participant와 일치하는지 확인
-        validateParticipantIsRequester(command.requesterMemberId(), requester);
+        validateParticipantIsRequester(command.requesterMemberId(), president);
 
         // 모임에서 추방
-        requester.expelFromClub(target);
+        president.expelFromClub(target);
 
         // 참여자 정보 제거
         participantRepository.delete(target);

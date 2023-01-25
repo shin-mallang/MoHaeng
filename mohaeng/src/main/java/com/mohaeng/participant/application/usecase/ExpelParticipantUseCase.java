@@ -13,7 +13,6 @@ public interface ExpelParticipantUseCase {
 
     record Command(
             Long requesterMemberId,  // 추방 요청을 보낸 회원 ID
-            Long requesterParticipantId,  // 추방 요청을 보낸 회원의 참가자 ID
             Long targetParticipantId  // 추방 대상 참가자 ID
     ) {
     }

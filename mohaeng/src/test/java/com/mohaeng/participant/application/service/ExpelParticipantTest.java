@@ -72,7 +72,7 @@ class ExpelParticipantTest {
 
             // when
             expelParticipant.command(
-                    new ExpelParticipantUseCase.Command(presidentMember.id(), president.id(), expelTargetParticipant.id())
+                    new ExpelParticipantUseCase.Command(presidentMember.id(), expelTargetParticipant.id())
             );
 
             // then
@@ -102,7 +102,7 @@ class ExpelParticipantTest {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     expelParticipant.command(
-                            new ExpelParticipantUseCase.Command(presidentMember.id(), president.id(), expelTargetParticipant.id() + 10L)
+                            new ExpelParticipantUseCase.Command(presidentMember.id(), expelTargetParticipant.id() + 10L)
                     )).exceptionType();
 
             assertAll(
@@ -128,7 +128,7 @@ class ExpelParticipantTest {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     expelParticipant.command(
-                            new ExpelParticipantUseCase.Command(requesterMember.id(), requester.id(), expelTargetParticipant.id())
+                            new ExpelParticipantUseCase.Command(requesterMember.id(), expelTargetParticipant.id())
                     )).exceptionType();
 
             assertAll(
@@ -153,7 +153,7 @@ class ExpelParticipantTest {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     expelParticipant.command(
-                            new ExpelParticipantUseCase.Command(presidentMember.id() + 1L, president.id(), expelTargetParticipant.id())
+                            new ExpelParticipantUseCase.Command(presidentMember.id() + 1L, expelTargetParticipant.id())
                     )).exceptionType();
 
             assertAll(
@@ -163,26 +163,24 @@ class ExpelParticipantTest {
         }
 
         @Test
-        @DisplayName("요청자의 Participant Id에 대응되는 참여자가 없으면 예외를 발생시킨다.")
+        @DisplayName("모임에 회장이 없으면 예외를 발생시킨다. (회장은 반드시 존재하므로 발생하지 않을 예외)")
         void fail_test_4() {
             // given
             Member member = saveMember();
-            Member presidentMember = saveMember();
             Club club = saveClub();
             Map<ClubRoleCategory, ClubRole> clubRoleCategoryClubRoleMap = saveDefaultClubRoles(club);
 
             Participant expelTargetParticipant = saveParticipant(member, club, clubRoleCategoryClubRoleMap.get(GENERAL));
-            Participant president = saveParticipant(presidentMember, club, clubRoleCategoryClubRoleMap.get(PRESIDENT));
             int currentParticipantCount = club.currentParticipantCount();
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     expelParticipant.command(
-                            new ExpelParticipantUseCase.Command(presidentMember.id(), president.id() + 100L, expelTargetParticipant.id())
+                            new ExpelParticipantUseCase.Command(member.id(), expelTargetParticipant.id())
                     )).exceptionType();
 
             assertAll(
-                    () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT),
+                    () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PRESIDENT),
                     () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(currentParticipantCount)
             );
         }
