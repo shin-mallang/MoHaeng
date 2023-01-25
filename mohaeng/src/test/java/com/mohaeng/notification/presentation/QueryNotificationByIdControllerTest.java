@@ -198,6 +198,39 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
     }
 
     @Test
+    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (ExpelParticipantNotification)")
+    void success_test_5_expelParticipantNotification() throws Exception {
+        // given
+        final Long memberId = 1L;
+        final Long alarmId = 1L;
+        when(queryNotificationByIdUseCase.query(any())).thenReturn(expelledParticipantNotificationDto(1L));
+        setAuthentication(memberId);
+
+        // when & then
+        ResultActions resultActions = mockMvc.perform(
+                        get(QUERY_ALARM_BY_ID_URL, alarmId)
+                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                )
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(queryNotificationByIdUseCase, times(1)).query(any());
+
+        resultActions.andDo(
+                document("notification-query-by-id(ExpelParticipantNotification)",
+                        getDocumentResponse(),
+                        responseFields(
+                                fieldWithPath("id").type(NUMBER).description("알림의 식별자"),
+                                fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
+                                fieldWithPath("type").type(STRING).description("알림의 종류 - ApplicationProcessedNotification"),
+                                fieldWithPath("clubId").type(NUMBER).description("추방된 모임 ID"),
+                                fieldWithPath("read").type(BOOLEAN).description("알림 읽음 여부 - true인 경우 읽음")
+                        )
+                )
+        );
+    }
+
+    @Test
     @DisplayName("인증되지 않은 사용자의 경우 401을 반환한다.")
     void fail_test_1() throws Exception {
         // given

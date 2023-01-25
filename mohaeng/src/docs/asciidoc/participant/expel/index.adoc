@@ -1,0 +1,33 @@
+= MoHaeng API Docs
+:doctype: book
+:icons: font
+// 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:source-highlighter: highlightjs
+// toc (Table Of Contents)를 문서의 좌측에 두기
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Participant-API]]
+= Participant API
+
+[[Participant-추방]]
+== - 모임에서 추방
+
+operation::expel-participant-from-club[snippets='http-request,path-parameters,request-headers,http-response']
+
+=== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::expel-participant-from-club(No Access Token)[snippets='http-response']
+
+=== - 없는 참여자 ID인 경우
+
+operation::expel-participant-from-club(Nonexistent Participant ID)[snippets='http-response']
+
+=== - 요청자가 회장이 아닌 경우
+
+operation::expel-participant-from-club(requester does not president)[snippets='http-response']
+
+=== - 모임에 회장이 없는 경우 (발생하지 않는 상황)
+
+operation::expel-participant-from-club(Nonexistent president in club)[snippets='http-response']

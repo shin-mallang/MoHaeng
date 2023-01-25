@@ -1,13 +1,7 @@
 package com.mohaeng.common.fixtures;
 
-import com.mohaeng.notification.application.dto.kind.ApplicationProcessedNotificationDto;
-import com.mohaeng.notification.application.dto.kind.ClubJoinApplicationCreatedNotificationDto;
-import com.mohaeng.notification.application.dto.kind.OfficerApproveApplicationNotificationDto;
-import com.mohaeng.notification.application.dto.kind.OfficerRejectApplicationNotificationDto;
-import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
-import com.mohaeng.notification.domain.model.kind.ClubJoinApplicationCreatedNotification;
-import com.mohaeng.notification.domain.model.kind.OfficerApproveApplicationNotification;
-import com.mohaeng.notification.domain.model.kind.OfficerRejectApplicationNotification;
+import com.mohaeng.notification.application.dto.kind.*;
+import com.mohaeng.notification.domain.model.kind.*;
 
 import java.time.LocalDateTime;
 
@@ -55,5 +49,13 @@ public class NotificationFixture {
                 2L,
                 3L
         );
+    }
+
+    public static ExpelParticipantNotificationDto expelledParticipantNotificationDto(final Long id) {
+        return new ExpelParticipantNotificationDto(id,
+                LocalDateTime.now(),
+                true,
+                ExpelParticipantNotification.class.getSimpleName(),
+                1L);
     }
 }
