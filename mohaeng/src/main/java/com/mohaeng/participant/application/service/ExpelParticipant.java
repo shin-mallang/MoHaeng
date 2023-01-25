@@ -1,6 +1,8 @@
 package com.mohaeng.participant.application.service;
 
+import com.mohaeng.common.event.Events;
 import com.mohaeng.participant.application.usecase.ExpelParticipantUseCase;
+import com.mohaeng.participant.domain.event.ExpelParticipantEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.participant.exception.ParticipantException;
@@ -38,6 +40,9 @@ public class ExpelParticipant implements ExpelParticipantUseCase {
 
         // 참여자 정보 제거
         participantRepository.delete(target);
+
+        // 추방 이벤트 발행 -> 추방되었다는 알림 보내기
+        Events.raise(new ExpelParticipantEvent(this, target.member().id(), target.club().id()));
     }
 
     /**
