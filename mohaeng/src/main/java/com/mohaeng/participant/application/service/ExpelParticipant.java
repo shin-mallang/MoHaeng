@@ -34,7 +34,7 @@ public class ExpelParticipant implements ExpelParticipantUseCase {
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
 
         // 요청한 Member 가 Participant와 일치하는지 확인
-        validateParticipantIsRequester(command.requesterMemberId(), president);
+        validatePresidentIsRequester(command.requesterMemberId(), president);
 
         // 모임에서 추방
         president.expelFromClub(target);
@@ -48,12 +48,10 @@ public class ExpelParticipant implements ExpelParticipantUseCase {
 
     /**
      * 요청한 Member 가 Participant와 일치하는지 확인한다.
-     * <p>
-     * TODO : LeaveParticipant 와 중복 코드
      */
-    private void validateParticipantIsRequester(final Long memberId, final Participant participant) {
+    private void validatePresidentIsRequester(final Long memberId, final Participant participant) {
         if (!participant.member().id().equals(memberId)) {
-            throw new ParticipantException(ParticipantExceptionType.MISMATCH_BETWEEN_PARTICIPANT_AND_MEMBER);
+            throw new ParticipantException(ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT);
         }
     }
 }

@@ -127,36 +127,8 @@ class ExpelParticipantControllerTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("요청한 회원의 id가 참가자의 MemberId와 일치하지 않는 경우 403")
-        void fail_test_3() throws Exception {
-            // given
-            final Long participantId = 1L;
-            final Long memberId = 1L;
-            doThrow(new ParticipantException(MISMATCH_BETWEEN_PARTICIPANT_AND_MEMBER))
-                    .when(expelParticipantUseCase).command(any());
-
-            setAuthentication(memberId);
-
-            ResultActions resultActions = mockMvc.perform(
-                            delete(EXPEL_PARTICIPANT_URL, participantId)
-                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                    ).andDo(print())
-                    .andDo(print())
-                    .andExpect(status().isForbidden());
-
-            // when & then
-            verify(expelParticipantUseCase, times(1)).command(any());
-
-            resultActions.andDo(
-                    document("expel-participant-from-club(requested memberId does not match the participant's MemberId)",
-                            getDocumentResponse()
-                    )
-            );
-        }
-
-        @Test
         @DisplayName("요청자가 회장이 아닌 경우 403")
-        void fail_test_4() throws Exception {
+        void fail_test_3() throws Exception {
             // given
             final Long participantId = 1L;
             final Long memberId = 1L;
@@ -183,7 +155,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
 
         @Test
         @DisplayName("모임에 회장이 없는 경우 404 (발생하지 않음)")
-        void fail_test_5() throws Exception {
+        void fail_test_4() throws Exception {
             // given
             final Long participantId = 1L;
             final Long memberId = 1L;

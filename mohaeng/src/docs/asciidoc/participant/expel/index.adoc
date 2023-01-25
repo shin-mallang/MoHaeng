@@ -24,10 +24,6 @@ operation::expel-participant-from-club(No Access Token)[snippets='http-response'
 
 operation::expel-participant-from-club(Nonexistent Participant ID)[snippets='http-response']
 
-=== - 요청한 회원의 ID가, 탈퇴하려는 참여자의 회원 ID와 일치하지 않는 경우
-
-operation::expel-participant-from-club(requested memberId does not match the participant's MemberId)[snippets='http-response']
-
 === - 요청자가 회장이 아닌 경우
 
 operation::expel-participant-from-club(requester does not president)[snippets='http-response']

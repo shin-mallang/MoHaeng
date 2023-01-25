@@ -118,9 +118,11 @@ class ExpelParticipantTest {
             // given
             Member member = saveMember();
             Member requesterMember = saveMember();
+            Member presidentMember = saveMember();
             Club club = saveClub();
             Map<ClubRoleCategory, ClubRole> clubRoleCategoryClubRoleMap = saveDefaultClubRoles(club);
 
+            Participant president = saveParticipant(presidentMember, club, clubRoleCategoryClubRoleMap.get(PRESIDENT));
             Participant expelTargetParticipant = saveParticipant(member, club, clubRoleCategoryClubRoleMap.get(GENERAL));
             Participant requester = saveParticipant(requesterMember, club, clubRoleCategoryClubRoleMap.get(clubRoleCategory));
             int currentParticipantCount = club.currentParticipantCount();
@@ -157,7 +159,7 @@ class ExpelParticipantTest {
                     )).exceptionType();
 
             assertAll(
-                    () -> assertThat(baseExceptionType).isEqualTo(MISMATCH_BETWEEN_PARTICIPANT_AND_MEMBER),
+                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT),
                     () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(currentParticipantCount)
             );
         }
