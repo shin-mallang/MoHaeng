@@ -16,6 +16,10 @@ public abstract class NotificationEvent extends BaseEvent {
         this.receiverIds = receiverIds;
     }
 
+    public NotificationEvent(final Object source, final Long receiverId) {
+        this(source, List.of(receiverId));
+    }
+
     public List<Long> receiverIds() {
         return receiverIds;
     }

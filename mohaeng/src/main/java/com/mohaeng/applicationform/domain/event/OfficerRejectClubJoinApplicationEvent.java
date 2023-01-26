@@ -3,8 +3,6 @@ package com.mohaeng.applicationform.domain.event;
 import com.mohaeng.common.event.BaseEventHistory;
 import com.mohaeng.common.notification.NotificationEvent;
 
-import java.util.List;
-
 /**
  * 회장이 아닌 임원이 모임 가입 신청을 거절하였을 때 발행
  */
@@ -28,7 +26,7 @@ public class OfficerRejectClubJoinApplicationEvent extends NotificationEvent {
                                                  final Long officerParticipantId,
                                                  final Long applicantMemberId,
                                                  final Long applicationFormId) {
-        super(source, List.of(receiverId));
+        super(source, receiverId);
         this.officerMemberId = officerMemberId;
         this.officerParticipantId = officerParticipantId;
         this.applicantMemberId = applicantMemberId;
