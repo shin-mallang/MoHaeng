@@ -1,4 +1,4 @@
-= MoHeang API Docs
+= MoHaeng API Docs
 :doctype: book
 :icons: font
 // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
