@@ -10,14 +10,11 @@ import java.time.LocalDateTime;
 @DiscriminatorValue("ApplicationProcessedEvent")
 public class ApplicationProcessedEventHistory extends BaseEventHistory {
 
-    private final Long applicationFormId;
-    private final Long clubId;
-    private final boolean isApproved;
+    private Long applicationFormId;
+    private Long clubId;
+    private boolean isApproved;
 
     protected ApplicationProcessedEventHistory() {
-        this.applicationFormId = null;
-        this.clubId = null;
-        this.isApproved = false;
     }
 
     public ApplicationProcessedEventHistory(final LocalDateTime eventDateTime,

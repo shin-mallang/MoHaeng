@@ -16,7 +16,7 @@ import jakarta.persistence.Entity;
 public class ExpelParticipantNotification extends Notification {
 
     @Column(nullable = false)
-    private final Long clubId;  // 추방된 모임의 id
+    private Long clubId;  // 추방된 모임의 id
 
     protected ExpelParticipantNotification() {
         this.clubId = null;

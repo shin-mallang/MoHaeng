@@ -8,18 +8,13 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("OfficerApproveClubJoinApplicationEvent")
 public class OfficerApproveClubJoinApplicationEventHistory extends BaseEventHistory {
 
-    private final Long managerMemberId;  // 관리자 ID (Member Id)
-    private final Long managerParticipantId;  // 관리자 ID (Participant Id)
-    private final Long applicantMemberId;  // 가입된 회원 ID (Member Id)
-    private final Long applicantParticipantId;  // 가입된 회원 ID (Participant Id)
-    private final Long applicationFormId;  // 처리된 가입 신청서 ID
+    private Long managerMemberId;  // 관리자 ID (Member Id)
+    private Long managerParticipantId;  // 관리자 ID (Participant Id)
+    private Long applicantMemberId;  // 가입된 회원 ID (Member Id)
+    private Long applicantParticipantId;  // 가입된 회원 ID (Participant Id)
+    private Long applicationFormId;  // 처리된 가입 신청서 ID
 
     protected OfficerApproveClubJoinApplicationEventHistory() {
-        this.managerMemberId = null;
-        this.managerParticipantId = null;
-        this.applicantMemberId = null;
-        this.applicantParticipantId = null;
-        this.applicationFormId = null;
     }
 
     public OfficerApproveClubJoinApplicationEventHistory(final Long managerMemberId,

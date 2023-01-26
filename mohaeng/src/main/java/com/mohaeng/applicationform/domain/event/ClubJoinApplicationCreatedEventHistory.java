@@ -10,14 +10,11 @@ import java.time.LocalDateTime;
 @DiscriminatorValue("ClubJoinApplicationRequestedEvent")
 public class ClubJoinApplicationCreatedEventHistory extends BaseEventHistory {
 
-    private final Long clubId;  // 가입을 요청한 모임 ID
-    private final Long applicantId;  // 가입 신청자의 Member ID
-    private final Long applicationFormId;  // 가입 신청서 ID
+    private Long clubId;  // 가입을 요청한 모임 ID
+    private Long applicantId;  // 가입 신청자의 Member ID
+    private Long applicationFormId;  // 가입 신청서 ID
 
     protected ClubJoinApplicationCreatedEventHistory() {
-        this.clubId = null;
-        this.applicantId = null;
-        this.applicationFormId = null;
     }
 
     public ClubJoinApplicationCreatedEventHistory(final LocalDateTime eventDateTime,
