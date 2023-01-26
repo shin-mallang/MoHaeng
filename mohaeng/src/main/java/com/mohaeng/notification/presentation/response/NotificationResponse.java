@@ -2,6 +2,9 @@ package com.mohaeng.notification.presentation.response;
 
 import java.time.LocalDateTime;
 
+/**
+ * Getter는 getXXX의 형태 사용해야 함
+ */
 public abstract class NotificationResponse {
 
     private final Long id;

@@ -3,8 +3,6 @@ package com.mohaeng.participant.domain.event;
 import com.mohaeng.common.event.BaseEventHistory;
 import com.mohaeng.common.notification.NotificationEvent;
 
-import java.util.List;
-
 /**
  * 회원 추방 시 발행
  */
@@ -15,7 +13,7 @@ public class ExpelParticipantEvent extends NotificationEvent {
     public ExpelParticipantEvent(final Object source,
                                  final Long expelledMemberId,
                                  final Long clubId) {
-        super(source, List.of(expelledMemberId));
+        super(source, expelledMemberId);
         this.clubId = clubId;
     }
 

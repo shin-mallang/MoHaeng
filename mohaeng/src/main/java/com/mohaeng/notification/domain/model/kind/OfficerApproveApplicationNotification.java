@@ -11,7 +11,7 @@ import jakarta.persistence.Entity;
 /**
  * 가입 신청을 회장이 아닌 다른 임원진이 처리한 경우 회장에게 알림을 보내기 위함
  */
-@DiscriminatorValue(value = "officer_processed_application_notification")
+@DiscriminatorValue(value = "OfficerApproveApplicationNotification")
 @Entity
 public class OfficerApproveApplicationNotification extends Notification {
 

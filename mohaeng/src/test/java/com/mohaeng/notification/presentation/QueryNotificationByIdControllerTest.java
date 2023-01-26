@@ -38,7 +38,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
     private QueryNotificationByIdUseCase queryNotificationByIdUseCase;
 
     @Test
-    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (applicationProcessedNotificationDto)")
+    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (ApplicationProcessedNotification)")
     void success_test_1_applicationProcessedNotification() throws Exception {
         // given
         final Long memberId = 1L;
@@ -57,7 +57,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         verify(queryNotificationByIdUseCase, times(1)).query(any());
 
         resultActions.andDo(
-                document("notification-query-by-id(applicationProcessedNotification)",
+                document("notification-query-by-id: ApplicationProcessedNotification",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -65,13 +65,21 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
                         ),
                         pathParameters(
                                 parameterWithName("id").description("알람 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type(NUMBER).description("알림의 ID"),
+                                fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
+                                fieldWithPath("type").type(STRING).description("알림의 종류 - 모임 가입 요청이 처리되었을 때, 신청자에게 전송되는 알림"),
+                                fieldWithPath("clubId").type(NUMBER).description("가입 신청 대상 모임"),
+                                fieldWithPath("approved").type(BOOLEAN).description("수락/거절 여부"),
+                                fieldWithPath("read").type(BOOLEAN).description("알림 읽음 여부 - true인 경우 읽음")
                         )
                 )
         );
     }
 
     @Test
-    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (clubJoinApplicationCreatedNotificationDto)")
+    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (ClubJoinApplicationCreatedNotification)")
     void success_test_2_clubJoinApplicationRequestedNotificationDto() throws Exception {
         // given
         final Long memberId = 1L;
@@ -90,7 +98,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         verify(queryNotificationByIdUseCase, times(1)).query(any());
 
         resultActions.andDo(
-                document("notification-query-by-id(clubJoinApplicationCreatedNotificationDto)",
+                document("notification-query-by-id: ClubJoinApplicationCreatedNotification",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -113,7 +121,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (officerApproveApplicationNotificationDto)")
+    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (OfficerApproveApplicationNotification)")
     void success_test_3_officerApproveApplicationNotificationDto() throws Exception {
         // given
         final Long memberId = 1L;
@@ -132,7 +140,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         verify(queryNotificationByIdUseCase, times(1)).query(any());
 
         resultActions.andDo(
-                document("notification-query-by-id(officerApproveApplicationNotification)",
+                document("notification-query-by-id: OfficerApproveApplicationNotification",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -144,7 +152,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
                         responseFields(
                                 fieldWithPath("id").type(NUMBER).description("알림의 ID"),
                                 fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
-                                fieldWithPath("type").type(STRING).description("알림의 종류 - ApplicationProcessedNotification"),
+                                fieldWithPath("type").type(STRING).description("알림의 종류 - 임원이 가입 신청을 수락했을 때 회장에게 전송되는 알림"),
                                 fieldWithPath("officerMemberId").type(NUMBER).description("처리한 임원의 Member Id"),
                                 fieldWithPath("officerParticipantId").type(NUMBER).description("처리한 임원의 Participant Id"),
                                 fieldWithPath("applicantMemberId").type(NUMBER).description("가입된 회원의 Member Id"),
@@ -156,7 +164,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (officerRejectApplicationNotificationDto)")
+    @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (OfficerRejectApplicationNotification)")
     void success_test_4_officerRejectApplicationNotificationDto() throws Exception {
         // given
         final Long memberId = 1L;
@@ -175,7 +183,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         verify(queryNotificationByIdUseCase, times(1)).query(any());
 
         resultActions.andDo(
-                document("notification-query-by-id(officerRejectApplicationNotification)",
+                document("notification-query-by-id: OfficerRejectApplicationNotification",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -187,7 +195,7 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
                         responseFields(
                                 fieldWithPath("id").type(NUMBER).description("알림의 식별자"),
                                 fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
-                                fieldWithPath("type").type(STRING).description("알림의 종류 - ApplicationProcessedNotification"),
+                                fieldWithPath("type").type(STRING).description("알림의 종류 - 임원이 가입 신청을 거절했을 때 회장에게 전송되는 알림"),
                                 fieldWithPath("officerMemberId").type(NUMBER).description("처리한 임원의 Member Id"),
                                 fieldWithPath("officerParticipantId").type(NUMBER).description("처리한 임원의 Participant Id"),
                                 fieldWithPath("applicantMemberId").type(NUMBER).description("가입이 거절된 회원의 Member Id"),
@@ -217,12 +225,12 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
         verify(queryNotificationByIdUseCase, times(1)).query(any());
 
         resultActions.andDo(
-                document("notification-query-by-id(ExpelParticipantNotification)",
+                document("notification-query-by-id: ExpelParticipantNotification",
                         getDocumentResponse(),
                         responseFields(
                                 fieldWithPath("id").type(NUMBER).description("알림의 식별자"),
                                 fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
-                                fieldWithPath("type").type(STRING).description("알림의 종류 - ApplicationProcessedNotification"),
+                                fieldWithPath("type").type(STRING).description("알림의 종류 - 모임에서 추방당했을 때 전송되는 알림"),
                                 fieldWithPath("clubId").type(NUMBER).description("추방된 모임 ID"),
                                 fieldWithPath("read").type(BOOLEAN).description("알림 읽음 여부 - true인 경우 읽음")
                         )

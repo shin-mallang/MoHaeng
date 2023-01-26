@@ -3,8 +3,6 @@ package com.mohaeng.applicationform.domain.event;
 import com.mohaeng.common.event.BaseEventHistory;
 import com.mohaeng.common.notification.NotificationEvent;
 
-import java.util.List;
-
 /**
  * 모임 가입 신청 요청이 수락/거절 된 경우 발행
  */
@@ -22,7 +20,7 @@ public class ApplicationProcessedEvent extends NotificationEvent {
                                       final Long applicationFormId,
                                       final Long clubId,
                                       final boolean isApproved) {
-        super(source, List.of(receiverId));
+        super(source, receiverId);
         this.applicationFormId = applicationFormId;
         this.clubId = clubId;
         this.isApproved = isApproved;

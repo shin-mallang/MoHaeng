@@ -11,12 +11,12 @@ import jakarta.persistence.Entity;
 /**
  * 모임에서 추방당했다는 알림
  */
-@DiscriminatorValue(value = "expel_participant_notification")
+@DiscriminatorValue(value = "ExpelParticipantNotification")
 @Entity
 public class ExpelParticipantNotification extends Notification {
 
     @Column(nullable = false)
-    private final Long clubId;  // 추방된 모임의 id
+    private Long clubId;  // 추방된 모임의 id
 
     protected ExpelParticipantNotification() {
         this.clubId = null;

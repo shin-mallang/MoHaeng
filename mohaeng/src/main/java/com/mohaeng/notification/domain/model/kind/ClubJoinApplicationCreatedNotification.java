@@ -12,7 +12,7 @@ import jakarta.persistence.Entity;
  * 가입 신청이 온 경우 생성되는 알림
  * 회장, 임원진들에게 가입 신청 요청에 대한 알림이 전송된다.
  */
-@DiscriminatorValue(value = "club_join_application_request_notification")
+@DiscriminatorValue(value = "ClubJoinApplicationCreatedNotification")
 @Entity
 public class ClubJoinApplicationCreatedNotification extends Notification {
 

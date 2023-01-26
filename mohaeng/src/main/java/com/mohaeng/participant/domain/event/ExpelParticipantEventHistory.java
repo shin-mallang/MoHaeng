@@ -11,7 +11,7 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("ExpelParticipantEvent")
 public class ExpelParticipantEventHistory extends BaseEventHistory {
 
-    private final Long clubId;
+    private Long clubId;
 
     protected ExpelParticipantEventHistory() {
         this.clubId = null;

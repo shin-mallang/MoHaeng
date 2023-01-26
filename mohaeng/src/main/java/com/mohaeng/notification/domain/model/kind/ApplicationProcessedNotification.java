@@ -11,7 +11,7 @@ import jakarta.persistence.Entity;
 /**
  * 가입 요청이 수락/거절 된 경우 발생하는 알림
  */
-@DiscriminatorValue(value = "application_processed_notification")
+@DiscriminatorValue(value = "ApplicationProcessedNotification")
 @Entity
 public class ApplicationProcessedNotification extends Notification {
 

@@ -1,4 +1,4 @@
-= MoHeang API Docs
+= MoHaeng API Docs
 :doctype: book
 :icons: font
 // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
@@ -14,62 +14,69 @@
 
 [[Member-회원가입]]
 === Member 회원가입
+
 operation::sign-up[snippets='http-request,request-body,request-fields,http-response']
 
 === 중복 아이디로 회원가입 시
+
 operation::sign-up fail(duplicated username)[snippets='http-response']
 
 === 필드가 다 채워지지 않은 경우
+
 operation::sign-up fail(request fields contains empty value)[snippets='http-response']
-
-
 
 [[Authentication-API]]
 == Authentication API
 
 [[Authentication-로그인]]
 === 로그인
+
 operation::login[snippets='http-request,request-body,request-fields,http-response']
 
 === 아이디 혹은 비밀번호가 일치하지 않아 로그인 실패 시
+
 operation::login fail(username or password miss match)[snippets='http-response']
 
 === 필드가 다 채워지지 않은 경우
+
 operation::login fail(request fields contains empty value)[snippets='http-response']
-
-
 
 [[Club-API]]
 == Club API
 
 [[Club-모임생성]]
 === 모임생성
+
 operation::create-club[snippets='http-request,request-body,request-fields,http-response']
 
 === 생성 요청 시 Header에 AccessToken이 없는 경우
+
 operation::create-club fail(No Access Token)[snippets='http-response']
 
 === 필드가 다 채워지지 않은 경우
+
 operation::create-club fail(request fields contains empty value)[snippets='http-response']
 
 === 인원을 0으로 설정한 경우(-> 최대 인원으로 설정)
+
 operation::create-club(max people count is 0 then setting MAX)[snippets='request-body,http-response']
-
-
 
 [[Club-모임-가입-신청]]
 === 모임 가입 신청
+
 operation::request-join-club[snippets='http-request,path-parameters,http-response']
 
 === 이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우
+
 operation::request-join-club fail(already request join club)[snippets='http-response']
 
 === 이미 모임에 가입된 회원이 같은 모임에 또다시 가입 신청을 보낸 경우
+
 operation::request-join-club fail(member already joined club)[snippets='http-response']
 
 === 요청 시 Header에 AccessToken이 없는 경우
-operation::request-join-club fail(No Access Token)[snippets='http-response']
 
+operation::request-join-club fail(No Access Token)[snippets='http-response']
 
 [[Notification-API]]
 == Notification API
@@ -77,64 +84,40 @@ operation::request-join-club fail(No Access Token)[snippets='http-response']
 [[Notification-알림-조회]]
 === 알림 조회 기본 형식
 
-operation::notification-query-by-id(applicationProcessedNotification)[snippets='http-request,path-parameters,request-headers,http-response']
+operation::notification-query-by-id: ApplicationProcessedNotification[snippets='http-request,path-parameters,request-headers,http-response']
 
-[%hardbreaks]
-.
-
-=== - 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::notification-query-by-id fail(No Access Token)[snippets='http-response']
 
-[%hardbreaks]
-.
-
-=== - 알림의 ID는 존재하지만 회원 자신이 받은 알림이 아닌 경우
+==== - 알림의 ID는 존재하지만 회원 자신이 받은 알림이 아닌 경우
 
 operation::notification-query-by-id fail(notification's receiver id is not matched login member id)[snippets='http-response']
 
-[%hardbreaks]
-.
-
-=== - 알림의 ID가 존재하지 않는 경우 경우
+==== - 알림의 ID가 존재하지 않는 경우 경우
 
 operation::notification-query-by-id fail(notification does not exist)[snippets='http-response']
-
-[%hardbreaks]
-.
-.
-.
-.
 
 [[Notification-알림-조회-종류별]]
 === 알림 조회 - 가입 신청 수락/거절에 대한 알림 (ApplicationProcessedNotification)
 
-operation::notification-query-by-id(applicationProcessedNotification)[snippets='http-response,response-fields']
-
-[%hardbreaks]
-.
+operation::notification-query-by-id: ApplicationProcessedNotification[snippets='http-response,response-fields']
 
 === 알림 조회 - 가입 요청 생성에 대한 알림 (ClubJoinApplicationRequestedNotification)
 
-operation::notification-query-by-id(clubJoinApplicationCreatedNotificationDto)[snippets='http-response,response-fields']
-
-[%hardbreaks]
-.
+operation::notification-query-by-id: ClubJoinApplicationCreatedNotification[snippets='http-response,response-fields']
 
 === 알림 조회 - 관리자가 가입 신청을 수락한 것에 대한 알림 (OfficerApproveApplicationNotification)
 
-operation::notification-query-by-id(officerApproveApplicationNotification)[snippets='http-response,response-fields']
-
-[%hardbreaks]
-.
+operation::notification-query-by-id: OfficerApproveApplicationNotification[snippets='http-response,response-fields']
 
 === 알림 조회 - 관리자가 가입 신청을 거절한 것에 대한 알림 (OfficerRejectApplicationNotification)
 
-operation::notification-query-by-id(officerRejectApplicationNotification)[snippets='http-response,response-fields']
+operation::notification-query-by-id: OfficerRejectApplicationNotification[snippets='http-response,response-fields']
 
-[%hardbreaks]
-.
+=== 알림 조회 - 모임에서 추방된 것에 대한 알림 (ExpelParticipantNotification)
 
+operation::notification-query-by-id: ExpelParticipantNotification[snippets='http-response,response-fields']
 
 [[Approve-Application-API]]
 == Approve Application API
@@ -160,8 +143,6 @@ operation::approve-join-club-application fail(No Access Token)[snippets='http-re
 
 operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
 
-
-
 [[Reject-Application-API]]
 == Reject Application API
 
@@ -185,7 +166,6 @@ operation::reject-join-club-application fail(No Access Token)[snippets='http-res
 === 요청 시 Header에 AccessToken이 없는 경우
 
 operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
-
 
 [[Participant-API]]
 = Participant API
@@ -214,7 +194,6 @@ operation::leave-participant-from-club(president requests to leave the club)[sni
 === - 모임에 사람이 1명밖에 남지 않아 탈퇴할 수 없는 경우 (회장이 항상 먼저 검사되므로 발생하지 않는 상황이다.)
 
 operation::leave-participant-from-club(club has only one participant)[snippets='http-response']
-
 
 [[Participant-API]]
 = Participant API
