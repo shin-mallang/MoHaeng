@@ -82,162 +82,172 @@ class RejectJoinClubTest {
         Events.setApplicationEventPublisher(applicationEventPublisher);
     }
 
-    @Test
-    @DisplayName("가입 신청서를 처리한 후, 회원을 모임에 가입시키지 않는다.")
-    void success_test_1() {
-        // given
-        Club target = clubRepository.save(club(null));
-        List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
-        Member managerMember = memberRepository.save(member(null));
-        Participant participant = new Participant(managerMember);
-        participant.joinClub(target, clubRoles.get(0));  // 회장으로 가입
-        participantRepository.save(participant);
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        Member applicant = memberRepository.save(member(null));
-        ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+        @Test
+        @DisplayName("가입 신청서를 처리한 후, 회원을 모임에 가입시키지 않는다.")
+        void success_test_1() {
+            // given
+            Club target = clubRepository.save(club(null));
+            List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+            Member managerMember = memberRepository.save(member(null));
+            Participant participant = new Participant(managerMember);
+            participant.joinClub(target, clubRoles.get(0));  // 회장으로 가입
+            participantRepository.save(participant);
 
-        em.flush();
-        em.clear();
+            Member applicant = memberRepository.save(member(null));
+            ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
 
-        // when
-        rejectJoinClubUseCase.command(
-                new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
-        );
+            em.flush();
+            em.clear();
 
-        // then
-        ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
-        assertAll(
-                () -> assertThatThrownBy(() -> em.createQuery("select p from Participant p where p.member = :member", Participant.class)
-                        .setParameter("member", applicant)
-                        .getSingleResult()).isInstanceOf(NoResultException.class),
-                () -> assertThat(findApplicationForm.processed()).isTrue()
-        );
+            // when
+            rejectJoinClubUseCase.command(
+                    new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+            );
+
+            // then
+            ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
+            assertAll(
+                    () -> assertThatThrownBy(() -> em.createQuery("select p from Participant p where p.member = :member", Participant.class)
+                            .setParameter("member", applicant)
+                            .getSingleResult()).isInstanceOf(NoResultException.class),
+                    () -> assertThat(findApplicationForm.processed()).isTrue()
+            );
+        }
+
+        @Test
+        @DisplayName("회장이 가입 신청을 처리한 경우 이벤트는 한개만 발행한다.")
+        void success_test_2() {
+            // given
+            Club target = clubRepository.save(club(null));
+            List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+            Member presidentMember = memberRepository.save(member(null));
+            Participant president = new Participant(presidentMember);
+            president.joinClub(target, clubRoles.get(0));  // 회장으로 가입
+            participantRepository.save(president);
+
+            Member applicant = memberRepository.save(member(null));
+            ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+
+            em.flush();
+            em.clear();
+
+            // when
+            rejectJoinClubUseCase.command(
+                    new RejectJoinClubUseCase.Command(applicationForm.id(), presidentMember.id())
+            );
+
+            // then
+            assertAll(
+                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any()),
+                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
+                    () -> verify(mockApplicationEventPublisher, times(0)).publishEvent(any(OfficerRejectClubJoinApplicationEvent.class))
+            );
+        }
+
+        @Test
+        @DisplayName("임원진이 가입 신청을 처리한 경우 이벤트는 두개가 발행한다.")
+        void success_test_3() {
+            // given
+            Club target = clubRepository.save(club(null));
+            List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+            Member presidentMember = memberRepository.save(member(null));
+            Member officerMember = memberRepository.save(member(null));
+            Participant president = new Participant(presidentMember);
+            Participant officer = new Participant(officerMember);
+            president.joinClub(target, clubRoles.get(0));  // 회장으로 가입
+            officer.joinClub(target, clubRoles.get(1));  // 임원으로 가입
+            participantRepository.save(president);
+            participantRepository.save(officer);
+
+            Member applicant = memberRepository.save(member(null));
+            ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+
+            em.flush();
+            em.clear();
+
+            // when
+            rejectJoinClubUseCase.command(
+                    new RejectJoinClubUseCase.Command(applicationForm.id(), officerMember.id())
+            );
+
+            // then
+            assertAll(
+                    () -> verify(mockApplicationEventPublisher, times(2)).publishEvent(any()),
+                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
+                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(OfficerRejectClubJoinApplicationEvent.class))
+            );
+        }
     }
 
-    @Test
-    @DisplayName("회장이 가입 신청을 처리한 경우 이벤트는 한개만 발행한다.")
-    void success_test_2() {
-        // given
-        Club target = clubRepository.save(club(null));
-        List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
-        Member presidentMember = memberRepository.save(member(null));
-        Participant president = new Participant(presidentMember);
-        president.joinClub(target, clubRoles.get(0));  // 회장으로 가입
-        participantRepository.save(president);
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
 
-        Member applicant = memberRepository.save(member(null));
-        ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+        @Test
+        @DisplayName("관리자가 아닌 경우 회원의 가입 신청을 거절할 수 없다.")
+        void fail_test_1() {
+            // given
+            Club target = clubRepository.save(club(null));
+            List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+            Member managerMember = memberRepository.save(member(null));
+            Participant participant = new Participant(managerMember);
+            participant.joinClub(target, clubRoles.get(2));  // 일반으로 가입
+            participantRepository.save(participant);
 
-        em.flush();
-        em.clear();
+            Member applicant = memberRepository.save(member(null));
+            ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
 
-        // when
-        rejectJoinClubUseCase.command(
-                new RejectJoinClubUseCase.Command(applicationForm.id(), presidentMember.id())
-        );
+            em.flush();
+            em.clear();
 
-        // then
-        assertAll(
-                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any()),
-                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
-                () -> verify(mockApplicationEventPublisher, times(0)).publishEvent(any(OfficerRejectClubJoinApplicationEvent.class))
-        );
-    }
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
+                    rejectJoinClubUseCase.command(
+                            new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+                    )
+            ).exceptionType();
 
-    @Test
-    @DisplayName("임원진이 가입 신청을 처리한 경우 이벤트는 두개가 발행한다.")
-    void success_test_3() {
-        // given
-        Club target = clubRepository.save(club(null));
-        List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
-        Member presidentMember = memberRepository.save(member(null));
-        Member officerMember = memberRepository.save(member(null));
-        Participant president = new Participant(presidentMember);
-        Participant officer = new Participant(officerMember);
-        president.joinClub(target, clubRoles.get(0));  // 회장으로 가입
-        officer.joinClub(target, clubRoles.get(1));  // 임원으로 가입
-        participantRepository.save(president);
-        participantRepository.save(officer);
+            ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
+            assertAll(
+                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION_FORM),
+                    () -> assertThat(findApplicationForm.processed()).isFalse()
+            );
+        }
 
-        Member applicant = memberRepository.save(member(null));
-        ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
+        @Test
+        @DisplayName("이미 처리된 신청서의 경우 또다시 처리될 수 없다.")
+        void fail_test_2() {
+            // given
+            Club target = clubRepository.save(club(null));
+            List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
+            Member managerMember = memberRepository.save(member(null));
+            Participant manager = new Participant(managerMember);
+            manager.joinClub(target, clubRoles.get(0));  // 회장으로 가입
+            participantRepository.save(manager);
 
-        em.flush();
-        em.clear();
+            Member applicantMember = memberRepository.save(member(null));
+            ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicantMember.id(), target.id(), null));
+            rejectJoinClubUseCase.command(
+                    new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+            );
+            em.flush();
+            em.clear();
 
-        // when
-        rejectJoinClubUseCase.command(
-                new RejectJoinClubUseCase.Command(applicationForm.id(), officerMember.id())
-        );
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
+                    rejectJoinClubUseCase.command(
+                            new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+                    )
+            ).exceptionType();
 
-        // then
-        assertAll(
-                () -> verify(mockApplicationEventPublisher, times(2)).publishEvent(any()),
-                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
-                () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(OfficerRejectClubJoinApplicationEvent.class))
-        );
-    }
-
-    @Test
-    @DisplayName("관리자가 아닌 경우 회원의 가입 신청을 거절할 수 없다.")
-    void fail_test_1() {
-        // given
-        Club target = clubRepository.save(club(null));
-        List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
-        Member managerMember = memberRepository.save(member(null));
-        Participant participant = new Participant(managerMember);
-        participant.joinClub(target, clubRoles.get(2));  // 일반으로 가입
-        participantRepository.save(participant);
-
-        Member applicant = memberRepository.save(member(null));
-        ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
-
-        em.flush();
-        em.clear();
-
-        // when
-        BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
-                rejectJoinClubUseCase.command(
-                        new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
-                )
-        ).exceptionType();
-
-        ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
-        assertAll(
-                () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION_FORM),
-                () -> assertThat(findApplicationForm.processed()).isFalse()
-        );
-    }
-
-    @Test
-    @DisplayName("이미 처리된 신청서의 경우 또다시 처리될 수 없다.")
-    void fail_test_2() {
-        // given
-        Club target = clubRepository.save(club(null));
-        List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
-        Member managerMember = memberRepository.save(member(null));
-        Participant manager = new Participant(managerMember);
-        manager.joinClub(target, clubRoles.get(0));  // 회장으로 가입
-        participantRepository.save(manager);
-
-        Member applicantMember = memberRepository.save(member(null));
-        ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicantMember.id(), target.id(), null));
-        rejectJoinClubUseCase.command(
-                new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
-        );
-        em.flush();
-        em.clear();
-
-        // when
-        BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
-                rejectJoinClubUseCase.command(
-                        new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
-                )
-        ).exceptionType();
-
-        assertAll(
-                () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_APPLICATION_FORM)
-        );
+            assertAll(
+                    () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_APPLICATION_FORM)
+            );
+        }
     }
 
     @Nested
@@ -249,7 +259,7 @@ class RejectJoinClubTest {
 
         @Test
         @DisplayName("임원이 가입 거절을 하게되면 `신청자`에게는 거절되었다는 알림이, `회장`에게는 임원진이 가입 신청을 처리했다는 알림이 전송된다.")
-        void test6() {
+        void test() {
             Events.setApplicationEventPublisher(applicationEventPublisher);  // 핸들러 정상 세팅
 
             Club target = clubRepository.save(club(null));

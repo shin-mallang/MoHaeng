@@ -5,6 +5,7 @@ import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.model.enums.Gender;
 import com.mohaeng.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -38,65 +39,75 @@ class SignUpControllerTest extends ControllerTest {
 
     private final SignUpController.SignUpRequest nullRequest = signUpRequest("", "", "", 0, Gender.MAN);
 
-    @Test
-    @DisplayName("회원가입(signUp) 성공 시 201을 반환한다.")
-    void signUpSuccessWillReturn201() throws Exception {
-        ResultActions resultActions = mockMvc.perform(
-                        post(SIGN_UP_URL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(signUpRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isCreated());
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        resultActions.andDo(
-                document("sign-up",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestFields(
-                                fieldWithPath("username").type(STRING).description("username(아이디)"),
-                                fieldWithPath("password").type(STRING).description("password(비밀번호)"),
-                                fieldWithPath("name").type(STRING).description("name(이름)"),
-                                fieldWithPath("age").type(NUMBER).description("age(나이)"),
-                                fieldWithPath("gender").type(STRING).description("gender(성별)")
-                        )
-                ));
+        @Test
+        @DisplayName("회원가입(signUp) 성공 시 201을 반환한다.")
+        void success_test_1() throws Exception {
+            ResultActions resultActions = mockMvc.perform(
+                            post(SIGN_UP_URL)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(signUpRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isCreated());
+
+            resultActions.andDo(
+                    document("sign-up",
+                            getDocumentRequest(),
+                            getDocumentResponse(),
+                            requestFields(
+                                    fieldWithPath("username").type(STRING).description("username(아이디)"),
+                                    fieldWithPath("password").type(STRING).description("password(비밀번호)"),
+                                    fieldWithPath("name").type(STRING).description("name(이름)"),
+                                    fieldWithPath("age").type(NUMBER).description("age(나이)"),
+                                    fieldWithPath("gender").type(STRING).description("gender(성별)")
+                            )
+                    ));
+        }
     }
 
-    @Test
-    @DisplayName("회원가입(signUp)시 중복 아이디인 경우 409를 반환한다.")
-    void signUpFailCauseByDuplicatedUsernameWillReturn409() throws Exception {
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
 
-        doThrow(new MemberException(DUPLICATE_USERNAME)).when(signUpUseCase).command(any());
+        @Test
+        @DisplayName("회원가입(signUp)시 중복 아이디인 경우 409를 반환한다.")
+        void fail_test_1() throws Exception {
 
-        ResultActions resultActions = mockMvc.perform(
-                        post(SIGN_UP_URL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(signUpRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isConflict());
+            doThrow(new MemberException(DUPLICATE_USERNAME)).when(signUpUseCase).command(any());
 
-        resultActions.andDo(
-                document("sign-up fail(duplicated username)",
-                        getDocumentResponse()
-                ));
-    }
+            ResultActions resultActions = mockMvc.perform(
+                            post(SIGN_UP_URL)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(signUpRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isConflict());
 
-    @Test
-    @DisplayName("회원가입(signUp)시 필드가 없는 경우 400을 반환한다.")
-    void signUpFailCauseByEmptyRequestFieldWillReturn400() throws Exception {
-        ResultActions resultActions = mockMvc.perform(
-                        post(SIGN_UP_URL)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(nullRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+            resultActions.andDo(
+                    document("sign-up fail(duplicated username)",
+                            getDocumentResponse()
+                    ));
+        }
 
-        resultActions.andDo(
-                document("sign-up fail(request fields contains empty value)",
-                        getDocumentResponse()
-                ));
+        @Test
+        @DisplayName("회원가입(signUp)시 필드가 없는 경우 400을 반환한다.")
+        void fail_test_2() throws Exception {
+            ResultActions resultActions = mockMvc.perform(
+                            post(SIGN_UP_URL)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(nullRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
+
+            resultActions.andDo(
+                    document("sign-up fail(request fields contains empty value)",
+                            getDocumentResponse()
+                    ));
+        }
     }
 }

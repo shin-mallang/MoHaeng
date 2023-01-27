@@ -1,5 +1,6 @@
 package com.mohaeng.common;
 
+import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.event.BaseEventHistory;
 import com.mohaeng.common.event.EventHistoryRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ApplicationTest
 public abstract class EventHandlerTest {
 
     protected final EventHistoryRepository eventHistoryRepository = mock(EventHistoryRepository.class);

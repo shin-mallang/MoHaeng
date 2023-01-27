@@ -6,6 +6,7 @@ import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.member.exception.MemberException;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,27 +25,37 @@ class SignUpTest {
     @Autowired
     private SignUpUseCase signUp;
 
-    @Test
-    @DisplayName("중복되는 아이디가 있다면 오류를 반환한다.")
-    void throwExceptionWhenUsernameDuplicated() {
-        // given
-        Member member = member(null);
-        memberRepository.save(member);
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        // when, then
-        assertThat(assertThrows(MemberException.class,
-                () -> signUp.command(new SignUpUseCase.Command(member.username(), member.password(), member.name(), member.age(), member.gender()))
-        ).exceptionType()).isEqualTo(DUPLICATE_USERNAME);
+        @Test
+        @DisplayName("문제가 없는 경우 회원 가입을 진행한다.")
+        void success_test_1() {
+            // when, then
+            assertAll(
+                    () -> assertDoesNotThrow(() -> signUp.command(signUpUseCaseCommand())),
+                    () -> assertThat(memberRepository.findByUsername(USERNAME)).isNotNull()
+            );
+        }
+        // TODO 비밀번호 암호화 되는 테스트
     }
 
-    @Test
-    @DisplayName("문제가 없는 경우 회원 가입을 진행한다.")
-    void success() {
-        // when, then
-        assertAll(
-                () -> assertDoesNotThrow(() -> signUp.command(signUpUseCaseCommand())),
-                () -> assertThat(memberRepository.findByUsername(USERNAME)).isNotNull()
-        );
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
+
+        @Test
+        @DisplayName("중복되는 아이디가 있다면 오류를 반환한다.")
+        void fail_test_1() {
+            // given
+            Member member = member(null);
+            memberRepository.save(member);
+
+            // when, then
+            assertThat(assertThrows(MemberException.class,
+                    () -> signUp.command(new SignUpUseCase.Command(member.username(), member.password(), member.name(), member.age(), member.gender()))
+            ).exceptionType()).isEqualTo(DUPLICATE_USERNAME);
+        }
     }
-    // TODO 비밀번호 암호화 되는 테스트
 }

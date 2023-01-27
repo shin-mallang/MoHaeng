@@ -7,6 +7,7 @@ import com.mohaeng.authentication.domain.model.AccessToken;
 import com.mohaeng.authentication.exception.AuthenticationException;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -38,65 +39,75 @@ class LogInControllerTest extends ControllerTest {
     private final LogInController.LoginRequest emptyLoginRequest = new LogInController.LoginRequest("", "");
     private final String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
-    @Test
-    @DisplayName("로그인 성공 시 200과 AccessToken을 반환한다.")
-    void loginSuccessWillReturn200AndAccessToken() throws Exception {
-        when(logInUseCase.command(any()))
-                .thenReturn(new AccessToken(jwt));
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        ResultActions resultActions = mockMvc.perform(
-                        post(LOGIN_URL)
-                                .contentType(APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(loginRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isOk());
+        @Test
+        @DisplayName("로그인 성공 시 200과 AccessToken을 반환한다.")
+        void success_test_1() throws Exception {
+            when(logInUseCase.command(any()))
+                    .thenReturn(new AccessToken(jwt));
 
-        resultActions.andDo(
-                document("login",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestFields(
-                                fieldWithPath("username").type(STRING).description("username(아이디)"),
-                                fieldWithPath("password").type(STRING).description("password(비밀번호)")
-                        )
-                ));
+            ResultActions resultActions = mockMvc.perform(
+                            post(LOGIN_URL)
+                                    .contentType(APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsBytes(loginRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isOk());
+
+            resultActions.andDo(
+                    document("login",
+                            getDocumentRequest(),
+                            getDocumentResponse(),
+                            requestFields(
+                                    fieldWithPath("username").type(STRING).description("username(아이디)"),
+                                    fieldWithPath("password").type(STRING).description("password(비밀번호)")
+                            )
+                    ));
+        }
     }
 
-    @Test
-    @DisplayName("로그인 실패 시 401 예외를 반환한다.")
-    void loginFailWillReturn401() throws Exception {
-        when(logInUseCase.command(any()))
-                .thenThrow(new AuthenticationException(INCORRECT_AUTHENTICATION));
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
 
-        ResultActions resultActions = mockMvc.perform(
-                        post(LOGIN_URL)
-                                .contentType(APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(loginRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+        @Test
+        @DisplayName("로그인 실패 시 401 예외를 반환한다.")
+        void fail_test_1() throws Exception {
+            when(logInUseCase.command(any()))
+                    .thenThrow(new AuthenticationException(INCORRECT_AUTHENTICATION));
 
-        resultActions.andDo(
-                document("login fail(username or password miss match)",
-                        getDocumentResponse()
-                ));
-    }
+            ResultActions resultActions = mockMvc.perform(
+                            post(LOGIN_URL)
+                                    .contentType(APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsBytes(loginRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isUnauthorized());
 
-    @Test
-    @DisplayName("요청 필드가 없는 경우 400 예외를 반환한다.")
-    void loginFailCauseByEmptyRequestFieldWillReturn400() throws Exception {
-        ResultActions resultActions = mockMvc.perform(
-                        post(LOGIN_URL)
-                                .contentType(APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(emptyLoginRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+            resultActions.andDo(
+                    document("login fail(username or password miss match)",
+                            getDocumentResponse()
+                    ));
+        }
 
-        resultActions.andDo(
-                document("login fail(request fields contains empty value)",
-                        getDocumentResponse()
-                ));
+        @Test
+        @DisplayName("요청 필드가 없는 경우 400 예외를 반환한다.")
+        void fail_test_2() throws Exception {
+            ResultActions resultActions = mockMvc.perform(
+                            post(LOGIN_URL)
+                                    .contentType(APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsBytes(emptyLoginRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
+
+            resultActions.andDo(
+                    document("login fail(request fields contains empty value)",
+                            getDocumentResponse()
+                    ));
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,107 +35,117 @@ class RequestJoinClubControllerTest extends ControllerTest {
     @MockBean
     private RequestJoinClubUseCase requestJoinClubUseCase;
 
-    @Test
-    @DisplayName("모임 가입 신청 성공 시 200과, 신청하였다는 메세지를 반환한다.")
-    void test() throws Exception {
-        // given
-        final Long memberId = 1L;
-        setAuthentication(memberId);
-        final Long clubId = 1L;
-        ResultActions resultActions = mockMvc.perform(
-                        post(REQUEST_JOIN_CLUB_URL, clubId)
-                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                )
-                .andDo(print())
-                .andExpect(status().isOk());
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        // when & then
-        verify(requestJoinClubUseCase, times(1)).command(any());
+        @Test
+        @DisplayName("모임 가입 신청 성공 시 200과, 신청하였다는 메세지를 반환한다.")
+        void success_test_1() throws Exception {
+            // given
+            final Long memberId = 1L;
+            setAuthentication(memberId);
+            final Long clubId = 1L;
+            ResultActions resultActions = mockMvc.perform(
+                            post(REQUEST_JOIN_CLUB_URL, clubId)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                    )
+                    .andDo(print())
+                    .andExpect(status().isOk());
 
-        assertThat(resultActions.andReturn().getResponse().getContentAsString()).isEqualTo("가입 신청 요청을 보냈습니다.");
+            // when & then
+            verify(requestJoinClubUseCase, times(1)).command(any());
 
-        resultActions.andDo(
-                document("request-join-club",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
-                        ),
-                        pathParameters(
-                                parameterWithName("clubId").description("모임 ID")
-                        )
-                )
-        );
+            assertThat(resultActions.andReturn().getResponse().getContentAsString()).isEqualTo("가입 신청 요청을 보냈습니다.");
+
+            resultActions.andDo(
+                    document("request-join-club",
+                            getDocumentRequest(),
+                            getDocumentResponse(),
+                            requestHeaders(
+                                    headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
+                            ),
+                            pathParameters(
+                                    parameterWithName("clubId").description("모임 ID")
+                            )
+                    )
+            );
+        }
     }
 
-    @Test
-    @DisplayName("이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우 400을 반환한다.")
-    void test2() throws Exception {
-        // given
-        when(requestJoinClubUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
-        final Long memberId = 1L;
-        setAuthentication(memberId);
-        final Long clubId = 1L;
-        ResultActions resultActions = mockMvc.perform(
-                        post(REQUEST_JOIN_CLUB_URL, clubId)
-                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
 
-        // when & then
-        verify(requestJoinClubUseCase, times(1)).command(any());
+        @Test
+        @DisplayName("이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우 400을 반환한다.")
+        void fail_test_1() throws Exception {
+            // given
+            when(requestJoinClubUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
+            final Long memberId = 1L;
+            setAuthentication(memberId);
+            final Long clubId = 1L;
+            ResultActions resultActions = mockMvc.perform(
+                            post(REQUEST_JOIN_CLUB_URL, clubId)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                    )
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
 
-        resultActions.andDo(
-                document("request-join-club fail(already request join club)",
-                        getDocumentResponse()
-                )
-        );
-    }
+            // when & then
+            verify(requestJoinClubUseCase, times(1)).command(any());
 
-    @Test
-    @DisplayName("이미 모임에 가입한 사람의 경우 400을 반환한다.")
-    void test3() throws Exception {
-        // given
-        when(requestJoinClubUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
-        final Long memberId = 1L;
-        setAuthentication(memberId);
-        final Long clubId = 1L;
-        ResultActions resultActions = mockMvc.perform(
-                        post(REQUEST_JOIN_CLUB_URL, clubId)
-                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+            resultActions.andDo(
+                    document("request-join-club fail(already request join club)",
+                            getDocumentResponse()
+                    )
+            );
+        }
 
-        // when & then
-        verify(requestJoinClubUseCase, times(1)).command(any());
+        @Test
+        @DisplayName("이미 모임에 가입한 사람의 경우 400을 반환한다.")
+        void fail_test_2() throws Exception {
+            // given
+            when(requestJoinClubUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
+            final Long memberId = 1L;
+            setAuthentication(memberId);
+            final Long clubId = 1L;
+            ResultActions resultActions = mockMvc.perform(
+                            post(REQUEST_JOIN_CLUB_URL, clubId)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                    )
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
 
-        resultActions.andDo(
-                document("request-join-club fail(member already joined club)",
-                        getDocumentResponse()
-                )
-        );
-    }
+            // when & then
+            verify(requestJoinClubUseCase, times(1)).command(any());
 
-    @Test
-    @DisplayName("인증되지 않은 사용자의 경우 401을 반환한다.")
-    void test4() throws Exception {
-        // given
-        final Long clubId = 1L;
-        ResultActions resultActions = mockMvc.perform(
-                        post(REQUEST_JOIN_CLUB_URL, clubId)
-                )
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+            resultActions.andDo(
+                    document("request-join-club fail(member already joined club)",
+                            getDocumentResponse()
+                    )
+            );
+        }
 
-        // when & then
-        verify(requestJoinClubUseCase, times(0)).command(any());
+        @Test
+        @DisplayName("인증되지 않은 사용자의 경우 401을 반환한다.")
+        void fail_test_3() throws Exception {
+            // given
+            final Long clubId = 1L;
+            ResultActions resultActions = mockMvc.perform(
+                            post(REQUEST_JOIN_CLUB_URL, clubId)
+                    )
+                    .andDo(print())
+                    .andExpect(status().isUnauthorized());
 
-        resultActions.andDo(
-                document("request-join-club fail(No Access Token)",
-                        getDocumentResponse()
-                )
-        );
+            // when & then
+            verify(requestJoinClubUseCase, times(0)).command(any());
+
+            resultActions.andDo(
+                    document("request-join-club fail(No Access Token)",
+                            getDocumentResponse()
+                    )
+            );
+        }
     }
 }

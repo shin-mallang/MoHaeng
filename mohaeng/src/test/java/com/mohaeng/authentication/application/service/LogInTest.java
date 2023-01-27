@@ -9,6 +9,7 @@ import com.mohaeng.common.fixtures.MemberFixture;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,45 +30,55 @@ class LogInTest {
 
     private final Member member = MemberFixture.member(null);
 
-    @Test
-    @DisplayName("아이디와 비밀번호를 통해 로그인을 진행하고 AccessToken을 반환한다.")
-    void loginWithUsernameAndPassword() {
-        // given
-        memberRepository.save(member);
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        // when
-        AccessToken token = logInUseCase.command(
-                new LogInUseCase.Command(member.username(), member.password())
-        );
+        @Test
+        @DisplayName("아이디와 비밀번호를 통해 로그인을 진행하고 AccessToken을 반환한다.")
+        void success_test_1() {
+            // given
+            memberRepository.save(member);
 
-        // then
-        assertAll(
-                () -> assertThat(token.token()).isNotNull()
-        );
+            // when
+            AccessToken token = logInUseCase.command(
+                    new LogInUseCase.Command(member.username(), member.password())
+            );
+
+            // then
+            assertAll(
+                    () -> assertThat(token.token()).isNotNull()
+            );
+        }
     }
 
-    @Test
-    @DisplayName("아이디가 없는 아이디라면 예외를 발생한다.")
-    void loginFailCauseByIncorrectUsernameWillReturnException() {
-        // when, then
-        BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
-                () -> logInUseCase.command(
-                        new LogInUseCase.Command(member.username(), member.password())
-                )).exceptionType();
-        assertThat(baseExceptionType).isEqualTo(INCORRECT_AUTHENTICATION);
-    }
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
 
-    @Test
-    @DisplayName("비밀번호가 일치하지 않는다면 예외를 발생한다.")
-    void loginFailCauseByIncorrectPasswordWillReturnException() {
-        // given
-        memberRepository.save(member);
+        @Test
+        @DisplayName("아이디가 없는 아이디라면 예외를 발생한다.")
+        void fail_test_1() {
+            // when, then
+            BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
+                    () -> logInUseCase.command(
+                            new LogInUseCase.Command(member.username(), member.password())
+                    )).exceptionType();
+            assertThat(baseExceptionType).isEqualTo(INCORRECT_AUTHENTICATION);
+        }
 
-        // when, then
-        BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
-                () -> logInUseCase.command(
-                        new LogInUseCase.Command(member.username(), "incorrectPassword")
-                )).exceptionType();
-        assertThat(baseExceptionType).isEqualTo(INCORRECT_AUTHENTICATION);
+        @Test
+        @DisplayName("비밀번호가 일치하지 않는다면 예외를 발생한다.")
+        void fail_test_2() {
+            // given
+            memberRepository.save(member);
+
+            // when, then
+            BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
+                    () -> logInUseCase.command(
+                            new LogInUseCase.Command(member.username(), "incorrectPassword")
+                    )).exceptionType();
+            assertThat(baseExceptionType).isEqualTo(INCORRECT_AUTHENTICATION);
+        }
     }
 }

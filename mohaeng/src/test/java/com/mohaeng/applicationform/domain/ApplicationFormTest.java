@@ -7,6 +7,7 @@ import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.domain.model.Participant;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
@@ -21,58 +22,68 @@ import static org.mockito.Mockito.when;
 @DisplayName("ApplicationForm 은 ")
 class ApplicationFormTest {
 
-    @Test
-    @DisplayName("회원과 모임을 가지고 생성된다.")
-    void test() {
-        // given
-        Member member = member(1L);
-        Club club = club(1L);
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        // when
-        ApplicationForm applicationForm = ApplicationForm.create(member, club);
+        @Test
+        @DisplayName("회원과 모임을 가지고 생성된다.")
+        void success_test_1() {
+            // given
+            Member member = member(1L);
+            Club club = club(1L);
 
-        // then
-        assertAll(
-                () -> assertThat(applicationForm.applicant()).isEqualTo(member),
-                () -> assertThat(applicationForm.target()).isEqualTo(club)
-        );
+            // when
+            ApplicationForm applicationForm = ApplicationForm.create(member, club);
+
+            // then
+            assertAll(
+                    () -> assertThat(applicationForm.applicant()).isEqualTo(member),
+                    () -> assertThat(applicationForm.target()).isEqualTo(club)
+            );
+        }
+
+        @Test
+        @DisplayName("처리(process)될 수 있다.")
+        void success_test_2() {
+            // given
+            Member member = member(1L);
+            Club club = club(1L);
+            ApplicationForm applicationForm = ApplicationForm.create(member, club);
+            Participant participant = mock(Participant.class);
+            when(participant.isManager()).thenReturn(true);
+
+            // when
+            applicationForm.approve(participant, mock(ClubRole.class));
+
+            // then
+            assertAll(
+                    () -> assertThat(applicationForm.processed()).isTrue()
+            );
+        }
     }
 
-    @Test
-    @DisplayName("처리(process)될 수 있다.")
-    void processTest() {
-        // given
-        Member member = member(1L);
-        Club club = club(1L);
-        ApplicationForm applicationForm = ApplicationForm.create(member, club);
-        Participant participant = mock(Participant.class);
-        when(participant.isManager()).thenReturn(true);
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
 
-        // when
-        applicationForm.approve(participant, mock(ClubRole.class));
+        @Test
+        @DisplayName("한 번 처리된 가입 신청서는 또다시 처리하려는 경우 예외를 발생시킨다.")
+        void fail_test_1() {
+            // given
+            Member member = member(1L);
+            Club club = club(1L);
+            ApplicationForm applicationForm = ApplicationForm.create(member, club);
+            Participant participant = mock(Participant.class);
+            when(participant.isManager()).thenReturn(true);
 
-        // then
-        assertAll(
-                () -> assertThat(applicationForm.processed()).isTrue()
-        );
-    }
+            // when
+            applicationForm.approve(participant, mock(ClubRole.class));
 
-    @Test
-    @DisplayName("한 번 처리된 가입 신청서는 또다시 처리하려는 경우 예외를 발생시킨다.")
-    void reProcessTest() {
-        // given
-        Member member = member(1L);
-        Club club = club(1L);
-        ApplicationForm applicationForm = ApplicationForm.create(member, club);
-        Participant participant = mock(Participant.class);
-        when(participant.isManager()).thenReturn(true);
-
-        // when
-        applicationForm.approve(participant, mock(ClubRole.class));
-
-        // then
-        assertThat(assertThrows(ApplicationFormException.class,
-                () -> applicationForm.approve(participant, mock(ClubRole.class))
-        ).exceptionType()).isEqualTo(ALREADY_PROCESSED_APPLICATION_FORM);
+            // then
+            assertThat(assertThrows(ApplicationFormException.class,
+                    () -> applicationForm.approve(participant, mock(ClubRole.class))
+            ).exceptionType()).isEqualTo(ALREADY_PROCESSED_APPLICATION_FORM);
+        }
     }
 }
