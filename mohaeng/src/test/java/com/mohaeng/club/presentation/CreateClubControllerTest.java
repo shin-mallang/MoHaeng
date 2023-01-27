@@ -3,6 +3,7 @@ package com.mohaeng.club.presentation;
 import com.mohaeng.club.application.usecase.CreateClubUseCase;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -44,136 +45,146 @@ class CreateClubControllerTest extends ControllerTest {
 
     private final CreateClubController.CreateClubRequest negativeMaxPeopleCountRequest = createClubRequest("name", "dex", -1);
 
-    @Test
-    @DisplayName("인증된 사용자의 올바른 모임 생성 요청인 경우 모임을 생성하고 201을 반환한다.")
-    void successTest() throws Exception {
-        // given
-        final Long memberId = 1L;
-        setAuthentication(memberId);
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        // when & then
-        ResultActions resultActions = mockMvc.perform(
-                        post(CREATE_CLUB_URL)
-                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(correctRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isCreated());
+        @Test
+        @DisplayName("인증된 사용자의 올바른 모임 생성 요청인 경우 모임을 생성하고 201을 반환한다.")
+        void success_test_1() throws Exception {
+            // given
+            final Long memberId = 1L;
+            setAuthentication(memberId);
 
-        verify(createClubUseCase, times(1)).command(any());
+            // when & then
+            ResultActions resultActions = mockMvc.perform(
+                            post(CREATE_CLUB_URL)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(correctRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isCreated());
 
-        resultActions.andDo(
-                document("create-club",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
-                        ),
-                        requestFields(
-                                fieldWithPath("name").type(STRING).description("name(모임 이름)"),
-                                fieldWithPath("description").type(STRING).description("description(모임 설명)"),
-                                fieldWithPath("maxParticipantCount").type(NUMBER).description("maxParticipantCount(최대 인원)")
-                        )
-                )
-        );
+            verify(createClubUseCase, times(1)).command(any());
+
+            resultActions.andDo(
+                    document("create-club",
+                            getDocumentRequest(),
+                            getDocumentResponse(),
+                            requestHeaders(
+                                    headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
+                            ),
+                            requestFields(
+                                    fieldWithPath("name").type(STRING).description("name(모임 이름)"),
+                                    fieldWithPath("description").type(STRING).description("description(모임 설명)"),
+                                    fieldWithPath("maxParticipantCount").type(NUMBER).description("maxParticipantCount(최대 인원)")
+                            )
+                    )
+            );
+        }
+
+        @Test
+        @DisplayName("인원을 0으로 설정한 경우 최대 인원으로 설정된다.")
+        void success_test_2() throws Exception {
+            // given
+            final Long memberId = 1L;
+            setAuthentication(memberId);
+
+            // when & then
+            ResultActions resultActions = mockMvc.perform(
+                            post(CREATE_CLUB_URL)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(zeroMaxPeopleCountRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isCreated());
+
+            verify(createClubUseCase, times(1)).command(any());
+
+            resultActions.andDo(
+                    document("create-club(max people count is 0 then setting MAX)",
+                            getDocumentRequest()
+                    )
+            );
+        }
     }
 
-    @Test
-    @DisplayName("인원을 0으로 설정한 경우 최대 인원으로 설정된다.")
-    void whenMaxPeopleCountIs0ThenSettingMax() throws Exception {
-        // given
-        final Long memberId = 1L;
-        setAuthentication(memberId);
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
 
-        // when & then
-        ResultActions resultActions = mockMvc.perform(
-                        post(CREATE_CLUB_URL)
-                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(zeroMaxPeopleCountRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isCreated());
+        @Test
+        @DisplayName("모임 생성 시 필드가 없는 경우 400을 반환한다.")
+        void fail_test_1() throws Exception {
+            // given
+            final Long memberId = 1L;
+            setAuthentication(memberId);
 
-        verify(createClubUseCase, times(1)).command(any());
+            // when & then
+            ResultActions resultActions = mockMvc.perform(
+                            post(CREATE_CLUB_URL)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(emptyFieldRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
 
-        resultActions.andDo(
-                document("create-club(max people count is 0 then setting MAX)",
-                        getDocumentRequest()
-                )
-        );
-    }
+            verify(createClubUseCase, times(0)).command(any());
 
-    @Test
-    @DisplayName("모임 생성 시 필드가 없는 경우 400을 반환한다.")
-    void createClubFailCauseByEmptyRequestFieldWillReturn400() throws Exception {
-        // given
-        final Long memberId = 1L;
-        setAuthentication(memberId);
+            resultActions.andDo(
+                    document("create-club fail(request fields contains empty value)",
+                            getDocumentResponse()
+                    ));
+        }
 
-        // when & then
-        ResultActions resultActions = mockMvc.perform(
-                        post(CREATE_CLUB_URL)
-                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(emptyFieldRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        @Test
+        @DisplayName("모임 생성 시 회원 수가 음수인 경우 400을 반환한다.")
+        void fail_test_2() throws Exception {
+            // given
+            final Long memberId = 1L;
+            setAuthentication(memberId);
 
-        verify(createClubUseCase, times(0)).command(any());
+            // when & then
+            ResultActions resultActions = mockMvc.perform(
+                            post(CREATE_CLUB_URL)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(negativeMaxPeopleCountRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
 
-        resultActions.andDo(
-                document("create-club fail(request fields contains empty value)",
-                        getDocumentResponse()
-                ));
-    }
+            verify(createClubUseCase, times(0)).command(any());
 
-    @Test
-    @DisplayName("모임 생성 시 회원 수가 음수인 경우 400을 반환한다.")
-    void createClubFailCauseByNegativePeopleCountWillReturn400() throws Exception {
-        // given
-        final Long memberId = 1L;
-        setAuthentication(memberId);
+            resultActions.andDo(
+                    document("create-club fail(max people count is negative)",
+                            getDocumentResponse()
+                    ));
+        }
 
-        // when & then
-        ResultActions resultActions = mockMvc.perform(
-                        post(CREATE_CLUB_URL)
-                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(negativeMaxPeopleCountRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        @Test
+        @DisplayName("인증되지 않은 사용자의 경우 401을 반환한다.")
+        void fail_test_3() throws Exception {
+            // given
+            final Long memberId = 1L;
 
-        verify(createClubUseCase, times(0)).command(any());
+            // when & then
+            ResultActions resultActions = mockMvc.perform(
+                            post(CREATE_CLUB_URL)
+                                    .content(objectMapper.writeValueAsString(correctRequest))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isUnauthorized());
 
-        resultActions.andDo(
-                document("create-club fail(max people count is negative)",
-                        getDocumentResponse()
-                ));
-    }
+            verify(createClubUseCase, times(0)).command(any());
 
-    @Test
-    @DisplayName("인증되지 않은 사용자의 경우 401을 반환한다.")
-    void createClubFailCauseByUnAuthenticatedUserWillReturn401() throws Exception {
-        // given
-        final Long memberId = 1L;
-
-        // when & then
-        ResultActions resultActions = mockMvc.perform(
-                        post(CREATE_CLUB_URL)
-                                .content(objectMapper.writeValueAsString(correctRequest))
-                )
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-
-        verify(createClubUseCase, times(0)).command(any());
-
-        resultActions.andDo(
-                document("create-club fail(No Access Token)",
-                        getDocumentResponse()
-                ));
+            resultActions.andDo(
+                    document("create-club fail(No Access Token)",
+                            getDocumentResponse()
+                    ));
+        }
     }
 }

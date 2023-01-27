@@ -33,46 +33,47 @@ class ExpelParticipantControllerTest extends ControllerTest {
     @MockBean
     private ExpelParticipantUseCase expelParticipantUseCase;
 
-    @Test
-    @DisplayName("모임에서 추방 성공")
-    void success_test_1() throws Exception {
-        // given
-        final Long participantId = 1L;
-        final Long memberId = 1L;
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
+        @Test
+        @DisplayName("모임에서 추방 성공")
+        void success_test_1() throws Exception {
+            // given
+            final Long participantId = 1L;
+            final Long memberId = 1L;
 
-        doNothing().when(expelParticipantUseCase).command(any());
-        setAuthentication(memberId);
+            doNothing().when(expelParticipantUseCase).command(any());
+            setAuthentication(memberId);
 
-        // when
-        ResultActions resultActions = mockMvc.perform(
-                        delete(EXPEL_PARTICIPANT_URL, participantId)
-                                .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                ).andDo(print())
-                .andExpect(status().isOk());
+            // when
+            ResultActions resultActions = mockMvc.perform(
+                            delete(EXPEL_PARTICIPANT_URL, participantId)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                    ).andDo(print())
+                    .andExpect(status().isOk());
 
-        // then
-        verify(expelParticipantUseCase, times(1)).command(any());
+            // then
+            verify(expelParticipantUseCase, times(1)).command(any());
 
-        resultActions.andDo(
-                document("expel-participant-from-club",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
-                        ),
-                        pathParameters(
-                                parameterWithName("participantId").description("추방시킬 참여자(Participant) ID")
-                        )
-                )
-        );
+            resultActions.andDo(
+                    document("expel-participant-from-club",
+                            getDocumentRequest(),
+                            getDocumentResponse(),
+                            requestHeaders(
+                                    headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
+                            ),
+                            pathParameters(
+                                    parameterWithName("participantId").description("추방시킬 참여자(Participant) ID")
+                            )
+                    )
+            );
+        }
     }
 
     @Nested
-    @DisplayName("모임 탈퇴 실패 테스트")
+    @DisplayName("실패 테스트")
     class FailTest {
-        /**
-         * 남은 사람이 1명이라 탈퇴가 불가능한 경우
-         */
 
         @Test
         @DisplayName("인증되지 않은 사용자의 경우 401을 반환한다.")

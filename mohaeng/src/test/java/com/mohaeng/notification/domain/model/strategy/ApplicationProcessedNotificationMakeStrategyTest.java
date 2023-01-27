@@ -8,6 +8,7 @@ import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.notification.domain.model.Notification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,29 +20,34 @@ class ApplicationProcessedNotificationMakeStrategyTest {
 
     private ApplicationProcessedNotificationMakeStrategy strategy = new ApplicationProcessedNotificationMakeStrategy();
 
-    @Test
-    @DisplayName("ApplicationProcessedEvent 이벤트만을 처리할 수 있다.")
-    void success_test_1() {
-        // then
-        Assertions.assertAll(
-                () -> assertThat(strategy.supportEvent()).isEqualTo(ApplicationProcessedEvent.class),
-                () -> assertThat(strategy.supportEvent()).isNotEqualTo(ClubJoinApplicationCreatedEvent.class),
-                () -> assertThat(strategy.supportEvent()).isNotEqualTo(OfficerRejectClubJoinApplicationEvent.class),
-                () -> assertThat(strategy.supportEvent()).isNotEqualTo(OfficerApproveClubJoinApplicationEvent.class),
-                () -> assertThat(strategy.supportEvent()).isNotEqualTo(NotificationEvent.class)
-        );
-    }
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-    @Test
-    @DisplayName("ApplicationProcessedEvent 이벤트를 받아 알림을 생성한다.")
-    void success_test_2() {
-        // given
-        Long receiverId = 1L;
+        @Test
+        @DisplayName("ApplicationProcessedEvent 이벤트만을 처리할 수 있다.")
+        void success_test_1() {
+            // then
+            Assertions.assertAll(
+                    () -> assertThat(strategy.supportEvent()).isEqualTo(ApplicationProcessedEvent.class),
+                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(ClubJoinApplicationCreatedEvent.class),
+                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(OfficerRejectClubJoinApplicationEvent.class),
+                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(OfficerApproveClubJoinApplicationEvent.class),
+                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(NotificationEvent.class)
+            );
+        }
 
-        // when
-        List<Notification> make = strategy.make(ApplicationProcessedEvent.reject(this, receiverId, 10L, 11L));
+        @Test
+        @DisplayName("ApplicationProcessedEvent 이벤트를 받아 알림을 생성한다.")
+        void success_test_2() {
+            // given
+            Long receiverId = 1L;
 
-        // then
-        assertThat(make.size()).isEqualTo(1);
+            // when
+            List<Notification> make = strategy.make(ApplicationProcessedEvent.reject(this, receiverId, 10L, 11L));
+
+            // then
+            assertThat(make.size()).isEqualTo(1);
+        }
     }
 }

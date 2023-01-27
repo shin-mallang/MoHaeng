@@ -2,6 +2,7 @@ package com.mohaeng.authentication.presentation.argumentresolver;
 
 import com.mohaeng.authentication.presentation.interceptor.AuthenticationContext;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -17,33 +18,38 @@ class AuthArgumentResolverTest {
     private final AuthenticationContext context = mock(AuthenticationContext.class);
     private final AuthArgumentResolver authArgumentResolver = new AuthArgumentResolver(context);
 
-    @Test
-    @DisplayName("@Auth 가 붙어있다면 지원할 수 있다.")
-    void test() {
-        // given
-        MethodParameter methodParameter = mock(MethodParameter.class);
-        when(methodParameter.hasParameterAnnotation(Auth.class))
-                .thenReturn(true);
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        // when
-        boolean result = authArgumentResolver.supportsParameter(methodParameter);
+        @Test
+        @DisplayName("@Auth 가 붙어있다면 지원할 수 있다.")
+        void success_test_1() {
+            // given
+            MethodParameter methodParameter = mock(MethodParameter.class);
+            when(methodParameter.hasParameterAnnotation(Auth.class))
+                    .thenReturn(true);
 
-        // then
-        assertThat(result).isTrue();
-    }
+            // when
+            boolean result = authArgumentResolver.supportsParameter(methodParameter);
 
-    @Test
-    @DisplayName("resolveArgument() 시 AuthenticationContext의 principle을 반환한다.")
-    void test2() {
-        // when
-        authArgumentResolver.resolveArgument(
-                mock(MethodParameter.class),
-                mock(ModelAndViewContainer.class),
-                mock(NativeWebRequest.class),
-                mock(WebDataBinderFactory.class)
-        );
+            // then
+            assertThat(result).isTrue();
+        }
 
-        // then
-        verify(context, times(1)).principal();
+        @Test
+        @DisplayName("resolveArgument() 시 AuthenticationContext의 principle을 반환한다.")
+        void success_test_2() {
+            // when
+            authArgumentResolver.resolveArgument(
+                    mock(MethodParameter.class),
+                    mock(ModelAndViewContainer.class),
+                    mock(NativeWebRequest.class),
+                    mock(WebDataBinderFactory.class)
+            );
+
+            // then
+            verify(context, times(1)).principal();
+        }
     }
 }

@@ -2,17 +2,20 @@ package com.mohaeng.clubrole.application.eventhandler;
 
 import com.mohaeng.club.domain.event.CreateClubEvent;
 import com.mohaeng.club.domain.model.Club;
+import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
 import com.mohaeng.clubrole.domain.model.ClubRole;
+import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.EventHandlerTest;
 import com.mohaeng.common.event.Events;
-import com.mohaeng.common.repositories.MockClubRepository;
-import com.mohaeng.common.repositories.MockClubRoleRepository;
-import com.mohaeng.common.repositories.MockMemberRepository;
 import com.mohaeng.member.domain.model.Member;
-import org.assertj.core.api.Assertions;
+import com.mohaeng.member.domain.repository.MemberRepository;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
@@ -20,57 +23,77 @@ import java.util.List;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.ClubRoleFixture.clubRolesWithId;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
 @DisplayName("CreateDefaultRoleWithCreateClubEventHandler 는 ")
 class CreateDefaultRoleWithCreateClubEventsHandlerTest extends EventHandlerTest {
 
-    private final MockMemberRepository memberRepository = new MockMemberRepository();
-    private final MockClubRepository clubRepository = new MockClubRepository();
-    private final MockClubRoleRepository clubRoleRepository = new MockClubRoleRepository();
-    private final ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
+    @Autowired
+    private MemberRepository memberRepository;
 
-    private final CreateDefaultRoleWithCreateClubEventHandler eventHandler =
-            new CreateDefaultRoleWithCreateClubEventHandler(eventHistoryRepository, clubRepository, clubRoleRepository);
+    @Autowired
+    private ClubRepository clubRepository;
 
-    @Test
-    @DisplayName("클럽 생성 이벤트(CreateClubEvent) 를 받으면 기본 역할을 생성한다.")
-    void createDefaultRole() {
-        // given
-        final Member member = memberRepository.save(member(null));
-        final Club club = clubRepository.save(club(null));
+    @Autowired
+    private ClubRoleRepository clubRoleRepository;
 
-        CreateClubEvent createClubEvent = new CreateClubEvent(this, member.id(), club.id());
-        List<ClubRole> clubRoles = clubRolesWithId(club);
+    @Autowired
+    private EntityManager em;
 
-        // when
-        eventHandler.handle(createClubEvent);
+    private final ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
 
-        // then
-        assertAll(
-                () -> Assertions.assertThat(clubRoleRepository.findAll().size()).isEqualTo(clubRoles.size())
-        );
+    private CreateDefaultRoleWithCreateClubEventHandler eventHandler;
+
+    @BeforeEach
+    public void init() {
+        eventHandler = new CreateDefaultRoleWithCreateClubEventHandler(eventHistoryRepository, clubRepository, clubRoleRepository);
     }
 
-    @Test
-    @DisplayName("기본 역할을 생성한 이후 기본 역할 생성 이벤트를 발행한다.")
-    void publishCreateDefaultRoleEvent() {
-        // given
-        Events.setApplicationEventPublisher(applicationEventPublisher);
-        final Member member = memberRepository.save(member(null));
-        final Club club = clubRepository.save(club(null));
+    @Nested
+    @DisplayName("성공 테스트")
+    class SuccessTest {
 
-        CreateClubEvent createClubEvent = new CreateClubEvent(this, member.id(), club.id());
-        List<ClubRole> clubRoles = clubRolesWithId(club);
+        @Test
+        @DisplayName("클럽 생성 이벤트(CreateClubEvent) 를 받으면 기본 역할을 생성한다.")
+        void success_test_1() {
+            // given
+            final Member member = memberRepository.save(member(null));
+            final Club club = clubRepository.save(club(null));
 
-        // when
-        eventHandler.handle(createClubEvent);
+            CreateClubEvent createClubEvent = new CreateClubEvent(this, member.id(), club.id());
+            List<ClubRole> clubRoles = clubRolesWithId(club);
 
-        // then
-        assertAll(
-                () -> Assertions.assertThat(clubRoleRepository.findAll().size()).isEqualTo(clubRoles.size()),
-                () -> verify(applicationEventPublisher, times(1)).publishEvent(any(CreateDefaultRoleEvent.class))
-        );
+            // when
+            eventHandler.handle(createClubEvent);
+
+            // then
+            assertAll(
+                    () -> assertThat(em.createQuery("select cr from ClubRole cr", ClubRole.class).getResultList().size()).isEqualTo(clubRoles.size())
+            );
+        }
+
+        @Test
+        @DisplayName("기본 역할을 생성한 이후 기본 역할 생성 이벤트를 발행한다.")
+        void success_test_2() {
+            // given
+            Events.setApplicationEventPublisher(mockApplicationEventPublisher);
+            final Member member = memberRepository.save(member(null));
+            final Club club = clubRepository.save(club(null));
+
+            CreateClubEvent createClubEvent = new CreateClubEvent(this, member.id(), club.id());
+            List<ClubRole> clubRoles = clubRolesWithId(club);
+
+            // when
+            eventHandler.handle(createClubEvent);
+
+            // then
+            assertAll(
+                    () -> assertThat(em.createQuery("select cr from ClubRole cr", ClubRole.class).getResultList().size()).isEqualTo(clubRoles.size()),
+                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(CreateDefaultRoleEvent.class))
+            );
+        }
     }
 }
+
