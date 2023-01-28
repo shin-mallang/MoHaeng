@@ -10,13 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DeleteClubController {
 
+    public static final String DELETE_CLUB_URL = "/api/club/{clubId}";
+
     private final DeleteClubUseCase deleteClubUseCase;
 
     public DeleteClubController(final DeleteClubUseCase deleteClubUseCase) {
         this.deleteClubUseCase = deleteClubUseCase;
     }
 
-    @DeleteMapping("/api/club/{clubId}")
+    /**
+     * 모임 제거
+     */
+    @DeleteMapping(DELETE_CLUB_URL)
     public ResponseEntity<Void> delete(
             @PathVariable(name = "clubId") final Long clubId,
             @Auth final Long memberId
