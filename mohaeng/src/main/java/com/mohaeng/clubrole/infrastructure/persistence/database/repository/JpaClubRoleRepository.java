@@ -4,7 +4,9 @@ import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +21,9 @@ public interface JpaClubRoleRepository extends JpaRepository<ClubRole, Long>, Cl
     @Override
     @Query("select cr from ClubRole cr where cr.clubRoleCategory = 'GENERAL'")
     Optional<ClubRole> findDefaultGeneralRoleByClub(final Club club);
+
+    @Override
+    @Modifying
+    @Query("delete from ClubRole cr where cr.club.id = :clubId")
+    void deleteAllByClubId(@Param("clubId") final Long clubId);
 }

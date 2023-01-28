@@ -38,6 +38,11 @@ public class MockClubRoleRepository implements ClubRoleRepository {
         return Optional.empty();
     }
 
+    @Override
+    public void deleteAllByClubId(Long clubId) {
+
+    }
+
     public List<ClubRole> findAll() {
         return store.values().stream().toList();
     }

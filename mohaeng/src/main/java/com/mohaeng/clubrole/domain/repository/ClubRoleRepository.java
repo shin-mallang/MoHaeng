@@ -12,5 +12,7 @@ public interface ClubRoleRepository {
 
     Optional<ClubRole> findById(final Long id);
 
-    Optional<ClubRole> findDefaultGeneralRoleByClub(Club club);
+    Optional<ClubRole> findDefaultGeneralRoleByClub(final Club club);
+
+    void deleteAllByClubId(final Long clubId);
 }

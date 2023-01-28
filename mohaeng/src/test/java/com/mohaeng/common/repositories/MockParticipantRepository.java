@@ -67,6 +67,16 @@ public class MockParticipantRepository implements ParticipantRepository {
 
     }
 
+    @Override
+    public void deleteAllByClubId(Long clubId) {
+
+    }
+
+    @Override
+    public List<Participant> findAllWithMemberByClubId(Long clubId) {
+        return null;
+    }
+
     public List<Participant> findAll() {
         return store.values().stream().toList();
     }

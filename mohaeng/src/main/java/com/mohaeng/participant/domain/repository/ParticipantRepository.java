@@ -30,11 +30,9 @@ public interface ParticipantRepository {
 
     List<Participant> findAllWithMemberByClubIdWhereClubRoleIsPresidentOrOfficer(final Long clubId);
 
-    /**
-     * memberId와 clubId로 Participant 단일 조회
-     * <p>
-     * (Member 와 Club 으로 조회할 수 있으나, 그럼 Member 조회 + Club 조회를 위한 Select 쿼리가 2번 발생하며 ID만을 사용하도록 함)
-     */
-
     void delete(final Participant participant);
+
+    void deleteAllByClubId(final Long clubId);
+
+    List<Participant> findAllWithMemberByClubId(final Long clubId);
 }
