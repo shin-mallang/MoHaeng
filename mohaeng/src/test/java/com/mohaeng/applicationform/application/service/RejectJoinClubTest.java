@@ -30,7 +30,7 @@ import org.springframework.test.context.event.ApplicationEvents;
 
 import java.util.List;
 
-import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NOT_FOUND_APPLICATION_FORM;
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
 import static com.mohaeng.clubrole.domain.model.ClubRole.defaultRoles;
 import static com.mohaeng.common.fixtures.ApplicationFormFixture.applicationForm;
@@ -232,7 +232,7 @@ class RejectJoinClubTest {
             ).exceptionType();
 
             assertAll(
-                    () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_APPLICATION_FORM)
+                    () -> assertThat(baseExceptionType).isEqualTo(ALREADY_PROCESSED_APPLICATION_FORM)
             );
         }
     }

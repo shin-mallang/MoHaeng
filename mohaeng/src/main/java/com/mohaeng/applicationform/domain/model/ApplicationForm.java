@@ -8,16 +8,12 @@ import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.domain.model.Participant;
 import jakarta.persistence.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
 
 /**
  * 가입 신청서
  */
-@Where(clause = "processed = false")  // soft delete 형식으로, 처리된 가입 신청서는 조회하지 않음
-@SQLDelete(sql = "UPDATE application_form SET processed = true WHERE id = ?")
 @Entity
 @Table(name = "application_form")
 public class ApplicationForm extends BaseEntity {
