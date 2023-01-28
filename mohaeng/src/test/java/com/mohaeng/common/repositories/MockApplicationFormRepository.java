@@ -45,6 +45,11 @@ public class MockApplicationFormRepository implements ApplicationFormRepository 
     }
 
     @Override
+    public List<ApplicationForm> findAllWithApplicantByTargetIdAndProcessedFalse(Long clubId) {
+        return null;
+    }
+
+    @Override
     public Optional<ApplicationForm> findWithClubById(Long id) {
         return Optional.empty();
     }
