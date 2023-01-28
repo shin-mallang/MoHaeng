@@ -11,7 +11,7 @@ import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
-import com.mohaeng.common.event.Events;
+import com.mohaeng.common.event.BaseEvent;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
@@ -23,9 +23,12 @@ import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.event.ApplicationEvents;
 
 import java.util.List;
 
@@ -39,8 +42,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ApplicationTest
 @DisplayName("RejectJoinClub 은 ")
@@ -68,19 +69,7 @@ class RejectJoinClubTest {
     private ParticipantRepository participantRepository;
 
     @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
-
-    private ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
-
-    @BeforeEach
-    void before() {
-        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
-    }
-
-    @AfterEach
-    void after() {
-        Events.setApplicationEventPublisher(applicationEventPublisher);
-    }
+    private ApplicationEvents events;
 
     @Nested
     @DisplayName("성공 테스트")
@@ -142,9 +131,9 @@ class RejectJoinClubTest {
 
             // then
             assertAll(
-                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any()),
-                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
-                    () -> verify(mockApplicationEventPublisher, times(0)).publishEvent(any(OfficerRejectClubJoinApplicationEvent.class))
+                    () -> assertThat(events.stream(BaseEvent.class).count()).isEqualTo(1L),
+                    () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
+                    () -> assertThat(events.stream(OfficerRejectClubJoinApplicationEvent.class).count()).isEqualTo(0L)
             );
         }
 
@@ -176,9 +165,9 @@ class RejectJoinClubTest {
 
             // then
             assertAll(
-                    () -> verify(mockApplicationEventPublisher, times(2)).publishEvent(any()),
-                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ApplicationProcessedEvent.class)),
-                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(OfficerRejectClubJoinApplicationEvent.class))
+                    () -> assertThat(events.stream(BaseEvent.class).count()).isEqualTo(2L),
+                    () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
+                    () -> assertThat(events.stream(OfficerRejectClubJoinApplicationEvent.class).count()).isEqualTo(1L)
             );
         }
     }
@@ -260,8 +249,6 @@ class RejectJoinClubTest {
         @Test
         @DisplayName("임원이 가입 거절을 하게되면 `신청자`에게는 거절되었다는 알림이, `회장`에게는 임원진이 가입 신청을 처리했다는 알림이 전송된다.")
         void test() {
-            Events.setApplicationEventPublisher(applicationEventPublisher);  // 핸들러 정상 세팅
-
             Club target = clubRepository.save(club(null));
             List<ClubRole> clubRoles = clubRoleRepository.saveAll(defaultRoles(target));
             Member presidentMember = memberRepository.save(member(null));
