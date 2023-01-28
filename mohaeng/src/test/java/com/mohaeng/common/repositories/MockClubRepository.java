@@ -24,4 +24,9 @@ public class MockClubRepository implements ClubRepository {
     public Optional<Club> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
+
+    @Override
+    public void delete(Club club) {
+
+    }
 }

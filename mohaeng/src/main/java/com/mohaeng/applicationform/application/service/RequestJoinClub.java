@@ -93,7 +93,7 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
      * @throws ApplicationFormException (ALREADY_REQUEST_JOIN_CLUB) 이미 가입 신청한 경우
      */
     private void validateAlreadyRequested(final Member member, final Club club) throws ApplicationFormException {
-        if (applicationFormRepository.existsByApplicantAndTarget(member, club)) {
+        if (applicationFormRepository.existsByApplicantAndTargetAndProcessedFalse(member, club)) {
             throw new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB);
         }
     }

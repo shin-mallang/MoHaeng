@@ -34,9 +34,19 @@ public class MockApplicationFormRepository implements ApplicationFormRepository 
     }
 
     @Override
-    public boolean existsByApplicantAndTarget(final Member applicant, final Club target) {
+    public boolean existsByApplicantAndTargetAndProcessedFalse(final Member applicant, final Club target) {
         return store.values().stream()
                 .anyMatch(it -> it.applicant().id().equals(applicant.id()) && it.target().id().equals(target.id()));
+    }
+
+    @Override
+    public void deleteAllByClubId(Long clubId) {
+
+    }
+
+    @Override
+    public List<ApplicationForm> findAllWithApplicantByTargetIdAndProcessedFalse(Long clubId) {
+        return null;
     }
 
     @Override

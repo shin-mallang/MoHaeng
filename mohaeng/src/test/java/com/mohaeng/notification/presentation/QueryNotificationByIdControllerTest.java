@@ -82,11 +82,6 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
                     )
             );
         }
-    }
-
-    @Nested
-    @DisplayName("실패 테스트")
-    class FailTest {
 
         @Test
         @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (ClubJoinApplicationCreatedNotification)")
@@ -247,6 +242,79 @@ class QueryNotificationByIdControllerTest extends ControllerTest {
                     )
             );
         }
+
+        @Test
+        @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (DeleteApplicationFormBecauseClubIsDeletedNotification)")
+        void success_test_6_DeleteApplicationFormBecauseClubIsDeletedNotification() throws Exception {
+            // given
+            final Long memberId = 1L;
+            final Long alarmId = 1L;
+            when(queryNotificationByIdUseCase.query(any())).thenReturn(deleteApplicationFormBecauseClubIsDeletedNotificationDto(1L));
+            setAuthentication(memberId);
+
+            // when & then
+            ResultActions resultActions = mockMvc.perform(
+                            get(QUERY_ALARM_BY_ID_URL, alarmId)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                    )
+                    .andDo(print())
+                    .andExpect(status().isOk());
+
+            verify(queryNotificationByIdUseCase, times(1)).query(any());
+
+            resultActions.andDo(
+                    document("notification-query-by-id: DeleteApplicationFormBecauseClubIsDeletedNotification",
+                            getDocumentResponse(),
+                            responseFields(
+                                    fieldWithPath("id").type(NUMBER).description("알림의 식별자"),
+                                    fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
+                                    fieldWithPath("type").type(STRING).description("알림의 종류 - 모임이 삭제되어 가입 신청서가 제거된 경우 전송되는 알림"),
+                                    fieldWithPath("clubName").type(STRING).description("삭제된 모임의 이름"),
+                                    fieldWithPath("clubDescription").type(STRING).description("삭제된 모임의 설명"),
+                                    fieldWithPath("read").type(BOOLEAN).description("알림 읽음 여부 - true인 경우 읽음")
+                            )
+                    )
+            );
+        }
+
+        @Test
+        @DisplayName("인증된 사용자의 자신이 받은 알림 조회 성공 (DeleteParticipantBecauseClubIsDeletedNotification)")
+        void success_test_7_DeleteParticipantBecauseClubIsDeletedNotification() throws Exception {
+            // given
+            final Long memberId = 1L;
+            final Long alarmId = 1L;
+            when(queryNotificationByIdUseCase.query(any())).thenReturn(deleteParticipantBecauseClubIsDeletedNotificationDto(1L));
+            setAuthentication(memberId);
+
+            // when & then
+            ResultActions resultActions = mockMvc.perform(
+                            get(QUERY_ALARM_BY_ID_URL, alarmId)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                    )
+                    .andDo(print())
+                    .andExpect(status().isOk());
+
+            verify(queryNotificationByIdUseCase, times(1)).query(any());
+
+            resultActions.andDo(
+                    document("notification-query-by-id: DeleteParticipantBecauseClubIsDeletedNotification",
+                            getDocumentResponse(),
+                            responseFields(
+                                    fieldWithPath("id").type(NUMBER).description("알림의 식별자"),
+                                    fieldWithPath("createdAt").type(STRING).description("알림 생성시간"),
+                                    fieldWithPath("type").type(STRING).description("알림의 종류 - 모임이 삭제되어 해당 모임에 가입되었던 참여자들에게 전송되는 알림"),
+                                    fieldWithPath("clubName").type(STRING).description("삭제된 모임의 이름"),
+                                    fieldWithPath("clubDescription").type(STRING).description("삭제된 모임의 설명"),
+                                    fieldWithPath("read").type(BOOLEAN).description("알림 읽음 여부 - true인 경우 읽음")
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
 
         @Test
         @DisplayName("인증되지 않은 사용자의 경우 401을 반환한다.")

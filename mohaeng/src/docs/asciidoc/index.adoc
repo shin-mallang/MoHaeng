@@ -61,6 +61,23 @@ operation::create-club fail(request fields contains empty value)[snippets='http-
 
 operation::create-club(max people count is 0 then setting MAX)[snippets='request-body,http-response']
 
+[[Club-모임제거]]
+=== 모임제거
+
+operation::delete-club[snippets='http-request,path-parameters,request-headers,http-response']
+
+=== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::delete-club(No Access Token)[snippets='http-response']
+
+=== - 없는 모임 ID인 경우
+
+operation::delete-club(Nonexistent Club ID)[snippets='http-response']
+
+=== - 요청자가 회장이 아닌 경우
+
+operation::delete-club(requester does not president)[snippets='http-response']
+
 [[Club-모임-가입-신청]]
 === 모임 가입 신청
 
@@ -118,6 +135,14 @@ operation::notification-query-by-id: OfficerRejectApplicationNotification[snippe
 === 알림 조회 - 모임에서 추방된 것에 대한 알림 (ExpelParticipantNotification)
 
 operation::notification-query-by-id: ExpelParticipantNotification[snippets='http-response,response-fields']
+
+=== 알림 조회 - 모임이 제거되어 해당 모임에 대한 가입 신청서가 제거된 것에 대한 알림 (DeleteApplicationFormBecauseClubIsDeletedNotification)
+
+operation::notification-query-by-id: DeleteApplicationFormBecauseClubIsDeletedNotification[snippets='http-response,response-fields']
+
+=== 알림 조회 - 모임이 제거되어 해당 모임의 참여자들에게 모임이 제거되었다는 것을 알리기 위한 알림 (DeleteParticipantBecauseClubIsDeletedNotification)
+
+operation::notification-query-by-id: DeleteParticipantBecauseClubIsDeletedNotification[snippets='http-response,response-fields']
 
 [[Approve-Application-API]]
 == Approve Application API

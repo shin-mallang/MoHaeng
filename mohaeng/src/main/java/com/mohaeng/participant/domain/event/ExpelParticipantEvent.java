@@ -27,7 +27,7 @@ public class ExpelParticipantEvent extends NotificationEvent {
 
     @Override
     public BaseEventHistory history() {
-        return new ExpelParticipantEventHistory(clubId);
+        return new ExpelParticipantEventHistory(eventDateTime, clubId);
     }
 
     @Override
