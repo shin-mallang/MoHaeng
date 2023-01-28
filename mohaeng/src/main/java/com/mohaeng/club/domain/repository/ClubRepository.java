@@ -9,4 +9,6 @@ public interface ClubRepository {
     Club save(final Club club);
 
     Optional<Club> findById(final Long id);
+
+    void delete(final Club club);
 }
