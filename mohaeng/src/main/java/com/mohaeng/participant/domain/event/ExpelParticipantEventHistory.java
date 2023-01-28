@@ -4,6 +4,8 @@ import com.mohaeng.common.event.BaseEventHistory;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+import java.time.LocalDateTime;
+
 /**
  * 회원 추방 시 발행
  */
@@ -14,10 +16,10 @@ public class ExpelParticipantEventHistory extends BaseEventHistory {
     private Long clubId;
 
     protected ExpelParticipantEventHistory() {
-        this.clubId = null;
     }
 
-    public ExpelParticipantEventHistory(final Long clubId) {
+    public ExpelParticipantEventHistory(final LocalDateTime eventDateTime, final Long clubId) {
+        super(eventDateTime);
         this.clubId = clubId;
     }
 
