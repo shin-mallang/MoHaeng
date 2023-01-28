@@ -9,6 +9,7 @@ import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
+import com.mohaeng.common.NotificationEventHandlerTestTemplate;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.fixtures.ClubRoleFixture;
 import com.mohaeng.member.domain.model.Member;
@@ -18,10 +19,7 @@ import com.mohaeng.notification.domain.repository.NotificationRepository;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -186,16 +184,16 @@ class RequestJoinClubTest {
         }
     }
 
+    @Disabled("단독으로만 테스트할 것 (함께 테스트하면 롤백이 안되어서 오류남)")
     @Nested
-    @DisplayName("RequestJoinClub + 이벤트 핸들러 테스트 ")
-    public class RequestJoinClubWithEventHandlerTest {
+    @DisplayName("가입 신청을 하게되면 `회장`과 `관리자` 에게 알림이 전송된다.")
+    public class RequestJoinClubWithEventHandlerTest extends NotificationEventHandlerTestTemplate {
 
         @Autowired
         private NotificationRepository notificationRepository;
 
-        @Test
-        @DisplayName("가입 신청을 하게되면 `회장`과 `관리자` 에게 알림이 전송된다.")
-        void test() {
+        @Override
+        protected void givenAndWhen() {
             Club club = clubRepository.save(club(null));
             ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
             ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
@@ -212,8 +210,10 @@ class RequestJoinClubTest {
             officer.joinClub(club, officerRole);
 
             requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(generalMember.id(), club.id()));
+        }
 
-            // then
+        @Override
+        protected void then() {
             List<Notification> all = notificationRepository.findAll();
             assertThat(all.size()).isEqualTo(2);  // 회원 1 + 임원 1
         }
