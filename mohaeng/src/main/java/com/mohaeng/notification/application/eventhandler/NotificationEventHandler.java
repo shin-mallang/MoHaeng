@@ -7,10 +7,11 @@ import com.mohaeng.notification.domain.model.NotificationMakeStrategies;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 public class NotificationEventHandler extends EventHandler<NotificationEvent> {
@@ -30,7 +31,7 @@ public class NotificationEventHandler extends EventHandler<NotificationEvent> {
 
     @Override
     @Async(value = "asyncTaskExecutor")
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional // 어차피 Async 이므로 Thread가 달라 트랜잭션이 다르다. 즉 REQUIRES_NEW 같은게 필요없다.
     public void handle(final NotificationEvent event) {
 
