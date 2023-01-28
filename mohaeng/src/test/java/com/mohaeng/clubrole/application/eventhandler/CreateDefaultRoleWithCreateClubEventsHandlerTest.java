@@ -7,7 +7,6 @@ import com.mohaeng.clubrole.domain.event.CreateDefaultRoleEvent;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.EventHandlerTest;
-import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
@@ -16,7 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.event.ApplicationEvents;
 
 import java.util.List;
 
@@ -25,7 +24,6 @@ import static com.mohaeng.common.fixtures.ClubRoleFixture.clubRolesWithId;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.*;
 
 @DisplayName("CreateDefaultRoleWithCreateClubEventHandler 는 ")
 class CreateDefaultRoleWithCreateClubEventsHandlerTest extends EventHandlerTest {
@@ -42,7 +40,8 @@ class CreateDefaultRoleWithCreateClubEventsHandlerTest extends EventHandlerTest 
     @Autowired
     private EntityManager em;
 
-    private final ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
+    @Autowired
+    private ApplicationEvents events;
 
     private CreateDefaultRoleWithCreateClubEventHandler eventHandler;
 
@@ -78,7 +77,6 @@ class CreateDefaultRoleWithCreateClubEventsHandlerTest extends EventHandlerTest 
         @DisplayName("기본 역할을 생성한 이후 기본 역할 생성 이벤트를 발행한다.")
         void success_test_2() {
             // given
-            Events.setApplicationEventPublisher(mockApplicationEventPublisher);
             final Member member = memberRepository.save(member(null));
             final Club club = clubRepository.save(club(null));
 
@@ -91,7 +89,7 @@ class CreateDefaultRoleWithCreateClubEventsHandlerTest extends EventHandlerTest 
             // then
             assertAll(
                     () -> assertThat(em.createQuery("select cr from ClubRole cr", ClubRole.class).getResultList().size()).isEqualTo(clubRoles.size()),
-                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(CreateDefaultRoleEvent.class))
+                    () -> assertThat(events.stream(CreateDefaultRoleEvent.class).count()).isEqualTo(1L)
             );
         }
     }

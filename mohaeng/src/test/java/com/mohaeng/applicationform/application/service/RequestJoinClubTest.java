@@ -10,7 +10,6 @@ import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
-import com.mohaeng.common.event.Events;
 import com.mohaeng.common.fixtures.ClubRoleFixture;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
@@ -19,9 +18,12 @@ import com.mohaeng.notification.domain.repository.NotificationRepository;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -34,7 +36,6 @@ import static com.mohaeng.common.fixtures.ClubFixture.clubWithMaxParticipantCoun
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 @ApplicationTest
 @DisplayName("RequestJoinClub 은 ")
@@ -62,19 +63,7 @@ class RequestJoinClubTest {
     private EntityManager em;
 
     @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
-
-    private final ApplicationEventPublisher mockApplicationEventPublisher = mock(ApplicationEventPublisher.class);
-
-    @BeforeEach
-    void before() {
-        Events.setApplicationEventPublisher(mockApplicationEventPublisher);
-    }
-
-    @AfterEach
-    void after() {
-        Events.setApplicationEventPublisher(applicationEventPublisher);
-    }
+    private ApplicationEvents events;
 
     @Nested
     @DisplayName("성공 테스트")
@@ -147,7 +136,7 @@ class RequestJoinClubTest {
             // then
             Assertions.assertAll(
                     () -> assertThat(applicationFormId).isNotNull(),
-                    () -> verify(mockApplicationEventPublisher, times(1)).publishEvent(any(ClubJoinApplicationCreatedEvent.class))
+                    () -> assertThat(events.stream(ClubJoinApplicationCreatedEvent.class).count()).isEqualTo(1L)
             );
         }
     }
@@ -207,8 +196,6 @@ class RequestJoinClubTest {
         @Test
         @DisplayName("가입 신청을 하게되면 `회장`과 `관리자` 에게 알림이 전송된다.")
         void test() {
-            Events.setApplicationEventPublisher(applicationEventPublisher);  // 핸들러 정상 세팅
-
             Club club = clubRepository.save(club(null));
             ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
             ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
