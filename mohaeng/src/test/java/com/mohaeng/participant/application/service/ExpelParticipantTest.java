@@ -5,14 +5,18 @@ import com.mohaeng.club.domain.repository.ClubRepository;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
+import com.mohaeng.common.NotificationEventHandlerTestTemplate;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
+import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.repository.NotificationRepository;
 import com.mohaeng.participant.application.usecase.ExpelParticipantUseCase;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.participant.exception.ParticipantException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +24,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -187,6 +192,37 @@ class ExpelParticipantTest {
             );
         }
 
+    }
+
+    @Disabled("단독으로만 테스트할 것 (함께 테스트하면 롤백이 안되어서 오류남)")
+    @Nested
+    @DisplayName("추방당한 경우 회원에게 추방당했다는 메일이 전송된다.")
+    public class RequestJoinClubWithEventHandlerTest extends NotificationEventHandlerTestTemplate {
+
+        @Autowired
+        private NotificationRepository notificationRepository;
+
+        @Override
+        protected void givenAndWhen() {
+            Member member = saveMember();
+            Member presidentMember = saveMember();
+            Club club = saveClub();
+            Map<ClubRoleCategory, ClubRole> clubRoleCategoryClubRoleMap = saveDefaultClubRoles(club);
+
+            Participant expelTargetParticipant = saveParticipant(member, club, clubRoleCategoryClubRoleMap.get(GENERAL));
+            saveParticipant(presidentMember, club, clubRoleCategoryClubRoleMap.get(PRESIDENT));
+
+            // when
+            expelParticipant.command(
+                    new ExpelParticipantUseCase.Command(presidentMember.id(), expelTargetParticipant.id())
+            );
+        }
+
+        @Override
+        protected void then() {
+            List<Notification> all = notificationRepository.findAll();
+            assertThat(all.size()).isEqualTo(1);
+        }
     }
 
     private Participant saveParticipant(final Member member, final Club club, final ClubRole clubRole) {
