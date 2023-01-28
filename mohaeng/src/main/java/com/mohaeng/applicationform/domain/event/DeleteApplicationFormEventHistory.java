@@ -10,17 +10,25 @@ import java.time.LocalDateTime;
 @DiscriminatorValue("DeleteApplicationFormEvent")
 public class DeleteApplicationFormEventHistory extends BaseEventHistory {
 
-    private Long clubId;
+    private String clubName;
+    private String clubDescription;
 
     protected DeleteApplicationFormEventHistory() {
     }
 
-    public DeleteApplicationFormEventHistory(final LocalDateTime eventDateTime, final Long clubId) {
+    public DeleteApplicationFormEventHistory(final LocalDateTime eventDateTime,
+                                             final String clubName,
+                                             final String clubDescription) {
         super(eventDateTime);
-        this.clubId = clubId;
+        this.clubName = clubName;
+        this.clubDescription = clubDescription;
     }
 
-    public Long clubId() {
-        return clubId;
+    public String clubName() {
+        return clubName;
+    }
+
+    public String clubDescription() {
+        return clubDescription;
     }
 }

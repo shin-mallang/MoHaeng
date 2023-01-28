@@ -58,4 +58,22 @@ public class NotificationFixture {
                 ExpelParticipantNotification.class.getSimpleName(),
                 1L);
     }
+
+    public static DeleteApplicationFormBecauseClubIsDeletedNotificationDto deleteApplicationFormBecauseClubIsDeletedNotificationDto(final Long id) {
+        return new DeleteApplicationFormBecauseClubIsDeletedNotificationDto(id,
+                LocalDateTime.now(),
+                true,
+                DeleteApplicationFormBecauseClubIsDeletedNotification.class.getSimpleName(),
+                "ANA",
+                "알고리즘 동아리입니다.");
+    }
+
+    public static DeleteParticipantBecauseClubIsDeletedNotificationDto deleteParticipantBecauseClubIsDeletedNotificationDto(final Long id) {
+        return new DeleteParticipantBecauseClubIsDeletedNotificationDto(id,
+                LocalDateTime.now(),
+                true,
+                DeleteParticipantBecauseClubIsDeletedNotification.class.getSimpleName(),
+                "ANA",
+                "알고리즘 동아리입니다.");
+    }
 }

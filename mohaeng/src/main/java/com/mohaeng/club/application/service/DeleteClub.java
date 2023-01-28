@@ -37,7 +37,7 @@ public class DeleteClub implements DeleteClubUseCase {
         validateRequesterIsPresident(command.memberId(), president);
 
         // 모임 제거 이벤트 발행 -> 가입 신청서 & 참여자 제거 -> 모임 역할 제거 + 모임 제거 알림 전송(- AfterCommit 으로)
-        Events.raise(new DeleteClubEvent(this, club.id()));
+        Events.raise(new DeleteClubEvent(this, club.id(), club.name(), club.description()));
 
         clubRepository.delete(club);
     }

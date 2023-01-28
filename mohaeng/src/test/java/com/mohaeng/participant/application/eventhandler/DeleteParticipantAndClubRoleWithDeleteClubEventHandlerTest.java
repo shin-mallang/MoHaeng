@@ -91,7 +91,7 @@ class DeleteParticipantAndClubRoleWithDeleteClubEventHandlerTest extends EventHa
             );
 
             // when
-            handler.handle(new DeleteClubEvent(this, club.id()));
+            handler.handle(new DeleteClubEvent(this, club.id(), club.name(), club.description()));
             flushAndClear();
 
             // then
@@ -120,7 +120,7 @@ class DeleteParticipantAndClubRoleWithDeleteClubEventHandlerTest extends EventHa
             flushAndClear();
 
             // when
-            handler.handle(new DeleteClubEvent(this, club.id()));
+            handler.handle(new DeleteClubEvent(this, club.id(), club.name(), club.description()));
 
             // then
             assertAll(

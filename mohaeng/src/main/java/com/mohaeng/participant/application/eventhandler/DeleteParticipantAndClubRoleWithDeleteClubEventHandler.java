@@ -51,7 +51,7 @@ public class DeleteParticipantAndClubRoleWithDeleteClubEventHandler extends Even
         clubRoleRepository.deleteAllByClubId(event.clubId());
 
         // 참여자 제거 이벤트 발행 -> 참여자들에게 모임이 제거되었다는 알림 전송
-        Events.raise(new DeleteClubParticipantEvent(this, receiverIds, event.clubId()));
+        Events.raise(new DeleteClubParticipantEvent(this, receiverIds, event.clubName(), event.clubDescription()));
 
         process(event);
     }

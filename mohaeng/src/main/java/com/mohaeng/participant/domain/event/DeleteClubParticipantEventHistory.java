@@ -13,19 +13,25 @@ import java.time.LocalDateTime;
 @DiscriminatorValue("ClubParticipantDeleteEvent")
 public class DeleteClubParticipantEventHistory extends BaseEventHistory {
 
-    private Long clubId;
+    private String clubName;
+    private String clubDescription;
 
     protected DeleteClubParticipantEventHistory() {
-
     }
 
     public DeleteClubParticipantEventHistory(final LocalDateTime eventDateTime,
-                                             final Long clubId) {
+                                             final String clubName,
+                                             final String clubDescription) {
         super(eventDateTime);
-        this.clubId = clubId;
+        this.clubName = clubName;
+        this.clubDescription = clubDescription;
     }
 
-    public Long clubId() {
-        return clubId;
+    public String clubName() {
+        return clubName;
+    }
+
+    public String clubDescription() {
+        return clubDescription;
     }
 }

@@ -90,7 +90,7 @@ class DeleteApplicationFormWithDeleteClubEventHandlerTest extends EventHandlerTe
             flushAndClear();
 
             // when
-            handler.handle(new DeleteClubEvent(this, club.id()));
+            handler.handle(new DeleteClubEvent(this, club.id(), club.name(), club.description()));
             flushAndClear();
 
             // then
@@ -116,7 +116,7 @@ class DeleteApplicationFormWithDeleteClubEventHandlerTest extends EventHandlerTe
             flushAndClear();
 
             // when
-            handler.handle(new DeleteClubEvent(this, club.id()));
+            handler.handle(new DeleteClubEvent(this, club.id(), club.name(), club.description()));
             flushAndClear();
 
             // then

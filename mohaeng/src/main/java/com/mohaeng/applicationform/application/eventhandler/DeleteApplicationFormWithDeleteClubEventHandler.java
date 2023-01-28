@@ -41,7 +41,7 @@ public class DeleteApplicationFormWithDeleteClubEventHandler extends EventHandle
         applicationFormRepository.deleteAllByClubId(event.clubId());
 
         // 가입 신청서 제거 이벤트 발행 -> 신청자들에게 모임이 제거되어 가입 신청서가 제거되었다는 알림 전송
-        Events.raise(new DeleteApplicationFormEvent(this, receiverIds, event.clubId()));
+        Events.raise(new DeleteApplicationFormEvent(this, receiverIds, event.clubName(), event.clubDescription()));
 
         process(event);
     }

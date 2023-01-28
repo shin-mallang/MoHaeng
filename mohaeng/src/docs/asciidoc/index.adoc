@@ -119,6 +119,15 @@ operation::notification-query-by-id: OfficerRejectApplicationNotification[snippe
 
 operation::notification-query-by-id: ExpelParticipantNotification[snippets='http-response,response-fields']
 
+=== 알림 조회 - 모임이 제거되어 해당 모임에 대한 가입 신청서가 제거된 것에 대한 알림 (DeleteApplicationFormBecauseClubIsDeletedNotification)
+
+operation::notification-query-by-id: DeleteApplicationFormBecauseClubIsDeletedNotification[snippets='http-response,response-fields']
+
+=== 알림 조회 - 모임이 제거되어 해당 모임의 참여자들에게 모임이 제거되었다는 것을 알리기 위한 알림 (DeleteParticipantBecauseClubIsDeletedNotification)
+
+operation::notification-query-by-id: DeleteParticipantBecauseClubIsDeletedNotification[snippets='http-response,response-fields']
+
+
 [[Approve-Application-API]]
 == Approve Application API
 
