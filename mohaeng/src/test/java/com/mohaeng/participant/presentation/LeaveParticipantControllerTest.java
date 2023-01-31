@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LeaveParticipantController.class)
+@DisplayName("LeaveParticipantControllerTest 는 ")
 class LeaveParticipantControllerTest extends ControllerTest {
 
     @MockBean

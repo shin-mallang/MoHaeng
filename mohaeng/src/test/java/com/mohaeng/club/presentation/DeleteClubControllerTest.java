@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(DeleteClubController.class)
+@DisplayName("DeleteClubController 는 ")
 class DeleteClubControllerTest extends ControllerTest {
 
     @MockBean

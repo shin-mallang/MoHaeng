@@ -16,14 +16,14 @@ public class ClubRoleFixture {
     }
 
     public static ClubRole presidentRole(final String name, final Club club) {
-        return new ClubRole(name, ClubRoleCategory.PRESIDENT, club);
+        return new ClubRole(name, ClubRoleCategory.PRESIDENT, club, true);
     }
 
     public static ClubRole generalRole(final String name, final Club club) {
-        return new ClubRole(name, ClubRoleCategory.GENERAL, club);
+        return new ClubRole(name, ClubRoleCategory.GENERAL, club, false);
     }
 
     public static ClubRole officerRole(final String name, final Club club) {
-        return new ClubRole(name, ClubRoleCategory.OFFICER, club);
+        return new ClubRole(name, ClubRoleCategory.OFFICER, club, false);
     }
 }

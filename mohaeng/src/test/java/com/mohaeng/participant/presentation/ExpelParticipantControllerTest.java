@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ExpelParticipantController.class)
+@DisplayName("ExpelParticipantController 는 ")
 class ExpelParticipantControllerTest extends ControllerTest {
 
     @MockBean

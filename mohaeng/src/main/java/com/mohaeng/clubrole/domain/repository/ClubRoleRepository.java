@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface ClubRoleRepository {
 
+    ClubRole save(final ClubRole clubRole);
+
     List<ClubRole> saveAll(final List<ClubRole> defaultClubRoles);
 
     Optional<ClubRole> findById(final Long id);
