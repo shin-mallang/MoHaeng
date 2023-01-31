@@ -243,3 +243,35 @@ operation::expel-participant-from-club(requester does not president)[snippets='h
 === - 모임에 회장이 없는 경우 (발생하지 않는 상황)
 
 operation::expel-participant-from-club(Nonexistent president in club)[snippets='http-response']
+
+[[Club-Role-API]]
+== Club Role API
+
+[[Club-Role-역할생성]]
+=== 역할 생성
+
+operation::create-club-role[snippets='http-request,path-parameters,request-headers,request-fields,http-response']
+
+=== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::create-club-role(No Access Token)[snippets='http-response']
+
+=== - 없는 모임 ID인 경우
+
+operation::create-club-role(Nonexistent Participant)[snippets='http-response']
+
+=== - 요청자가 회장 혹은 임원이 아닌 경우
+
+operation::create-club-role(requester does not president or officer)[snippets='http-response']
+
+=== - 회장 역할을 생성하려는 경우
+
+operation::create-club-role(when create president role)[snippets='http-response']
+
+=== - 요청 시 비어있는 필드가 있는 경우
+
+operation::create-club-role(request fields contains empty value)[snippets='http-request,http-response']
+
+=== - 역할 카테고리를 잘못 입력한 경우
+
+operation::create-club-role(category enum mapping fail)[snippets='http-request,http-response']
