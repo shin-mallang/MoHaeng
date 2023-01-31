@@ -48,6 +48,11 @@ public class MockParticipantRepository implements ParticipantRepository {
     }
 
     @Override
+    public Optional<Participant> findWithClubRoleByMemberIdAndClubId(Long memberId, Long clubId) {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Participant> findPresidentWithMemberByClub(Club club) {
         return Optional.empty();
     }

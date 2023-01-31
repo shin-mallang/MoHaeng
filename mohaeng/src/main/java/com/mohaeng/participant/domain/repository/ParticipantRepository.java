@@ -23,6 +23,8 @@ public interface ParticipantRepository {
      */
     Optional<Participant> findWithClubRoleByMemberIdAndClub(final Long memberId, final Club club);
 
+    Optional<Participant> findWithClubRoleByMemberIdAndClubId(final Long memberId, final Long clubId);
+
     /**
      * 해당 모임의 회장을 조회
      */
