@@ -133,7 +133,7 @@ public class Participant extends BaseEntity {
         }
     }
 
-    private void checkCategoryIsNotPresident(ClubRoleCategory clubRoleCategory) {
+    private void checkCategoryIsNotPresident(final ClubRoleCategory clubRoleCategory) {
         if (clubRoleCategory == PRESIDENT) {
             throw new ClubRoleException(CAN_NOT_CREATE_ADDITIONAL_PRESIDENT_ROLE);
         }
