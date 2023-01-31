@@ -2,7 +2,7 @@
 name: "\U0001F308 Feature request"
 about: 기능 추가
 title: "[\U0001F308 Feature] "
-labels: "\U0001F308 feature, \U0001F525 refactor"
+labels: "\U0001F308 feature"
 assignees: ''
 
 ---
