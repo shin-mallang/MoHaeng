@@ -49,31 +49,13 @@ public class Participant extends BaseEntity {
         return clubRole;
     }
 
+    /**
+     * 모임에 가입한다.
+     */
     public void joinClub(final Club club, final ClubRole clubRole) {
+        club.participantCountUp();
         this.club = club;
         this.clubRole = clubRole;
-        club.participantCountUp();
-    }
-
-    /**
-     * 회장인지 확인
-     */
-    private boolean isPresident() {
-        return clubRole().isPresidentRole();
-    }
-
-    /**
-     * 관리자(회장, 임원)인지 확인
-     */
-    public boolean isManager() {
-        return clubRole().isManagerRole();
-    }
-
-    /**
-     * 일반 회원인지 여부
-     */
-    private boolean isGeneral() {
-        return clubRole.isGeneralRole();
     }
 
     /**
@@ -84,6 +66,9 @@ public class Participant extends BaseEntity {
         checkCanLeaveFromClub();
 
         club.participantCountDown();
+
+        this.club = null;
+        this.clubRole = null;
     }
 
     /**
@@ -104,6 +89,9 @@ public class Participant extends BaseEntity {
         checkAuthorityExpel();
 
         target.club().participantCountDown();
+
+        target.club = null;
+        target.clubRole = null;
     }
 
     /**
@@ -157,5 +145,26 @@ public class Participant extends BaseEntity {
         if (this.isGeneral()) {
             throw new ClubRoleException(NO_AUTHORITY_CHANGE_ROLE_NAME);
         }
+    }
+
+    /**
+     * 회장인지 확인
+     */
+    private boolean isPresident() {
+        return clubRole().isPresidentRole();
+    }
+
+    /**
+     * 관리자(회장, 임원)인지 확인
+     */
+    public boolean isManager() {
+        return clubRole().isManagerRole();
+    }
+
+    /**
+     * 일반 회원인지 여부
+     */
+    private boolean isGeneral() {
+        return clubRole.isGeneralRole();
     }
 }

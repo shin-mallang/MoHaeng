@@ -2,6 +2,7 @@ package com.mohaeng.applicationform.presentation;
 
 import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
+import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.*;
 import static com.mohaeng.applicationform.presentation.ApproveJoinClubController.APPROVE_JOIN_CLUB_URL;
+import static com.mohaeng.club.exception.ClubExceptionType.CLUB_IS_FULL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;
@@ -168,6 +170,32 @@ class ApproveJoinClubControllerTest extends ControllerTest {
 
             resultActions.andDo(
                     document("approve-join-club-application fail(No Access Token)",
+                            getDocumentResponse()
+                    )
+            );
+        }
+
+        @Test
+        @DisplayName("모임이 가득 찬 경우 400을 반환한다.")
+        void fail_test_5() throws Exception {
+            // given
+            doThrow(new ClubException(CLUB_IS_FULL))
+                    .when(approveJoinClubUseCase).command(any());
+            final Long memberId = 1L;
+            setAuthentication(memberId);
+            final Long applicationFormId = 1L;
+            ResultActions resultActions = mockMvc.perform(
+                            post(APPROVE_JOIN_CLUB_URL, applicationFormId)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                    )
+                    .andDo(print())
+                    .andExpect(status().isBadRequest());
+
+            // when & then
+            verify(approveJoinClubUseCase, times(1)).command(any());
+
+            resultActions.andDo(
+                    document("approve-join-club-application fail(club is full)",
                             getDocumentResponse()
                     )
             );

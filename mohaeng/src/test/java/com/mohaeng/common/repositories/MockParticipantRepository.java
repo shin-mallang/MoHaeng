@@ -82,6 +82,11 @@ public class MockParticipantRepository implements ParticipantRepository {
         return null;
     }
 
+    @Override
+    public Optional<Participant> findPresidentWithMemberAndClubRoleByClub(Club club) {
+        return Optional.empty();
+    }
+
     public List<Participant> findAll() {
         return store.values().stream().toList();
     }

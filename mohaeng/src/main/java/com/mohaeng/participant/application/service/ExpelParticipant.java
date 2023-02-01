@@ -30,7 +30,7 @@ public class ExpelParticipant implements ExpelParticipantUseCase {
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
 
         // 해당 모임의 회장 조회
-        Participant president = participantRepository.findPresidentWithMemberByClub(target.club())
+        Participant president = participantRepository.findPresidentWithMemberAndClubRoleByClub(target.club())
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
 
         // 요청한 Member 가 Participant와 일치하는지 확인
@@ -43,7 +43,7 @@ public class ExpelParticipant implements ExpelParticipantUseCase {
         participantRepository.delete(target);
 
         // 추방 이벤트 발행 -> 추방되었다는 알림 보내기
-        Events.raise(new ExpelParticipantEvent(this, target.member().id(), target.club().id()));
+        Events.raise(new ExpelParticipantEvent(this, target.member().id(), president.club().id()));
     }
 
     /**

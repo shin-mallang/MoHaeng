@@ -164,6 +164,10 @@ operation::approve-join-club-application fail(No Access Token)[snippets='http-re
 
 operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
 
+=== 모임이 가득 찬 경우
+
+operation::approve-join-club-application fail(club is full)[snippets='http-response']
+
 === 요청 시 Header에 AccessToken이 없는 경우
 
 operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
@@ -220,7 +224,6 @@ operation::leave-participant-from-club(president requests to leave the club)[sni
 
 operation::leave-participant-from-club(club has only one participant)[snippets='http-response']
 
-
 [[Participant-추방]]
 == - 모임에서 추방
 
@@ -241,7 +244,6 @@ operation::expel-participant-from-club(requester does not president)[snippets='h
 === - 모임에 회장이 없는 경우 (발생하지 않는 상황)
 
 operation::expel-participant-from-club(Nonexistent president in club)[snippets='http-response']
-
 
 [[Club-Role-API]]
 = Club Role API
@@ -274,7 +276,6 @@ operation::create-club-role(request fields contains empty value)[snippets='http-
 === - 역할 카테고리를 잘못 입력한 경우
 
 operation::create-club-role(category enum mapping fail)[snippets='http-request,http-response']
-
 
 [[Club-Role-이름변경]]
 == 역할 이름 변경

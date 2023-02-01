@@ -91,6 +91,7 @@ class ExpelParticipantTest {
     @Nested
     @DisplayName("실패 테스트")
     class FailTest {
+
         @Test
         @DisplayName("추방하려는 회원이 모임에 존재하지 않는 경우 예외를 발생시킨다.")
         void fail_test_1() {
