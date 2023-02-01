@@ -1,8 +1,8 @@
 package com.mohaeng.notification.domain.model;
 
-import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.notification.NotificationEvent;
+import com.mohaeng.participant.domain.event.ClubJoinApplicationCreatedEvent;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

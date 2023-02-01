@@ -1,8 +1,6 @@
-package com.mohaeng.applicationform.application.service;
+package com.mohaeng.participant.application.service;
 
 import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -22,6 +20,8 @@ import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
 import com.mohaeng.notification.domain.model.kind.OfficerApproveApplicationNotification;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
+import com.mohaeng.participant.domain.event.ApplicationProcessedEvent;
+import com.mohaeng.participant.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;

@@ -1,12 +1,12 @@
-package com.mohaeng.applicationform.application.service;
+package com.mohaeng.participant.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RejectJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.applicationform.domain.event.OfficerRejectClubJoinApplicationEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.common.event.Events;
+import com.mohaeng.participant.domain.event.ApplicationProcessedEvent;
+import com.mohaeng.participant.domain.event.OfficerRejectClubJoinApplicationEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.participant.exception.ParticipantException;
@@ -41,7 +41,7 @@ public class RejectJoinClub implements RejectJoinClubUseCase {
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
 
         // 가입 신청 거절 처리
-        applicationForm.reject(manager);
+        manager.rejectApplicationForm(applicationForm);
 
         // 알림 전송을 위해 모임의 회장 조회하기
         Participant president = participantRepository.findPresidentWithMemberByClub(manager.club())

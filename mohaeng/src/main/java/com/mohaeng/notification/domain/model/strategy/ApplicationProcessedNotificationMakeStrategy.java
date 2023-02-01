@@ -1,10 +1,10 @@
 package com.mohaeng.notification.domain.model.strategy;
 
-import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.NotificationMakeStrategy;
 import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
 import com.mohaeng.notification.domain.model.value.Receiver;
+import com.mohaeng.participant.domain.event.ApplicationProcessedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

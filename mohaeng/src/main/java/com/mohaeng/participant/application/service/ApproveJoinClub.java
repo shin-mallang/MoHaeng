@@ -1,8 +1,6 @@
-package com.mohaeng.applicationform.application.service;
+package com.mohaeng.participant.application.service;
 
 import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -11,6 +9,8 @@ import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.clubrole.exception.ClubRoleException;
 import com.mohaeng.clubrole.exception.ClubRoleExceptionType;
 import com.mohaeng.common.event.Events;
+import com.mohaeng.participant.domain.event.ApplicationProcessedEvent;
+import com.mohaeng.participant.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.participant.exception.ParticipantException;
@@ -52,7 +52,7 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
                 .orElseThrow(() -> new ClubRoleException(ClubRoleExceptionType.NOT_FOUND_CLUB_ROLE));
 
         // 가입 신청 승인 처리 -> 모임에 가입시키기
-        Participant applicant = applicationForm.approve(manager, defaultGeneralRole);
+        Participant applicant = manager.approveApplicationForm(applicationForm, defaultGeneralRole);
         participantRepository.save(applicant);
 
         // 알림 전송을 위해 모임의 회장 조회하기
