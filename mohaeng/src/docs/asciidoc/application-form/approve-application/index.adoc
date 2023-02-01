@@ -30,6 +30,10 @@ operation::approve-join-club-application fail(already processed)[snippets='http-
 
 operation::approve-join-club-application fail(no application form)[snippets='http-response']
 
+=== 모임이 가득 찬 경우
+
+operation::approve-join-club-application fail(club is full)[snippets='http-response']
+
 === 요청 시 Header에 AccessToken이 없는 경우
 
 operation::approve-join-club-application fail(No Access Token)[snippets='http-response']

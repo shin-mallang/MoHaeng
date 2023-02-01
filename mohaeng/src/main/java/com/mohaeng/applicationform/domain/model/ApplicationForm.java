@@ -1,7 +1,6 @@
 package com.mohaeng.applicationform.domain.model;
 
 import com.mohaeng.applicationform.exception.ApplicationFormException;
-import com.mohaeng.applicationform.exception.ApplicationFormExceptionType;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.common.domain.BaseEntity;
@@ -10,6 +9,7 @@ import com.mohaeng.participant.domain.model.Participant;
 import jakarta.persistence.*;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
 
 /**
  * 가입 신청서
@@ -103,7 +103,7 @@ public class ApplicationForm extends BaseEntity {
      */
     private void checkAuthorityToProcessApplication(final Participant manager) {
         if (!manager.isManager()) {
-            throw new ApplicationFormException(ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM);
+            throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
         }
     }
 }
