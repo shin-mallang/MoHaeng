@@ -78,7 +78,8 @@ class ClubTest {
         @DisplayName("participantCountDown 시 모임의 회원 수가 1인 경우 예외를 발생시킨다.")
         void fail_test_2() {
             // given
-            Club club = new Club("name", "dex", 2);
+            Club club = new Club("name", "dex", 1);
+            club.participantCountUp();
             int currentParticipantCount = club.currentParticipantCount();
 
             // when
