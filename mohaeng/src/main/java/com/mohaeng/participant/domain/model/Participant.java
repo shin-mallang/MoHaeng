@@ -1,5 +1,7 @@
 package com.mohaeng.participant.domain.model;
 
+import com.mohaeng.applicationform.domain.model.ApplicationForm;
+import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
@@ -9,6 +11,7 @@ import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.exception.ParticipantException;
 import jakarta.persistence.*;
 
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
 import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.participant.exception.ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT;
@@ -144,6 +147,43 @@ public class Participant extends BaseEntity {
     private void checkAuthorityChangeClubRoleName() {
         if (this.isGeneral()) {
             throw new ClubRoleException(NO_AUTHORITY_CHANGE_ROLE_NAME);
+        }
+    }
+
+    /**
+     * 가입 신청서를 승인한 후, Participant를 생성하여 반환한다.
+     */
+    public Participant approveApplicationForm(final ApplicationForm applicationForm, final ClubRole defaultGeneralRole) {
+        // 권한 확인
+        checkAuthorityToProcessApplication();
+
+        // 모임에 가입시키기
+        Participant applicant = new Participant(applicationForm.applicant());
+        applicant.joinClub(applicationForm.target(), defaultGeneralRole);
+
+        // 가입 신청서 처리
+        applicationForm.process();
+
+        return applicant;
+    }
+
+    /**
+     * 가입 신청서를 거절한다.
+     */
+    public void rejectApplicationForm(final ApplicationForm applicationForm) {
+        // 권한 확인
+        checkAuthorityToProcessApplication();
+
+        // 가입 신청서 처리
+        applicationForm.process();
+    }
+
+    /**
+     * 가입 신청서를 처리할 권한을 확인한다.
+     */
+    private void checkAuthorityToProcessApplication() {
+        if (!isManager()) {
+            throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
         }
     }
 

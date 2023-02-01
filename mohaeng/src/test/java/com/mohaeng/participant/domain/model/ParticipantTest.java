@@ -1,5 +1,7 @@
 package com.mohaeng.participant.domain.model;
 
+import com.mohaeng.applicationform.domain.model.ApplicationForm;
+import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.clubrole.domain.model.ClubRole;
@@ -11,6 +13,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
+import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
 import static com.mohaeng.club.exception.ClubExceptionType.CLUB_IS_EMPTY;
 import static com.mohaeng.club.exception.ClubExceptionType.CLUB_IS_FULL;
 import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.*;
@@ -190,6 +194,64 @@ class ParticipantTest {
                     () -> assertThat(presidentRole.name()).isEqualTo(changeName2),
                     () -> assertThat(officerRole.name()).isEqualTo(changeName2),
                     () -> assertThat(generalRole.name()).isEqualTo(changeName2)
+            );
+        }
+
+        @Test
+        @DisplayName("approveApplicationForm() 시 임원 혹은 회장인 경우 가입 신청서를 처리상태로 만든 뒤, 모임에 가입된 Participant를 반환한다.")
+        void success_test_7() {
+            // given
+            Member member = member(null);
+            Member applicant = member(null);
+            Club club = club(null);
+            ClubRole presidentRole = presidentRole("회장", club);
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+            Participant president = participant(null, member, club, presidentRole);
+            Participant officer = participant(null, member, club, officerRole);
+
+            ApplicationForm applicationForm1 = ApplicationForm.create(applicant, club);
+            ApplicationForm applicationForm2 = ApplicationForm.create(applicant, club);
+
+            // when
+            Participant participant1 = president.approveApplicationForm(applicationForm1, generalRole);
+            Participant participant2 = officer.approveApplicationForm(applicationForm2, generalRole);
+
+            // then
+            assertAll(
+                    () -> assertThat(participant1.club()).isEqualTo(club),
+                    () -> assertThat(participant1.clubRole()).isEqualTo(generalRole),
+                    () -> assertThat(applicationForm1.processed()).isTrue(),
+                    () -> assertThat(participant2.club()).isEqualTo(club),
+                    () -> assertThat(participant2.clubRole()).isEqualTo(generalRole),
+                    () -> assertThat(applicationForm2.processed()).isTrue()
+            );
+        }
+
+        @Test
+        @DisplayName("rejectApplicationForm() 시 임원 혹은 회장인 경우 가입 신청서를 처리상태로 만든다.")
+        void success_test_8() {
+            // given
+            Member member = member(null);
+            Member applicant = member(null);
+            Club club = club(null);
+            ClubRole presidentRole = presidentRole("회장", club);
+            ClubRole officerRole = officerRole("임원", club);
+            Participant president = participant(null, member, club, presidentRole);
+            Participant officer = participant(null, member, club, officerRole);
+
+            ApplicationForm applicationForm1 = ApplicationForm.create(applicant, club);
+            ApplicationForm applicationForm2 = ApplicationForm.create(applicant, club);
+            ;
+
+            // when
+            president.rejectApplicationForm(applicationForm1);
+            officer.rejectApplicationForm(applicationForm2);
+
+            // then
+            assertAll(
+                    () -> assertThat(applicationForm1.processed()).isTrue(),
+                    () -> assertThat(applicationForm2.processed()).isTrue()
             );
         }
     }
@@ -406,6 +468,88 @@ class ParticipantTest {
                     () -> assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME),
                     () -> assertThat(baseExceptionType2).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME),
                     () -> assertThat(baseExceptionType3).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME)
+            );
+        }
+
+        @Test
+        @DisplayName("approveApplicationForm() 혹은 rejectApplicationForm() 시 이미 처리된 가입 신청서인 경우 예외가 발생한다.")
+        void fail_test_9() {
+            // given
+            Member member = member(null);
+            Member applicant = member(null);
+            Club club = club(null);
+            ClubRole presidentRole = presidentRole("회장", club);
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+            Participant president = participant(null, member, club, presidentRole);
+
+            ApplicationForm applicationForm1 = ApplicationForm.create(applicant, club);
+            applicationForm1.process();
+            ApplicationForm applicationForm2 = ApplicationForm.create(applicant, club);
+            applicationForm2.process();
+
+            // when
+            BaseExceptionType baseExceptionType1 = assertThrows(ApplicationFormException.class,
+                    () -> president.approveApplicationForm(applicationForm1, generalRole))
+                    .exceptionType();
+            BaseExceptionType baseExceptionType2 = assertThrows(ApplicationFormException.class,
+                    () -> president.rejectApplicationForm(applicationForm2))
+                    .exceptionType();
+
+            // then
+            assertAll(
+                    () -> assertThat(baseExceptionType1).isEqualTo(ALREADY_PROCESSED_APPLICATION_FORM),
+                    () -> assertThat(baseExceptionType2).isEqualTo(ALREADY_PROCESSED_APPLICATION_FORM)
+            );
+        }
+
+        @Test
+        @DisplayName("approveApplicationForm() 혹은 rejectApplicationForm() 시 임원이나 회장이 아닌 경우 예외가 발생한다.")
+        void fail_test_10() {
+            // given
+            Member member = member(null);
+            Member applicant = member(null);
+            Club club = club(null);
+            ClubRole presidentRole = presidentRole("회장", club);
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+            Participant general = participant(null, member, club, generalRole);
+
+            ApplicationForm applicationForm1 = ApplicationForm.create(applicant, club);
+
+            // when
+            BaseExceptionType baseExceptionType1 = assertThrows(ApplicationFormException.class,
+                    () -> general.approveApplicationForm(applicationForm1, generalRole))
+                    .exceptionType();
+
+            // then
+            assertAll(
+                    () -> assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION_FORM),
+                    () -> assertThat(applicationForm1.processed()).isFalse()
+            );
+        }
+
+        @Test
+        @DisplayName("approveApplicationForm() 시 해당 모임이 가득 찬 경우 예외가 발생한다.")
+        void fail_test_11() {
+            // given
+            Member member = member(null);
+            Member applicant = member(null);
+            Club club = new Club("name", "des", 1);
+            ClubRole presidentRole = presidentRole("회장", club);
+            ClubRole generalRole = generalRole("일반", club);
+            Participant president = participant(null, member, club, presidentRole);
+
+            ApplicationForm applicationForm1 = ApplicationForm.create(applicant, club);
+
+            // when
+            BaseExceptionType baseExceptionType1 = assertThrows(ClubException.class,
+                    () -> president.approveApplicationForm(applicationForm1, generalRole))
+                    .exceptionType();
+
+            // then
+            assertAll(
+                    () -> assertThat(baseExceptionType1).isEqualTo(CLUB_IS_FULL)
             );
         }
     }

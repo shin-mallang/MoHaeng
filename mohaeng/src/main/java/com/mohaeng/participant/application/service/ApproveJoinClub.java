@@ -52,7 +52,7 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
                 .orElseThrow(() -> new ClubRoleException(ClubRoleExceptionType.NOT_FOUND_CLUB_ROLE));
 
         // 가입 신청 승인 처리 -> 모임에 가입시키기
-        Participant applicant = applicationForm.approve(manager, defaultGeneralRole);
+        Participant applicant = manager.approveApplicationForm(applicationForm, defaultGeneralRole);
         participantRepository.save(applicant);
 
         // 알림 전송을 위해 모임의 회장 조회하기

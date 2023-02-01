@@ -41,7 +41,7 @@ public class RejectJoinClub implements RejectJoinClubUseCase {
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
 
         // 가입 신청 거절 처리
-        applicationForm.reject(manager);
+        manager.rejectApplicationForm(applicationForm);
 
         // 알림 전송을 위해 모임의 회장 조회하기
         Participant president = participantRepository.findPresidentWithMemberByClub(manager.club())
