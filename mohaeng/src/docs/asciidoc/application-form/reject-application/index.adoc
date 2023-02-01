@@ -8,28 +8,26 @@
 :toclevels: 2
 :sectlinks:
 
-
-
-[[Reject-Application-API]]
-== Reject Application API
+[[ApplicationForm-API]]
+== ApplicationForm API
 
 [[모임-가입-신청-거절]]
-=== 모임 가입 신청 거절
+=== - 모임 가입 신청 거절
 
 operation::reject-join-club-application[snippets='http-request,path-parameters,request-headers,http-response']
 
-=== 회장 & 임원진이 아닌 사람이 요청을 처리하려는 경우
+==== - 회장 & 임원진이 아닌 사람이 요청을 처리하려는 경우
 
 operation::reject-join-club-application fail(no authority)[snippets='http-response']
 
-=== 이미 처리된 신청서인 경우
+==== - 이미 처리된 신청서인 경우
 
-operation::reject-join-club-application fail(already processed)[snippets='http-response']
+operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
 
-=== 없는 신청서의 경우
+==== - 없는 신청서의 경우
 
-operation::reject-join-club-application fail(no application form)[snippets='http-response']
+operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
 
-=== 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::reject-join-club-application fail(No Access Token)[snippets='http-response']

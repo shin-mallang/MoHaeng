@@ -8,20 +8,22 @@
 :toclevels: 2
 :sectlinks:
 
-
 [[Club-API]]
 == Club API
 
 [[Club-모임생성]]
-=== 모임생성
-operation::create-club[snippets='http-request,request-headers,request-body,request-fields,http-response']
+=== - 모임생성
 
-=== 생성 요청 시 Header에 AccessToken이 없는 경우
+operation::create-club[snippets='http-request,request-body,request-fields,http-response']
+
+==== - 생성 요청 시 Header에 AccessToken이 없는 경우
+
 operation::create-club fail(No Access Token)[snippets='http-response']
 
-=== 필드가 다 채워지지 않은 경우
+==== - 필드가 다 채워지지 않은 경우
+
 operation::create-club fail(request fields contains empty value)[snippets='http-response']
 
-=== 인원을 0으로 설정한 경우(-> 최대 인원으로 설정)
-operation::create-club(max people count is 0 then setting MAX)[snippets='request-body,http-response']
+==== - 인원을 0으로 설정한 경우(-> 최대 인원으로 설정)
 
+operation::create-club(max people count is 0 then setting MAX)[snippets='request-body,http-response']

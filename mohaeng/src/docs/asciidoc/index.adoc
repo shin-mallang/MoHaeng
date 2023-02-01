@@ -13,15 +13,15 @@
 == Member API
 
 [[Member-회원가입]]
-=== Member 회원가입
+=== - Member 회원가입
 
 operation::sign-up[snippets='http-request,request-body,request-fields,http-response']
 
-=== 중복 아이디로 회원가입 시
+==== - 중복 아이디로 회원가입 시
 
 operation::sign-up fail(duplicated username)[snippets='http-response']
 
-=== 필드가 다 채워지지 않은 경우
+==== - 필드가 다 채워지지 않은 경우
 
 operation::sign-up fail(request fields contains empty value)[snippets='http-response']
 
@@ -29,15 +29,15 @@ operation::sign-up fail(request fields contains empty value)[snippets='http-resp
 == Authentication API
 
 [[Authentication-로그인]]
-=== 로그인
+=== - 로그인
 
 operation::login[snippets='http-request,request-body,request-fields,http-response']
 
-=== 아이디 혹은 비밀번호가 일치하지 않아 로그인 실패 시
+==== - 아이디 혹은 비밀번호가 일치하지 않아 로그인 실패 시
 
 operation::login fail(username or password miss match)[snippets='http-response']
 
-=== 필드가 다 채워지지 않은 경우
+==== - 필드가 다 채워지지 않은 경우
 
 operation::login fail(request fields contains empty value)[snippets='http-response']
 
@@ -45,61 +45,44 @@ operation::login fail(request fields contains empty value)[snippets='http-respon
 == Club API
 
 [[Club-모임생성]]
-=== 모임생성
+=== - 모임생성
 
 operation::create-club[snippets='http-request,request-body,request-fields,http-response']
 
-=== 생성 요청 시 Header에 AccessToken이 없는 경우
+==== - 생성 요청 시 Header에 AccessToken이 없는 경우
 
 operation::create-club fail(No Access Token)[snippets='http-response']
 
-=== 필드가 다 채워지지 않은 경우
+==== - 필드가 다 채워지지 않은 경우
 
 operation::create-club fail(request fields contains empty value)[snippets='http-response']
 
-=== 인원을 0으로 설정한 경우(-> 최대 인원으로 설정)
+==== - 인원을 0으로 설정한 경우(-> 최대 인원으로 설정)
 
 operation::create-club(max people count is 0 then setting MAX)[snippets='request-body,http-response']
 
 [[Club-모임제거]]
-=== 모임제거
+=== - 모임제거
 
 operation::delete-club[snippets='http-request,path-parameters,request-headers,http-response']
 
-=== - 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::delete-club(No Access Token)[snippets='http-response']
 
-=== - 없는 모임 ID인 경우
+==== - 없는 모임 ID인 경우
 
 operation::delete-club(Nonexistent Club ID)[snippets='http-response']
 
-=== - 요청자가 회장이 아닌 경우
+==== - 요청자가 회장이 아닌 경우
 
 operation::delete-club(requester does not president)[snippets='http-response']
-
-[[Club-모임-가입-신청]]
-=== 모임 가입 신청
-
-operation::request-join-club[snippets='http-request,path-parameters,http-response']
-
-=== 이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우
-
-operation::request-join-club fail(already request join club)[snippets='http-response']
-
-=== 이미 모임에 가입된 회원이 같은 모임에 또다시 가입 신청을 보낸 경우
-
-operation::request-join-club fail(member already joined club)[snippets='http-response']
-
-=== 요청 시 Header에 AccessToken이 없는 경우
-
-operation::request-join-club fail(No Access Token)[snippets='http-response']
 
 [[Notification-API]]
 == Notification API
 
 [[Notification-알림-조회]]
-=== 알림 조회 기본 형식
+=== - 알림 조회 기본 형식
 
 operation::notification-query-by-id: ApplicationProcessedNotification[snippets='http-request,path-parameters,request-headers,http-response']
 
@@ -116,184 +99,200 @@ operation::notification-query-by-id fail(notification's receiver id is not match
 operation::notification-query-by-id fail(notification does not exist)[snippets='http-response']
 
 [[Notification-알림-조회-종류별]]
-=== 알림 조회 - 가입 신청 수락/거절에 대한 알림 (ApplicationProcessedNotification)
+=== - 알림 종류별 조회 결과
+
+==== - 알림 조회 - 가입 신청 수락/거절에 대한 알림 (ApplicationProcessedNotification)
 
 operation::notification-query-by-id: ApplicationProcessedNotification[snippets='http-response,response-fields']
 
-=== 알림 조회 - 가입 요청 생성에 대한 알림 (ClubJoinApplicationRequestedNotification)
+==== - 알림 조회 - 가입 요청 생성에 대한 알림 (ClubJoinApplicationRequestedNotification)
 
 operation::notification-query-by-id: ClubJoinApplicationCreatedNotification[snippets='http-response,response-fields']
 
-=== 알림 조회 - 관리자가 가입 신청을 수락한 것에 대한 알림 (OfficerApproveApplicationNotification)
+==== - 알림 조회 - 관리자가 가입 신청을 수락한 것에 대한 알림 (OfficerApproveApplicationNotification)
 
 operation::notification-query-by-id: OfficerApproveApplicationNotification[snippets='http-response,response-fields']
 
-=== 알림 조회 - 관리자가 가입 신청을 거절한 것에 대한 알림 (OfficerRejectApplicationNotification)
+==== - 알림 조회 - 관리자가 가입 신청을 거절한 것에 대한 알림 (OfficerRejectApplicationNotification)
 
 operation::notification-query-by-id: OfficerRejectApplicationNotification[snippets='http-response,response-fields']
 
-=== 알림 조회 - 모임에서 추방된 것에 대한 알림 (ExpelParticipantNotification)
+==== - 알림 조회 - 모임에서 추방된 것에 대한 알림 (ExpelParticipantNotification)
 
 operation::notification-query-by-id: ExpelParticipantNotification[snippets='http-response,response-fields']
 
-=== 알림 조회 - 모임이 제거되어 해당 모임에 대한 가입 신청서가 제거된 것에 대한 알림 (DeleteApplicationFormBecauseClubIsDeletedNotification)
+==== - 알림 조회 - 모임이 제거되어 해당 모임에 대한 가입 신청서가 제거된 것에 대한 알림 (DeleteApplicationFormBecauseClubIsDeletedNotification)
 
 operation::notification-query-by-id: DeleteApplicationFormBecauseClubIsDeletedNotification[snippets='http-response,response-fields']
 
-=== 알림 조회 - 모임이 제거되어 해당 모임의 참여자들에게 모임이 제거되었다는 것을 알리기 위한 알림 (DeleteParticipantBecauseClubIsDeletedNotification)
+==== - 알림 조회 - 모임이 제거되어 해당 모임의 참여자들에게 모임이 제거되었다는 것을 알리기 위한 알림 (DeleteParticipantBecauseClubIsDeletedNotification)
 
 operation::notification-query-by-id: DeleteParticipantBecauseClubIsDeletedNotification[snippets='http-response,response-fields']
 
-[[Approve-Application-API]]
-== Approve Application API
+[[ApplicationForm-API]]
+== ApplicationForm API
+
+[[모임-가입-신청]]
+=== - 모임 가입 신청
+
+operation::request-join-club[snippets='http-request,path-parameters,http-response']
+
+==== - 이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우
+
+operation::request-join-club fail(already request join club)[snippets='http-response']
+
+==== - 이미 모임에 가입된 회원이 같은 모임에 또다시 가입 신청을 보낸 경우
+
+operation::request-join-club fail(member already joined club)[snippets='http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::request-join-club fail(No Access Token)[snippets='http-response']
 
 [[모임-가입-신청-수락]]
-=== 모임 가입 신청 수락
+=== - 모임 가입 신청 수락
 
 operation::approve-join-club-application[snippets='http-request,path-parameters,request-headers,http-response']
 
-=== 회장 & 임원진이 아닌 사람이 요청을 처리하려는 경우
+==== - 회장 & 임원진이 아닌 사람이 요청을 처리하려는 경우
 
 operation::approve-join-club-application fail(no authority)[snippets='http-response']
 
-=== 이미 처리된 신청서인 경우
+==== - 이미 처리된 신청서인 경우
 
 operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
 
-=== 없는 신청서의 경우
+==== - 없는 신청서의 경우
 
 operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
 
-=== 모임이 가득 찬 경우
+==== - 모임이 가득 찬 경우
 
 operation::approve-join-club-application fail(club is full)[snippets='http-response']
 
-=== 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
 
-[[Reject-Application-API]]
-== Reject Application API
-
 [[모임-가입-신청-거절]]
-=== 모임 가입 신청 거절
+=== - 모임 가입 신청 거절
 
 operation::reject-join-club-application[snippets='http-request,path-parameters,request-headers,http-response']
 
-=== 회장 & 임원진이 아닌 사람이 요청을 처리하려는 경우
+==== - 회장 & 임원진이 아닌 사람이 요청을 처리하려는 경우
 
 operation::reject-join-club-application fail(no authority)[snippets='http-response']
 
-=== 이미 처리된 신청서인 경우
+==== - 이미 처리된 신청서인 경우
 
 operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
 
-=== 없는 신청서의 경우
+==== - 없는 신청서의 경우
 
 operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
 
-=== 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
 
 [[Participant-API]]
-= Participant API
+== Participant API
 
 [[Participant-제거]]
-== - 모임에서 탈퇴
+=== - 모임에서 탈퇴
 
 operation::leave-participant-from-club[snippets='http-request,path-parameters,request-headers,http-response']
 
-=== - 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::leave-participant-from-club(No Access Token)[snippets='http-response']
 
-=== - 없는 참여자 ID인 경우
+==== - 없는 참여자 ID인 경우
 
 operation::leave-participant-from-club(Nonexistent Participant ID)[snippets='http-response']
 
-=== - 요청한 회원의 ID가, 탈퇴하려는 참여자의 회원 ID와 일치하지 않는 경우
+==== - 요청한 회원의 ID가, 탈퇴하려는 참여자의 회원 ID와 일치하지 않는 경우
 
 operation::leave-participant-from-club(requested memberId does not match the participant's MemberId)[snippets='http-response']
 
-=== - 회장이 탈퇴를 시도한 경우
+==== - 회장이 탈퇴를 시도한 경우
 
 operation::leave-participant-from-club(president requests to leave the club)[snippets='http-response']
 
-=== - 모임에 사람이 1명밖에 남지 않아 탈퇴할 수 없는 경우 (회장이 항상 먼저 검사되므로 발생하지 않는 상황이다.)
+==== - 모임에 사람이 1명밖에 남지 않아 탈퇴할 수 없는 경우 (회장이 항상 먼저 검사되므로 발생하지 않는 상황이다.)
 
 operation::leave-participant-from-club(club has only one participant)[snippets='http-response']
 
 [[Participant-추방]]
-== - 모임에서 추방
+=== - 모임에서 추방
 
 operation::expel-participant-from-club[snippets='http-request,path-parameters,request-headers,http-response']
 
-=== - 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::expel-participant-from-club(No Access Token)[snippets='http-response']
 
-=== - 없는 참여자 ID인 경우
+==== - 없는 참여자 ID인 경우
 
 operation::expel-participant-from-club(Nonexistent Participant ID)[snippets='http-response']
 
-=== - 요청자가 회장이 아닌 경우
+==== - 요청자가 회장이 아닌 경우
 
 operation::expel-participant-from-club(requester does not president)[snippets='http-response']
 
-=== - 모임에 회장이 없는 경우 (발생하지 않는 상황)
+==== - 모임에 회장이 없는 경우 (발생하지 않는 상황)
 
 operation::expel-participant-from-club(Nonexistent president in club)[snippets='http-response']
 
 [[Club-Role-API]]
-= Club Role API
+== Club Role API
 
 [[Club-Role-역할생성]]
-== 역할 생성
+=== - 역할 생성
 
 operation::create-club-role[snippets='http-request,path-parameters,request-headers,request-fields,http-response']
 
-=== - 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::create-club-role(No Access Token)[snippets='http-response']
 
-=== - 없는 참여자 ID인 경우
+==== - 없는 참여자 ID인 경우
 
 operation::create-club-role(Nonexistent Participant)[snippets='http-response']
 
-=== - 요청자가 회장 혹은 임원이 아닌 경우
+==== - 요청자가 회장 혹은 임원이 아닌 경우
 
 operation::create-club-role(requester does not president or officer)[snippets='http-response']
 
-=== - 회장 역할을 생성하려는 경우
+==== - 회장 역할을 생성하려는 경우
 
 operation::create-club-role(when create president role)[snippets='http-response']
 
-=== - 요청 시 비어있는 필드가 있는 경우
+==== - 요청 시 비어있는 필드가 있는 경우
 
 operation::create-club-role(request fields contains empty value)[snippets='http-request,http-response']
 
-=== - 역할 카테고리를 잘못 입력한 경우
+==== - 역할 카테고리를 잘못 입력한 경우
 
 operation::create-club-role(category enum mapping fail)[snippets='http-request,http-response']
 
 [[Club-Role-이름변경]]
-== 역할 이름 변경
+=== - 역할 이름 변경
 
 operation::change-club-role-name[snippets='http-request,path-parameters,request-headers,request-fields,http-response']
 
-=== - 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::change-club-role-name(No Access Token)[snippets='http-response']
 
-=== - 없는 참여자 ID인 경우
+==== - 없는 참여자 ID인 경우
 
 operation::change-club-role-name(Nonexistent Participant)[snippets='http-response']
 
-=== - 요청자가 회장 혹은 임원이 아닌 경우
+==== - 요청자가 회장 혹은 임원이 아닌 경우
 
 operation::change-club-role-name(requester does not president or officer)[snippets='http-response']
 
-=== - 요청 시 비어있는 필드가 있는 경우
+==== - 요청 시 비어있는 필드가 있는 경우
 
 operation::change-club-role-name(request fields contains empty value)[snippets='http-request,http-response']

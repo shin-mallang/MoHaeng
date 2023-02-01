@@ -8,27 +8,26 @@
 :toclevels: 2
 :sectlinks:
 
-
 [[Club-Role-API]]
 == Club Role API
 
 [[Club-Role-이름변경]]
-=== 역할 이름 변경
+=== - 역할 이름 변경
 
 operation::change-club-role-name[snippets='http-request,path-parameters,request-headers,request-fields,http-response']
 
-=== - 요청 시 Header에 AccessToken이 없는 경우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::change-club-role-name(No Access Token)[snippets='http-response']
 
-=== - 없는 참여자 ID인 경우
+==== - 없는 참여자 ID인 경우
 
 operation::change-club-role-name(Nonexistent Participant)[snippets='http-response']
 
-=== - 요청자가 회장 혹은 임원이 아닌 경우
+==== - 요청자가 회장 혹은 임원이 아닌 경우
 
 operation::change-club-role-name(requester does not president or officer)[snippets='http-response']
 
-=== - 요청 시 비어있는 필드가 있는 경우
+==== - 요청 시 비어있는 필드가 있는 경우
 
 operation::change-club-role-name(request fields contains empty value)[snippets='http-request,http-response']
