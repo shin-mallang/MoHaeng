@@ -7,12 +7,12 @@ import com.mohaeng.clubrole.exception.ClubRoleException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.exception.ParticipantException;
-import com.mohaeng.participant.exception.ParticipantExceptionType;
 import jakarta.persistence.*;
 
 import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
-import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.CAN_NOT_CREATE_ADDITIONAL_PRESIDENT_ROLE;
-import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.NO_AUTHORITY_CREATE_ROLE;
+import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.*;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
 
 @Entity
 @Table(name = "participant")
@@ -92,7 +92,7 @@ public class Participant extends BaseEntity {
      */
     private void checkCanLeaveFromClub() {
         if (this.isPresident()) {
-            throw new ParticipantException(ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB);
+            throw new ParticipantException(PRESIDENT_CAN_NOT_LEAVE_CLUB);
         }
     }
 
@@ -112,7 +112,7 @@ public class Participant extends BaseEntity {
      */
     private void checkAuthorityExpel() {
         if (!this.isPresident()) {
-            throw new ParticipantException(ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT);
+            throw new ParticipantException(NO_AUTHORITY_EXPEL_PARTICIPANT);
         }
     }
 
@@ -133,9 +133,29 @@ public class Participant extends BaseEntity {
         }
     }
 
-    private void checkCategoryIsNotPresident(ClubRoleCategory clubRoleCategory) {
+    private void checkCategoryIsNotPresident(final ClubRoleCategory clubRoleCategory) {
         if (clubRoleCategory == PRESIDENT) {
             throw new ClubRoleException(CAN_NOT_CREATE_ADDITIONAL_PRESIDENT_ROLE);
+        }
+    }
+
+    /**
+     * 역할 이름을 변경한다.
+     *
+     * @param clubRole 이름을 바꿀 역할
+     * @param roleName 바꾸고싶은 이름
+     */
+    public void changeClubRoleName(final ClubRole clubRole, final String roleName) {
+        // 이름을 변경하려는 회원이 회장이나 임원이 아닌 경우 예외 발생
+        checkAuthorityChangeClubRoleName();
+
+        // 이름 변경
+        clubRole.changeName(roleName);
+    }
+
+    private void checkAuthorityChangeClubRoleName() {
+        if (this.isGeneral()) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_ROLE_NAME);
         }
     }
 }

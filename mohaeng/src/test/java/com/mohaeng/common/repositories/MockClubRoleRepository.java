@@ -39,6 +39,11 @@ public class MockClubRoleRepository implements ClubRoleRepository {
     }
 
     @Override
+    public Optional<ClubRole> findWithClubById(Long clubRoleId) {
+        return Optional.empty();
+    }
+
+    @Override
     public void deleteAllByClubId(Long clubId) {
 
     }

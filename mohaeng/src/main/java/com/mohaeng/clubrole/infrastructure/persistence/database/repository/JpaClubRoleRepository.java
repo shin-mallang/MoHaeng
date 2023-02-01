@@ -19,8 +19,12 @@ public interface JpaClubRoleRepository extends JpaRepository<ClubRole, Long>, Cl
     }
 
     @Override
-    @Query("select cr from ClubRole cr where cr.clubRoleCategory = 'GENERAL'")
+    @Query("select cr from ClubRole cr where cr.clubRoleCategory = 'GENERAL' and cr.isBasic = true")
     Optional<ClubRole> findDefaultGeneralRoleByClub(final Club club);
+
+    @Override
+    @Query("select cr from ClubRole cr join fetch cr.club where cr.id = :clubRoleId")
+    Optional<ClubRole> findWithClubById(@Param("clubRoleId") final Long clubRoleId);
 
     @Override
     @Modifying
