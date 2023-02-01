@@ -69,7 +69,6 @@ public class Participant extends BaseEntity {
 
         this.club = null;
         this.clubRole = null;
-        this.member = null;
     }
 
     /**
@@ -93,7 +92,6 @@ public class Participant extends BaseEntity {
 
         target.club = null;
         target.clubRole = null;
-        target.member = null;
     }
 
     /**

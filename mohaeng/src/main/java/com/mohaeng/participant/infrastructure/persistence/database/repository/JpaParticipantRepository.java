@@ -32,6 +32,10 @@ public interface JpaParticipantRepository extends JpaRepository<Participant, Lon
     Optional<Participant> findPresidentWithMemberByClub(final Club club);
 
     @Override
+    @Query("select p from Participant p join fetch p.member join fetch p.clubRole where p.clubRole.clubRoleCategory = 'PRESIDENT'")
+    Optional<Participant> findPresidentWithMemberAndClubRoleByClub(final Club club);
+
+    @Override
     @Query("select p from Participant p join fetch p.member join fetch p.club where p.id = :id")
     Optional<Participant> findWithMemberAndClubById(@Param("id") final Long id);
 

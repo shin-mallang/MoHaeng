@@ -37,4 +37,6 @@ public interface ParticipantRepository {
     void deleteAllByClubId(final Long clubId);
 
     List<Participant> findAllWithMemberByClubId(final Long clubId);
+
+    Optional<Participant> findPresidentWithMemberAndClubRoleByClub(final Club club);
 }
