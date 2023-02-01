@@ -23,6 +23,10 @@ public interface JpaClubRoleRepository extends JpaRepository<ClubRole, Long>, Cl
     Optional<ClubRole> findDefaultGeneralRoleByClub(final Club club);
 
     @Override
+    @Query("select cr from ClubRole cr join fetch cr.club where cr.id = :clubRoleId")
+    Optional<ClubRole> findWithClubById(@Param("clubRoleId") final Long clubRoleId);
+
+    @Override
     @Modifying
     @Query("delete from ClubRole cr where cr.club.id = :clubId")
     void deleteAllByClubId(@Param("clubId") final Long clubId);

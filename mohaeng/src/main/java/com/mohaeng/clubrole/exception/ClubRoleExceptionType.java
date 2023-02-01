@@ -8,6 +8,7 @@ public enum ClubRoleExceptionType implements BaseExceptionType {
     NOT_FOUND_CLUB_ROLE(400, HttpStatus.NOT_FOUND, "찾으시는 역할이 없습니다."),
     NO_AUTHORITY_CREATE_ROLE(401, HttpStatus.FORBIDDEN, "모임의 역할을 생성할 권한이 없습니다."),
     CAN_NOT_CREATE_ADDITIONAL_PRESIDENT_ROLE(402, HttpStatus.BAD_REQUEST, "회장 역할은 추가적으로 생성할 수 없습니다."),
+    NO_AUTHORITY_CHANGE_ROLE_NAME(403, HttpStatus.FORBIDDEN, "역할의 이름을 변경할 권한이 없습니다."),
     ;
 
     private final int errorCode;

@@ -98,4 +98,11 @@ public class ClubRole extends BaseEntity {
     public boolean isGeneralRole() {
         return this.clubRoleCategory == ClubRoleCategory.GENERAL;
     }
+
+    /**
+     * 역할의 이름 변경
+     */
+    public void changeName(final String roleName) {
+        this.name = roleName;
+    }
 }
