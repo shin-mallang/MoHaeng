@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>MoHeang API Docs</title>
+<title>MoHaeng API Docs</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -440,7 +440,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>MoHeang API Docs</h1>
+<h1>MoHaeng API Docs</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
@@ -449,7 +449,43 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#Member-API">Member API</a>
 <ul class="sectlevel2">
-<li><a href="#Member-회원가입">Member 회원가입</a></li>
+<li><a href="#Member-회원가입">- Member 회원가입</a></li>
+</ul>
+</li>
+<li><a href="#Authentication-API">Authentication API</a>
+<ul class="sectlevel2">
+<li><a href="#Authentication-로그인">- 로그인</a></li>
+</ul>
+</li>
+<li><a href="#Club-API">Club API</a>
+<ul class="sectlevel2">
+<li><a href="#Club-모임생성">- 모임생성</a></li>
+<li><a href="#Club-모임제거">- 모임제거</a></li>
+</ul>
+</li>
+<li><a href="#Notification-API">Notification API</a>
+<ul class="sectlevel2">
+<li><a href="#Notification-알림-조회">- 알림 조회 기본 형식</a></li>
+<li><a href="#Notification-알림-조회-종류별">- 알림 종류별 조회 결과</a></li>
+</ul>
+</li>
+<li><a href="#ApplicationForm-API">ApplicationForm API</a>
+<ul class="sectlevel2">
+<li><a href="#모임-가입-신청">- 모임 가입 신청</a></li>
+<li><a href="#모임-가입-신청-수락">- 모임 가입 신청 수락</a></li>
+<li><a href="#모임-가입-신청-거절">- 모임 가입 신청 거절</a></li>
+</ul>
+</li>
+<li><a href="#Participant-API">Participant API</a>
+<ul class="sectlevel2">
+<li><a href="#Participant-제거">- 모임에서 탈퇴</a></li>
+<li><a href="#Participant-추방">- 모임에서 추방</a></li>
+</ul>
+</li>
+<li><a href="#Club-Role-API">Club Role API</a>
+<ul class="sectlevel2">
+<li><a href="#Club-Role-역할생성">- 역할 생성</a></li>
+<li><a href="#Club-Role-이름변경">- 역할 이름 변경</a></li>
 </ul>
 </li>
 </ul>
@@ -460,12 +496,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="Member-API"><a class="link" href="#Member-API">Member API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="Member-회원가입"><a class="link" href="#Member-회원가입">Member 회원가입</a></h3>
+<h3 id="Member-회원가입"><a class="link" href="#Member-회원가입">- Member 회원가입</a></h3>
 <div class="sect3">
 <h4 id="Member-회원가입_http_request"><a class="link" href="#Member-회원가입_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/sign-up HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/sign-up HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 109
 Host: localhost:8080
@@ -547,36 +583,2182 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_중복_아이디로_회원가입_시"><a class="link" href="#_중복_아이디로_회원가입_시">중복 아이디로 회원가입 시</a></h4>
+<h4 id="_중복_아이디로_회원가입_시"><a class="link" href="#_중복_아이디로_회원가입_시">- 중복 아이디로 회원가입 시</a></h4>
 <div class="sect4">
 <h5 id="_중복_아이디로_회원가입_시_http_response"><a class="link" href="#_중복_아이디로_회원가입_시_http_response">HTTP response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 409 Conflict
-Content-Type: application/json
-Content-Length: 45
+Content-Type: application/json;charset=UTF-8
+Content-Length: 77
 
 {
-  "code" : "CONFLICT",
-  "message" : null
+  "code" : "100",
+  "message" : "이미 존재하는 아이디입니다."
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_필드가_다_채워지지_않은_경우"><a class="link" href="#_필드가_다_채워지지_않은_경우">필드가 다 채워지지 않은 경우</a></h4>
+<h4 id="_필드가_다_채워지지_않은_경우"><a class="link" href="#_필드가_다_채워지지_않은_경우">- 필드가 다 채워지지 않은 경우</a></h4>
 <div class="sect4">
 <h5 id="_필드가_다_채워지지_않은_경우_http_response"><a class="link" href="#_필드가_다_채워지지_않은_경우_http_response">HTTP response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
-Content-Type: application/json
+Content-Type: application/json;charset=UTF-8
+Content-Length: 114
+
+{
+  "code" : "1000",
+  "message" : "입력되지 않은 필드가 있습니다. [age, name, password, username]"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Authentication-API"><a class="link" href="#Authentication-API">Authentication API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="Authentication-로그인"><a class="link" href="#Authentication-로그인">- 로그인</a></h3>
+<div class="sect3">
+<h4 id="Authentication-로그인_http_request"><a class="link" href="#Authentication-로그인_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/login HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 68
+Host: localhost:8080
+
+{
+  "username" : "sampleUsername",
+  "password" : "samplePassword"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Authentication-로그인_request_body"><a class="link" href="#Authentication-로그인_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "username" : "sampleUsername",
+  "password" : "samplePassword"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Authentication-로그인_request_fields"><a class="link" href="#Authentication-로그인_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>username</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">username(아이디)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">password(비밀번호)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Authentication-로그인_http_response"><a class="link" href="#Authentication-로그인_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 173
+
+{
+  "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_아이디_혹은_비밀번호가_일치하지_않아_로그인_실패_시"><a class="link" href="#_아이디_혹은_비밀번호가_일치하지_않아_로그인_실패_시">- 아이디 혹은 비밀번호가 일치하지 않아 로그인 실패 시</a></h4>
+<div class="sect4">
+<h5 id="_아이디_혹은_비밀번호가_일치하지_않아_로그인_실패_시_http_response"><a class="link" href="#_아이디_혹은_비밀번호가_일치하지_않아_로그인_실패_시_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 110
+
+{
+  "code" : "200",
+  "message" : "인증 정보가 올바르지 않아 로그인에 실패하였습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_필드가_다_채워지지_않은_경우_2"><a class="link" href="#_필드가_다_채워지지_않은_경우_2">- 필드가 다 채워지지 않은 경우</a></h4>
+<div class="sect4">
+<h5 id="_필드가_다_채워지지_않은_경우_2_http_response"><a class="link" href="#_필드가_다_채워지지_않은_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 103
+
+{
+  "code" : "1000",
+  "message" : "입력되지 않은 필드가 있습니다. [username, password]"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Club-API"><a class="link" href="#Club-API">Club API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="Club-모임생성"><a class="link" href="#Club-모임생성">- 모임생성</a></h3>
+<div class="sect3">
+<h4 id="Club-모임생성_http_request"><a class="link" href="#Club-모임생성_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/club HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Content-Length: 76
+Host: localhost:8080
+
+{
+  "name" : "name",
+  "description" : "dex",
+  "maxParticipantCount" : 10
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Club-모임생성_request_body"><a class="link" href="#Club-모임생성_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "name" : "name",
+  "description" : "dex",
+  "maxParticipantCount" : 10
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Club-모임생성_request_fields"><a class="link" href="#Club-모임생성_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name(모임 이름)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">description(모임 설명)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxParticipantCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">maxParticipantCount(최대 인원)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-모임생성_http_response"><a class="link" href="#Club-모임생성_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_생성_요청_시_header에_accesstoken이_없는_경우"><a class="link" href="#_생성_요청_시_header에_accesstoken이_없는_경우">- 생성 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_생성_요청_시_header에_accesstoken이_없는_경우_http_response"><a class="link" href="#_생성_요청_시_header에_accesstoken이_없는_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_필드가_다_채워지지_않은_경우_3"><a class="link" href="#_필드가_다_채워지지_않은_경우_3">- 필드가 다 채워지지 않은 경우</a></h4>
+<div class="sect4">
+<h5 id="_필드가_다_채워지지_않은_경우_3_http_response"><a class="link" href="#_필드가_다_채워지지_않은_경우_3_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 89
+
+{
+  "code" : "1000",
+  "message" : "입력되지 않은 필드가 있습니다. [name]"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_인원을_0으로_설정한_경우_최대_인원으로_설정"><a class="link" href="#_인원을_0으로_설정한_경우_최대_인원으로_설정">- 인원을 0으로 설정한 경우(&#8594; 최대 인원으로 설정)</a></h4>
+<div class="sect4">
+<h5 id="_인원을_0으로_설정한_경우_최대_인원으로_설정_request_body"><a class="link" href="#_인원을_0으로_설정한_경우_최대_인원으로_설정_request_body">Request body</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "name" : "name",
+  "description" : "dex",
+  "maxParticipantCount" : 2147483647
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_인원을_0으로_설정한_경우_최대_인원으로_설정_http_response"><a class="link" href="#_인원을_0으로_설정한_경우_최대_인원으로_설정_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Club-모임제거"><a class="link" href="#Club-모임제거">- 모임제거</a></h3>
+<div class="sect3">
+<h4 id="Club-모임제거_http_request"><a class="link" href="#Club-모임제거_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/club/1 HTTP/1.1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Club-모임제거_path_parameters"><a class="link" href="#Club-모임제거_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/club/{clubId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제거할 모임의 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-모임제거_request_headers"><a class="link" href="#Club-모임제거_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-모임제거_http_response"><a class="link" href="#Club-모임제거_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_없는_모임_id인_경우"><a class="link" href="#_없는_모임_id인_경우">- 없는 모임 ID인 경우</a></h4>
+<div class="sect4">
+<h5 id="_없는_모임_id인_경우_http_response"><a class="link" href="#_없는_모임_id인_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 74
+
+{
+  "code" : "301",
+  "message" : "찾으시는 모임이 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청자가_회장이_아닌_경우"><a class="link" href="#_요청자가_회장이_아닌_경우">- 요청자가 회장이 아닌 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청자가_회장이_아닌_경우_http_response"><a class="link" href="#_요청자가_회장이_아닌_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 403 Forbidden
+Content-Type: application/json;charset=UTF-8
+Content-Length: 81
+
+{
+  "code" : "303",
+  "message" : "모임을 제거할 권한이 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Notification-API"><a class="link" href="#Notification-API">Notification API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="Notification-알림-조회"><a class="link" href="#Notification-알림-조회">- 알림 조회 기본 형식</a></h3>
+<div class="sect3">
+<h4 id="Notification-알림-조회_http_request"><a class="link" href="#Notification-알림-조회_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/alarm/1 HTTP/1.1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Notification-알림-조회_path_parameters"><a class="link" href="#Notification-알림-조회_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/alarm/{id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알람 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Notification-알림-조회_request_headers"><a class="link" href="#Notification-알림-조회_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Notification-알림-조회_http_response"><a class="link" href="#Notification-알림-조회_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 161
+
+{
+  "id" : 1,
+  "createdAt" : "2023-02-01T23:03:14.239427",
+  "type" : "ApplicationProcessedNotification",
+  "clubId" : 1,
+  "approved" : true,
+  "read" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우_2"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_2">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_2_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_알림의_id는_존재하지만_회원_자신이_받은_알림이_아닌_경우"><a class="link" href="#_알림의_id는_존재하지만_회원_자신이_받은_알림이_아닌_경우">- 알림의 ID는 존재하지만 회원 자신이 받은 알림이 아닌 경우</a></h4>
+<div class="sect4">
+<h5 id="_알림의_id는_존재하지만_회원_자신이_받은_알림이_아닌_경우_http_response"><a class="link" href="#_알림의_id는_존재하지만_회원_자신이_받은_알림이_아닌_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 87
+
+{
+  "code" : "500",
+  "message" : "찾으시는 알람이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_알림의_id가_존재하지_않는_경우_경우"><a class="link" href="#_알림의_id가_존재하지_않는_경우_경우">- 알림의 ID가 존재하지 않는 경우 경우</a></h4>
+<div class="sect4">
+<h5 id="_알림의_id가_존재하지_않는_경우_경우_http_response"><a class="link" href="#_알림의_id가_존재하지_않는_경우_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 87
+
+{
+  "code" : "500",
+  "message" : "찾으시는 알람이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Notification-알림-조회-종류별"><a class="link" href="#Notification-알림-조회-종류별">- 알림 종류별 조회 결과</a></h3>
+<div class="sect3">
+<h4 id="_알림_조회_가입_신청_수락거절에_대한_알림_applicationprocessednotification"><a class="link" href="#_알림_조회_가입_신청_수락거절에_대한_알림_applicationprocessednotification">- 알림 조회 - 가입 신청 수락/거절에 대한 알림 (ApplicationProcessedNotification)</a></h4>
+<div class="sect4">
+<h5 id="_알림_조회_가입_신청_수락거절에_대한_알림_applicationprocessednotification_http_response"><a class="link" href="#_알림_조회_가입_신청_수락거절에_대한_알림_applicationprocessednotification_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 161
+
+{
+  "id" : 1,
+  "createdAt" : "2023-02-01T23:03:14.239427",
+  "type" : "ApplicationProcessedNotification",
+  "clubId" : 1,
+  "approved" : true,
+  "read" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_알림_조회_가입_신청_수락거절에_대한_알림_applicationprocessednotification_response_fields"><a class="link" href="#_알림_조회_가입_신청_수락거절에_대한_알림_applicationprocessednotification_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 생성시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 종류 - 모임 가입 요청이 처리되었을 때, 신청자에게 전송되는 알림</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입 신청 대상 모임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>approved</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수락/거절 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 읽음 여부 - true인 경우 읽음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_알림_조회_가입_요청_생성에_대한_알림_clubjoinapplicationrequestednotification"><a class="link" href="#_알림_조회_가입_요청_생성에_대한_알림_clubjoinapplicationrequestednotification">- 알림 조회 - 가입 요청 생성에 대한 알림 (ClubJoinApplicationRequestedNotification)</a></h4>
+<div class="sect4">
+<h5 id="_알림_조회_가입_요청_생성에_대한_알림_clubjoinapplicationrequestednotification_http_response"><a class="link" href="#_알림_조회_가입_요청_생성에_대한_알림_clubjoinapplicationrequestednotification_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 194
+
+{
+  "id" : 1,
+  "createdAt" : "2023-02-01T23:03:14.253318",
+  "type" : "ClubJoinApplicationCreatedNotification",
+  "clubId" : 1,
+  "applicantId" : 2,
+  "applicationFormId" : 3,
+  "read" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_알림_조회_가입_요청_생성에_대한_알림_clubjoinapplicationrequestednotification_response_fields"><a class="link" href="#_알림_조회_가입_요청_생성에_대한_알림_clubjoinapplicationrequestednotification_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 생성시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 종류 - 모임 가입 요청 생성 시 회장과 임원들에게 발송되는 알림</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입 신청 대상 모임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>applicantId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">모임 가입 신청자의 Member ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>applicationFormId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성된 모임 가입 신청서 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 읽음 여부 - true인 경우 읽음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_알림_조회_관리자가_가입_신청을_수락한_것에_대한_알림_officerapproveapplicationnotification"><a class="link" href="#_알림_조회_관리자가_가입_신청을_수락한_것에_대한_알림_officerapproveapplicationnotification">- 알림 조회 - 관리자가 가입 신청을 수락한 것에 대한 알림 (OfficerApproveApplicationNotification)</a></h4>
+<div class="sect4">
+<h5 id="_알림_조회_관리자가_가입_신청을_수락한_것에_대한_알림_officerapproveapplicationnotification_http_response"><a class="link" href="#_알림_조회_관리자가_가입_신청을_수락한_것에_대한_알림_officerapproveapplicationnotification_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 243
+
+{
+  "id" : 1,
+  "createdAt" : "2023-02-01T23:03:14.230402",
+  "type" : "OfficerApproveApplicationNotification",
+  "officerMemberId" : 1,
+  "officerParticipantId" : 2,
+  "applicantMemberId" : 3,
+  "applicantParticipantId" : 4,
+  "read" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_알림_조회_관리자가_가입_신청을_수락한_것에_대한_알림_officerapproveapplicationnotification_response_fields"><a class="link" href="#_알림_조회_관리자가_가입_신청을_수락한_것에_대한_알림_officerapproveapplicationnotification_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 생성시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 종류 - 임원이 가입 신청을 수락했을 때 회장에게 전송되는 알림</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>officerMemberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">처리한 임원의 Member Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>officerParticipantId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">처리한 임원의 Participant Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>applicantMemberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입된 회원의 Member Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>applicantParticipantId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입된 회원의 Participant Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 읽음 여부 - true인 경우 읽음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_알림_조회_관리자가_가입_신청을_거절한_것에_대한_알림_officerrejectapplicationnotification"><a class="link" href="#_알림_조회_관리자가_가입_신청을_거절한_것에_대한_알림_officerrejectapplicationnotification">- 알림 조회 - 관리자가 가입 신청을 거절한 것에 대한 알림 (OfficerRejectApplicationNotification)</a></h4>
+<div class="sect4">
+<h5 id="_알림_조회_관리자가_가입_신청을_거절한_것에_대한_알림_officerrejectapplicationnotification_http_response"><a class="link" href="#_알림_조회_관리자가_가입_신청을_거절한_것에_대한_알림_officerrejectapplicationnotification_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 210
+
+{
+  "id" : 1,
+  "createdAt" : "2023-02-01T23:03:14.204417",
+  "type" : "OfficerRejectApplicationNotification",
+  "officerMemberId" : 1,
+  "officerParticipantId" : 2,
+  "applicantMemberId" : 3,
+  "read" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_알림_조회_관리자가_가입_신청을_거절한_것에_대한_알림_officerrejectapplicationnotification_response_fields"><a class="link" href="#_알림_조회_관리자가_가입_신청을_거절한_것에_대한_알림_officerrejectapplicationnotification_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 생성시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 종류 - 임원이 가입 신청을 거절했을 때 회장에게 전송되는 알림</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>officerMemberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">처리한 임원의 Member Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>officerParticipantId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">처리한 임원의 Participant Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>applicantMemberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입이 거절된 회원의 Member Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 읽음 여부 - true인 경우 읽음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_알림_조회_모임에서_추방된_것에_대한_알림_expelparticipantnotification"><a class="link" href="#_알림_조회_모임에서_추방된_것에_대한_알림_expelparticipantnotification">- 알림 조회 - 모임에서 추방된 것에 대한 알림 (ExpelParticipantNotification)</a></h4>
+<div class="sect4">
+<h5 id="_알림_조회_모임에서_추방된_것에_대한_알림_expelparticipantnotification_http_response"><a class="link" href="#_알림_조회_모임에서_추방된_것에_대한_알림_expelparticipantnotification_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 136
+
+{
+  "id" : 1,
+  "createdAt" : "2023-02-01T23:03:14.223704",
+  "type" : "ExpelParticipantNotification",
+  "clubId" : 1,
+  "read" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_알림_조회_모임에서_추방된_것에_대한_알림_expelparticipantnotification_response_fields"><a class="link" href="#_알림_조회_모임에서_추방된_것에_대한_알림_expelparticipantnotification_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 생성시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 종류 - 모임에서 추방당했을 때 전송되는 알림</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">추방된 모임 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 읽음 여부 - true인 경우 읽음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_알림_조회_모임이_제거되어_해당_모임에_대한_가입_신청서가_제거된_것에_대한_알림_deleteapplicationformbecauseclubisdeletednotification"><a class="link" href="#_알림_조회_모임이_제거되어_해당_모임에_대한_가입_신청서가_제거된_것에_대한_알림_deleteapplicationformbecauseclubisdeletednotification">- 알림 조회 - 모임이 제거되어 해당 모임에 대한 가입 신청서가 제거된 것에 대한 알림 (DeleteApplicationFormBecauseClubIsDeletedNotification)</a></h4>
+<div class="sect4">
+<h5 id="_알림_조회_모임이_제거되어_해당_모임에_대한_가입_신청서가_제거된_것에_대한_알림_deleteapplicationformbecauseclubisdeletednotification_http_response"><a class="link" href="#_알림_조회_모임이_제거되어_해당_모임에_대한_가입_신청서가_제거된_것에_대한_알림_deleteapplicationformbecauseclubisdeletednotification_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 225
+
+{
+  "id" : 1,
+  "createdAt" : "2023-02-01T23:03:14.246889",
+  "type" : "DeleteApplicationFormBecauseClubIsDeletedNotification",
+  "clubName" : "ANA",
+  "clubDescription" : "알고리즘 동아리입니다.",
+  "read" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_알림_조회_모임이_제거되어_해당_모임에_대한_가입_신청서가_제거된_것에_대한_알림_deleteapplicationformbecauseclubisdeletednotification_response_fields"><a class="link" href="#_알림_조회_모임이_제거되어_해당_모임에_대한_가입_신청서가_제거된_것에_대한_알림_deleteapplicationformbecauseclubisdeletednotification_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 생성시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 종류 - 모임이 삭제되어 가입 신청서가 제거된 경우 전송되는 알림</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 모임의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubDescription</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 모임의 설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 읽음 여부 - true인 경우 읽음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_알림_조회_모임이_제거되어_해당_모임의_참여자들에게_모임이_제거되었다는_것을_알리기_위한_알림_deleteparticipantbecauseclubisdeletednotification"><a class="link" href="#_알림_조회_모임이_제거되어_해당_모임의_참여자들에게_모임이_제거되었다는_것을_알리기_위한_알림_deleteparticipantbecauseclubisdeletednotification">- 알림 조회 - 모임이 제거되어 해당 모임의 참여자들에게 모임이 제거되었다는 것을 알리기 위한 알림 (DeleteParticipantBecauseClubIsDeletedNotification)</a></h4>
+<div class="sect4">
+<h5 id="_알림_조회_모임이_제거되어_해당_모임의_참여자들에게_모임이_제거되었다는_것을_알리기_위한_알림_deleteparticipantbecauseclubisdeletednotification_http_response"><a class="link" href="#_알림_조회_모임이_제거되어_해당_모임의_참여자들에게_모임이_제거되었다는_것을_알리기_위한_알림_deleteparticipantbecauseclubisdeletednotification_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 221
+
+{
+  "id" : 1,
+  "createdAt" : "2023-02-01T23:03:14.215494",
+  "type" : "DeleteParticipantBecauseClubIsDeletedNotification",
+  "clubName" : "ANA",
+  "clubDescription" : "알고리즘 동아리입니다.",
+  "read" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_알림_조회_모임이_제거되어_해당_모임의_참여자들에게_모임이_제거되었다는_것을_알리기_위한_알림_deleteparticipantbecauseclubisdeletednotification_response_fields"><a class="link" href="#_알림_조회_모임이_제거되어_해당_모임의_참여자들에게_모임이_제거되었다는_것을_알리기_위한_알림_deleteparticipantbecauseclubisdeletednotification_response_fields">Response fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 생성시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림의 종류 - 모임이 삭제되어 해당 모임에 가입되었던 참여자들에게 전송되는 알림</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 모임의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubDescription</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 모임의 설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>read</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">알림 읽음 여부 - true인 경우 읽음</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ApplicationForm-API"><a class="link" href="#ApplicationForm-API">ApplicationForm API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="모임-가입-신청"><a class="link" href="#모임-가입-신청">- 모임 가입 신청</a></h3>
+<div class="sect3">
+<h4 id="모임-가입-신청_http_request"><a class="link" href="#모임-가입-신청_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/club/join/1 HTTP/1.1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="모임-가입-신청_path_parameters"><a class="link" href="#모임-가입-신청_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/club/join/{clubId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">모임 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="모임-가입-신청_http_response"><a class="link" href="#모임-가입-신청_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 40
+
+가입 신청 요청을 보냈습니다.</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_이미_가입_신청을_보냈으며_해당_요청이_처리되지_않았는데_재요청한_경우"><a class="link" href="#_이미_가입_신청을_보냈으며_해당_요청이_처리되지_않았는데_재요청한_경우">- 이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우</a></h4>
+<div class="sect4">
+<h5 id="_이미_가입_신청을_보냈으며_해당_요청이_처리되지_않았는데_재요청한_경우_http_response"><a class="link" href="#_이미_가입_신청을_보냈으며_해당_요청이_처리되지_않았는데_재요청한_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 78
+
+{
+  "code" : "702",
+  "message" : "이미 가입 신청한 모임입니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_이미_모임에_가입된_회원이_같은_모임에_또다시_가입_신청을_보낸_경우"><a class="link" href="#_이미_모임에_가입된_회원이_같은_모임에_또다시_가입_신청을_보낸_경우">- 이미 모임에 가입된 회원이 같은 모임에 또다시 가입 신청을 보낸 경우</a></h4>
+<div class="sect4">
+<h5 id="_이미_모임에_가입된_회원이_같은_모임에_또다시_가입_신청을_보낸_경우_http_response"><a class="link" href="#_이미_모임에_가입된_회원이_같은_모임에_또다시_가입_신청을_보낸_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 78
+
+{
+  "code" : "702",
+  "message" : "이미 가입 신청한 모임입니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우_3"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_3">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_3_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_3_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="모임-가입-신청-수락"><a class="link" href="#모임-가입-신청-수락">- 모임 가입 신청 수락</a></h3>
+<div class="sect3">
+<h4 id="모임-가입-신청-수락_http_request"><a class="link" href="#모임-가입-신청-수락_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/application-form/1/accept HTTP/1.1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="모임-가입-신청-수락_path_parameters"><a class="link" href="#모임-가입-신청-수락_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/application-form/{applicationFormId}/accept</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>applicationFormId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입 신청서 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="모임-가입-신청-수락_request_headers"><a class="link" href="#모임-가입-신청-수락_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="모임-가입-신청-수락_http_response"><a class="link" href="#모임-가입-신청-수락_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_회장_임원진이_아닌_사람이_요청을_처리하려는_경우"><a class="link" href="#_회장_임원진이_아닌_사람이_요청을_처리하려는_경우">- 회장 &amp; 임원진이 아닌 사람이 요청을 처리하려는 경우</a></h4>
+<div class="sect4">
+<h5 id="_회장_임원진이_아닌_사람이_요청을_처리하려는_경우_http_response"><a class="link" href="#_회장_임원진이_아닌_사람이_요청을_처리하려는_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 403 Forbidden
+Content-Type: application/json;charset=UTF-8
+Content-Length: 88
+
+{
+  "code" : "704",
+  "message" : "가입 신청을 처리할 권한이 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_이미_처리된_신청서인_경우"><a class="link" href="#_이미_처리된_신청서인_경우">- 이미 처리된 신청서인 경우</a></h4>
+<div class="sect4">
+<h5 id="_이미_처리된_신청서인_경우_http_response"><a class="link" href="#_이미_처리된_신청서인_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_없는_신청서의_경우"><a class="link" href="#_없는_신청서의_경우">- 없는 신청서의 경우</a></h4>
+<div class="sect4">
+<h5 id="_없는_신청서의_경우_http_response"><a class="link" href="#_없는_신청서의_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_모임이_가득_찬_경우"><a class="link" href="#_모임이_가득_찬_경우">- 모임이 가득 찬 경우</a></h4>
+<div class="sect4">
+<h5 id="_모임이_가득_찬_경우_http_response"><a class="link" href="#_모임이_가득_찬_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 118
+
+{
+  "code" : "300",
+  "message" : "모임의 회원 수가 가득 차 더 이상 회원을 받을 수 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우_4"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_4">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_4_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_4_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="모임-가입-신청-거절"><a class="link" href="#모임-가입-신청-거절">- 모임 가입 신청 거절</a></h3>
+<div class="sect3">
+<h4 id="모임-가입-신청-거절_http_request"><a class="link" href="#모임-가입-신청-거절_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/application-form/1/reject HTTP/1.1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="모임-가입-신청-거절_path_parameters"><a class="link" href="#모임-가입-신청-거절_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/application-form/{applicationFormId}/reject</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>applicationFormId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입 신청서 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="모임-가입-신청-거절_request_headers"><a class="link" href="#모임-가입-신청-거절_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="모임-가입-신청-거절_http_response"><a class="link" href="#모임-가입-신청-거절_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_회장_임원진이_아닌_사람이_요청을_처리하려는_경우_2"><a class="link" href="#_회장_임원진이_아닌_사람이_요청을_처리하려는_경우_2">- 회장 &amp; 임원진이 아닌 사람이 요청을 처리하려는 경우</a></h4>
+<div class="sect4">
+<h5 id="_회장_임원진이_아닌_사람이_요청을_처리하려는_경우_2_http_response"><a class="link" href="#_회장_임원진이_아닌_사람이_요청을_처리하려는_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 403 Forbidden
+Content-Type: application/json;charset=UTF-8
+Content-Length: 88
+
+{
+  "code" : "704",
+  "message" : "가입 신청을 처리할 권한이 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_이미_처리된_신청서인_경우_2"><a class="link" href="#_이미_처리된_신청서인_경우_2">- 이미 처리된 신청서인 경우</a></h4>
+<div class="sect4">
+<h5 id="_이미_처리된_신청서인_경우_2_http_response"><a class="link" href="#_이미_처리된_신청서인_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_없는_신청서의_경우_2"><a class="link" href="#_없는_신청서의_경우_2">- 없는 신청서의 경우</a></h4>
+<div class="sect4">
+<h5 id="_없는_신청서의_경우_2_http_response"><a class="link" href="#_없는_신청서의_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우_5"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_5">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_5_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_5_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Participant-API"><a class="link" href="#Participant-API">Participant API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="Participant-제거"><a class="link" href="#Participant-제거">- 모임에서 탈퇴</a></h3>
+<div class="sect3">
+<h4 id="Participant-제거_http_request"><a class="link" href="#Participant-제거_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/participant/1 HTTP/1.1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Participant-제거_path_parameters"><a class="link" href="#Participant-제거_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/participant/{participantId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>participantId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">참여자(Participant) ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Participant-제거_request_headers"><a class="link" href="#Participant-제거_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Participant-제거_http_response"><a class="link" href="#Participant-제거_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우_6"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_6">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_6_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_6_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_없는_참여자_id인_경우"><a class="link" href="#_없는_참여자_id인_경우">- 없는 참여자 ID인 경우</a></h4>
+<div class="sect4">
+<h5 id="_없는_참여자_id인_경우_http_response"><a class="link" href="#_없는_참여자_id인_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 77
+
+{
+  "code" : "600",
+  "message" : "참여자가 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청한_회원의_id가_탈퇴하려는_참여자의_회원_id와_일치하지_않는_경우"><a class="link" href="#_요청한_회원의_id가_탈퇴하려는_참여자의_회원_id와_일치하지_않는_경우">- 요청한 회원의 ID가, 탈퇴하려는 참여자의 회원 ID와 일치하지 않는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청한_회원의_id가_탈퇴하려는_참여자의_회원_id와_일치하지_않는_경우_http_response"><a class="link" href="#_요청한_회원의_id가_탈퇴하려는_참여자의_회원_id와_일치하지_않는_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 403 Forbidden
+Content-Type: application/json;charset=UTF-8
 Content-Length: 121
 
 {
-  "code" : "BAD_REQUEST",
-  "message" : "입력되지 않은 필드가 있습니다. [name, age, password, username]"
+  "code" : "603",
+  "message" : "현재 요청한 회원과, 참여자가 일치하지 않아 거부되었습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_회장이_탈퇴를_시도한_경우"><a class="link" href="#_회장이_탈퇴를_시도한_경우">- 회장이 탈퇴를 시도한 경우</a></h4>
+<div class="sect4">
+<h5 id="_회장이_탈퇴를_시도한_경우_http_response"><a class="link" href="#_회장이_탈퇴를_시도한_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 98
+
+{
+  "code" : "602",
+  "message" : "모임의 회장은 모임에서 탈퇴할 수 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_모임에_사람이_1명밖에_남지_않아_탈퇴할_수_없는_경우_회장이_항상_먼저_검사되므로_발생하지_않는_상황이다"><a class="link" href="#_모임에_사람이_1명밖에_남지_않아_탈퇴할_수_없는_경우_회장이_항상_먼저_검사되므로_발생하지_않는_상황이다">- 모임에 사람이 1명밖에 남지 않아 탈퇴할 수 없는 경우 (회장이 항상 먼저 검사되므로 발생하지 않는 상황이다.)</a></h4>
+<div class="sect4">
+<h5 id="_모임에_사람이_1명밖에_남지_않아_탈퇴할_수_없는_경우_회장이_항상_먼저_검사되므로_발생하지_않는_상황이다_http_response"><a class="link" href="#_모임에_사람이_1명밖에_남지_않아_탈퇴할_수_없는_경우_회장이_항상_먼저_검사되므로_발생하지_않는_상황이다_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 87
+
+{
+  "code" : "302",
+  "message" : "모임의 인원은 0명이 될 수 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Participant-추방"><a class="link" href="#Participant-추방">- 모임에서 추방</a></h3>
+<div class="sect3">
+<h4 id="Participant-추방_http_request"><a class="link" href="#Participant-추방_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/participant/expel/1 HTTP/1.1
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Participant-추방_path_parameters"><a class="link" href="#Participant-추방_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/participant/expel/{participantId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>participantId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">추방시킬 참여자(Participant) ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Participant-추방_request_headers"><a class="link" href="#Participant-추방_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Participant-추방_http_response"><a class="link" href="#Participant-추방_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우_7"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_7">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_7_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_7_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_없는_참여자_id인_경우_2"><a class="link" href="#_없는_참여자_id인_경우_2">- 없는 참여자 ID인 경우</a></h4>
+<div class="sect4">
+<h5 id="_없는_참여자_id인_경우_2_http_response"><a class="link" href="#_없는_참여자_id인_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 77
+
+{
+  "code" : "600",
+  "message" : "참여자가 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청자가_회장이_아닌_경우_2"><a class="link" href="#_요청자가_회장이_아닌_경우_2">- 요청자가 회장이 아닌 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청자가_회장이_아닌_경우_2_http_response"><a class="link" href="#_요청자가_회장이_아닌_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 403 Forbidden
+Content-Type: application/json;charset=UTF-8
+Content-Length: 149
+
+{
+  "code" : "604",
+  "message" : "회원을 모임에서 추방시킬 권한이 존재하지 않습니다. (회장만이 추방 가능합니다.)"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_모임에_회장이_없는_경우_발생하지_않는_상황"><a class="link" href="#_모임에_회장이_없는_경우_발생하지_않는_상황">- 모임에 회장이 없는 경우 (발생하지 않는 상황)</a></h4>
+<div class="sect4">
+<h5 id="_모임에_회장이_없는_경우_발생하지_않는_상황_http_response"><a class="link" href="#_모임에_회장이_없는_경우_발생하지_않는_상황_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 123
+
+{
+  "code" : "601",
+  "message" : "주어진 모임의 회장이 없습니다. (발생하면 안되는 오류입니다.)"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Club-Role-API"><a class="link" href="#Club-Role-API">Club Role API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="Club-Role-역할생성"><a class="link" href="#Club-Role-역할생성">- 역할 생성</a></h3>
+<div class="sect3">
+<h4 id="Club-Role-역할생성_http_request"><a class="link" href="#Club-Role-역할생성_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/club/1/club-role HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Content-Length: 57
+Host: localhost:8080
+
+{
+  "name" : "역할 이름!",
+  "category" : "OFFICER"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Club-Role-역할생성_path_parameters"><a class="link" href="#Club-Role-역할생성_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/club/{clubId}/club-role</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역할을 생성 모임의 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-Role-역할생성_request_headers"><a class="link" href="#Club-Role-역할생성_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-Role-역할생성_request_fields"><a class="link" href="#Club-Role-역할생성_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name(생성할 역할의 이름)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">category(생성할 역할의 카테고리[OFFICER, GENERAL])</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-Role-역할생성_http_response"><a class="link" href="#Club-Role-역할생성_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우_8"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_8">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_8_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_8_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_없는_참여자_id인_경우_3"><a class="link" href="#_없는_참여자_id인_경우_3">- 없는 참여자 ID인 경우</a></h4>
+<div class="sect4">
+<h5 id="_없는_참여자_id인_경우_3_http_response"><a class="link" href="#_없는_참여자_id인_경우_3_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 77
+
+{
+  "code" : "600",
+  "message" : "참여자가 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청자가_회장_혹은_임원이_아닌_경우"><a class="link" href="#_요청자가_회장_혹은_임원이_아닌_경우">- 요청자가 회장 혹은 임원이 아닌 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청자가_회장_혹은_임원이_아닌_경우_http_response"><a class="link" href="#_요청자가_회장_혹은_임원이_아닌_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 403 Forbidden
+Content-Type: application/json;charset=UTF-8
+Content-Length: 91
+
+{
+  "code" : "401",
+  "message" : "모임의 역할을 생성할 권한이 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_회장_역할을_생성하려는_경우"><a class="link" href="#_회장_역할을_생성하려는_경우">- 회장 역할을 생성하려는 경우</a></h4>
+<div class="sect4">
+<h5 id="_회장_역할을_생성하려는_경우_http_response"><a class="link" href="#_회장_역할을_생성하려는_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 98
+
+{
+  "code" : "402",
+  "message" : "회장 역할은 추가적으로 생성할 수 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_비어있는_필드가_있는_경우"><a class="link" href="#_요청_시_비어있는_필드가_있는_경우">- 요청 시 비어있는 필드가 있는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_비어있는_필드가_있는_경우_http_request"><a class="link" href="#_요청_시_비어있는_필드가_있는_경우_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/club/1/club-role HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Content-Length: 38
+Host: localhost:8080
+
+{
+  "name" : "",
+  "category" : null
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_요청_시_비어있는_필드가_있는_경우_http_response"><a class="link" href="#_요청_시_비어있는_필드가_있는_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 99
+
+{
+  "code" : "1000",
+  "message" : "입력되지 않은 필드가 있습니다. [category, name]"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_역할_카테고리를_잘못_입력한_경우"><a class="link" href="#_역할_카테고리를_잘못_입력한_경우">- 역할 카테고리를 잘못 입력한 경우</a></h4>
+<div class="sect4">
+<h5 id="_역할_카테고리를_잘못_입력한_경우_http_request"><a class="link" href="#_역할_카테고리를_잘못_입력한_경우_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/club/1/club-role HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Content-Length: 48
+Host: localhost:8080
+
+{
+  "name" : "name",
+  "category" : "cateGory"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_역할_카테고리를_잘못_입력한_경우_http_response"><a class="link" href="#_역할_카테고리를_잘못_입력한_경우_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 68
+
+{
+  "code" : "1000",
+  "message" : "ENUM 매핑 시 오류 발생"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Club-Role-이름변경"><a class="link" href="#Club-Role-이름변경">- 역할 이름 변경</a></h3>
+<div class="sect3">
+<h4 id="Club-Role-이름변경_http_request"><a class="link" href="#Club-Role-이름변경_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/club-role/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Content-Length: 44
+Host: localhost:8080
+
+{
+  "roleName" : "변경할 역할 이름"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Club-Role-이름변경_path_parameters"><a class="link" href="#Club-Role-이름변경_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/club-role/{clubRoleId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>clubRoleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이름을 변경할 모임 역할의 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-Role-이름변경_request_headers"><a class="link" href="#Club-Role-이름변경_request_headers">Request headers</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-Role-이름변경_request_fields"><a class="link" href="#Club-Role-이름변경_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>roleName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name(변경할 역할의 이름)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Club-Role-이름변경_http_response"><a class="link" href="#Club-Role-이름변경_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_header에_accesstoken이_없는_경우_9"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_9">- 요청 시 Header에 AccessToken이 없는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_header에_accesstoken이_없는_경우_9_http_response"><a class="link" href="#_요청_시_header에_accesstoken이_없는_경우_9_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 401 Unauthorized
+Content-Type: application/json;charset=UTF-8
+Content-Length: 79
+
+{
+  "code" : "201",
+  "message" : "AccessToken이 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_없는_참여자_id인_경우_4"><a class="link" href="#_없는_참여자_id인_경우_4">- 없는 참여자 ID인 경우</a></h4>
+<div class="sect4">
+<h5 id="_없는_참여자_id인_경우_4_http_response"><a class="link" href="#_없는_참여자_id인_경우_4_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 404 Not Found
+Content-Type: application/json;charset=UTF-8
+Content-Length: 77
+
+{
+  "code" : "600",
+  "message" : "참여자가 존재하지 않습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청자가_회장_혹은_임원이_아닌_경우_2"><a class="link" href="#_요청자가_회장_혹은_임원이_아닌_경우_2">- 요청자가 회장 혹은 임원이 아닌 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청자가_회장_혹은_임원이_아닌_경우_2_http_response"><a class="link" href="#_요청자가_회장_혹은_임원이_아닌_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 403 Forbidden
+Content-Type: application/json;charset=UTF-8
+Content-Length: 91
+
+{
+  "code" : "403",
+  "message" : "역할의 이름을 변경할 권한이 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_요청_시_비어있는_필드가_있는_경우_2"><a class="link" href="#_요청_시_비어있는_필드가_있는_경우_2">- 요청 시 비어있는 필드가 있는 경우</a></h4>
+<div class="sect4">
+<h5 id="_요청_시_비어있는_필드가_있는_경우_2_http_request"><a class="link" href="#_요청_시_비어있는_필드가_있는_경우_2_http_request">HTTP request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/club-role/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g
+Content-Length: 22
+Host: localhost:8080
+
+{
+  "roleName" : " "
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_요청_시_비어있는_필드가_있는_경우_2_http_response"><a class="link" href="#_요청_시_비어있는_필드가_있는_경우_2_http_response">HTTP response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 93
+
+{
+  "code" : "1000",
+  "message" : "입력되지 않은 필드가 있습니다. [roleName]"
 }</code></pre>
 </div>
 </div>
@@ -589,7 +2771,7 @@ Content-Length: 121
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-12-24 02:23:54 +0900
+Last updated 2023-02-01 23:00:05 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

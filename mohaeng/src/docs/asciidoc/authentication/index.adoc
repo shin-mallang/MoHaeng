@@ -8,16 +8,18 @@
 :toclevels: 2
 :sectlinks:
 
-
 [[Authentication-API]]
 == Authentication API
 
 [[Authentication-로그인]]
-=== 로그인
+=== - 로그인
+
 operation::login[snippets='http-request,request-body,request-fields,http-response']
 
-=== 아이디 혹은 비밀번호가 일치하지 않아 로그인 실패 시
+==== - 아이디 혹은 비밀번호가 일치하지 않아 로그인 실패 시
+
 operation::login fail(username or password miss match)[snippets='http-response']
 
-=== 필드가 다 채워지지 않은 경우
+==== - 필드가 다 채워지지 않은 경우
+
 operation::login fail(request fields contains empty value)[snippets='http-response']
