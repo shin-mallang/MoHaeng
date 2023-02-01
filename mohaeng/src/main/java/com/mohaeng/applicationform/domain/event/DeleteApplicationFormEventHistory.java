@@ -1,4 +1,4 @@
-package com.mohaeng.participant.domain.event;
+package com.mohaeng.applicationform.domain.event;
 
 import com.mohaeng.common.event.BaseEventHistory;
 import jakarta.persistence.DiscriminatorValue;

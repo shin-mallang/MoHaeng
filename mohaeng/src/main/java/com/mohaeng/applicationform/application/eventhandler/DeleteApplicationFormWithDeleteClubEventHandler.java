@@ -1,11 +1,11 @@
 package com.mohaeng.applicationform.application.eventhandler;
 
+import com.mohaeng.applicationform.domain.event.DeleteApplicationFormEvent;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.club.domain.event.DeleteClubEvent;
 import com.mohaeng.common.event.EventHandler;
 import com.mohaeng.common.event.EventHistoryRepository;
 import com.mohaeng.common.event.Events;
-import com.mohaeng.participant.domain.event.DeleteApplicationFormEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
