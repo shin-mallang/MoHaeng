@@ -220,8 +220,6 @@ operation::leave-participant-from-club(president requests to leave the club)[sni
 
 operation::leave-participant-from-club(club has only one participant)[snippets='http-response']
 
-[[Participant-API]]
-= Participant API
 
 [[Participant-추방]]
 == - 모임에서 추방
