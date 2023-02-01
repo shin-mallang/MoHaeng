@@ -1,7 +1,6 @@
-package com.mohaeng.applicationform.application.service;
+package com.mohaeng.participant.application.service;
 
 import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
-import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -13,6 +12,7 @@ import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.member.exception.MemberException;
+import com.mohaeng.participant.domain.event.ClubJoinApplicationCreatedEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.springframework.stereotype.Service;

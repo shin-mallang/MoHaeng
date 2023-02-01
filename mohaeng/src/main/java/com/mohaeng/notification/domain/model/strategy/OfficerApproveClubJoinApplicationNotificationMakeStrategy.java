@@ -1,10 +1,10 @@
 package com.mohaeng.notification.domain.model.strategy;
 
-import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.NotificationMakeStrategy;
 import com.mohaeng.notification.domain.model.kind.OfficerApproveApplicationNotification;
 import com.mohaeng.notification.domain.model.value.Receiver;
+import com.mohaeng.participant.domain.event.OfficerApproveClubJoinApplicationEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

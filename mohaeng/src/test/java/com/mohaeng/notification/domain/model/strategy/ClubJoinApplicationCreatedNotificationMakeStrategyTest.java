@@ -1,11 +1,11 @@
 package com.mohaeng.notification.domain.model.strategy;
 
-import com.mohaeng.applicationform.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.applicationform.domain.event.ClubJoinApplicationCreatedEvent;
-import com.mohaeng.applicationform.domain.event.OfficerApproveClubJoinApplicationEvent;
-import com.mohaeng.applicationform.domain.event.OfficerRejectClubJoinApplicationEvent;
 import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.participant.domain.event.ApplicationProcessedEvent;
+import com.mohaeng.participant.domain.event.ClubJoinApplicationCreatedEvent;
+import com.mohaeng.participant.domain.event.OfficerApproveClubJoinApplicationEvent;
+import com.mohaeng.participant.domain.event.OfficerRejectClubJoinApplicationEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

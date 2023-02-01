@@ -1,4 +1,4 @@
-package com.mohaeng.applicationform.domain.event;
+package com.mohaeng.participant.domain.event;
 
 import com.mohaeng.common.event.BaseEventHistory;
 import com.mohaeng.common.notification.NotificationEvent;
