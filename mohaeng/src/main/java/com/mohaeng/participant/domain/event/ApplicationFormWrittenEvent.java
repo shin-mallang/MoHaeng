@@ -5,17 +5,17 @@ import com.mohaeng.common.notification.NotificationEvent;
 
 import java.util.List;
 
-public class ClubJoinApplicationCreatedEvent extends NotificationEvent {
+public class ApplicationFormWrittenEvent extends NotificationEvent {
 
     private final Long clubId;  // 가입을 요청한 모임 ID
     private final Long applicantId;  // 가입 신청자의 Member ID
     private final Long applicationFormId;  // 가입 신청서 ID
 
-    public ClubJoinApplicationCreatedEvent(final Object source,
-                                           final List<Long> receiverIds,
-                                           final Long clubId,
-                                           final Long applicantId,
-                                           final Long applicationFormId) {
+    public ApplicationFormWrittenEvent(final Object source,
+                                       final List<Long> receiverIds,
+                                       final Long clubId,
+                                       final Long applicantId,
+                                       final Long applicationFormId) {
         super(source, receiverIds);
         this.clubId = clubId;
         this.applicantId = applicantId;
@@ -24,7 +24,7 @@ public class ClubJoinApplicationCreatedEvent extends NotificationEvent {
 
     @Override
     public BaseEventHistory history() {
-        return new ClubJoinApplicationCreatedEventHistory(eventDateTime, clubId, applicantId, applicationFormId);
+        return new ApplicationFormWrittenEventHistory(eventDateTime, clubId, applicantId, applicationFormId);
     }
 
     public Long clubId() {

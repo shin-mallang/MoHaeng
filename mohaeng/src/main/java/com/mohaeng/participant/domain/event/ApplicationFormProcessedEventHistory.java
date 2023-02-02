@@ -7,20 +7,20 @@ import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 
 @Entity
-@DiscriminatorValue("ApplicationProcessedEvent")
-public class ApplicationProcessedEventHistory extends BaseEventHistory {
+@DiscriminatorValue("ApplicationFormProcessedEvent")
+public class ApplicationFormProcessedEventHistory extends BaseEventHistory {
 
     private Long applicationFormId;
     private Long clubId;
     private boolean isApproved;
 
-    protected ApplicationProcessedEventHistory() {
+    protected ApplicationFormProcessedEventHistory() {
     }
 
-    public ApplicationProcessedEventHistory(final LocalDateTime eventDateTime,
-                                            final Long applicationFormId,
-                                            final Long clubId,
-                                            final boolean isApproved) {
+    public ApplicationFormProcessedEventHistory(final LocalDateTime eventDateTime,
+                                                final Long applicationFormId,
+                                                final Long clubId,
+                                                final boolean isApproved) {
         super(eventDateTime);
         this.applicationFormId = applicationFormId;
         this.clubId = clubId;

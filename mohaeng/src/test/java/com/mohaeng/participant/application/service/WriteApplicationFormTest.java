@@ -1,6 +1,6 @@
 package com.mohaeng.participant.application.service;
 
-import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.WriteApplicationFormUseCase;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -15,7 +15,7 @@ import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
-import com.mohaeng.participant.domain.event.ClubJoinApplicationCreatedEvent;
+import com.mohaeng.participant.domain.event.ApplicationFormWrittenEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
@@ -36,11 +36,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ApplicationTest
-@DisplayName("RequestJoinClub 은 ")
-class RequestJoinClubTest {
+@DisplayName("WriteApplicationForm 은 ")
+class WriteApplicationFormTest {
 
     @Autowired
-    private RequestJoinClubUseCase requestJoinClubUseCase;
+    private WriteApplicationFormUseCase writeApplicationFormUseCase;
 
     @Autowired
     private ApplicationFormRepository applicationFormRepository;
@@ -75,7 +75,7 @@ class RequestJoinClubTest {
             Member member = memberRepository.save(member(null));
 
             // when
-            Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
+            Long applicationFormId = writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
             // then
             assertThat(applicationFormId).isNotNull();
@@ -87,14 +87,14 @@ class RequestJoinClubTest {
             // given
             Club club = clubRepository.save(club(null));
             Member member = memberRepository.save(member(null));
-            Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
+            Long applicationFormId = writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
             // 가입 처리
             ApplicationForm applicationForm = applicationFormRepository.findById(applicationFormId).orElse(null);
             ReflectionTestUtils.setField(applicationForm, "processed", true);
 
             // when
-            Long reApplicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
+            Long reApplicationFormId = writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
             // then
             assertThat(reApplicationFormId).isNotNull();
@@ -108,14 +108,14 @@ class RequestJoinClubTest {
             club.participantCountUp();  // 모임 참가자 가득 채우기
 
             Member member = memberRepository.save(member(null));
-            Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
+            Long applicationFormId = writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
             // 가입 처리
             ApplicationForm applicationForm = applicationFormRepository.findById(applicationFormId).orElse(null);
             ReflectionTestUtils.setField(applicationForm, "processed", true);
 
             // when
-            Long reApplicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
+            Long reApplicationFormId = writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
             // then
             assertThat(reApplicationFormId).isNotNull();
@@ -129,12 +129,12 @@ class RequestJoinClubTest {
             Member member = memberRepository.save(member(null));
 
             // when
-            Long applicationFormId = requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
+            Long applicationFormId = writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
             // then
             Assertions.assertAll(
                     () -> assertThat(applicationFormId).isNotNull(),
-                    () -> assertThat(events.stream(ClubJoinApplicationCreatedEvent.class).count()).isEqualTo(1L)
+                    () -> assertThat(events.stream(ApplicationFormWrittenEvent.class).count()).isEqualTo(1L)
             );
         }
     }
@@ -163,7 +163,7 @@ class RequestJoinClubTest {
 
             // when & then
             assertThat(assertThrows(ApplicationFormException.class,
-                    () -> requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(generalMember.id(), club.id())))
+                    () -> writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(generalMember.id(), club.id())))
                     .exceptionType())
                     .isEqualTo(ALREADY_MEMBER_JOINED_CLUB);
         }
@@ -174,11 +174,11 @@ class RequestJoinClubTest {
             // given
             Club club = clubRepository.save(club(null));
             Member member = memberRepository.save(member(null));
-            requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
+            writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id()));
 
             // when & then
             assertThat(assertThrows(ApplicationFormException.class,
-                    () -> requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id())))
+                    () -> writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(member.id(), club.id())))
                     .exceptionType())
                     .isEqualTo(ALREADY_REQUEST_JOIN_CLUB);
         }
@@ -209,7 +209,7 @@ class RequestJoinClubTest {
             president.joinClub(club, presidentRole);
             officer.joinClub(club, officerRole);
 
-            requestJoinClubUseCase.command(requestJoinClubUseCaseCommand(generalMember.id(), club.id()));
+            writeApplicationFormUseCase.command(requestJoinClubUseCaseCommand(generalMember.id(), club.id()));
         }
 
         @Override

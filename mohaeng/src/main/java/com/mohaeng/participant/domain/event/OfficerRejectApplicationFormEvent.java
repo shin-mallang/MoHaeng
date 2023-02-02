@@ -6,7 +6,7 @@ import com.mohaeng.common.notification.NotificationEvent;
 /**
  * 회장이 아닌 임원이 모임 가입 신청을 거절하였을 때 발행
  */
-public class OfficerRejectClubJoinApplicationEvent extends NotificationEvent {
+public class OfficerRejectApplicationFormEvent extends NotificationEvent {
 
     private final Long officerMemberId;  // 관리자 ID (Member Id)
     private final Long officerParticipantId;  // 관리자 ID (Participant Id)
@@ -20,12 +20,12 @@ public class OfficerRejectClubJoinApplicationEvent extends NotificationEvent {
      * @param applicantMemberId    거절된 회원 ID (Member Id)
      * @param applicationFormId    처리된 가입 신청서 ID
      */
-    public OfficerRejectClubJoinApplicationEvent(final Object source,
-                                                 final Long receiverId,
-                                                 final Long officerMemberId,
-                                                 final Long officerParticipantId,
-                                                 final Long applicantMemberId,
-                                                 final Long applicationFormId) {
+    public OfficerRejectApplicationFormEvent(final Object source,
+                                             final Long receiverId,
+                                             final Long officerMemberId,
+                                             final Long officerParticipantId,
+                                             final Long applicantMemberId,
+                                             final Long applicationFormId) {
         super(source, receiverId);
         this.officerMemberId = officerMemberId;
         this.officerParticipantId = officerParticipantId;
@@ -55,7 +55,7 @@ public class OfficerRejectClubJoinApplicationEvent extends NotificationEvent {
 
     @Override
     public BaseEventHistory history() {
-        return new OfficerRejectClubJoinApplicationEventHistory(officerMemberId, officerParticipantId, applicantMemberId, applicationFormId);
+        return new OfficerRejectApplicationFormEventHistory(officerMemberId, officerParticipantId, applicantMemberId, applicationFormId);
     }
 
     @Override

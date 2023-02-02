@@ -1,6 +1,9 @@
 package com.mohaeng.applicationform.application.usecase;
 
-public interface RequestJoinClubUseCase {
+/**
+ * 모임에 가입 신청 시 가입 신청서 작성
+ */
+public interface WriteApplicationFormUseCase {
 
     /**
      * 모임에 가입을 신청한다.

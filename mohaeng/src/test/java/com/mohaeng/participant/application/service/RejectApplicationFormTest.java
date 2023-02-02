@@ -1,6 +1,6 @@
 package com.mohaeng.participant.application.service;
 
-import com.mohaeng.applicationform.application.usecase.RejectJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.RejectApplicationFormUseCase;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -18,8 +18,8 @@ import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.kind.ApplicationProcessedNotification;
 import com.mohaeng.notification.domain.model.kind.OfficerRejectApplicationNotification;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
-import com.mohaeng.participant.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.participant.domain.event.OfficerRejectClubJoinApplicationEvent;
+import com.mohaeng.participant.domain.event.ApplicationFormProcessedEvent;
+import com.mohaeng.participant.domain.event.OfficerRejectApplicationFormEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
@@ -42,14 +42,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ApplicationTest
-@DisplayName("RejectJoinClub 은 ")
-class RejectJoinClubTest {
+@DisplayName("RejectApplicationForm 은 ")
+class RejectApplicationFormTest {
 
     @Autowired
     private EntityManager em;
 
     @Autowired
-    private RejectJoinClubUseCase rejectJoinClubUseCase;
+    private RejectApplicationFormUseCase rejectApplicationFormUseCase;
 
     @Autowired
     private ApplicationFormRepository applicationFormRepository;
@@ -91,8 +91,8 @@ class RejectJoinClubTest {
             em.clear();
 
             // when
-            rejectJoinClubUseCase.command(
-                    new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+            rejectApplicationFormUseCase.command(
+                    new RejectApplicationFormUseCase.Command(applicationForm.id(), managerMember.id())
             );
 
             // then
@@ -123,15 +123,15 @@ class RejectJoinClubTest {
             em.clear();
 
             // when
-            rejectJoinClubUseCase.command(
-                    new RejectJoinClubUseCase.Command(applicationForm.id(), presidentMember.id())
+            rejectApplicationFormUseCase.command(
+                    new RejectApplicationFormUseCase.Command(applicationForm.id(), presidentMember.id())
             );
 
             // then
             assertAll(
                     () -> assertThat(events.stream(BaseEvent.class).count()).isEqualTo(1L),
-                    () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
-                    () -> assertThat(events.stream(OfficerRejectClubJoinApplicationEvent.class).count()).isEqualTo(0L)
+                    () -> assertThat(events.stream(ApplicationFormProcessedEvent.class).count()).isEqualTo(1L),
+                    () -> assertThat(events.stream(OfficerRejectApplicationFormEvent.class).count()).isEqualTo(0L)
             );
         }
 
@@ -157,15 +157,15 @@ class RejectJoinClubTest {
             em.clear();
 
             // when
-            rejectJoinClubUseCase.command(
-                    new RejectJoinClubUseCase.Command(applicationForm.id(), officerMember.id())
+            rejectApplicationFormUseCase.command(
+                    new RejectApplicationFormUseCase.Command(applicationForm.id(), officerMember.id())
             );
 
             // then
             assertAll(
                     () -> assertThat(events.stream(BaseEvent.class).count()).isEqualTo(2L),
-                    () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
-                    () -> assertThat(events.stream(OfficerRejectClubJoinApplicationEvent.class).count()).isEqualTo(1L)
+                    () -> assertThat(events.stream(ApplicationFormProcessedEvent.class).count()).isEqualTo(1L),
+                    () -> assertThat(events.stream(OfficerRejectApplicationFormEvent.class).count()).isEqualTo(1L)
             );
         }
     }
@@ -193,8 +193,8 @@ class RejectJoinClubTest {
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
-                    rejectJoinClubUseCase.command(
-                            new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+                    rejectApplicationFormUseCase.command(
+                            new RejectApplicationFormUseCase.Command(applicationForm.id(), managerMember.id())
                     )
             ).exceptionType();
 
@@ -218,16 +218,16 @@ class RejectJoinClubTest {
 
             Member applicantMember = memberRepository.save(member(null));
             ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicantMember.id(), target.id(), null));
-            rejectJoinClubUseCase.command(
-                    new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+            rejectApplicationFormUseCase.command(
+                    new RejectApplicationFormUseCase.Command(applicationForm.id(), managerMember.id())
             );
             em.flush();
             em.clear();
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
-                    rejectJoinClubUseCase.command(
-                            new RejectJoinClubUseCase.Command(applicationForm.id(), managerMember.id())
+                    rejectApplicationFormUseCase.command(
+                            new RejectApplicationFormUseCase.Command(applicationForm.id(), managerMember.id())
                     )
             ).exceptionType();
 
@@ -262,8 +262,8 @@ class RejectJoinClubTest {
             ApplicationForm applicationForm = applicationFormRepository.save(applicationForm(applicant.id(), target.id(), null));
 
             // when
-            rejectJoinClubUseCase.command(
-                    new RejectJoinClubUseCase.Command(applicationForm.id(), officerMember.id())
+            rejectApplicationFormUseCase.command(
+                    new RejectApplicationFormUseCase.Command(applicationForm.id(), officerMember.id())
             );
         }
 
