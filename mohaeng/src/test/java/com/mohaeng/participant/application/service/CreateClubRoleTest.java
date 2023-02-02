@@ -92,14 +92,14 @@ class CreateClubRoleTest {
                     )
             );
 
-            List<ClubRole> resultList = em.createQuery("select cr from ClubRole cr where cr.isBasic = false", ClubRole.class).getResultList();
+            List<ClubRole> resultList = em.createQuery("select cr from ClubRole cr where cr.isDefault = false", ClubRole.class).getResultList();
             // then
             assertAll(
                     () -> assertThat(resultList.size()).isEqualTo(2),
                     () -> assertThat(resultList.stream().filter(it -> it.clubRoleCategory() == ClubRoleCategory.GENERAL)
-                            .findAny().get().name().equals(generalRoleName)),
+                            .findAny().get().name()).isEqualTo(generalRoleName),
                     () -> assertThat(resultList.stream().filter(it -> it.clubRoleCategory() == ClubRoleCategory.OFFICER)
-                            .findAny().get().name().equals(officerRoleName))
+                            .findAny().get().name()).isEqualTo(officerRoleName)
             );
         }
     }
