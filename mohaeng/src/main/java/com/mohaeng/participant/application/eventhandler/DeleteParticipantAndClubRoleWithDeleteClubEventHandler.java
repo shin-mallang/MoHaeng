@@ -5,7 +5,7 @@ import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.event.EventHandler;
 import com.mohaeng.common.event.EventHistoryRepository;
 import com.mohaeng.common.event.Events;
-import com.mohaeng.participant.domain.event.DeleteClubParticipantEvent;
+import com.mohaeng.participant.domain.event.DeleteParticipantEvent;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -51,7 +51,7 @@ public class DeleteParticipantAndClubRoleWithDeleteClubEventHandler extends Even
         clubRoleRepository.deleteAllByClubId(event.clubId());
 
         // 참여자 제거 이벤트 발행 -> 참여자들에게 모임이 제거되었다는 알림 전송
-        Events.raise(new DeleteClubParticipantEvent(this, receiverIds, event.clubName(), event.clubDescription()));
+        Events.raise(new DeleteParticipantEvent(this, receiverIds, event.clubName(), event.clubDescription()));
 
         process(event);
     }
