@@ -1,6 +1,6 @@
 package com.mohaeng.applicationform.presentation;
 
-import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.WriteApplicationFormUseCase;
 import com.mohaeng.authentication.presentation.argumentresolver.Auth;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,10 +12,10 @@ public class RequestJoinClubController {
 
     public static final String REQUEST_JOIN_CLUB_URL = "/api/club/join/{clubId}";
 
-    private final RequestJoinClubUseCase requestJoinClubUseCase;
+    private final WriteApplicationFormUseCase writeApplicationFormUseCase;
 
-    public RequestJoinClubController(final RequestJoinClubUseCase requestJoinClubUseCase) {
-        this.requestJoinClubUseCase = requestJoinClubUseCase;
+    public RequestJoinClubController(final WriteApplicationFormUseCase writeApplicationFormUseCase) {
+        this.writeApplicationFormUseCase = writeApplicationFormUseCase;
     }
 
     /**
@@ -26,8 +26,8 @@ public class RequestJoinClubController {
             @PathVariable(name = "clubId") final Long clubId,
             @Auth final Long applicantId
     ) {
-        requestJoinClubUseCase.command(
-                new RequestJoinClubUseCase.Command(applicantId, clubId)
+        writeApplicationFormUseCase.command(
+                new WriteApplicationFormUseCase.Command(applicantId, clubId)
         );
         return ResponseEntity.ok("가입 신청 요청을 보냈습니다.");
     }

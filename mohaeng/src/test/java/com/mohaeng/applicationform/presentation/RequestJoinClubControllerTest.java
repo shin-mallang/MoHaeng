@@ -1,6 +1,6 @@
 package com.mohaeng.applicationform.presentation;
 
-import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.WriteApplicationFormUseCase;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RequestJoinClubControllerTest extends ControllerTest {
 
     @MockBean
-    private RequestJoinClubUseCase requestJoinClubUseCase;
+    private WriteApplicationFormUseCase writeApplicationFormUseCase;
 
     @Nested
     @DisplayName("성공 테스트")
@@ -54,7 +54,7 @@ class RequestJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isOk());
 
             // when & then
-            verify(requestJoinClubUseCase, times(1)).command(any());
+            verify(writeApplicationFormUseCase, times(1)).command(any());
 
             assertThat(resultActions.andReturn().getResponse().getContentAsString()).isEqualTo("가입 신청 요청을 보냈습니다.");
 
@@ -81,7 +81,7 @@ class RequestJoinClubControllerTest extends ControllerTest {
         @DisplayName("이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우 400을 반환한다.")
         void fail_test_1() throws Exception {
             // given
-            when(requestJoinClubUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
+            when(writeApplicationFormUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long clubId = 1L;
@@ -93,7 +93,7 @@ class RequestJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isBadRequest());
 
             // when & then
-            verify(requestJoinClubUseCase, times(1)).command(any());
+            verify(writeApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("request-join-club fail(already request join club)",
@@ -106,7 +106,7 @@ class RequestJoinClubControllerTest extends ControllerTest {
         @DisplayName("이미 모임에 가입한 사람의 경우 400을 반환한다.")
         void fail_test_2() throws Exception {
             // given
-            when(requestJoinClubUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
+            when(writeApplicationFormUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long clubId = 1L;
@@ -118,7 +118,7 @@ class RequestJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isBadRequest());
 
             // when & then
-            verify(requestJoinClubUseCase, times(1)).command(any());
+            verify(writeApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("request-join-club fail(member already joined club)",
@@ -139,7 +139,7 @@ class RequestJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isUnauthorized());
 
             // when & then
-            verify(requestJoinClubUseCase, times(0)).command(any());
+            verify(writeApplicationFormUseCase, times(0)).command(any());
 
             resultActions.andDo(
                     document("request-join-club fail(No Access Token)",

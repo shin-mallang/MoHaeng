@@ -1,9 +1,9 @@
 package com.mohaeng.applicationform.application.usecase;
 
-public interface RejectJoinClubUseCase {
+public interface ApproveApplicationFormUseCase {
 
     /**
-     * 모임 가입 요청 거절
+     * 모임 가입 요청 수락
      */
     void command(final Command command);
 

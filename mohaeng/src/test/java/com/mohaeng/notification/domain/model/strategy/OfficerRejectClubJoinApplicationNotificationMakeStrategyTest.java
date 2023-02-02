@@ -2,10 +2,10 @@ package com.mohaeng.notification.domain.model.strategy;
 
 import com.mohaeng.common.notification.NotificationEvent;
 import com.mohaeng.notification.domain.model.Notification;
-import com.mohaeng.participant.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.participant.domain.event.ClubJoinApplicationCreatedEvent;
-import com.mohaeng.participant.domain.event.OfficerApproveClubJoinApplicationEvent;
-import com.mohaeng.participant.domain.event.OfficerRejectClubJoinApplicationEvent;
+import com.mohaeng.participant.domain.event.ApplicationFormProcessedEvent;
+import com.mohaeng.participant.domain.event.ApplicationFormWrittenEvent;
+import com.mohaeng.participant.domain.event.OfficerApproveApplicationFormEvent;
+import com.mohaeng.participant.domain.event.OfficerRejectApplicationFormEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,10 +29,10 @@ class OfficerRejectClubJoinApplicationNotificationMakeStrategyTest {
         void success_test_1() {
             // then
             Assertions.assertAll(
-                    () -> assertThat(strategy.supportEvent()).isEqualTo(OfficerRejectClubJoinApplicationEvent.class),
-                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(ClubJoinApplicationCreatedEvent.class),
-                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(ApplicationProcessedEvent.class),
-                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(OfficerApproveClubJoinApplicationEvent.class),
+                    () -> assertThat(strategy.supportEvent()).isEqualTo(OfficerRejectApplicationFormEvent.class),
+                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(ApplicationFormWrittenEvent.class),
+                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(ApplicationFormProcessedEvent.class),
+                    () -> assertThat(strategy.supportEvent()).isNotEqualTo(OfficerApproveApplicationFormEvent.class),
                     () -> assertThat(strategy.supportEvent()).isNotEqualTo(NotificationEvent.class)
             );
         }
@@ -45,7 +45,7 @@ class OfficerRejectClubJoinApplicationNotificationMakeStrategyTest {
 
             // when
             List<Notification> make = strategy.make(
-                    new OfficerRejectClubJoinApplicationEvent(
+                    new OfficerRejectApplicationFormEvent(
                             this,
                             receiverId,
                             10L,

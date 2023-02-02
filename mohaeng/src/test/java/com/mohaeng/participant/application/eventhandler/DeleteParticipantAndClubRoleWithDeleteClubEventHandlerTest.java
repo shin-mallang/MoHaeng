@@ -9,7 +9,7 @@ import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.common.EventHandlerTest;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
-import com.mohaeng.participant.domain.event.DeleteClubParticipantEvent;
+import com.mohaeng.participant.domain.event.DeleteParticipantEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import jakarta.persistence.EntityManager;
@@ -127,7 +127,7 @@ class DeleteParticipantAndClubRoleWithDeleteClubEventHandlerTest extends EventHa
                     () -> assertThat(em.createQuery("select p from Participant p", Participant.class)
                             .getResultList().size())
                             .isEqualTo(0),
-                    () -> assertThat(events.stream(DeleteClubParticipantEvent.class).count()).isEqualTo(1L)
+                    () -> assertThat(events.stream(DeleteParticipantEvent.class).count()).isEqualTo(1L)
             );
         }
     }

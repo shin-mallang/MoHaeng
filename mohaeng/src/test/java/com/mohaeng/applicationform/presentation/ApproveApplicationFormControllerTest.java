@@ -1,6 +1,6 @@
 package com.mohaeng.applicationform.presentation;
 
-import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.ApproveApplicationFormUseCase;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.common.ControllerTest;
@@ -13,7 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.*;
-import static com.mohaeng.applicationform.presentation.ApproveJoinClubController.APPROVE_JOIN_CLUB_URL;
+import static com.mohaeng.applicationform.presentation.ApproveApplicationFormController.APPROVE_JOIN_CLUB_URL;
 import static com.mohaeng.club.exception.ClubExceptionType.CLUB_IS_FULL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
@@ -29,12 +29,12 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("ApproveJoinClubController 는 ")
-@WebMvcTest(controllers = ApproveJoinClubController.class)
-class ApproveJoinClubControllerTest extends ControllerTest {
+@DisplayName("ApproveApplicationFormController 는 ")
+@WebMvcTest(controllers = ApproveApplicationFormController.class)
+class ApproveApplicationFormControllerTest extends ControllerTest {
 
     @MockBean
-    private ApproveJoinClubUseCase approveJoinClubUseCase;
+    private ApproveApplicationFormUseCase approveApplicationFormUseCase;
 
     @Nested
     @DisplayName("성공 테스트")
@@ -55,7 +55,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isOk());
 
             // when & then
-            verify(approveJoinClubUseCase, times(1)).command(any());
+            verify(approveApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("approve-join-club-application",
@@ -81,7 +81,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
         void fail_test_1() throws Exception {
             // given
             doThrow(new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM))
-                    .when(approveJoinClubUseCase).command(any());
+                    .when(approveApplicationFormUseCase).command(any());
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long applicationFormId = 1L;
@@ -93,7 +93,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isForbidden());
 
             // when & then
-            verify(approveJoinClubUseCase, times(1)).command(any());
+            verify(approveApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("approve-join-club-application fail(no authority)",
@@ -107,7 +107,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
         void fail_test_2() throws Exception {
             // given
             doThrow(new ApplicationFormException(ALREADY_PROCESSED_APPLICATION_FORM))
-                    .when(approveJoinClubUseCase).command(any());
+                    .when(approveApplicationFormUseCase).command(any());
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long applicationFormId = 1L;
@@ -119,7 +119,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isBadRequest());
 
             // when & then
-            verify(approveJoinClubUseCase, times(1)).command(any());
+            verify(approveApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("approve-join-club-application fail(already processed)",
@@ -133,7 +133,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
         void fail_test_3() throws Exception {
             // given
             doThrow(new ApplicationFormException(NOT_FOUND_APPLICATION_FORM))
-                    .when(approveJoinClubUseCase).command(any());
+                    .when(approveApplicationFormUseCase).command(any());
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long applicationFormId = 1L;
@@ -145,7 +145,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isNotFound());
 
             // when & then
-            verify(approveJoinClubUseCase, times(1)).command(any());
+            verify(approveApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("approve-join-club-application fail(no application form)",
@@ -166,7 +166,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isUnauthorized());
 
             // when & then
-            verify(approveJoinClubUseCase, times(0)).command(any());
+            verify(approveApplicationFormUseCase, times(0)).command(any());
 
             resultActions.andDo(
                     document("approve-join-club-application fail(No Access Token)",
@@ -180,7 +180,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
         void fail_test_5() throws Exception {
             // given
             doThrow(new ClubException(CLUB_IS_FULL))
-                    .when(approveJoinClubUseCase).command(any());
+                    .when(approveApplicationFormUseCase).command(any());
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long applicationFormId = 1L;
@@ -192,7 +192,7 @@ class ApproveJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isBadRequest());
 
             // when & then
-            verify(approveJoinClubUseCase, times(1)).command(any());
+            verify(approveApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("approve-join-club-application fail(club is full)",

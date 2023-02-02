@@ -1,6 +1,6 @@
 package com.mohaeng.participant.application.service;
 
-import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.ApproveApplicationFormUseCase;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -9,8 +9,8 @@ import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.clubrole.exception.ClubRoleException;
 import com.mohaeng.clubrole.exception.ClubRoleExceptionType;
 import com.mohaeng.common.event.Events;
-import com.mohaeng.participant.domain.event.ApplicationProcessedEvent;
-import com.mohaeng.participant.domain.event.OfficerApproveClubJoinApplicationEvent;
+import com.mohaeng.participant.domain.event.ApplicationFormProcessedEvent;
+import com.mohaeng.participant.domain.event.OfficerApproveApplicationFormEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.participant.exception.ParticipantException;
@@ -23,15 +23,15 @@ import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOU
 
 @Service
 @Transactional
-public class ApproveJoinClub implements ApproveJoinClubUseCase {
+public class ApproveApplicationForm implements ApproveApplicationFormUseCase {
 
     private final ApplicationFormRepository applicationFormRepository;
     private final ClubRoleRepository clubRoleRepository;
     private final ParticipantRepository participantRepository;
 
-    public ApproveJoinClub(final ApplicationFormRepository applicationFormRepository,
-                           final ClubRoleRepository clubRoleRepository,
-                           final ParticipantRepository participantRepository) {
+    public ApproveApplicationForm(final ApplicationFormRepository applicationFormRepository,
+                                  final ClubRoleRepository clubRoleRepository,
+                                  final ParticipantRepository participantRepository) {
         this.applicationFormRepository = applicationFormRepository;
         this.clubRoleRepository = clubRoleRepository;
         this.participantRepository = participantRepository;
@@ -72,7 +72,7 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
                             final Participant president) {
 
         // 모임 가입 요청 승인 이벤트 -> 가입된 회원에게 가입되었다는 알림 전송 & 해당 ApplicationForm과 연관된 알림 다른 임원진에게서 모두 제거하기
-        Events.raise(ApplicationProcessedEvent.approve(this,
+        Events.raise(ApplicationFormProcessedEvent.approve(this,
                 applicationForm.applicant().id(),
                 applicationForm.id(),
                 applicationForm.target().id())
@@ -80,7 +80,7 @@ public class ApproveJoinClub implements ApproveJoinClubUseCase {
 
         // 처리자가 회장이 아닌 경우 회장에게 알림 전송을 위한 이벤트 발행
         if (!president.equals(manager)) {
-            Events.raise(new OfficerApproveClubJoinApplicationEvent(
+            Events.raise(new OfficerApproveApplicationFormEvent(
                     this,
                     president.member().id(),
                     manager.member().id(),

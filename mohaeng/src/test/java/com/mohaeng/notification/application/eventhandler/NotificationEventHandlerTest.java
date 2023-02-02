@@ -5,7 +5,7 @@ import com.mohaeng.common.event.EventHistoryRepository;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.NotificationMakeStrategies;
 import com.mohaeng.notification.domain.repository.NotificationRepository;
-import com.mohaeng.participant.domain.event.ClubJoinApplicationCreatedEvent;
+import com.mohaeng.participant.domain.event.ApplicationFormWrittenEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,7 +46,7 @@ class NotificationEventHandlerTest {
         void success_test_1() {
             // given
             List<Long> memberIds = List.of(1L, 2L, 3L, 4L);
-            eventHandler.handle(new ClubJoinApplicationCreatedEvent(this, memberIds, 10L, 11L, 12L));
+            eventHandler.handle(new ApplicationFormWrittenEvent(this, memberIds, 10L, 11L, 12L));
 
             // when
             List<Notification> all = repository.findAll();

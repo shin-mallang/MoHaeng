@@ -1,6 +1,6 @@
 package com.mohaeng.participant.application.service;
 
-import com.mohaeng.applicationform.application.usecase.RequestJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.WriteApplicationFormUseCase;
 import com.mohaeng.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
@@ -12,7 +12,7 @@ import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import com.mohaeng.member.exception.MemberException;
-import com.mohaeng.participant.domain.event.ClubJoinApplicationCreatedEvent;
+import com.mohaeng.participant.domain.event.ApplicationFormWrittenEvent;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import org.springframework.stereotype.Service;
@@ -27,17 +27,17 @@ import static com.mohaeng.member.exception.MemberExceptionType.NOT_FOUND_MEMBER;
 
 @Service
 @Transactional
-public class RequestJoinClub implements RequestJoinClubUseCase {
+public class WriteApplicationForm implements WriteApplicationFormUseCase {
 
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ParticipantRepository participantRepository;
     private final ApplicationFormRepository applicationFormRepository;
 
-    public RequestJoinClub(final ClubRepository clubRepository,
-                           final MemberRepository memberRepository,
-                           final ParticipantRepository participantRepository,
-                           final ApplicationFormRepository applicationFormRepository) {
+    public WriteApplicationForm(final ClubRepository clubRepository,
+                                final MemberRepository memberRepository,
+                                final ParticipantRepository participantRepository,
+                                final ApplicationFormRepository applicationFormRepository) {
         this.clubRepository = clubRepository;
         this.memberRepository = memberRepository;
         this.participantRepository = participantRepository;
@@ -102,7 +102,7 @@ public class RequestJoinClub implements RequestJoinClubUseCase {
      * 이벤트 발행 -> 모임 가입 신청 요청에 대하여 회장과 임원진에게 알림 보내기
      */
     private void raiseEvents(final Member applicant, final Club club, final ApplicationForm applicationForm) {
-        Events.raise(new ClubJoinApplicationCreatedEvent(
+        Events.raise(new ApplicationFormWrittenEvent(
                 this,
                 getOfficerAndPresidentIdsOfClub(club),
                 club.id(),

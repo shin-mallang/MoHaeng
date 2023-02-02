@@ -1,6 +1,6 @@
 package com.mohaeng.applicationform.presentation;
 
-import com.mohaeng.applicationform.application.usecase.ApproveJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.ApproveApplicationFormUseCase;
 import com.mohaeng.authentication.presentation.argumentresolver.Auth;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
  * 모임 가입 신청 수락
  */
 @RestController
-public class ApproveJoinClubController {
+public class ApproveApplicationFormController {
 
     public static final String APPROVE_JOIN_CLUB_URL = "/api/application-form/{applicationFormId}/accept";
 
-    private final ApproveJoinClubUseCase approveJoinClubUseCase;
+    private final ApproveApplicationFormUseCase approveApplicationFormUseCase;
 
-    public ApproveJoinClubController(final ApproveJoinClubUseCase approveJoinClubUseCase) {
-        this.approveJoinClubUseCase = approveJoinClubUseCase;
+    public ApproveApplicationFormController(final ApproveApplicationFormUseCase approveApplicationFormUseCase) {
+        this.approveApplicationFormUseCase = approveApplicationFormUseCase;
     }
 
     @PostMapping(path = APPROVE_JOIN_CLUB_URL)
@@ -26,8 +26,8 @@ public class ApproveJoinClubController {
             @PathVariable("applicationFormId") final Long applicationFormId,
             @Auth final Long memberId
     ) {
-        approveJoinClubUseCase.command(
-                new ApproveJoinClubUseCase.Command(applicationFormId, memberId)
+        approveApplicationFormUseCase.command(
+                new ApproveApplicationFormUseCase.Command(applicationFormId, memberId)
         );
         return ResponseEntity.ok().build();
     }

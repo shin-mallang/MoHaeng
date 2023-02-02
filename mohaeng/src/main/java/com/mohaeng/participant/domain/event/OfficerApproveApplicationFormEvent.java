@@ -6,7 +6,7 @@ import com.mohaeng.common.notification.NotificationEvent;
 /**
  * 회장이 아닌 임원이 모임 가입 신청을 승인하였을 때 발행
  */
-public class OfficerApproveClubJoinApplicationEvent extends NotificationEvent {
+public class OfficerApproveApplicationFormEvent extends NotificationEvent {
 
     private final Long officerMemberId;  // 관리자 ID (Member Id)
     private final Long officerParticipantId;  // 관리자 ID (Participant Id)
@@ -22,13 +22,13 @@ public class OfficerApproveClubJoinApplicationEvent extends NotificationEvent {
      * @param applicantParticipantId 가입된 회원 ID (Participant Id)
      * @param applicationFormId      처리된 가입 신청서 ID
      */
-    public OfficerApproveClubJoinApplicationEvent(final Object source,
-                                                  final Long receiverId,
-                                                  final Long officerMemberId,
-                                                  final Long officerParticipantId,
-                                                  final Long applicantMemberId,
-                                                  final Long applicantParticipantId,
-                                                  final Long applicationFormId) {
+    public OfficerApproveApplicationFormEvent(final Object source,
+                                              final Long receiverId,
+                                              final Long officerMemberId,
+                                              final Long officerParticipantId,
+                                              final Long applicantMemberId,
+                                              final Long applicantParticipantId,
+                                              final Long applicationFormId) {
         super(source, receiverId);
         this.officerMemberId = officerMemberId;
         this.officerParticipantId = officerParticipantId;
@@ -63,7 +63,7 @@ public class OfficerApproveClubJoinApplicationEvent extends NotificationEvent {
 
     @Override
     public BaseEventHistory history() {
-        return new OfficerApproveClubJoinApplicationEventHistory(officerMemberId, officerParticipantId, applicantMemberId, applicantParticipantId, applicationFormId);
+        return new OfficerApproveApplicationFormEventHistory(officerMemberId, officerParticipantId, applicantMemberId, applicantParticipantId, applicationFormId);
     }
 
     @Override

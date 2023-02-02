@@ -10,15 +10,15 @@ import java.util.List;
  * <p>
  * 참여자들에게 모임이 제거되었다는 알림 발행
  */
-public class DeleteClubParticipantEvent extends NotificationEvent {
+public class DeleteParticipantEvent extends NotificationEvent {
 
     private final String clubName;
     private final String clubDescription;
 
-    public DeleteClubParticipantEvent(final Object source,
-                                      final List<Long> receiverIds,
-                                      final String clubName,
-                                      final String clubDescription) {
+    public DeleteParticipantEvent(final Object source,
+                                  final List<Long> receiverIds,
+                                  final String clubName,
+                                  final String clubDescription) {
         super(source, receiverIds);
         this.clubName = clubName;
         this.clubDescription = clubDescription;
@@ -34,7 +34,7 @@ public class DeleteClubParticipantEvent extends NotificationEvent {
 
     @Override
     public BaseEventHistory history() {
-        return new DeleteClubParticipantEventHistory(eventDateTime, clubName, clubDescription);
+        return new DeleteParticipantEventHistory(eventDateTime, clubName, clubDescription);
     }
 
     @Override

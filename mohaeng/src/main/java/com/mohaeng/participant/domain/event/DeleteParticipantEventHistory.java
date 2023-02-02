@@ -10,18 +10,18 @@ import java.time.LocalDateTime;
  * 모임의 참여자가 모두 제거된 경우 발행되는 알림
  */
 @Entity
-@DiscriminatorValue("ClubParticipantDeleteEvent")
-public class DeleteClubParticipantEventHistory extends BaseEventHistory {
+@DiscriminatorValue("DeleteParticipantEvent")
+public class DeleteParticipantEventHistory extends BaseEventHistory {
 
     private String clubName;
     private String clubDescription;
 
-    protected DeleteClubParticipantEventHistory() {
+    protected DeleteParticipantEventHistory() {
     }
 
-    public DeleteClubParticipantEventHistory(final LocalDateTime eventDateTime,
-                                             final String clubName,
-                                             final String clubDescription) {
+    public DeleteParticipantEventHistory(final LocalDateTime eventDateTime,
+                                         final String clubName,
+                                         final String clubDescription) {
         super(eventDateTime);
         this.clubName = clubName;
         this.clubDescription = clubDescription;

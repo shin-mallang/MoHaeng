@@ -1,6 +1,6 @@
 package com.mohaeng.applicationform.presentation;
 
-import com.mohaeng.applicationform.application.usecase.RejectJoinClubUseCase;
+import com.mohaeng.applicationform.application.usecase.RejectApplicationFormUseCase;
 import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.*;
-import static com.mohaeng.applicationform.presentation.RejectJoinClubController.REJECT_JOIN_CLUB_URL;
+import static com.mohaeng.applicationform.presentation.RejectApplicationFormController.REJECT_JOIN_CLUB_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;
@@ -27,12 +27,12 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("RejectJoinClubController 는 ")
-@WebMvcTest(controllers = RejectJoinClubController.class)
-class RejectJoinClubControllerTest extends ControllerTest {
+@DisplayName("RejectApplicationFormController 는 ")
+@WebMvcTest(controllers = RejectApplicationFormController.class)
+class RejectApplicationFormControllerTest extends ControllerTest {
 
     @MockBean
-    private RejectJoinClubUseCase rejectJoinClubUseCase;
+    private RejectApplicationFormUseCase rejectApplicationFormUseCase;
 
     @Nested
     @DisplayName("성공 테스트")
@@ -53,7 +53,7 @@ class RejectJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isOk());
 
             // when & then
-            verify(rejectJoinClubUseCase, times(1)).command(any());
+            verify(rejectApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("reject-join-club-application",
@@ -79,7 +79,7 @@ class RejectJoinClubControllerTest extends ControllerTest {
         void fail_test_1() throws Exception {
             // given
             doThrow(new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM))
-                    .when(rejectJoinClubUseCase).command(any());
+                    .when(rejectApplicationFormUseCase).command(any());
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long applicationFormId = 1L;
@@ -91,7 +91,7 @@ class RejectJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isForbidden());
 
             // when & then
-            verify(rejectJoinClubUseCase, times(1)).command(any());
+            verify(rejectApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("reject-join-club-application fail(no authority)",
@@ -105,7 +105,7 @@ class RejectJoinClubControllerTest extends ControllerTest {
         void fail_test_2() throws Exception {
             // given
             doThrow(new ApplicationFormException(ALREADY_PROCESSED_APPLICATION_FORM))
-                    .when(rejectJoinClubUseCase).command(any());
+                    .when(rejectApplicationFormUseCase).command(any());
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long applicationFormId = 1L;
@@ -117,7 +117,7 @@ class RejectJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isBadRequest());
 
             // when & then
-            verify(rejectJoinClubUseCase, times(1)).command(any());
+            verify(rejectApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("reject-join-club-application fail(already processed)",
@@ -131,7 +131,7 @@ class RejectJoinClubControllerTest extends ControllerTest {
         void fail_test_3() throws Exception {
             // given
             doThrow(new ApplicationFormException(NOT_FOUND_APPLICATION_FORM))
-                    .when(rejectJoinClubUseCase).command(any());
+                    .when(rejectApplicationFormUseCase).command(any());
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long applicationFormId = 1L;
@@ -143,7 +143,7 @@ class RejectJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isNotFound());
 
             // when & then
-            verify(rejectJoinClubUseCase, times(1)).command(any());
+            verify(rejectApplicationFormUseCase, times(1)).command(any());
 
             resultActions.andDo(
                     document("reject-join-club-application fail(no application form)",
@@ -164,7 +164,7 @@ class RejectJoinClubControllerTest extends ControllerTest {
                     .andExpect(status().isUnauthorized());
 
             // when & then
-            verify(rejectJoinClubUseCase, times(0)).command(any());
+            verify(rejectApplicationFormUseCase, times(0)).command(any());
 
             resultActions.andDo(
                     document("reject-join-club-application fail(No Access Token)",

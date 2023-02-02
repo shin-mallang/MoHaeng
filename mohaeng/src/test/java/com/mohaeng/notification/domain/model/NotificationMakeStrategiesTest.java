@@ -2,7 +2,7 @@ package com.mohaeng.notification.domain.model;
 
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.notification.NotificationEvent;
-import com.mohaeng.participant.domain.event.ClubJoinApplicationCreatedEvent;
+import com.mohaeng.participant.domain.event.ApplicationFormWrittenEvent;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,7 +32,7 @@ class NotificationMakeStrategiesTest {
 
             // when
             List<Notification> make =
-                    notificationMakeStrategies.make(new ClubJoinApplicationCreatedEvent(this, memberIds, 10L, 11L, 12L));
+                    notificationMakeStrategies.make(new ApplicationFormWrittenEvent(this, memberIds, 10L, 11L, 12L));
 
             // then
             Assertions.assertThat(make.size()).isEqualTo(memberIds.size());

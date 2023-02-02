@@ -5,21 +5,21 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("OfficerRejectClubJoinApplicationEvent")
-public class OfficerRejectClubJoinApplicationEventHistory extends BaseEventHistory {
+@DiscriminatorValue("OfficerRejectApplicationFormEvent")
+public class OfficerRejectApplicationFormEventHistory extends BaseEventHistory {
 
     private Long managerMemberId;  // 관리자 ID (Member Id)
     private Long managerParticipantId;  // 관리자 ID (Participant Id)
     private Long applicantMemberId;  // 거절된 회원 ID (Member Id)
     private Long applicationFormId;  // 처리된 가입 신청서 ID
 
-    protected OfficerRejectClubJoinApplicationEventHistory() {
+    protected OfficerRejectApplicationFormEventHistory() {
     }
 
-    public OfficerRejectClubJoinApplicationEventHistory(final Long managerMemberId,
-                                                        final Long managerParticipantId,
-                                                        final Long applicantMemberId,
-                                                        final Long applicationFormId) {
+    public OfficerRejectApplicationFormEventHistory(final Long managerMemberId,
+                                                    final Long managerParticipantId,
+                                                    final Long applicantMemberId,
+                                                    final Long applicationFormId) {
         this.managerMemberId = managerMemberId;
         this.managerParticipantId = managerParticipantId;
         this.applicantMemberId = applicantMemberId;
