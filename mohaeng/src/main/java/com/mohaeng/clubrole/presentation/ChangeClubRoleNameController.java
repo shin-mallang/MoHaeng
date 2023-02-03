@@ -23,14 +23,14 @@ public class ChangeClubRoleNameController {
 
     @PostMapping(CHANGE_CLUB_ROLE_NAME_URL)
     public ResponseEntity<Void> changeName(
-            @PathVariable(name = "clubRoleId") final Long clubId,
+            @PathVariable(name = "clubRoleId") final Long clubRoleId,
             @Auth final Long memberId,
             @Valid @RequestBody ChangeClubRoleNameController.ChangeClubRoleNameRequest request
     ) {
         changeClubRoleNameUseCase.command(
                 new ChangeClubRoleNameUseCase.Command(
                         memberId,
-                        clubId,
+                        clubRoleId,
                         request.roleName()
                 ));
         return ResponseEntity.ok().build();
