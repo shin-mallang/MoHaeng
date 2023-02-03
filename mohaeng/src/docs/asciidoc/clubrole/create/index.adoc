@@ -20,7 +20,7 @@ operation::create-club-role[snippets='http-request,path-parameters,request-heade
 
 operation::create-club-role(No Access Token)[snippets='http-response']
 
-==== - 없는 참여자 ID인 경우
+==== - 해당 회원이 역할을 생성하려는 모임에 가입되어있지 않은 경우
 
 operation::create-club-role(Nonexistent Participant)[snippets='http-response']
 
