@@ -78,7 +78,7 @@ class CreateClubRoleControllerTest extends ControllerTest {
                                     headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
                             ),
                             pathParameters(
-                                    parameterWithName("clubId").description("역할을 생성 모임의 ID")
+                                    parameterWithName("clubId").description("역할을 생성할 모임의 ID")
                             ),
                             requestFields(
                                     fieldWithPath("name").type(STRING).description("name(생성할 역할의 이름)"),
