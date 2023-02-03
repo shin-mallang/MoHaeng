@@ -211,6 +211,44 @@ public class Participant extends BaseEntity {
     }
 
     /**
+     * 기본 역할을 변경한다.
+     *
+     * @param defaultRoleCandidate 기본 역할로 만들고 싶은 역할
+     * @param existingDefaultRole  기존의 기본 역할
+     */
+    public void changeDefaultRole(final ClubRole defaultRoleCandidate, ClubRole existingDefaultRole) {
+        // 권한 확인
+        checkAuthorityChangeDefaultRole();
+
+        // 두 역할의 카테고리가 일치하는지 확인
+        checkCategoryIsMatchBetweenExistingDefaultRoleAndCandidate(defaultRoleCandidate, existingDefaultRole);
+
+        defaultRoleCandidate.makeDefault();
+        existingDefaultRole.makeNotDefault();
+    }
+
+    /**
+     * 두 역할의 카테고리가 일치하는지 확인한다.
+     *
+     * @param defaultRoleCandidate 기본 역할로 변경될 역할
+     * @param existingDefaultRole  기존의 기본 역할
+     */
+    private static void checkCategoryIsMatchBetweenExistingDefaultRoleAndCandidate(final ClubRole defaultRoleCandidate, final ClubRole existingDefaultRole) {
+        if (defaultRoleCandidate.clubRoleCategory() != existingDefaultRole.clubRoleCategory()) {
+            throw new ClubRoleException(MISMATCH_EXISTING_DEFAULT_ROLE_AND_CANDIDATE);
+        }
+    }
+
+    /**
+     * 기본 역할 변경 권한 확인
+     */
+    private void checkAuthorityChangeDefaultRole() {
+        if (!isManager()) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
+        }
+    }
+
+    /**
      * 회장인지 확인
      */
     private boolean isPresident() {
