@@ -233,7 +233,7 @@ public class Participant extends BaseEntity {
      * @param defaultRoleCandidate 기본 역할로 변경될 역할
      * @param existingDefaultRole  기존의 기본 역할
      */
-    private static void checkCategoryIsMatchBetweenExistingDefaultRoleAndCandidate(final ClubRole defaultRoleCandidate, final ClubRole existingDefaultRole) {
+    private void checkCategoryIsMatchBetweenExistingDefaultRoleAndCandidate(final ClubRole defaultRoleCandidate, final ClubRole existingDefaultRole) {
         if (defaultRoleCandidate.clubRoleCategory() != existingDefaultRole.clubRoleCategory()) {
             throw new ClubRoleException(MISMATCH_EXISTING_DEFAULT_ROLE_AND_CANDIDATE);
         }
