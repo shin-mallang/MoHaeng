@@ -168,4 +168,26 @@ class ClubRoleTest {
             );
         }
     }
+
+    @Nested
+    @DisplayName("실패 테스트")
+    class FailTest {
+
+        @Test
+        @DisplayName("makeDefault() 는 이미 기본 역할에 대해 적용되는 경우, 예외가 발생한다.")
+        void fail_test_1() {
+            // given
+            Club club = club(null);
+            List<ClubRole> defaultRoles = ClubRole.defaultRoles(club);
+
+            // when
+            defaultRoles.stream()
+                    .map(it ->
+                            assertThrows(ClubRoleException.class, it::makeDefault)
+                                    .exceptionType())
+                    .forEach(it -> {
+                        assertThat(it).isEqualTo(ALREADY_DEFAULT_ROLE);
+                    });
+        }
+    }
 }
