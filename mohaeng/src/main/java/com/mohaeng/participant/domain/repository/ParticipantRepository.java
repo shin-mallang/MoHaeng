@@ -1,6 +1,7 @@
 package com.mohaeng.participant.domain.repository;
 
 import com.mohaeng.club.domain.model.Club;
+import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.domain.model.Participant;
 
@@ -39,4 +40,6 @@ public interface ParticipantRepository {
     List<Participant> findAllWithMemberByClubId(final Long clubId);
 
     Optional<Participant> findPresidentWithMemberAndClubRoleByClub(final Club club);
+
+    List<Participant> findAllByClubRole(final ClubRole clubRole);
 }

@@ -1,6 +1,7 @@
 package com.mohaeng.common.repositories;
 
 import com.mohaeng.club.domain.model.Club;
+import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
@@ -85,6 +86,11 @@ public class MockParticipantRepository implements ParticipantRepository {
     @Override
     public Optional<Participant> findPresidentWithMemberAndClubRoleByClub(Club club) {
         return Optional.empty();
+    }
+
+    @Override
+    public List<Participant> findAllByClubRole(ClubRole clubRole) {
+        return null;
     }
 
     public List<Participant> findAll() {

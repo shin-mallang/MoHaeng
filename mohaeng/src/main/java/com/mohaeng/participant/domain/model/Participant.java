@@ -53,6 +53,13 @@ public class Participant extends BaseEntity {
     }
 
     /**
+     * 참여자의 역할을 변경한다.
+     */
+    public void changeRole(final ClubRole clubRole) {
+        this.clubRole = clubRole;
+    }
+
+    /**
      * 모임에 가입한다.
      */
     public void joinClub(final Club club, final ClubRole clubRole) {
@@ -184,6 +191,22 @@ public class Participant extends BaseEntity {
     private void checkAuthorityToProcessApplication() {
         if (!isManager()) {
             throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
+        }
+    }
+
+    /**
+     * 주어진 역할을 제거한다.
+     */
+    public void deleteClubRole(final ClubRole clubRole) {
+        // 권한 확인
+        checkAuthorityDeleteClubRole();
+
+        clubRole.makeNotDefault();
+    }
+
+    private void checkAuthorityDeleteClubRole() {
+        if (!isManager()) {
+            throw new ClubRoleException(NO_AUTHORITY_DELETE_ROLE);
         }
     }
 

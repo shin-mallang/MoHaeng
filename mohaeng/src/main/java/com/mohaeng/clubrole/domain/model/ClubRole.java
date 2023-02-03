@@ -105,4 +105,15 @@ public class ClubRole extends BaseEntity {
     public void changeName(final String roleName) {
         this.name = roleName;
     }
+
+    /**
+     * 기본 역할로 변경한다.
+     */
+    public void makeDefault() {
+        this.isDefault = true;
+    }
+
+    public void makeNotDefault() {
+        this.isDefault = false;
+    }
 }
