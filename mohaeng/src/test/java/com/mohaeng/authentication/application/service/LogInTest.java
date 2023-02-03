@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ApplicationTest
-@DisplayName("LogIn은 ")
+@DisplayName("LogIn 은 ")
 class LogInTest {
 
     @Autowired

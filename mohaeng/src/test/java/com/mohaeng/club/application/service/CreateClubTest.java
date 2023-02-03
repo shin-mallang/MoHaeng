@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ApplicationTest
-@DisplayName("CreateClub은 ")
+@DisplayName("CreateClub 은 ")
 class CreateClubTest {
 
     @Autowired

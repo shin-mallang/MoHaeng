@@ -16,7 +16,7 @@ public class ClubRole extends BaseEntity {
 
     private String name;  // 역할의 이름
 
-    private boolean isBasic;  // 기본 역할인지 여부
+    private boolean isDefault;  // 기본 역할인지 여부
 
     @Enumerated(EnumType.STRING)
     private ClubRoleCategory clubRoleCategory;  // 역할 분류
@@ -32,11 +32,11 @@ public class ClubRole extends BaseEntity {
     public ClubRole(final String name,
                     final ClubRoleCategory clubRoleCategory,
                     final Club club,
-                    final boolean isBasic) {
+                    final boolean isDefault) {
         this.name = name;
         this.clubRoleCategory = clubRoleCategory;
         this.club = club;
-        this.isBasic = isBasic;
+        this.isDefault = isDefault;
     }
 
     //== 정적 메서드 ==//
@@ -73,8 +73,8 @@ public class ClubRole extends BaseEntity {
         return club;
     }
 
-    public boolean isBasic() {
-        return isBasic;
+    public boolean isDefault() {
+        return isDefault;
     }
 
     /**
@@ -104,5 +104,16 @@ public class ClubRole extends BaseEntity {
      */
     public void changeName(final String roleName) {
         this.name = roleName;
+    }
+
+    /**
+     * 기본 역할로 변경한다.
+     */
+    public void makeDefault() {
+        this.isDefault = true;
+    }
+
+    public void makeNotDefault() {
+        this.isDefault = false;
     }
 }

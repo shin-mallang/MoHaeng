@@ -2,6 +2,7 @@ package com.mohaeng.common.repositories;
 
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.model.ClubRole;
+import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -44,7 +45,22 @@ public class MockClubRoleRepository implements ClubRoleRepository {
     }
 
     @Override
+    public List<ClubRole> findTop2ByClubAndClubRoleCategory(Club club, ClubRoleCategory clubRoleCategory) {
+        return null;
+    }
+
+    @Override
+    public ClubRole findDefaultRoleByClubAndClubRoleCategory(Club club, ClubRoleCategory clubRoleCategory) {
+        return null;
+    }
+
+    @Override
     public void deleteAllByClubId(Long clubId) {
+
+    }
+
+    @Override
+    public void delete(ClubRole clubRole) {
 
     }
 
