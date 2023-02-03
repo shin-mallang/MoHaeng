@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.NOT_FOUND_CLUB_ROLE;
 import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.NO_AUTHORITY_CHANGE_ROLE_NAME;
 import static com.mohaeng.clubrole.presentation.ChangeClubRoleNameController.CHANGE_CLUB_ROLE_NAME_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
@@ -190,6 +191,31 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
 
             resultActions.andDo(
                     document("change-club-role-name(request fields contains empty value)",
+                            getDocumentRequest(),
+                            getDocumentResponse()
+                    ));
+        }
+
+        @Test
+        @DisplayName("이름을 변경하려는 역할이 없는 경우 404를 반환한다.")
+        void fail_test_5() throws Exception {
+            final Long memberId = 1L;
+            setAuthentication(memberId);
+            doThrow(new ClubRoleException(NOT_FOUND_CLUB_ROLE))
+                    .when(changeClubRoleNameUseCase).command(any());
+            ResultActions resultActions = mockMvc.perform(
+                            post(CHANGE_CLUB_ROLE_NAME_URL, 1L)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(request))
+                    )
+                    .andDo(print())
+                    .andExpect(status().isNotFound());
+
+            verify(changeClubRoleNameUseCase, times(1)).command(any());
+
+            resultActions.andDo(
+                    document("change-club-role-name(Nonexistent ClubRole)",
                             getDocumentRequest(),
                             getDocumentResponse()
                     ));

@@ -289,6 +289,10 @@ operation::change-club-role-name(No Access Token)[snippets='http-response']
 
 operation::change-club-role-name(Nonexistent Participant)[snippets='http-response']
 
+==== - 이름을 변경하려는 역할이 존재하지 않는 경우
+
+operation::change-club-role-name(Nonexistent ClubRole)[snippets='http-response']
+
 ==== - 요청자가 회장 혹은 임원이 아닌 경우
 
 operation::change-club-role-name(requester does not president or officer)[snippets='http-response']
@@ -309,6 +313,10 @@ operation::delete-club-role(No Access Token)[snippets='http-response']
 ==== - 해당 회원이 역할을 제거하려는 모임에 가입되어있지 않은 경우
 
 operation::delete-club-role(Nonexistent Participant)[snippets='http-response']
+
+==== - 제거하려는 역할이 존재하지 않는 경우
+
+operation::delete-club-role(Nonexistent ClubRole)[snippets='http-response']
 
 ==== - 요청자가 회장 혹은 임원이 아닌 경우
 
@@ -335,13 +343,13 @@ operation::change-default-club-role(No Access Token)[snippets='http-response']
 
 operation::change-default-club-role(Nonexistent Participant)[snippets='http-response']
 
-==== - 요청자가 회장 혹은 임원이 아닌 경우
-
-operation::change-default-club-role(requester does not president or officer)[snippets='http-response']
-
 ==== - 기본 역할로 변경하려는 역할이 존재하지 않는 경우
 
 operation::change-default-club-role(Nonexistent ClubRole)[snippets='http-response']
+
+==== - 요청자가 회장 혹은 임원이 아닌 경우
+
+operation::change-default-club-role(requester does not president or officer)[snippets='http-response']
 
 ==== - 이미 기본 역할인 경우
 
