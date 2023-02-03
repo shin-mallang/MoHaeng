@@ -1,16 +1,20 @@
 package com.mohaeng.clubrole.domain.model;
 
 import com.mohaeng.club.domain.model.Club;
-import com.mohaeng.common.fixtures.ClubRoleFixture;
+import com.mohaeng.clubrole.exception.ClubRoleException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
+import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.ALREADY_DEFAULT_ROLE;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
+import static com.mohaeng.common.fixtures.ClubRoleFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("ClubRole 은 ")
 class ClubRoleTest {
@@ -55,9 +59,9 @@ class ClubRoleTest {
         void success_test_2() {
             // given
             Club club = club(null);
-            ClubRole generalRole = ClubRoleFixture.generalRole("일반", club);
-            ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
-            ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
+            ClubRole generalRole = generalRole("일반", club);
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole presidentRole = presidentRole("회장", club);
 
             // when & then
             assertAll(
@@ -72,9 +76,9 @@ class ClubRoleTest {
         void success_test_3() {
             // given
             Club club = club(null);
-            ClubRole generalRole = ClubRoleFixture.generalRole("일반", club);
-            ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
-            ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
+            ClubRole generalRole = generalRole("일반", club);
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole presidentRole = presidentRole("회장", club);
 
             // when & then
             assertAll(
@@ -89,9 +93,9 @@ class ClubRoleTest {
         void success_test_4() {
             // given
             Club club = club(null);
-            ClubRole generalRole = ClubRoleFixture.generalRole("일반", club);
-            ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
-            ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
+            ClubRole generalRole = generalRole("일반", club);
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole presidentRole = presidentRole("회장", club);
 
             // when & then
             assertAll(
@@ -106,9 +110,9 @@ class ClubRoleTest {
         void success_test_5() {
             // given
             Club club = club(null);
-            ClubRole generalRole = ClubRoleFixture.generalRole("일반", club);
-            ClubRole officerRole = ClubRoleFixture.officerRole("임원", club);
-            ClubRole presidentRole = ClubRoleFixture.presidentRole("회장", club);
+            ClubRole generalRole = generalRole("일반", club);
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole presidentRole = presidentRole("회장", club);
 
             String changeName = "변경!";
 
@@ -122,6 +126,45 @@ class ClubRoleTest {
                     () -> assertThat(generalRole.name()).isEqualTo(changeName),
                     () -> assertThat(officerRole.name()).isEqualTo(changeName),
                     () -> assertThat(presidentRole.name()).isEqualTo(changeName)
+            );
+        }
+
+        @Test
+        @DisplayName("makeDefault() 는 기본 역할이 아닌 역할을 기본 역할로 변경한다.")
+        void success_test_6() {
+            // given
+            Club club = club(null);
+            ClubRole generalRole = generalRole("기본역할이 아닌 알번 역할", club);
+            ClubRole officerRole = officerRole("기본역할이 아닌 임원 역할", club);
+            ClubRole presidentRole = new ClubRole("기본역할이 아닌 회장 역할", PRESIDENT, club, false);
+            ;
+
+            // when
+            generalRole.makeDefault();
+            officerRole.makeDefault();
+            presidentRole.makeDefault();
+
+            // then
+            assertAll(
+                    () -> assertThat(generalRole.isDefault()).isTrue(),
+                    () -> assertThat(officerRole.isDefault()).isTrue(),
+                    () -> assertThat(presidentRole.isDefault()).isTrue()
+            );
+        }
+
+        @Test
+        @DisplayName("makeNotDefault() 는 기본 역할을 기본 역할이 아닌 역할로 변경한다.")
+        void success_test_7() {
+            // given
+            Club club = club(null);
+            List<ClubRole> defaultRoles = ClubRole.defaultRoles(club);
+
+            // when
+            defaultRoles.forEach(ClubRole::makeNotDefault);
+
+            // then
+            defaultRoles.forEach(
+                    it -> assertThat(it.isDefault()).isFalse()
             );
         }
     }

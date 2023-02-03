@@ -5,6 +5,7 @@ import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.clubrole.domain.model.ClubRole;
+import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.exception.ClubRoleException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
@@ -12,6 +13,11 @@ import com.mohaeng.participant.exception.ParticipantException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
@@ -28,6 +34,8 @@ import static com.mohaeng.participant.exception.ParticipantExceptionType.PRESIDE
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 
 @DisplayName("Participant 는 ")
 class ParticipantTest {
@@ -252,6 +260,31 @@ class ParticipantTest {
             assertAll(
                     () -> assertThat(applicationForm1.processed()).isTrue(),
                     () -> assertThat(applicationForm2.processed()).isTrue()
+            );
+        }
+
+        @ParameterizedTest(name = "[{arguments}] deleteClubRole() 시 권한이 있다면(회장 혹은 임원) 해당 역할을 기본 역할이 아니도록 만든다. ")
+        @EnumSource(mode = INCLUDE, value = ClubRoleCategory.class, names = {"PRESIDENT", "OFFICER"})
+        void success_test_9(final ClubRoleCategory category) {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant manager = participant(null, member, club, defaultRoles.get(category));
+
+            // when
+            manager.deleteClubRole(officerRole);
+            manager.deleteClubRole(generalRole);
+
+            // then
+            assertAll(
+                    () -> assertThat(officerRole.isDefault()).isFalse(),
+                    () -> assertThat(generalRole.isDefault()).isFalse()
             );
         }
     }
@@ -550,6 +583,37 @@ class ParticipantTest {
             // then
             assertAll(
                     () -> assertThat(baseExceptionType1).isEqualTo(CLUB_IS_FULL)
+            );
+        }
+
+        @ParameterizedTest(name = "[{arguments}] deleteClubRole() 시 권한이 없다면(회장 혹은 임원이 아닌 경우) 예외가 발생한다.")
+        @EnumSource(mode = EXCLUDE, value = ClubRoleCategory.class, names = {"PRESIDENT", "OFFICER"})
+        void fail_test_12(final ClubRoleCategory category) {
+            // given
+            Member member = member(null);
+            Member applicant = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant manager = participant(null, member, club, defaultRoles.get(category));
+
+            // when & then
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    manager.deleteClubRole(officerRole))
+                    .exceptionType())
+                    .isEqualTo(NO_AUTHORITY_DELETE_ROLE);
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    manager.deleteClubRole(generalRole))
+                    .exceptionType())
+                    .isEqualTo(NO_AUTHORITY_DELETE_ROLE);
+            // then
+            assertAll(
+                    () -> assertThat(officerRole.isDefault()).isFalse(),
+                    () -> assertThat(generalRole.isDefault()).isFalse()
             );
         }
     }
