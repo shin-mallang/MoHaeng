@@ -24,6 +24,10 @@ operation::delete-club-role(No Access Token)[snippets='http-response']
 
 operation::delete-club-role(Nonexistent Participant)[snippets='http-response']
 
+==== - 제거하려는 역할이 존재하지 않는 경우
+
+operation::delete-club-role(Nonexistent ClubRole)[snippets='http-response']
+
 ==== - 요청자가 회장 혹은 임원이 아닌 경우
 
 operation::delete-club-role(requester does not president or officer)[snippets='http-response']

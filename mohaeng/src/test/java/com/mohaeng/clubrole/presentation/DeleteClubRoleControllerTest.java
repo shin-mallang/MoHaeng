@@ -12,8 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.CAN_NOT_DELETE_ROLE_BECAUSE_NO_ROLE_TO_REPLACE;
-import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.NO_AUTHORITY_DELETE_ROLE;
+import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.clubrole.presentation.DeleteClubRoleController.DELETE_CLUB_ROLE_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
@@ -201,6 +200,28 @@ class DeleteClubRoleControllerTest extends ControllerTest {
 
             resultActions.andDo(
                     document("delete-club-role(only one role belonging to that category, so cannot be removed)",
+                            getDocumentRequest(),
+                            getDocumentResponse()
+                    ));
+        }
+
+        @Test
+        @DisplayName("제거하려는 역할이 없는 경우 404를 반환한다.")
+        void fail_test_6() throws Exception {
+            setAuthentication(1L);
+            doThrow(new ClubRoleException(NOT_FOUND_CLUB_ROLE))
+                    .when(deleteClubRoleUseCase).command(any());
+            ResultActions resultActions = mockMvc.perform(
+                            delete(DELETE_CLUB_ROLE_URL, 1L)
+                                    .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                    )
+                    .andDo(print())
+                    .andExpect(status().isNotFound());
+
+            verify(deleteClubRoleUseCase, times(1)).command(any());
+
+            resultActions.andDo(
+                    document("delete-club-role(Nonexistent ClubRole)",
                             getDocumentRequest(),
                             getDocumentResponse()
                     ));

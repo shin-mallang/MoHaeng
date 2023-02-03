@@ -1,10 +1,13 @@
 package com.mohaeng.clubrole.domain.model;
 
 import com.mohaeng.club.domain.model.Club;
+import com.mohaeng.clubrole.exception.ClubRoleException;
 import com.mohaeng.common.domain.BaseEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
+
+import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.ALREADY_DEFAULT_ROLE;
 
 @Entity
 @Table(name = "club_role")
@@ -110,6 +113,10 @@ public class ClubRole extends BaseEntity {
      * 기본 역할로 변경한다.
      */
     public void makeDefault() {
+        // 이미 기본 역할일 경우 예외
+        if (isDefault) {
+            throw new ClubRoleException(ALREADY_DEFAULT_ROLE);
+        }
         this.isDefault = true;
     }
 

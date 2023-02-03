@@ -1,8 +1,7 @@
 package com.mohaeng.clubrole.presentation;
 
-import com.mohaeng.clubrole.application.usecase.ChangeClubRoleNameUseCase;
+import com.mohaeng.clubrole.application.usecase.ChangeDefaultRoleUseCase;
 import com.mohaeng.clubrole.exception.ClubRoleException;
-import com.mohaeng.clubrole.presentation.ChangeClubRoleNameController.ChangeClubRoleNameRequest;
 import com.mohaeng.common.ControllerTest;
 import com.mohaeng.participant.exception.ParticipantException;
 import org.junit.jupiter.api.DisplayName;
@@ -14,9 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.NOT_FOUND_CLUB_ROLE;
-import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.NO_AUTHORITY_CHANGE_ROLE_NAME;
-import static com.mohaeng.clubrole.presentation.ChangeClubRoleNameController.CHANGE_CLUB_ROLE_NAME_URL;
+import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.*;
+import static com.mohaeng.clubrole.presentation.ChangeDefaultRoleController.CHANGE_DEFAULT_ROLE_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;
@@ -27,59 +25,49 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ChangeClubRoleNameController.class)
-@DisplayName("ChangeClubRoleNameController 는 ")
-class ChangeClubRoleNameControllerTest extends ControllerTest {
+@WebMvcTest(ChangeDefaultRoleController.class)
+@DisplayName("ChangeDefaultRoleController 는 ")
+class ChangeDefaultRoleControllerTest extends ControllerTest {
 
     @MockBean
-    private ChangeClubRoleNameUseCase changeClubRoleNameUseCase;
-
-    private static final ChangeClubRoleNameRequest request = new ChangeClubRoleNameRequest("변경할 역할 이름");
+    private ChangeDefaultRoleUseCase changeDefaultRoleUseCase;
 
     @Nested
     @DisplayName("성공 테스트")
     class SuccessTest {
 
         @Test
-        @DisplayName("모임의 회장 혹은 임원진이 역할 이름 변경 요청을 보낸 경우 역할 이름을 변경하고 200을 반환한다.")
+        @DisplayName("모임의 회장 혹은 임원진이 기본 역할 변경 요청을 보낸 경우 기본 역할을 변경하고 200을 반환한다.")
         void success_test_1() throws Exception {
             // given
             final Long memberId = 1L;
             setAuthentication(memberId);
-            doNothing().when(changeClubRoleNameUseCase).command(any());
+            doNothing().when(changeDefaultRoleUseCase).command(any());
 
             // when & then
             ResultActions resultActions = mockMvc.perform(
-                            post(CHANGE_CLUB_ROLE_NAME_URL, 1L)
+                            post(CHANGE_DEFAULT_ROLE_URL, 1L)
                                     .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(request))
                     )
                     .andDo(print())
                     .andExpect(status().isOk());
 
-            verify(changeClubRoleNameUseCase, times(1)).command(any());
+            verify(changeDefaultRoleUseCase, times(1)).command(any());
 
             resultActions.andDo(
-                    document("change-club-role-name",
+                    document("change-default-club-role",
                             getDocumentRequest(),
                             getDocumentResponse(),
                             requestHeaders(
                                     headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
                             ),
                             pathParameters(
-                                    parameterWithName("clubRoleId").description("이름을 변경할 모임 역할의 ID")
-                            ),
-                            requestFields(
-                                    fieldWithPath("roleName").type(STRING).description("name(변경할 역할의 이름)")
+                                    parameterWithName("clubRoleId").description("기본 역할로 설정할 모임 역할의 ID")
                             )
                     )
             );
@@ -99,17 +87,16 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
 
             // when & then
             ResultActions resultActions = mockMvc.perform(
-                            post(CHANGE_CLUB_ROLE_NAME_URL, 1L)
+                            post(CHANGE_DEFAULT_ROLE_URL, 1L)
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(request))
                     )
                     .andDo(print())
                     .andExpect(status().isUnauthorized());
 
-            verify(changeClubRoleNameUseCase, times(0)).command(any());
+            verify(changeDefaultRoleUseCase, times(0)).command(any());
 
             resultActions.andDo(
-                    document("change-club-role-name(No Access Token)",
+                    document("change-default-club-role(No Access Token)",
                             getDocumentResponse()
                     )
             );
@@ -122,22 +109,20 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
             final Long memberId = 1L;
             setAuthentication(memberId);
             doThrow(new ParticipantException(NOT_FOUND_PARTICIPANT))
-                    .when(changeClubRoleNameUseCase).command(any());
+                    .when(changeDefaultRoleUseCase).command(any());
 
             // when & then
             ResultActions resultActions = mockMvc.perform(
-                            post(CHANGE_CLUB_ROLE_NAME_URL, 1L)
+                            post(CHANGE_DEFAULT_ROLE_URL, 1L)
                                     .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(request))
                     )
                     .andDo(print())
                     .andExpect(status().isNotFound());
 
-            verify(changeClubRoleNameUseCase, times(1)).command(any());
+            verify(changeDefaultRoleUseCase, times(1)).command(any());
 
             resultActions.andDo(
-                    document("change-club-role-name(Nonexistent Participant)",
+                    document("change-default-club-role(Nonexistent Participant)",
                             getDocumentResponse()
                     )
             );
@@ -149,73 +134,69 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
             // given
             final Long memberId = 1L;
             setAuthentication(memberId);
-            doThrow(new ClubRoleException(NO_AUTHORITY_CHANGE_ROLE_NAME))
-                    .when(changeClubRoleNameUseCase).command(any());
+            doThrow(new ClubRoleException(NO_AUTHORITY_CHANGE_DEFAULT_ROLE))
+                    .when(changeDefaultRoleUseCase).command(any());
 
             setAuthentication(memberId);
 
             ResultActions resultActions = mockMvc.perform(
-                            post(CHANGE_CLUB_ROLE_NAME_URL, 1L)
+                            post(CHANGE_DEFAULT_ROLE_URL, 1L)
                                     .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(request))
                     ).andDo(print())
                     .andExpect(status().isForbidden());
 
             // when & then
-            verify(changeClubRoleNameUseCase, times(1)).command(any());
+            verify(changeDefaultRoleUseCase, times(1)).command(any());
 
             resultActions.andDo(
-                    document("change-club-role-name(requester does not president or officer)",
+                    document("change-default-club-role(requester does not president or officer)",
                             getDocumentResponse()
                     )
             );
         }
 
         @Test
-        @DisplayName("모임 역할 이름 변경 요청 시 필드가 없는 경우 400을 반환한다.")
+        @DisplayName("기본 역할을 변경하려는 역할이 존재하지 않는 경우 404를 반환한다.")
         void fail_test_4() throws Exception {
-            CreateClubRoleController.CreateClubRoleRequest emptyRequest = new CreateClubRoleController.CreateClubRoleRequest("", null);
+            doThrow(new ClubRoleException(NOT_FOUND_CLUB_ROLE))
+                    .when(changeDefaultRoleUseCase).command(any());
             setAuthentication(1L);
-            ChangeClubRoleNameRequest request = new ChangeClubRoleNameRequest(" ");
             ResultActions resultActions = mockMvc.perform(
-                            post(CHANGE_CLUB_ROLE_NAME_URL, 1L)
+                            post(CHANGE_DEFAULT_ROLE_URL, 1L)
                                     .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(request))
                     )
                     .andDo(print())
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isNotFound());
 
-            verify(changeClubRoleNameUseCase, times(0)).command(any());
+            verify(changeDefaultRoleUseCase, times(1)).command(any());
 
             resultActions.andDo(
-                    document("change-club-role-name(request fields contains empty value)",
+                    document("change-default-club-role(Nonexistent ClubRole)",
                             getDocumentRequest(),
                             getDocumentResponse()
                     ));
         }
 
         @Test
-        @DisplayName("이름을 변경하려는 역할이 없는 경우 404를 반환한다.")
+        @DisplayName("이미 기본 역할인 경우 400을 반환한다.")
         void fail_test_5() throws Exception {
             final Long memberId = 1L;
             setAuthentication(memberId);
-            doThrow(new ClubRoleException(NOT_FOUND_CLUB_ROLE))
-                    .when(changeClubRoleNameUseCase).command(any());
+            doThrow(new ClubRoleException(ALREADY_DEFAULT_ROLE))
+                    .when(changeDefaultRoleUseCase).command(any());
+
+            // when & then
             ResultActions resultActions = mockMvc.perform(
-                            post(CHANGE_CLUB_ROLE_NAME_URL, 1L)
+                            post(CHANGE_DEFAULT_ROLE_URL, 1L)
                                     .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(request))
                     )
                     .andDo(print())
-                    .andExpect(status().isNotFound());
+                    .andExpect(status().isBadRequest());
 
-            verify(changeClubRoleNameUseCase, times(1)).command(any());
+            verify(changeDefaultRoleUseCase, times(1)).command(any());
 
             resultActions.andDo(
-                    document("change-club-role-name(Nonexistent ClubRole)",
+                    document("change-default-club-role(already default role)",
                             getDocumentRequest(),
                             getDocumentResponse()
                     ));

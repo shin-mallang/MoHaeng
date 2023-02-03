@@ -5,6 +5,7 @@ import com.mohaeng.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.exception.ClubException;
 import com.mohaeng.clubrole.domain.model.ClubRole;
+import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.exception.ClubRoleException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
@@ -12,6 +13,11 @@ import com.mohaeng.participant.exception.ParticipantException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
@@ -28,6 +34,8 @@ import static com.mohaeng.participant.exception.ParticipantExceptionType.PRESIDE
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 
 @DisplayName("Participant 는 ")
 class ParticipantTest {
@@ -252,6 +260,58 @@ class ParticipantTest {
             assertAll(
                     () -> assertThat(applicationForm1.processed()).isTrue(),
                     () -> assertThat(applicationForm2.processed()).isTrue()
+            );
+        }
+
+        @ParameterizedTest(name = "[{arguments}] deleteClubRole() 시 권한이 있다면(회장 혹은 임원) 해당 역할을 기본 역할이 아니도록 만든다. ")
+        @EnumSource(mode = INCLUDE, value = ClubRoleCategory.class, names = {"PRESIDENT", "OFFICER"})
+        void success_test_9(final ClubRoleCategory category) {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant manager = participant(null, member, club, defaultRoles.get(category));
+
+            // when
+            manager.deleteClubRole(officerRole);
+            manager.deleteClubRole(generalRole);
+
+            // then
+            assertAll(
+                    () -> assertThat(officerRole.isDefault()).isFalse(),
+                    () -> assertThat(generalRole.isDefault()).isFalse()
+            );
+        }
+
+        @ParameterizedTest(name = "[{arguments}] changeDefaultRole() 시 권한이 있다면(회장 혹은 임원) 첫번째 Role은 기본 역할로 변경하고, 두번째 Role은 기본 역할이 아니도록 변경한다.")
+        @EnumSource(mode = INCLUDE, value = ClubRoleCategory.class, names = {"PRESIDENT", "OFFICER"})
+        void success_test_10(final ClubRoleCategory category) {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant manager = participant(null, member, club, defaultRoles.get(category));
+
+            // when
+            manager.changeDefaultRole(officerRole, defaultRoles.get(OFFICER));
+            manager.changeDefaultRole(generalRole, defaultRoles.get(GENERAL));
+
+            // then
+            assertAll(
+                    () -> assertThat(officerRole.isDefault()).isTrue(),
+                    () -> assertThat(defaultRoles.get(OFFICER).isDefault()).isFalse(),
+                    () -> assertThat(generalRole.isDefault()).isTrue(),
+                    () -> assertThat(defaultRoles.get(GENERAL).isDefault()).isFalse()
             );
         }
     }
@@ -550,6 +610,145 @@ class ParticipantTest {
             // then
             assertAll(
                     () -> assertThat(baseExceptionType1).isEqualTo(CLUB_IS_FULL)
+            );
+        }
+
+        @ParameterizedTest(name = "[{arguments}] deleteClubRole() 시 권한이 없다면(회장 혹은 임원이 아닌 경우) 예외가 발생한다.")
+        @EnumSource(mode = EXCLUDE, value = ClubRoleCategory.class, names = {"PRESIDENT", "OFFICER"})
+        void fail_test_12(final ClubRoleCategory category) {
+            // given
+            Member member = member(null);
+            Member applicant = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant manager = participant(null, member, club, defaultRoles.get(category));
+
+            // when & then
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    manager.deleteClubRole(officerRole))
+                    .exceptionType())
+                    .isEqualTo(NO_AUTHORITY_DELETE_ROLE);
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    manager.deleteClubRole(generalRole))
+                    .exceptionType())
+                    .isEqualTo(NO_AUTHORITY_DELETE_ROLE);
+            // then
+            assertAll(
+                    () -> assertThat(officerRole.isDefault()).isFalse(),
+                    () -> assertThat(generalRole.isDefault()).isFalse()
+            );
+        }
+
+        @ParameterizedTest(name = "[{arguments}] changeDefaultRole() 시 권한이 없다면(회장 혹은 임원) 예외가 발생한다.")
+        @EnumSource(mode = EXCLUDE, value = ClubRoleCategory.class, names = {"PRESIDENT", "OFFICER"})
+        void fail_test_13(final ClubRoleCategory category) {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant manager = participant(null, member, club, defaultRoles.get(category));
+
+            // when
+            assertThat(
+                    assertThrows(ClubRoleException.class, () ->
+                            manager.changeDefaultRole(officerRole, defaultRoles.get(OFFICER))
+                    ).exceptionType()
+            ).isEqualTo(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
+
+            assertThat(
+                    assertThrows(ClubRoleException.class, () ->
+                            manager.changeDefaultRole(generalRole, defaultRoles.get(GENERAL))
+                    ).exceptionType()
+            ).isEqualTo(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
+
+            // then
+            assertAll(
+                    () -> assertThat(officerRole.isDefault()).isFalse(),
+                    () -> assertThat(defaultRoles.get(OFFICER).isDefault()).isTrue(),
+                    () -> assertThat(generalRole.isDefault()).isFalse(),
+                    () -> assertThat(defaultRoles.get(GENERAL).isDefault()).isTrue()
+            );
+        }
+
+        @Test
+        @DisplayName("changeDefaultRole() 시 첫번째 Role이 이미 기본 역할인 경우 예외가 발생한다.")
+        void fail_test_14() {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant manager = participant(null, member, club, defaultRoles.get(PRESIDENT));
+
+            // when
+            assertThat(
+                    assertThrows(ClubRoleException.class, () ->
+                            manager.changeDefaultRole(defaultRoles.get(OFFICER), officerRole)
+                    ).exceptionType()
+            ).isEqualTo(ALREADY_DEFAULT_ROLE);
+
+            assertThat(
+                    assertThrows(ClubRoleException.class, () ->
+                            manager.changeDefaultRole(defaultRoles.get(GENERAL), defaultRoles.get(GENERAL))
+                    ).exceptionType()
+            ).isEqualTo(ALREADY_DEFAULT_ROLE);
+
+            // then
+            assertAll(
+                    () -> assertThat(officerRole.isDefault()).isFalse(),
+                    () -> assertThat(defaultRoles.get(OFFICER).isDefault()).isTrue(),
+                    () -> assertThat(generalRole.isDefault()).isFalse(),
+                    () -> assertThat(defaultRoles.get(GENERAL).isDefault()).isTrue()
+            );
+        }
+
+        @Test
+        @DisplayName("changeDefaultRole() 시 두 인자로 들어오는 역할의 카테고리가 일치하지 않으면 예외가 발생한다.")
+        void fail_test_16() {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant manager = participant(null, member, club, defaultRoles.get(PRESIDENT));
+
+            // when
+            assertThat(
+                    assertThrows(ClubRoleException.class, () ->
+                            manager.changeDefaultRole(officerRole, defaultRoles.get(GENERAL))
+                    ).exceptionType()
+            ).isEqualTo(MISMATCH_EXISTING_DEFAULT_ROLE_AND_CANDIDATE);
+
+            assertThat(
+                    assertThrows(ClubRoleException.class, () ->
+                            manager.changeDefaultRole(generalRole, defaultRoles.get(OFFICER))
+                    ).exceptionType()
+            ).isEqualTo(MISMATCH_EXISTING_DEFAULT_ROLE_AND_CANDIDATE);
+
+            // then
+            assertAll(
+                    () -> assertThat(officerRole.isDefault()).isFalse(),
+                    () -> assertThat(defaultRoles.get(OFFICER).isDefault()).isTrue(),
+                    () -> assertThat(generalRole.isDefault()).isFalse(),
+                    () -> assertThat(defaultRoles.get(GENERAL).isDefault()).isTrue()
             );
         }
     }
