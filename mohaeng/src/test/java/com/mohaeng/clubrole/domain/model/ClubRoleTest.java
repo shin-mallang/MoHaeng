@@ -173,7 +173,7 @@ class ClubRoleTest {
         @DisplayName("isPowerfulThan() 은 내 역할이 대상 역할보다 센 경우 true를 반환한다.")
         void success_test_8() {
             // given
-            Club club = club(null);
+            Club club = club(1L);
             ClubRole presidentRole1 = new ClubRole("P1", PRESIDENT, club, false);
             ClubRole presidentRole2 = new ClubRole("P2", PRESIDENT, club, false);
             ClubRole officerRole1 = new ClubRole("O1", OFFICER, club, false);
@@ -228,7 +228,7 @@ class ClubRoleTest {
         @DisplayName("isSamePowerThan()은 내 역할과 대상 역할의 파워가 동일한 경우 ture를 반환한다.")
         void success_test_9() {
             // given
-            Club club = club(null);
+            Club club = club(1L);
             ClubRole presidentRole1 = new ClubRole("P1", PRESIDENT, club, false);
             ClubRole presidentRole2 = new ClubRole("P2", PRESIDENT, club, false);
             ClubRole officerRole1 = new ClubRole("O1", OFFICER, club, false);
@@ -305,8 +305,8 @@ class ClubRoleTest {
         @DisplayName("isPowerfulThan() 은 두 역할이 속한 모임이 다른 경우 예외를 발생시킨다.")
         void fail_test_2() {
             // given
-            Club club1 = club(null);
-            Club club2 = club(null);
+            Club club1 = club(1L);
+            Club club2 = club(2L);
             ClubRole presidentRole1 = new ClubRole("P1", PRESIDENT, club1, false);
             ClubRole presidentRole2 = new ClubRole("P2", PRESIDENT, club2, false);
             ClubRole officerRole1 = new ClubRole("O1", OFFICER, club1, false);
@@ -334,8 +334,8 @@ class ClubRoleTest {
         @DisplayName("isSamePowerThan() 은 두 역할이 속한 모임이 다른 경우 예외를 발생시킨다.")
         void fail_test_3() {
             // given
-            Club club1 = club(null);
-            Club club2 = club(null);
+            Club club1 = club(1L);
+            Club club2 = club(2L);
             ClubRole presidentRole1 = new ClubRole("P1", PRESIDENT, club1, false);
             ClubRole presidentRole2 = new ClubRole("P2", PRESIDENT, club2, false);
             ClubRole officerRole1 = new ClubRole("O1", OFFICER, club1, false);

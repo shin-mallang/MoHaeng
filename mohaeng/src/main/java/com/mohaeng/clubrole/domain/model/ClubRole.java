@@ -153,9 +153,6 @@ public class ClubRole extends BaseEntity {
      * 같은 모임의 역할이 아닌 경우 예외를 발생한다.
      */
     private void checkSameClub(final ClubRole clubRole) {
-        System.out.println("!@@!@!");
-        System.out.println(this.club().id());
-        System.out.println(clubRole.club().id());
         if (!this.club().id().equals(clubRole.club().id())) {
             throw new ClubRoleException(CAN_NOT_COMPARE_OTHER_CLUB_ROLE);
         }
