@@ -8,8 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
+import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.*;
 import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.ALREADY_DEFAULT_ROLE;
+import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.CAN_NOT_COMPARE_OTHER_CLUB_ROLE;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.ClubRoleFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -167,6 +168,116 @@ class ClubRoleTest {
                     it -> assertThat(it.isDefault()).isFalse()
             );
         }
+
+        @Test
+        @DisplayName("isPowerfulThan() 은 내 역할이 대상 역할보다 센 경우 true를 반환한다.")
+        void success_test_8() {
+            // given
+            Club club = club(null);
+            ClubRole presidentRole1 = new ClubRole("P1", PRESIDENT, club, false);
+            ClubRole presidentRole2 = new ClubRole("P2", PRESIDENT, club, false);
+            ClubRole officerRole1 = new ClubRole("O1", OFFICER, club, false);
+            ClubRole officerRole2 = new ClubRole("O2", OFFICER, club, false);
+            ClubRole generalRole1 = new ClubRole("G1", GENERAL, club, false);
+            ClubRole generalRole2 = new ClubRole("G2", GENERAL, club, false);
+
+            // then
+            assertAll(
+                    () -> assertThat(presidentRole1.isPowerfulThan(presidentRole1)).isFalse(),
+                    () -> assertThat(presidentRole1.isPowerfulThan(presidentRole2)).isFalse(),
+                    () -> assertThat(presidentRole1.isPowerfulThan(officerRole1)).isTrue(),
+                    () -> assertThat(presidentRole1.isPowerfulThan(officerRole2)).isTrue(),
+                    () -> assertThat(presidentRole1.isPowerfulThan(generalRole1)).isTrue(),
+                    () -> assertThat(presidentRole1.isPowerfulThan(generalRole2)).isTrue(),
+                    () -> assertThat(presidentRole2.isPowerfulThan(presidentRole1)).isFalse(),
+                    () -> assertThat(presidentRole2.isPowerfulThan(presidentRole2)).isFalse(),
+                    () -> assertThat(presidentRole2.isPowerfulThan(officerRole1)).isTrue(),
+                    () -> assertThat(presidentRole2.isPowerfulThan(officerRole2)).isTrue(),
+                    () -> assertThat(presidentRole2.isPowerfulThan(generalRole1)).isTrue(),
+                    () -> assertThat(presidentRole2.isPowerfulThan(generalRole2)).isTrue(),
+
+                    () -> assertThat(officerRole1.isPowerfulThan(presidentRole1)).isFalse(),
+                    () -> assertThat(officerRole1.isPowerfulThan(presidentRole2)).isFalse(),
+                    () -> assertThat(officerRole1.isPowerfulThan(officerRole1)).isFalse(),
+                    () -> assertThat(officerRole1.isPowerfulThan(officerRole2)).isFalse(),
+                    () -> assertThat(officerRole1.isPowerfulThan(generalRole1)).isTrue(),
+                    () -> assertThat(officerRole1.isPowerfulThan(generalRole2)).isTrue(),
+                    () -> assertThat(officerRole2.isPowerfulThan(presidentRole1)).isFalse(),
+                    () -> assertThat(officerRole2.isPowerfulThan(presidentRole2)).isFalse(),
+                    () -> assertThat(officerRole2.isPowerfulThan(officerRole1)).isFalse(),
+                    () -> assertThat(officerRole2.isPowerfulThan(officerRole2)).isFalse(),
+                    () -> assertThat(officerRole2.isPowerfulThan(generalRole1)).isTrue(),
+                    () -> assertThat(officerRole2.isPowerfulThan(generalRole2)).isTrue(),
+
+                    () -> assertThat(generalRole1.isPowerfulThan(presidentRole1)).isFalse(),
+                    () -> assertThat(generalRole1.isPowerfulThan(presidentRole2)).isFalse(),
+                    () -> assertThat(generalRole1.isPowerfulThan(officerRole1)).isFalse(),
+                    () -> assertThat(generalRole1.isPowerfulThan(officerRole2)).isFalse(),
+                    () -> assertThat(generalRole1.isPowerfulThan(generalRole1)).isFalse(),
+                    () -> assertThat(generalRole1.isPowerfulThan(generalRole2)).isFalse(),
+                    () -> assertThat(generalRole2.isPowerfulThan(presidentRole1)).isFalse(),
+                    () -> assertThat(generalRole2.isPowerfulThan(presidentRole2)).isFalse(),
+                    () -> assertThat(generalRole2.isPowerfulThan(officerRole1)).isFalse(),
+                    () -> assertThat(generalRole2.isPowerfulThan(officerRole2)).isFalse(),
+                    () -> assertThat(generalRole2.isPowerfulThan(generalRole1)).isFalse(),
+                    () -> assertThat(generalRole2.isPowerfulThan(generalRole2)).isFalse()
+            );
+        }
+
+        @Test
+        @DisplayName("isSamePowerThan()은 내 역할과 대상 역할의 파워가 동일한 경우 ture를 반환한다.")
+        void success_test_9() {
+            // given
+            Club club = club(null);
+            ClubRole presidentRole1 = new ClubRole("P1", PRESIDENT, club, false);
+            ClubRole presidentRole2 = new ClubRole("P2", PRESIDENT, club, false);
+            ClubRole officerRole1 = new ClubRole("O1", OFFICER, club, false);
+            ClubRole officerRole2 = new ClubRole("O2", OFFICER, club, false);
+            ClubRole generalRole1 = new ClubRole("G1", GENERAL, club, false);
+            ClubRole generalRole2 = new ClubRole("G2", GENERAL, club, false);
+
+            // then
+            assertAll(
+                    () -> assertThat(presidentRole1.isSamePowerThan(presidentRole1)).isTrue(),
+                    () -> assertThat(presidentRole1.isSamePowerThan(presidentRole2)).isTrue(),
+                    () -> assertThat(presidentRole1.isSamePowerThan(officerRole1)).isFalse(),
+                    () -> assertThat(presidentRole1.isSamePowerThan(officerRole2)).isFalse(),
+                    () -> assertThat(presidentRole1.isSamePowerThan(generalRole1)).isFalse(),
+                    () -> assertThat(presidentRole1.isSamePowerThan(generalRole2)).isFalse(),
+                    () -> assertThat(presidentRole2.isSamePowerThan(presidentRole1)).isTrue(),
+                    () -> assertThat(presidentRole2.isSamePowerThan(presidentRole2)).isTrue(),
+                    () -> assertThat(presidentRole2.isSamePowerThan(officerRole1)).isFalse(),
+                    () -> assertThat(presidentRole2.isSamePowerThan(officerRole2)).isFalse(),
+                    () -> assertThat(presidentRole2.isSamePowerThan(generalRole1)).isFalse(),
+                    () -> assertThat(presidentRole2.isSamePowerThan(generalRole2)).isFalse(),
+
+                    () -> assertThat(officerRole1.isSamePowerThan(presidentRole1)).isFalse(),
+                    () -> assertThat(officerRole1.isSamePowerThan(presidentRole2)).isFalse(),
+                    () -> assertThat(officerRole1.isSamePowerThan(officerRole1)).isTrue(),
+                    () -> assertThat(officerRole1.isSamePowerThan(officerRole2)).isTrue(),
+                    () -> assertThat(officerRole1.isSamePowerThan(generalRole1)).isFalse(),
+                    () -> assertThat(officerRole1.isSamePowerThan(generalRole2)).isFalse(),
+                    () -> assertThat(officerRole2.isSamePowerThan(presidentRole1)).isFalse(),
+                    () -> assertThat(officerRole2.isSamePowerThan(presidentRole2)).isFalse(),
+                    () -> assertThat(officerRole2.isSamePowerThan(officerRole1)).isTrue(),
+                    () -> assertThat(officerRole2.isSamePowerThan(officerRole2)).isTrue(),
+                    () -> assertThat(officerRole2.isSamePowerThan(generalRole1)).isFalse(),
+                    () -> assertThat(officerRole2.isSamePowerThan(generalRole2)).isFalse(),
+
+                    () -> assertThat(generalRole1.isSamePowerThan(presidentRole1)).isFalse(),
+                    () -> assertThat(generalRole1.isSamePowerThan(presidentRole2)).isFalse(),
+                    () -> assertThat(generalRole1.isSamePowerThan(officerRole1)).isFalse(),
+                    () -> assertThat(generalRole1.isSamePowerThan(officerRole2)).isFalse(),
+                    () -> assertThat(generalRole1.isSamePowerThan(generalRole1)).isTrue(),
+                    () -> assertThat(generalRole1.isSamePowerThan(generalRole2)).isTrue(),
+                    () -> assertThat(generalRole2.isSamePowerThan(presidentRole1)).isFalse(),
+                    () -> assertThat(generalRole2.isSamePowerThan(presidentRole2)).isFalse(),
+                    () -> assertThat(generalRole2.isSamePowerThan(officerRole1)).isFalse(),
+                    () -> assertThat(generalRole2.isSamePowerThan(officerRole2)).isFalse(),
+                    () -> assertThat(generalRole2.isSamePowerThan(generalRole1)).isTrue(),
+                    () -> assertThat(generalRole2.isSamePowerThan(generalRole2)).isTrue()
+            );
+        }
     }
 
     @Nested
@@ -187,6 +298,64 @@ class ClubRoleTest {
                                     .exceptionType())
                     .forEach(it -> {
                         assertThat(it).isEqualTo(ALREADY_DEFAULT_ROLE);
+                    });
+        }
+
+        @Test
+        @DisplayName("isPowerfulThan() 은 두 역할이 속한 모임이 다른 경우 예외를 발생시킨다.")
+        void fail_test_2() {
+            // given
+            Club club1 = club(null);
+            Club club2 = club(null);
+            ClubRole presidentRole1 = new ClubRole("P1", PRESIDENT, club1, false);
+            ClubRole presidentRole2 = new ClubRole("P2", PRESIDENT, club2, false);
+            ClubRole officerRole1 = new ClubRole("O1", OFFICER, club1, false);
+            ClubRole officerRole2 = new ClubRole("O2", OFFICER, club2, false);
+            ClubRole generalRole1 = new ClubRole("G1", GENERAL, club1, false);
+            ClubRole generalRole2 = new ClubRole("G2", GENERAL, club2, false);
+
+            List<ClubRole> roles1 = List.of(presidentRole1, officerRole1, generalRole1);
+            List<ClubRole> roles2 = List.of(presidentRole2, officerRole2, generalRole2);
+
+            // when
+            roles1.stream()
+                    .flatMap(it -> roles2.stream().map(other ->
+                            assertThrows(ClubRoleException.class, () ->
+
+                                    it.isPowerfulThan(other)
+
+                            ).exceptionType())
+                    ).forEach(exType -> {
+                        assertThat(exType).isEqualTo(CAN_NOT_COMPARE_OTHER_CLUB_ROLE);
+                    });
+        }
+
+        @Test
+        @DisplayName("isSamePowerThan() 은 두 역할이 속한 모임이 다른 경우 예외를 발생시킨다.")
+        void fail_test_3() {
+            // given
+            Club club1 = club(null);
+            Club club2 = club(null);
+            ClubRole presidentRole1 = new ClubRole("P1", PRESIDENT, club1, false);
+            ClubRole presidentRole2 = new ClubRole("P2", PRESIDENT, club2, false);
+            ClubRole officerRole1 = new ClubRole("O1", OFFICER, club1, false);
+            ClubRole officerRole2 = new ClubRole("O2", OFFICER, club2, false);
+            ClubRole generalRole1 = new ClubRole("G1", GENERAL, club1, false);
+            ClubRole generalRole2 = new ClubRole("G2", GENERAL, club2, false);
+
+            List<ClubRole> roles1 = List.of(presidentRole1, officerRole1, generalRole1);
+            List<ClubRole> roles2 = List.of(presidentRole2, officerRole2, generalRole2);
+
+            // when
+            roles1.stream()
+                    .flatMap(it -> roles2.stream().map(other ->
+                            assertThrows(ClubRoleException.class, () ->
+
+                                    it.isSamePowerThan(other)
+
+                            ).exceptionType())
+                    ).forEach(exType -> {
+                        assertThat(exType).isEqualTo(CAN_NOT_COMPARE_OTHER_CLUB_ROLE);
                     });
         }
     }

@@ -314,6 +314,53 @@ class ParticipantTest {
                     () -> assertThat(defaultRoles.get(GENERAL).isDefault()).isFalse()
             );
         }
+
+        @Test
+        @DisplayName("""
+                 changeTargetRole() 은 내가 임원이거나 회장일 때,
+                 대상의 권한이 나보다 낮고,
+                 변경하려는 권한의 등급이 나보다 낮거나 같은 등급인 경우 대상의 역할을 변경한다.
+                """)
+        void success_test_11() {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant president = participant(null, member, club, defaultRoles.get(PRESIDENT));
+            Participant officer = participant(null, member, club, defaultRoles.get(OFFICER));
+
+            Participant officerToGeneralTarget1 = participant(null, member, club, defaultRoles.get(OFFICER));
+            Participant generalToOfficerTarget1 = participant(null, member, club, defaultRoles.get(GENERAL));
+            Participant officerToOfficerTarget1 = participant(null, member, club, defaultRoles.get(OFFICER));
+            Participant generalToGeneralTarget1 = participant(null, member, club, defaultRoles.get(GENERAL));
+
+            Participant generalToOfficerTarget2 = participant(null, member, club, defaultRoles.get(GENERAL));
+            Participant generalToGeneralTarget2 = participant(null, member, club, defaultRoles.get(GENERAL));
+
+            // when
+            president.changeTargetRole(officerToGeneralTarget1, generalRole);
+            president.changeTargetRole(generalToOfficerTarget1, officerRole);
+            president.changeTargetRole(officerToOfficerTarget1, officerRole);
+            president.changeTargetRole(generalToGeneralTarget1, generalRole);
+
+            officer.changeTargetRole(generalToOfficerTarget2, officerRole);
+            officer.changeTargetRole(generalToGeneralTarget2, generalRole);
+
+            // then
+            assertAll(
+                    () -> assertThat(officerToGeneralTarget1.clubRole()).isEqualTo(generalRole),
+                    () -> assertThat(generalToOfficerTarget1.clubRole()).isEqualTo(officerRole),
+                    () -> assertThat(officerToOfficerTarget1.clubRole()).isEqualTo(officerRole),
+                    () -> assertThat(generalToGeneralTarget1.clubRole()).isEqualTo(generalRole),
+                    () -> assertThat(generalToOfficerTarget2.clubRole()).isEqualTo(officerRole),
+                    () -> assertThat(generalToGeneralTarget2.clubRole()).isEqualTo(generalRole)
+            );
+        }
     }
 
     @Nested
@@ -718,7 +765,7 @@ class ParticipantTest {
 
         @Test
         @DisplayName("changeDefaultRole() 시 두 인자로 들어오는 역할의 카테고리가 일치하지 않으면 예외가 발생한다.")
-        void fail_test_16() {
+        void fail_test_15() {
             // given
             Member member = member(null);
             Club club = club(null);
@@ -750,6 +797,103 @@ class ParticipantTest {
                     () -> assertThat(generalRole.isDefault()).isFalse(),
                     () -> assertThat(defaultRoles.get(GENERAL).isDefault()).isTrue()
             );
+        }
+
+        @Test
+        @DisplayName("changeTargetRole() 은 요청자가 일반 회원인 경우 예외를 발생시킨다.")
+        void fail_test_16() {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            Participant general = participant(null, member, club, defaultRoles.get(GENERAL));
+
+            Participant presidentTarget = participant(null, member, club, defaultRoles.get(PRESIDENT));
+            Participant officerTarget = participant(null, member, club, defaultRoles.get(OFFICER));
+            Participant generalTarget = participant(null, member, club, defaultRoles.get(GENERAL));
+
+            // when & then
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    general.changeTargetRole(presidentTarget, officerRole)
+            ).exceptionType())
+                    .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    general.changeTargetRole(officerTarget, officerRole)
+            ).exceptionType())
+                    .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    general.changeTargetRole(generalTarget, officerRole)
+            ).exceptionType())
+                    .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+        }
+
+        @Test
+        @DisplayName("changeTargetRole() 변경 대상의 권한이 나와 동일하거나, 나보다 높은 경우 예외를 발생시킨다.")
+        void fail_test_17() {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant president = participant(null, member, club, defaultRoles.get(PRESIDENT));
+            Participant officer = participant(null, member, club, defaultRoles.get(OFFICER));
+
+            Participant officerToGeneralTarget1 = participant(null, member, club, defaultRoles.get(OFFICER));
+            Participant officerToOfficerTarget1 = participant(null, member, club, defaultRoles.get(OFFICER));
+
+            // when & then
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    officer.changeTargetRole(officerToGeneralTarget1, generalRole)
+            ).exceptionType())
+                    .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    officer.changeTargetRole(officerToOfficerTarget1, officerRole)
+            ).exceptionType())
+                    .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    officer.changeTargetRole(president, generalRole)
+            ).exceptionType())
+                    .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+        }
+
+        @Test
+        @DisplayName("changeTargetRole() 변경하려는 권한의 등급이 회장인 경우 예외를 발생시킨다.")
+        void fail_test_18() {
+            // given
+            Member member = member(null);
+            Club club = club(null);
+            Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
+                    .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
+
+            ClubRole officerRole = officerRole("임원", club);
+            ClubRole generalRole = generalRole("일반", club);
+
+            Participant officer = participant(null, member, club, defaultRoles.get(OFFICER));
+
+            Participant target1 = participant(null, member, club, defaultRoles.get(OFFICER));
+            Participant target2 = participant(null, member, club, defaultRoles.get(GENERAL));
+
+            // when & then
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    officer.changeTargetRole(target1, defaultRoles.get(PRESIDENT))
+            ).exceptionType())
+                    .isEqualTo(CAN_NOT_CHANGED_TO_PRESIDENT_ROLE);
+
+            assertThat(assertThrows(ClubRoleException.class, () ->
+                    officer.changeTargetRole(target2, defaultRoles.get(PRESIDENT))
+            ).exceptionType())
+                    .isEqualTo(CAN_NOT_CHANGED_TO_PRESIDENT_ROLE);
         }
     }
 }

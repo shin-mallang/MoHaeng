@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.ALREADY_DEFAULT_ROLE;
+import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.CAN_NOT_COMPARE_OTHER_CLUB_ROLE;
 
 @Entity
 @Table(name = "club_role")
@@ -122,5 +123,38 @@ public class ClubRole extends BaseEntity {
 
     public void makeNotDefault() {
         this.isDefault = false;
+    }
+
+    /**
+     * 다른 역할보다 파워가 더 센지 확인한다.
+     *
+     * @param clubRole 비교대상
+     * @return 파워가 더 센 경우 true
+     */
+    public boolean isPowerfulThan(final ClubRole clubRole) {
+        // 같은 모임인지 확인한다.
+        checkSameClub(clubRole);
+        return this.clubRoleCategory().isPowerfulThan(clubRole.clubRoleCategory());
+    }
+
+    /**
+     * 다른 역할과 내 역할의 파워가 동일한지 확인한다.
+     *
+     * @param clubRole 비교대상
+     * @return 파워가 동일한 경우 true
+     */
+    public boolean isSamePowerThan(final ClubRole clubRole) {
+        // 같은 모임인지 확인한다.
+        checkSameClub(clubRole);
+        return this.clubRoleCategory().isSamePowerThan(clubRole.clubRoleCategory());
+    }
+
+    /**
+     * 같은 모임의 역할이 아닌 경우 예외를 발생한다.
+     */
+    private void checkSameClub(final ClubRole clubRole) {
+        if (!this.club().equals(clubRole.club)) {
+            throw new ClubRoleException(CAN_NOT_COMPARE_OTHER_CLUB_ROLE);
+        }
     }
 }

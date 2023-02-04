@@ -6,6 +6,7 @@ import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.exception.ClubRoleException;
+import com.mohaeng.clubrole.exception.ClubRoleExceptionType;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.exception.ParticipantException;
@@ -81,6 +82,54 @@ public class Participant extends BaseEntity {
     }
 
     /**
+     * 상대방의 역할을 변경한다.
+     */
+    public void changeTargetRole(final Participant target, final ClubRole clubRole) {
+        // 회장 역할이 아닌지 확인한다.
+        checkChangeRoleCategoryIsNotPresident(clubRole);
+
+        // 대상의 역할을 수정할 권한이 있는지 확인한다.
+        checkAuthorityToChangeTargetRole(target, clubRole);
+
+        // 역할 변경
+        target.changeRole(clubRole);
+    }
+
+    /**
+     * 바꾸려는 역할이 회장 역할이 아닌지 확인한다.
+     */
+    private void checkChangeRoleCategoryIsNotPresident(final ClubRole clubRole) {
+        if (clubRole.clubRoleCategory() == PRESIDENT) {
+            throw new ClubRoleException(ClubRoleExceptionType.CAN_NOT_CHANGED_TO_PRESIDENT_ROLE);
+        }
+    }
+
+    /**
+     * 상대방의 역할을 수정할 수 있는지 확인한다.
+     * <p>
+     * 상대방이 나보다 계급이 낮아야 하며, 나와 동일하거나 낮은 계급으로만 변경 가능하다.
+     * (예를 들어 회장은, 모든 회원을 임원 혹은 일반 회원으로 변경할 수 있고,
+     * 임원은 일반 회원만을 임원으로 변경할 수 있다.)
+     *
+     * @param target   역할을 변경할 대상
+     * @param clubRole 변경하고 싶은 역할
+     */
+    private void checkAuthorityToChangeTargetRole(final Participant target, final ClubRole clubRole) {
+        // 일반 회원인 경우 역할을 변경할 수 없음
+        if (!isManager()) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+        }
+
+        // 대상이 나보다 계급이 높거나 같은 경우 예외 발생
+        if (!this.clubRole().isPowerfulThan(target.clubRole())) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+        }
+
+        // 바꾸려는 계급이 나보다 높은 계급인 경우, 회장으로 바꾸는 경우 이미 걸려졌으므로
+        // 해당 상황은 발생하지 않는다.
+    }
+
+    /**
      * 모임에 가입한다.
      */
     public void joinClub(final Club club, final ClubRole clubRole) {
@@ -144,7 +193,7 @@ public class Participant extends BaseEntity {
         checkAuthorityCreateClubRole();
 
         // 회장을 생성하는 경우 예외 발생
-        checkCategoryIsNotPresident(clubRoleCategory);
+        checkCreateCategoryIsNotPresident(clubRoleCategory);
 
         return new ClubRole(name, clubRoleCategory, club(), false);
     }
@@ -161,7 +210,7 @@ public class Participant extends BaseEntity {
     /**
      * 회장 역할을 생성하려는 경우 예외를 발생시킨다.
      */
-    private void checkCategoryIsNotPresident(final ClubRoleCategory clubRoleCategory) {
+    private void checkCreateCategoryIsNotPresident(final ClubRoleCategory clubRoleCategory) {
         if (clubRoleCategory == PRESIDENT) {
             throw new ClubRoleException(CAN_NOT_CREATE_ADDITIONAL_PRESIDENT_ROLE);
         }
@@ -277,5 +326,4 @@ public class Participant extends BaseEntity {
             throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
         }
     }
-
 }
