@@ -53,7 +53,28 @@ public class Participant extends BaseEntity {
     }
 
     /**
-     * 참여자의 역할을 변경한다.
+     * 관리자(회장, 임원)인지 확인
+     */
+    public boolean isManager() {
+        return clubRole().isManagerRole();
+    }
+
+    /**
+     * 회장인지 확인
+     */
+    private boolean isPresident() {
+        return clubRole().isPresidentRole();
+    }
+
+    /**
+     * 일반 회원인지 여부
+     */
+    private boolean isGeneral() {
+        return clubRole.isGeneralRole();
+    }
+
+    /**
+     * 역할을 변경한다.
      */
     public void changeRole(final ClubRole clubRole) {
         this.clubRole = clubRole;
@@ -69,7 +90,7 @@ public class Participant extends BaseEntity {
     }
 
     /**
-     * 모임에서 탈퇴
+     * 모임에서 탈퇴한다.
      */
     public void leaveFromClub() {
         // 모임에서 탈퇴할 수 있는지 확인한다.
@@ -114,6 +135,9 @@ public class Participant extends BaseEntity {
         }
     }
 
+    /**
+     * 모임의 역할을 새로 생성한다.
+     */
     public ClubRole createClubRole(final String name,
                                    final ClubRoleCategory clubRoleCategory) {
         // 생성하려는 회원이 회장이나 임원이 아닌 경우 예외 발생
@@ -125,12 +149,18 @@ public class Participant extends BaseEntity {
         return new ClubRole(name, clubRoleCategory, club(), false);
     }
 
+    /**
+     * 모임의 역할을 생성할 권할을 확인한다.
+     */
     private void checkAuthorityCreateClubRole() {
         if (this.isGeneral()) {
             throw new ClubRoleException(NO_AUTHORITY_CREATE_ROLE);
         }
     }
 
+    /**
+     * 회장 역할을 생성하려는 경우 예외를 발생시킨다.
+     */
     private void checkCategoryIsNotPresident(final ClubRoleCategory clubRoleCategory) {
         if (clubRoleCategory == PRESIDENT) {
             throw new ClubRoleException(CAN_NOT_CREATE_ADDITIONAL_PRESIDENT_ROLE);
@@ -154,43 +184,6 @@ public class Participant extends BaseEntity {
     private void checkAuthorityChangeClubRoleName() {
         if (this.isGeneral()) {
             throw new ClubRoleException(NO_AUTHORITY_CHANGE_ROLE_NAME);
-        }
-    }
-
-    /**
-     * 가입 신청서를 승인한 후, Participant를 생성하여 반환한다.
-     */
-    public Participant approveApplicationForm(final ApplicationForm applicationForm, final ClubRole defaultGeneralRole) {
-        // 권한 확인
-        checkAuthorityToProcessApplication();
-
-        // 모임에 가입시키기
-        Participant applicant = new Participant(applicationForm.applicant());
-        applicant.joinClub(applicationForm.target(), defaultGeneralRole);
-
-        // 가입 신청서 처리
-        applicationForm.process();
-
-        return applicant;
-    }
-
-    /**
-     * 가입 신청서를 거절한다.
-     */
-    public void rejectApplicationForm(final ApplicationForm applicationForm) {
-        // 권한 확인
-        checkAuthorityToProcessApplication();
-
-        // 가입 신청서 처리
-        applicationForm.process();
-    }
-
-    /**
-     * 가입 신청서를 처리할 권한을 확인한다.
-     */
-    private void checkAuthorityToProcessApplication() {
-        if (!isManager()) {
-            throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
         }
     }
 
@@ -249,23 +242,40 @@ public class Participant extends BaseEntity {
     }
 
     /**
-     * 회장인지 확인
+     * 가입 신청서를 승인한 후, Participant를 생성하여 반환한다.
      */
-    private boolean isPresident() {
-        return clubRole().isPresidentRole();
+    public Participant approveApplicationForm(final ApplicationForm applicationForm, final ClubRole defaultGeneralRole) {
+        // 권한 확인
+        checkAuthorityToProcessApplication();
+
+        // 모임에 가입시키기
+        Participant applicant = new Participant(applicationForm.applicant());
+        applicant.joinClub(applicationForm.target(), defaultGeneralRole);
+
+        // 가입 신청서 처리
+        applicationForm.process();
+
+        return applicant;
     }
 
     /**
-     * 관리자(회장, 임원)인지 확인
+     * 가입 신청서를 거절한다.
      */
-    public boolean isManager() {
-        return clubRole().isManagerRole();
+    public void rejectApplicationForm(final ApplicationForm applicationForm) {
+        // 권한 확인
+        checkAuthorityToProcessApplication();
+
+        // 가입 신청서 처리
+        applicationForm.process();
     }
 
     /**
-     * 일반 회원인지 여부
+     * 가입 신청서를 처리할 권한을 확인한다.
      */
-    private boolean isGeneral() {
-        return clubRole.isGeneralRole();
+    private void checkAuthorityToProcessApplication() {
+        if (!isManager()) {
+            throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
+        }
     }
+
 }
