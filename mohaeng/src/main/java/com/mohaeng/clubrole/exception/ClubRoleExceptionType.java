@@ -14,15 +14,7 @@ public enum ClubRoleExceptionType implements BaseExceptionType {
     ALREADY_DEFAULT_ROLE(406, HttpStatus.BAD_REQUEST, "이미 기본 역할로 설정되어 있습니다."),
     NO_AUTHORITY_CHANGE_DEFAULT_ROLE(407, HttpStatus.FORBIDDEN, "기본 역할을 변경할 권한이 없습니다."),
     MISMATCH_EXISTING_DEFAULT_ROLE_AND_CANDIDATE(408, HttpStatus.BAD_REQUEST, "기존에 존재하였던 기본 역할과, 기본 역할로 바꾸려는 역할의 카테고리가 일치하지 않습니다."),
-    CAN_NOT_CHANGED_TO_PRESIDENT_ROLE(409, HttpStatus.BAD_REQUEST, "회장 역할로는 변경할 수 없습니다."),
-    CAN_NOT_COMPARE_OTHER_CLUB_ROLE(410, HttpStatus.BAD_REQUEST, "다른 모임의 역할과는 비교할 수 없습니다."),
-    NO_AUTHORITY_CHANGE_TARGET_ROLE(411, HttpStatus.FORBIDDEN, """
-            대상의 계급을 변경할 권한이 없습니다. 이유는 다음 중 하나입니다.
-            (1): 요청자분이 일반 회원이라 역할을 변경할 권한이 없습니다.
-            (2): 대상의 계급이 요청자분과 동일하거나 더 높습니다.
-            (3): 바꾸려는 역할의 계급이 요청자분의 계급보다 높습니다.
-            """),
-    CAN_NOT_CHANGE_TO_OTHER_CLUB_ROLE(412, HttpStatus.BAD_REQUEST, "다른 모임의 역할로는 변경할 수 없습니다."),
+    CAN_NOT_COMPARE_OTHER_CLUB_ROLE(409, HttpStatus.BAD_REQUEST, "다른 모임의 역할과는 비교할 수 없습니다."),
     ;
 
     private final int errorCode;

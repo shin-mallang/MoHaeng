@@ -1,9 +1,9 @@
 package com.mohaeng.participant.application.service;
 
-import com.mohaeng.clubrole.application.usecase.ChangeTargetClubRoleUseCase;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
 import com.mohaeng.clubrole.exception.ClubRoleException;
+import com.mohaeng.participant.application.usecase.ChangeTargetClubRoleUseCase;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.participant.exception.ParticipantException;

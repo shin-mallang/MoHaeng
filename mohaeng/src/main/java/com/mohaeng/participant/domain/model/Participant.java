@@ -6,7 +6,6 @@ import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.exception.ClubRoleException;
-import com.mohaeng.clubrole.exception.ClubRoleExceptionType;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.participant.exception.ParticipantException;
@@ -15,8 +14,7 @@ import jakarta.persistence.*;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
 import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.*;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.*;
 
 @Entity
 @Table(name = "participant")
@@ -79,7 +77,7 @@ public class Participant extends BaseEntity {
      */
     private void checkChangeRoleCategoryIsNotPresident(final ClubRole clubRole) {
         if (clubRole.clubRoleCategory() == PRESIDENT) {
-            throw new ClubRoleException(ClubRoleExceptionType.CAN_NOT_CHANGED_TO_PRESIDENT_ROLE);
+            throw new ParticipantException(CAN_NOT_CHANGED_TO_PRESIDENT_ROLE);
         }
     }
 
@@ -96,17 +94,17 @@ public class Participant extends BaseEntity {
     private void checkAuthorityToChangeTargetRole(final Participant target, final ClubRole clubRole) {
         // 일반 회원인 경우 역할을 변경할 수 없음
         if (isGeneral()) {
-            throw new ClubRoleException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+            throw new ParticipantException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
         }
 
         // 대상이 나보다 계급이 높거나 같은 경우 예외 발생
         if (!this.clubRole().isPowerfulThan(target.clubRole())) {
-            throw new ClubRoleException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+            throw new ParticipantException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
         }
 
         // 다른 모임의 계급인 경우
         if (!this.clubRole().club().id().equals(clubRole.club().id())) {
-            throw new ClubRoleException(CAN_NOT_CHANGE_TO_OTHER_CLUB_ROLE);
+            throw new ParticipantException(CAN_NOT_CHANGE_TO_OTHER_CLUB_ROLE);
         }
 
         // 바꾸려는 계급이 나보다 높은 계급인 경우, 회장으로 바꾸는 경우 이미 걸려졌으므로

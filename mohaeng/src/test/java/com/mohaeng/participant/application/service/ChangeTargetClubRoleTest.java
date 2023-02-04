@@ -2,15 +2,14 @@ package com.mohaeng.participant.application.service;
 
 import com.mohaeng.club.domain.model.Club;
 import com.mohaeng.club.domain.repository.ClubRepository;
-import com.mohaeng.clubrole.application.usecase.ChangeTargetClubRoleUseCase;
 import com.mohaeng.clubrole.domain.model.ClubRole;
 import com.mohaeng.clubrole.domain.model.ClubRoleCategory;
 import com.mohaeng.clubrole.domain.repository.ClubRoleRepository;
-import com.mohaeng.clubrole.exception.ClubRoleException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
+import com.mohaeng.participant.application.usecase.ChangeTargetClubRoleUseCase;
 import com.mohaeng.participant.domain.model.Participant;
 import com.mohaeng.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.participant.exception.ParticipantException;
@@ -26,13 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.*;
-import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.ClubRoleFixture.generalRole;
 import static com.mohaeng.common.fixtures.ClubRoleFixture.officerRole;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static com.mohaeng.common.fixtures.ParticipantFixture.participant;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.*;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -131,7 +129,7 @@ class ChangeTargetClubRoleTest {
             Participant targetParticipant = saveParticipant(target, club, clubRoleCategoryClubRoleMap.get(GENERAL));
 
             // when
-            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     changeTargetClubRoleUseCase.command(
                             new ChangeTargetClubRoleUseCase.Command(
                                     member.id(),
@@ -161,7 +159,7 @@ class ChangeTargetClubRoleTest {
             Participant targetParticipant = saveParticipant(target, club, clubRoleCategoryClubRoleMap1.get(GENERAL));
 
             // when
-            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     changeTargetClubRoleUseCase.command(
                             new ChangeTargetClubRoleUseCase.Command(
                                     member.id(),
@@ -219,7 +217,7 @@ class ChangeTargetClubRoleTest {
             Participant targetParticipant = saveParticipant(target, club, clubRoleCategoryClubRoleMap.get(GENERAL));
 
             // when
-            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     changeTargetClubRoleUseCase.command(
                             new ChangeTargetClubRoleUseCase.Command(
                                     member.id(),
@@ -260,7 +258,7 @@ class ChangeTargetClubRoleTest {
             Participant targetParticipant = saveParticipant(target, club, clubRoleCategoryClubRoleMap.get(targetRoleCategory));
 
             // when
-            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
                     changeTargetClubRoleUseCase.command(
                             new ChangeTargetClubRoleUseCase.Command(
                                     member.id(),

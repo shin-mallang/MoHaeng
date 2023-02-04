@@ -1,4 +1,4 @@
-package com.mohaeng.clubrole.application.usecase;
+package com.mohaeng.participant.application.usecase;
 
 /**
  * 대상의 역할을 변경

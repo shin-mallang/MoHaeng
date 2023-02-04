@@ -29,8 +29,7 @@ import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.ClubRoleFixture.*;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static com.mohaeng.common.fixtures.ParticipantFixture.participant;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -302,7 +301,7 @@ class ParticipantTest {
         void success_test_10() {
             // given
             Member member = member(null);
-            Club club = club(null);
+            Club club = club(1L);
             Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
                     .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
 
@@ -794,17 +793,17 @@ class ParticipantTest {
             Participant generalTarget = participant(null, member, club, defaultRoles.get(GENERAL));
 
             // when & then
-            assertThat(assertThrows(ClubRoleException.class, () ->
+            assertThat(assertThrows(ParticipantException.class, () ->
                     general.changeTargetRole(presidentTarget, officerRole)
             ).exceptionType())
                     .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
 
-            assertThat(assertThrows(ClubRoleException.class, () ->
+            assertThat(assertThrows(ParticipantException.class, () ->
                     general.changeTargetRole(officerTarget, officerRole)
             ).exceptionType())
                     .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
 
-            assertThat(assertThrows(ClubRoleException.class, () ->
+            assertThat(assertThrows(ParticipantException.class, () ->
                     general.changeTargetRole(generalTarget, officerRole)
             ).exceptionType())
                     .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
@@ -815,7 +814,7 @@ class ParticipantTest {
         void fail_test_17() {
             // given
             Member member = member(null);
-            Club club = club(null);
+            Club club = club(1L);
             Map<ClubRoleCategory, ClubRole> defaultRoles = ClubRole.defaultRoles(club).stream()
                     .collect(Collectors.toUnmodifiableMap(ClubRole::clubRoleCategory, it -> it));
 
@@ -829,17 +828,17 @@ class ParticipantTest {
             Participant officerToOfficerTarget1 = participant(null, member, club, defaultRoles.get(OFFICER));
 
             // when & then
-            assertThat(assertThrows(ClubRoleException.class, () ->
+            assertThat(assertThrows(ParticipantException.class, () ->
                     officer.changeTargetRole(officerToGeneralTarget1, generalRole)
             ).exceptionType())
                     .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
 
-            assertThat(assertThrows(ClubRoleException.class, () ->
+            assertThat(assertThrows(ParticipantException.class, () ->
                     officer.changeTargetRole(officerToOfficerTarget1, officerRole)
             ).exceptionType())
                     .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
 
-            assertThat(assertThrows(ClubRoleException.class, () ->
+            assertThat(assertThrows(ParticipantException.class, () ->
                     officer.changeTargetRole(president, generalRole)
             ).exceptionType())
                     .isEqualTo(NO_AUTHORITY_CHANGE_TARGET_ROLE);
@@ -863,12 +862,12 @@ class ParticipantTest {
             Participant target2 = participant(null, member, club, defaultRoles.get(GENERAL));
 
             // when & then
-            assertThat(assertThrows(ClubRoleException.class, () ->
+            assertThat(assertThrows(ParticipantException.class, () ->
                     officer.changeTargetRole(target1, defaultRoles.get(PRESIDENT))
             ).exceptionType())
                     .isEqualTo(CAN_NOT_CHANGED_TO_PRESIDENT_ROLE);
 
-            assertThat(assertThrows(ClubRoleException.class, () ->
+            assertThat(assertThrows(ParticipantException.class, () ->
                     officer.changeTargetRole(target2, defaultRoles.get(PRESIDENT))
             ).exceptionType())
                     .isEqualTo(CAN_NOT_CHANGED_TO_PRESIDENT_ROLE);
