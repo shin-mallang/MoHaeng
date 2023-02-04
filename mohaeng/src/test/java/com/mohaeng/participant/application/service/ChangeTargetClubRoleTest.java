@@ -175,7 +175,7 @@ class ChangeTargetClubRoleTest {
         }
 
         @Test
-        @DisplayName("바꾸려는 회원이 다른 모임의 회원 경우 예외 (참여자를 찾을 수 없다는 예외)")
+        @DisplayName("바꾸려는 회원이 다른 모임의 회원인 경우 예외 (참여자를 찾을 수 없다는 예외)")
         void fail_test_3() {
             // given
             Member member = saveMember();
@@ -232,7 +232,7 @@ class ChangeTargetClubRoleTest {
                     .isEqualTo(clubRoleCategoryClubRoleMap.get(GENERAL).id());
         }
 
-        @ParameterizedTest(name = " 자신과 계급이 동일하거나, 자신보다 높은 계급의 회원의 역할을 변경하려는 경우 예외")
+        @ParameterizedTest(name = "자신과 계급이 동일하거나, 자신보다 높은 계급의 회원의 역할을 변경하려는 경우 예외")
         @CsvSource({
                 "OFFICER, OFFICER, GENERAL",
                 "OFFICER, OFFICER, OFFICER",
