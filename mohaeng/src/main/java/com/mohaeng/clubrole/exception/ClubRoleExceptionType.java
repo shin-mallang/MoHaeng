@@ -22,6 +22,7 @@ public enum ClubRoleExceptionType implements BaseExceptionType {
             (2): 대상의 계급이 요청자분과 동일하거나 더 높습니다.
             (3): 바꾸려는 역할의 계급이 요청자분의 계급보다 높습니다.
             """),
+    CAN_NOT_CHANGE_TO_OTHER_CLUB_ROLE(412, HttpStatus.BAD_REQUEST, "다른 모임의 역할로는 변경할 수 없습니다."),
     ;
 
     private final int errorCode;

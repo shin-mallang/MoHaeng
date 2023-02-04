@@ -42,4 +42,6 @@ public interface ParticipantRepository {
     Optional<Participant> findPresidentWithMemberAndClubRoleByClub(final Club club);
 
     List<Participant> findAllByClubRole(final ClubRole clubRole);
+
+    Optional<Participant> findWithClubAndClubRoleById(final Long id);
 }

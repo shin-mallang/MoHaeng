@@ -104,6 +104,11 @@ public class Participant extends BaseEntity {
             throw new ClubRoleException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
         }
 
+        // 다른 모임의 계급인 경우
+        if (!this.clubRole().club().id().equals(clubRole.club().id())) {
+            throw new ClubRoleException(CAN_NOT_CHANGE_TO_OTHER_CLUB_ROLE);
+        }
+
         // 바꾸려는 계급이 나보다 높은 계급인 경우, 회장으로 바꾸는 경우 이미 걸려졌으므로
         // 해당 상황은 발생하지 않는다.
     }
