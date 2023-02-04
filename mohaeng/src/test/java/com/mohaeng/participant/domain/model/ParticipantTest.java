@@ -66,30 +66,8 @@ class ParticipantTest {
         }
 
         @Test
-        @DisplayName("isManager() 시 회장 혹은 임원인 경우 true를 반환한다.")
-        void success_test_2() {
-            // given
-            Member member = member(null);
-            Club club = club(null);
-            ClubRole presidentRole = presidentRole("회장", club);
-            ClubRole officerRole = officerRole("임원", club);
-            ClubRole generalRole = generalRole("일반", club);
-
-            Participant president = participant(null, member, club, presidentRole);
-            Participant officer = participant(null, member, club, officerRole);
-            Participant general = participant(null, member, club, generalRole);
-
-            // when, then
-            assertAll(
-                    () -> assertThat(president.isManager()).isTrue(),
-                    () -> assertThat(officer.isManager()).isTrue(),
-                    () -> assertThat(general.isManager()).isFalse()
-            );
-        }
-
-        @Test
         @DisplayName("leaveFromClub() 시 모임의 인원 수를 1 감소시킨다.")
-        void success_test_3() {
+        void success_test_2() {
             // given
             Member member = member(null);
             Club club = club(null);
@@ -112,7 +90,7 @@ class ParticipantTest {
 
         @Test
         @DisplayName("expelFromClub() 시 모임의 인원 수를 1 감소시킨다.")
-        void success_test_4() {
+        void success_test_3() {
             // given
             Member member = member(null);
             Member officerMember = member(null);
@@ -138,7 +116,7 @@ class ParticipantTest {
 
         @Test
         @DisplayName("createClubRole() 시 임원 혹은 회장인 경우 ClubRole을 생성한다.")
-        void success_test_5() {
+        void success_test_4() {
             // given
             Member member = member(null);
             Club club = club(null);
@@ -168,7 +146,7 @@ class ParticipantTest {
 
         @Test
         @DisplayName("changeClubRoleName() 시 임원 혹은 회장인 경우 ClubRole의 이름을 변경한다.")
-        void success_test_6() {
+        void success_test_5() {
             // given
             Member member = member(null);
             Club club = club(null);
@@ -207,7 +185,7 @@ class ParticipantTest {
 
         @Test
         @DisplayName("approveApplicationForm() 시 임원 혹은 회장인 경우 가입 신청서를 처리상태로 만든 뒤, 모임에 가입된 Participant를 반환한다.")
-        void success_test_7() {
+        void success_test_6() {
             // given
             Member member = member(null);
             Member applicant = member(null);
@@ -238,7 +216,7 @@ class ParticipantTest {
 
         @Test
         @DisplayName("rejectApplicationForm() 시 임원 혹은 회장인 경우 가입 신청서를 처리상태로 만든다.")
-        void success_test_8() {
+        void success_test_7() {
             // given
             Member member = member(null);
             Member applicant = member(null);
@@ -265,7 +243,7 @@ class ParticipantTest {
 
         @ParameterizedTest(name = "[{arguments}] deleteClubRole() 시 권한이 있다면(회장 혹은 임원) 해당 역할을 기본 역할이 아니도록 만든다. ")
         @EnumSource(mode = INCLUDE, value = ClubRoleCategory.class, names = {"PRESIDENT", "OFFICER"})
-        void success_test_9(final ClubRoleCategory category) {
+        void success_test_8(final ClubRoleCategory category) {
             // given
             Member member = member(null);
             Club club = club(null);
@@ -290,7 +268,7 @@ class ParticipantTest {
 
         @ParameterizedTest(name = "[{arguments}] changeDefaultRole() 시 권한이 있다면(회장 혹은 임원) 첫번째 Role은 기본 역할로 변경하고, 두번째 Role은 기본 역할이 아니도록 변경한다.")
         @EnumSource(mode = INCLUDE, value = ClubRoleCategory.class, names = {"PRESIDENT", "OFFICER"})
-        void success_test_10(final ClubRoleCategory category) {
+        void success_test_9(final ClubRoleCategory category) {
             // given
             Member member = member(null);
             Club club = club(null);
@@ -321,7 +299,7 @@ class ParticipantTest {
                  대상의 권한이 나보다 낮고,
                  변경하려는 권한의 등급이 나보다 낮거나 같은 등급인 경우 대상의 역할을 변경한다.
                 """)
-        void success_test_11() {
+        void success_test_10() {
             // given
             Member member = member(null);
             Club club = club(null);

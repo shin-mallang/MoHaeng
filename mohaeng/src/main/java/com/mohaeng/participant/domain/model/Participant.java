@@ -54,27 +54,6 @@ public class Participant extends BaseEntity {
     }
 
     /**
-     * 관리자(회장, 임원)인지 확인
-     */
-    public boolean isManager() {
-        return clubRole().isManagerRole();
-    }
-
-    /**
-     * 회장인지 확인
-     */
-    private boolean isPresident() {
-        return clubRole().isPresidentRole();
-    }
-
-    /**
-     * 일반 회원인지 여부
-     */
-    private boolean isGeneral() {
-        return clubRole.isGeneralRole();
-    }
-
-    /**
      * 역할을 변경한다.
      */
     public void changeRole(final ClubRole clubRole) {
@@ -116,7 +95,7 @@ public class Participant extends BaseEntity {
      */
     private void checkAuthorityToChangeTargetRole(final Participant target, final ClubRole clubRole) {
         // 일반 회원인 경우 역할을 변경할 수 없음
-        if (!isManager()) {
+        if (isGeneral()) {
             throw new ClubRoleException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
         }
 
@@ -247,7 +226,7 @@ public class Participant extends BaseEntity {
     }
 
     private void checkAuthorityDeleteClubRole() {
-        if (!isManager()) {
+        if (isGeneral()) {
             throw new ClubRoleException(NO_AUTHORITY_DELETE_ROLE);
         }
     }
@@ -285,7 +264,7 @@ public class Participant extends BaseEntity {
      * 기본 역할 변경 권한 확인
      */
     private void checkAuthorityChangeDefaultRole() {
-        if (!isManager()) {
+        if (isGeneral()) {
             throw new ClubRoleException(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
         }
     }
@@ -322,8 +301,22 @@ public class Participant extends BaseEntity {
      * 가입 신청서를 처리할 권한을 확인한다.
      */
     private void checkAuthorityToProcessApplication() {
-        if (!isManager()) {
+        if (isGeneral()) {
             throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
         }
+    }
+
+    /**
+     * 회장인지 확인
+     */
+    private boolean isPresident() {
+        return clubRole().isPresidentRole();
+    }
+
+    /**
+     * 일반 회원인지 여부
+     */
+    private boolean isGeneral() {
+        return clubRole.isGeneralRole();
     }
 }
