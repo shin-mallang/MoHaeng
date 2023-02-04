@@ -303,7 +303,7 @@ class ChangeTargetClubRoleControllerTest extends ControllerTest {
             verify(changeTargetClubRoleUseCase, times(1)).command(any());
 
             resultActions.andDo(
-                    document("change-participant's-role(target is other club)",
+                    document("change-participant's-role(target is same rank or higher rank than requester)",
                             getDocumentResponse()
                     )
             );

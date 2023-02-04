@@ -249,15 +249,15 @@ operation::expel-participant-from-club(Nonexistent president in club)[snippets='
 
 operation::change-participant's-role[snippets='http-request,path-parameters,request-headers,http-response']
 
-==== - 요청 시 Header에 AccessToken이 없는 경ø우
+==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::change-participant's-role(No Access Token)[snippets='http-response']
 
-==== - 참가자 ID가 없는 경우 404
+==== - 역할을 변경할 대상 참가자의 ID가 없는 경우
 
 operation::change-participant's-role(Nonexistent Participant ID)[snippets='http-response']
 
-==== - 변경하고자 하는 역할의 ID가 없는 경우 404
+==== - 변경하고자 하는 역할의 ID가 없는 경우
 
 operation::change-participant's-role(Nonexistent ClubRole ID)[snippets='http-response']
 
@@ -279,7 +279,7 @@ operation::change-participant's-role(change to president role)[snippets='http-re
 
 ==== - 자신과 계급이 동일하거나, 자신보다 높은 계급의 회원의 역할을 변경하려는 경우
 
-operation::change-participant's-role(target is other club)[snippets='http-response']
+operation::change-participant's-role(target is same rank or higher rank than requester)[snippets='http-response']
 
 [[Club-Role-API]]
 == Club Role API
