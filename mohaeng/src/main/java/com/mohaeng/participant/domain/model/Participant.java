@@ -14,8 +14,7 @@ import jakarta.persistence.*;
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION_FORM;
 import static com.mohaeng.clubrole.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.clubrole.exception.ClubRoleExceptionType.*;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT;
-import static com.mohaeng.participant.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
+import static com.mohaeng.participant.exception.ParticipantExceptionType.*;
 
 @Entity
 @Table(name = "participant")
@@ -53,10 +52,63 @@ public class Participant extends BaseEntity {
     }
 
     /**
-     * 참여자의 역할을 변경한다.
+     * 역할을 변경한다.
      */
     public void changeRole(final ClubRole clubRole) {
         this.clubRole = clubRole;
+    }
+
+    /**
+     * 상대방의 역할을 변경한다.
+     */
+    public void changeTargetRole(final Participant target, final ClubRole clubRole) {
+        // 회장 역할이 아닌지 확인한다.
+        checkChangeRoleCategoryIsNotPresident(clubRole);
+
+        // 대상의 역할을 수정할 권한이 있는지 확인한다.
+        checkAuthorityToChangeTargetRole(target, clubRole);
+
+        // 역할 변경
+        target.changeRole(clubRole);
+    }
+
+    /**
+     * 바꾸려는 역할이 회장 역할이 아닌지 확인한다.
+     */
+    private void checkChangeRoleCategoryIsNotPresident(final ClubRole clubRole) {
+        if (clubRole.clubRoleCategory() == PRESIDENT) {
+            throw new ParticipantException(CAN_NOT_CHANGED_TO_PRESIDENT_ROLE);
+        }
+    }
+
+    /**
+     * 상대방의 역할을 수정할 수 있는지 확인한다.
+     * <p>
+     * 상대방이 나보다 계급이 낮아야 하며, 나와 동일하거나 낮은 계급으로만 변경 가능하다.
+     * (예를 들어 회장은, 모든 회원을 임원 혹은 일반 회원으로 변경할 수 있고,
+     * 임원은 일반 회원만을 임원으로 변경할 수 있다.)
+     *
+     * @param target   역할을 변경할 대상
+     * @param clubRole 변경하고 싶은 역할
+     */
+    private void checkAuthorityToChangeTargetRole(final Participant target, final ClubRole clubRole) {
+        // 일반 회원인 경우 역할을 변경할 수 없음
+        if (isGeneral()) {
+            throw new ParticipantException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+        }
+
+        // 대상이 나보다 계급이 높거나 같은 경우 예외 발생
+        if (!this.clubRole().isPowerfulThan(target.clubRole())) {
+            throw new ParticipantException(NO_AUTHORITY_CHANGE_TARGET_ROLE);
+        }
+
+        // 다른 모임의 계급인 경우
+        if (!this.clubRole().club().id().equals(clubRole.club().id())) {
+            throw new ParticipantException(CAN_NOT_CHANGE_TO_OTHER_CLUB_ROLE);
+        }
+
+        // 바꾸려는 계급이 나보다 높은 계급인 경우, 회장으로 바꾸는 경우 이미 걸려졌으므로
+        // 해당 상황은 발생하지 않는다.
     }
 
     /**
@@ -69,7 +121,7 @@ public class Participant extends BaseEntity {
     }
 
     /**
-     * 모임에서 탈퇴
+     * 모임에서 탈퇴한다.
      */
     public void leaveFromClub() {
         // 모임에서 탈퇴할 수 있는지 확인한다.
@@ -95,7 +147,7 @@ public class Participant extends BaseEntity {
      * 대상을 모임에서 추방시킨다.
      */
     public void expelFromClub(final Participant target) {
-        // 추방시킬 권한 확인
+        // 추방시키려는 사람이 회장이 아닌 경우 예외
         checkAuthorityExpel();
 
         target.club().participantCountDown();
@@ -114,24 +166,33 @@ public class Participant extends BaseEntity {
         }
     }
 
+    /**
+     * 모임의 역할을 새로 생성한다.
+     */
     public ClubRole createClubRole(final String name,
                                    final ClubRoleCategory clubRoleCategory) {
         // 생성하려는 회원이 회장이나 임원이 아닌 경우 예외 발생
         checkAuthorityCreateClubRole();
 
         // 회장을 생성하는 경우 예외 발생
-        checkCategoryIsNotPresident(clubRoleCategory);
+        checkCreateCategoryIsNotPresident(clubRoleCategory);
 
         return new ClubRole(name, clubRoleCategory, club(), false);
     }
 
+    /**
+     * 모임의 역할을 생성할 권할을 확인한다.
+     */
     private void checkAuthorityCreateClubRole() {
         if (this.isGeneral()) {
             throw new ClubRoleException(NO_AUTHORITY_CREATE_ROLE);
         }
     }
 
-    private void checkCategoryIsNotPresident(final ClubRoleCategory clubRoleCategory) {
+    /**
+     * 회장 역할을 생성하려는 경우 예외를 발생시킨다.
+     */
+    private void checkCreateCategoryIsNotPresident(final ClubRoleCategory clubRoleCategory) {
         if (clubRoleCategory == PRESIDENT) {
             throw new ClubRoleException(CAN_NOT_CREATE_ADDITIONAL_PRESIDENT_ROLE);
         }
@@ -158,10 +219,64 @@ public class Participant extends BaseEntity {
     }
 
     /**
+     * 주어진 역할을 제거한다.
+     */
+    public void deleteClubRole(final ClubRole clubRole) {
+        // 회장 혹은 임원이 아닌 경우 예외
+        checkAuthorityDeleteClubRole();
+
+        clubRole.makeNotDefault();
+    }
+
+    private void checkAuthorityDeleteClubRole() {
+        if (isGeneral()) {
+            throw new ClubRoleException(NO_AUTHORITY_DELETE_ROLE);
+        }
+    }
+
+    /**
+     * 기본 역할을 변경한다.
+     *
+     * @param defaultRoleCandidate 기본 역할로 만들고 싶은 역할
+     * @param existingDefaultRole  기존의 기본 역할
+     */
+    public void changeDefaultRole(final ClubRole defaultRoleCandidate, ClubRole existingDefaultRole) {
+        // 회장 혹은 임원이 아닌 경우 예외
+        checkAuthorityChangeDefaultRole();
+
+        // 두 역할의 카테고리가 일치하는지 확인
+        checkCategoryIsMatchBetweenExistingDefaultRoleAndCandidate(defaultRoleCandidate, existingDefaultRole);
+
+        defaultRoleCandidate.makeDefault();
+        existingDefaultRole.makeNotDefault();
+    }
+
+    /**
+     * 기본 역할 변경 권한 확인
+     */
+    private void checkAuthorityChangeDefaultRole() {
+        if (isGeneral()) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
+        }
+    }
+
+    /**
+     * 두 역할의 카테고리가 일치하는지 확인한다.
+     *
+     * @param defaultRoleCandidate 기본 역할로 변경될 역할
+     * @param existingDefaultRole  기존의 기본 역할
+     */
+    private void checkCategoryIsMatchBetweenExistingDefaultRoleAndCandidate(final ClubRole defaultRoleCandidate, final ClubRole existingDefaultRole) {
+        if (defaultRoleCandidate.clubRoleCategory() != existingDefaultRole.clubRoleCategory()) {
+            throw new ClubRoleException(MISMATCH_EXISTING_DEFAULT_ROLE_AND_CANDIDATE);
+        }
+    }
+
+    /**
      * 가입 신청서를 승인한 후, Participant를 생성하여 반환한다.
      */
     public Participant approveApplicationForm(final ApplicationForm applicationForm, final ClubRole defaultGeneralRole) {
-        // 권한 확인
+        // 회장 혹은 임원이 아닌 경우 예외
         checkAuthorityToProcessApplication();
 
         // 모임에 가입시키기
@@ -178,7 +293,7 @@ public class Participant extends BaseEntity {
      * 가입 신청서를 거절한다.
      */
     public void rejectApplicationForm(final ApplicationForm applicationForm) {
-        // 권한 확인
+        // 회장 혹은 임원이 아닌 경우 예외
         checkAuthorityToProcessApplication();
 
         // 가입 신청서 처리
@@ -189,62 +304,8 @@ public class Participant extends BaseEntity {
      * 가입 신청서를 처리할 권한을 확인한다.
      */
     private void checkAuthorityToProcessApplication() {
-        if (!isManager()) {
+        if (isGeneral()) {
             throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION_FORM);
-        }
-    }
-
-    /**
-     * 주어진 역할을 제거한다.
-     */
-    public void deleteClubRole(final ClubRole clubRole) {
-        // 권한 확인
-        checkAuthorityDeleteClubRole();
-
-        clubRole.makeNotDefault();
-    }
-
-    private void checkAuthorityDeleteClubRole() {
-        if (!isManager()) {
-            throw new ClubRoleException(NO_AUTHORITY_DELETE_ROLE);
-        }
-    }
-
-    /**
-     * 기본 역할을 변경한다.
-     *
-     * @param defaultRoleCandidate 기본 역할로 만들고 싶은 역할
-     * @param existingDefaultRole  기존의 기본 역할
-     */
-    public void changeDefaultRole(final ClubRole defaultRoleCandidate, ClubRole existingDefaultRole) {
-        // 권한 확인
-        checkAuthorityChangeDefaultRole();
-
-        // 두 역할의 카테고리가 일치하는지 확인
-        checkCategoryIsMatchBetweenExistingDefaultRoleAndCandidate(defaultRoleCandidate, existingDefaultRole);
-
-        defaultRoleCandidate.makeDefault();
-        existingDefaultRole.makeNotDefault();
-    }
-
-    /**
-     * 두 역할의 카테고리가 일치하는지 확인한다.
-     *
-     * @param defaultRoleCandidate 기본 역할로 변경될 역할
-     * @param existingDefaultRole  기존의 기본 역할
-     */
-    private void checkCategoryIsMatchBetweenExistingDefaultRoleAndCandidate(final ClubRole defaultRoleCandidate, final ClubRole existingDefaultRole) {
-        if (defaultRoleCandidate.clubRoleCategory() != existingDefaultRole.clubRoleCategory()) {
-            throw new ClubRoleException(MISMATCH_EXISTING_DEFAULT_ROLE_AND_CANDIDATE);
-        }
-    }
-
-    /**
-     * 기본 역할 변경 권한 확인
-     */
-    private void checkAuthorityChangeDefaultRole() {
-        if (!isManager()) {
-            throw new ClubRoleException(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
         }
     }
 
@@ -253,13 +314,6 @@ public class Participant extends BaseEntity {
      */
     private boolean isPresident() {
         return clubRole().isPresidentRole();
-    }
-
-    /**
-     * 관리자(회장, 임원)인지 확인
-     */
-    public boolean isManager() {
-        return clubRole().isManagerRole();
     }
 
     /**

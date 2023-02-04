@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import static com.mohaeng.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED_APPLICATION_FORM;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
+import static com.mohaeng.common.fixtures.ClubRoleFixture.presidentRole;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
+import static com.mohaeng.common.fixtures.ParticipantFixture.participant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @DisplayName("ApplicationForm 은 ")
 class ApplicationFormTest {
@@ -49,8 +49,7 @@ class ApplicationFormTest {
             Member member = member(1L);
             Club club = club(1L);
             ApplicationForm applicationForm = ApplicationForm.create(member, club);
-            Participant participant = mock(Participant.class);
-            when(participant.isManager()).thenReturn(true);
+            Participant participant = participant(null, member, club, presidentRole("회장", club));
 
             // when
             applicationForm.process();
@@ -73,8 +72,7 @@ class ApplicationFormTest {
             Member member = member(1L);
             Club club = club(1L);
             ApplicationForm applicationForm = ApplicationForm.create(member, club);
-            Participant participant = mock(Participant.class);
-            when(participant.isManager()).thenReturn(true);
+            Participant participant = participant(null, member, club, presidentRole("회장", club));
 
             // when
             applicationForm.process();

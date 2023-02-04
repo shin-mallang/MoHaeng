@@ -47,4 +47,8 @@ public interface JpaParticipantRepository extends JpaRepository<Participant, Lon
     @Override
     @Query("select p from Participant p where p.club.id = :clubId")
     List<Participant> findAllWithMemberByClubId(final Long clubId);
+
+    @Override
+    @Query("select p from Participant p join fetch p.clubRole join fetch p.club where p.id = :id")
+    Optional<Participant> findWithClubAndClubRoleById(@Param("id") final Long id);
 }

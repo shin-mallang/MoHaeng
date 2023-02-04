@@ -93,6 +93,11 @@ public class MockParticipantRepository implements ParticipantRepository {
         return null;
     }
 
+    @Override
+    public Optional<Participant> findWithClubAndClubRoleById(Long id) {
+        return Optional.empty();
+    }
+
     public List<Participant> findAll() {
         return store.values().stream().toList();
     }
