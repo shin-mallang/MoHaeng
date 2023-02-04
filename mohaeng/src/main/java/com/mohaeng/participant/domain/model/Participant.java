@@ -144,7 +144,7 @@ public class Participant extends BaseEntity {
      * 대상을 모임에서 추방시킨다.
      */
     public void expelFromClub(final Participant target) {
-        // 추방시킬 권한 확인
+        // 추방시키려는 사람이 회장이 아닌 경우 예외
         checkAuthorityExpel();
 
         target.club().participantCountDown();
@@ -219,7 +219,7 @@ public class Participant extends BaseEntity {
      * 주어진 역할을 제거한다.
      */
     public void deleteClubRole(final ClubRole clubRole) {
-        // 권한 확인
+        // 회장 혹은 임원이 아닌 경우 예외
         checkAuthorityDeleteClubRole();
 
         clubRole.makeNotDefault();
@@ -238,7 +238,7 @@ public class Participant extends BaseEntity {
      * @param existingDefaultRole  기존의 기본 역할
      */
     public void changeDefaultRole(final ClubRole defaultRoleCandidate, ClubRole existingDefaultRole) {
-        // 권한 확인
+        // 회장 혹은 임원이 아닌 경우 예외
         checkAuthorityChangeDefaultRole();
 
         // 두 역할의 카테고리가 일치하는지 확인
@@ -246,6 +246,15 @@ public class Participant extends BaseEntity {
 
         defaultRoleCandidate.makeDefault();
         existingDefaultRole.makeNotDefault();
+    }
+
+    /**
+     * 기본 역할 변경 권한 확인
+     */
+    private void checkAuthorityChangeDefaultRole() {
+        if (isGeneral()) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
+        }
     }
 
     /**
@@ -261,19 +270,10 @@ public class Participant extends BaseEntity {
     }
 
     /**
-     * 기본 역할 변경 권한 확인
-     */
-    private void checkAuthorityChangeDefaultRole() {
-        if (isGeneral()) {
-            throw new ClubRoleException(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
-        }
-    }
-
-    /**
      * 가입 신청서를 승인한 후, Participant를 생성하여 반환한다.
      */
     public Participant approveApplicationForm(final ApplicationForm applicationForm, final ClubRole defaultGeneralRole) {
-        // 권한 확인
+        // 회장 혹은 임원이 아닌 경우 예외
         checkAuthorityToProcessApplication();
 
         // 모임에 가입시키기
@@ -290,7 +290,7 @@ public class Participant extends BaseEntity {
      * 가입 신청서를 거절한다.
      */
     public void rejectApplicationForm(final ApplicationForm applicationForm) {
-        // 권한 확인
+        // 회장 혹은 임원이 아닌 경우 예외
         checkAuthorityToProcessApplication();
 
         // 가입 신청서 처리
