@@ -3,7 +3,7 @@ package com.mohaeng.club.exception;
 import com.mohaeng.common.exception.BaseExceptionType;
 import org.springframework.http.HttpStatus;
 
-public enum ClubExceptionType implements BaseExceptionType {
+public enum ClubRoleExceptionType implements BaseExceptionType {
 
     ;
 
@@ -11,7 +11,7 @@ public enum ClubExceptionType implements BaseExceptionType {
     private final HttpStatus httpStatus;
     private final String errorMessage;
 
-    ClubExceptionType(final int errorCode, final HttpStatus httpStatus, final String errorMessage) {
+    ClubRoleExceptionType(final int errorCode, final HttpStatus httpStatus, final String errorMessage) {
         this.errorCode = errorCode;
         this.httpStatus = httpStatus;
         this.errorMessage = errorMessage;
