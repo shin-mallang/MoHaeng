@@ -7,8 +7,8 @@ import com.mohaeng.authentication.presentation.LogInController;
 
 import java.util.HashMap;
 
-import static com.mohaeng.common.fixtures.MemberFixture.PASSWORD;
-import static com.mohaeng.common.fixtures.MemberFixture.USERNAME;
+import static com.mohaeng.common.fixtures.MemberFixture.MALLANG_PASSWORD;
+import static com.mohaeng.common.fixtures.MemberFixture.MALLANG_USERNAME;
 
 public class AuthenticationFixture {
 
@@ -46,6 +46,6 @@ public class AuthenticationFixture {
     }
 
     public static LogInController.LoginRequest loginRequest() {
-        return new LogInController.LoginRequest(USERNAME, PASSWORD);
+        return new LogInController.LoginRequest(MALLANG_USERNAME, MALLANG_PASSWORD);
     }
 }
