@@ -1,18 +1,18 @@
-package com.mohaeng.club.exception;
+package com.mohaeng.club.club.exception;
 
 import com.mohaeng.common.exception.BaseException;
 import com.mohaeng.common.exception.BaseExceptionType;
 
-public class ClubRoleException extends BaseException {
+public class ClubException extends BaseException {
 
-    private final ClubRoleExceptionType exceptionType;
+    private final ClubExceptionType exceptionType;
 
-    public ClubRoleException(final ClubRoleExceptionType exceptionType) {
+    public ClubException(final ClubExceptionType exceptionType) {
         super(exceptionType.errorMessage());
         this.exceptionType = exceptionType;
     }
 
-    public ClubRoleException(final ClubRoleExceptionType exceptionType, final Throwable cause) {
+    public ClubException(final ClubExceptionType exceptionType, final Throwable cause) {
         super(exceptionType.errorMessage(), cause);
         this.exceptionType = exceptionType;
     }

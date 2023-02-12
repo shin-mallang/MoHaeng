@@ -1,5 +1,7 @@
-package com.mohaeng.club.domain.model;
+package com.mohaeng.club.club.domain.model;
 
+import com.mohaeng.club.club.exception.ClubRoleException;
+import com.mohaeng.club.club.exception.ClubRoleExceptionType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 
@@ -24,5 +26,16 @@ public class ClubRoles {
 
     public static ClubRoles defaultRoles(final Club club) {
         return new ClubRoles(ClubRole.defaultRoles(club));
+    }
+
+    public List<ClubRole> clubRoles() {
+        return clubRoles;
+    }
+
+    public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
+        return clubRoles.stream().filter(ClubRole::isDefault)
+                .filter(it -> it.clubRoleCategory() == category)
+                .findAny()
+                .orElseThrow(() -> new ClubRoleException(ClubRoleExceptionType.NOT_FOUND_DEFAULT_ROLE));
     }
 }
