@@ -1,11 +1,11 @@
-package com.mohaeng.club.exception;
+package com.mohaeng.club.club.exception;
 
 import com.mohaeng.common.exception.BaseExceptionType;
 import org.springframework.http.HttpStatus;
 
 public enum ClubExceptionType implements BaseExceptionType {
 
-    ;
+    CLUB_IS_FULL(300, HttpStatus.BAD_REQUEST, "모임이 가득 차 더이상 참여자를 받을 수 없습니다.");
 
     private final int errorCode;
     private final HttpStatus httpStatus;

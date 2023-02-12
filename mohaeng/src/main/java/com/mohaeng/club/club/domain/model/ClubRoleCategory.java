@@ -1,4 +1,4 @@
-package com.mohaeng.club.domain.model;
+package com.mohaeng.club.club.domain.model;
 
 public enum ClubRoleCategory {
     PRESIDENT,
