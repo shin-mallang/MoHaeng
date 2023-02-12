@@ -10,6 +10,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
+
 @Entity
 @Table(name = "club")
 public class Club extends BaseEntity {
@@ -36,7 +38,7 @@ public class Club extends BaseEntity {
         this.description = description;
         this.maxParticipantCount = maxParticipantCount;
         this.clubRoles = ClubRoles.defaultRoles(this);
-        this.participants = Participants.initWithPresident(new Participant(member, this, findDefaultRoleByCategory(ClubRoleCategory.PRESIDENT)));
+        this.participants = Participants.initWithPresident(new Participant(member, this, findDefaultRoleByCategory(PRESIDENT)));
         participantCountUp();
     }
 
