@@ -1,16 +1,19 @@
 package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.club.club.exception.ClubException;
-import com.mohaeng.club.club.exception.ClubExceptionType;
-import com.mohaeng.club.participant.model.Participant;
-import com.mohaeng.club.participant.model.Participants;
+import com.mohaeng.club.participant.domain.model.Participant;
+import com.mohaeng.club.participant.domain.model.Participants;
+import com.mohaeng.club.participant.exception.ParticipantException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
+import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
+import static com.mohaeng.club.participant.exception.ParticipantExceptionType.ALREADY_EXIST_PARTICIPANT;
 
 @Entity
 @Table(name = "club")
@@ -44,7 +47,7 @@ public class Club extends BaseEntity {
 
     private void participantCountUp() {
         if (currentParticipantCount >= maxParticipantCount) {
-            throw new ClubException(ClubExceptionType.CLUB_IS_FULL);
+            throw new ClubException(CLUB_IS_FULL);
         }
         currentParticipantCount++;
     }
@@ -75,5 +78,23 @@ public class Club extends BaseEntity {
 
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
         return clubRoles().findDefaultRoleByCategory(category);
+    }
+
+    /**
+     * 회원을 모임에 등록한다.
+     */
+    public void registerParticipant(final Member member) {
+        // 이미 가입되어있는지 확인
+        validateAlreadyRegistered(member);
+
+        participantCountUp();
+
+        participants().register(new Participant(member, this, findDefaultRoleByCategory(GENERAL)));
+    }
+
+    private void validateAlreadyRegistered(final Member member) {
+        if (participants().findByMemberId(member.id()).isPresent()) {
+            throw new ParticipantException(ALREADY_EXIST_PARTICIPANT);
+        }
     }
 }

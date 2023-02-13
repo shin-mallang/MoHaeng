@@ -1,10 +1,11 @@
-package com.mohaeng.club.participant.model;
+package com.mohaeng.club.participant.domain.model;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
@@ -30,5 +31,15 @@ public class Participants {
 
     public List<Participant> participants() {
         return participants;
+    }
+
+    public void register(final Participant participant) {
+        this.participants().add(participant);
+    }
+
+    public Optional<Participant> findByMemberId(final Long id) {
+        return participants.stream()
+                .filter(it -> it.member().id().equals(id))
+                .findAny();
     }
 }

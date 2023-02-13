@@ -1,10 +1,13 @@
-package com.mohaeng.club.participant.model;
+package com.mohaeng.club.participant.domain.model;
 
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.*;
+
+import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
+import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
 
 @Entity
 @Table(name = "participant")
@@ -41,5 +44,13 @@ public class Participant extends BaseEntity {
 
     public ClubRole clubRole() {
         return clubRole;
+    }
+
+    public boolean isManager() {
+        return this.clubRole().clubRoleCategory() != GENERAL;
+    }
+
+    public boolean isPresident() {
+        return this.clubRole().clubRoleCategory() == PRESIDENT;
     }
 }
