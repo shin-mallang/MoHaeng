@@ -7,6 +7,7 @@ public enum ParticipantExceptionType implements BaseExceptionType {
 
     NOT_FOUND_PARTICIPANT(600, HttpStatus.NOT_FOUND, "참여자가 존재하지 않습니다."),
     ALREADY_EXIST_PARTICIPANT(601, HttpStatus.CONFLICT, "이미 가입된 참여자입니다."),
+    NOT_FOUND_PRESIDENT(699, HttpStatus.INTERNAL_SERVER_ERROR, "회장이 존재하지 않습니다."),
     ;
 
     private final int errorCode;

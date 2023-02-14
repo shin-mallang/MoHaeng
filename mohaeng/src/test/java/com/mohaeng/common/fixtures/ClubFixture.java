@@ -1,6 +1,7 @@
 package com.mohaeng.common.fixtures;
 
 import com.mohaeng.club.club.domain.model.Club;
+import com.mohaeng.member.domain.model.Member;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static com.mohaeng.common.fixtures.MemberFixture.MALLANG_WITH_ID;
@@ -19,5 +20,9 @@ public class ClubFixture {
         Club club = new Club(ANA_NAME, ANA_DESCRIPTION, ANA_MAX_PARTICIPANT_COUNT, MALLANG_WITH_ID);
         ReflectionTestUtils.setField(club, "id", id);
         return club;
+    }
+
+    public static Club clubWithMember(final Member member) {
+        return new Club(ANA_NAME, ANA_DESCRIPTION, ANA_MAX_PARTICIPANT_COUNT, member);
     }
 }

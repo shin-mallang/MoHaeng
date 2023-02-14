@@ -7,6 +7,7 @@ import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.participant.domain.model.Participant;
 import com.mohaeng.club.participant.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
+import com.mohaeng.common.fixtures.ParticipantFixture;
 import com.mohaeng.member.domain.model.Member;
 import org.junit.jupiter.api.*;
 
@@ -14,13 +15,12 @@ import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptio
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
 import static com.mohaeng.club.participant.exception.ParticipantExceptionType.ALREADY_EXIST_PARTICIPANT;
+import static com.mohaeng.common.fixtures.ApplicationFormFixture.applicationForm;
 import static com.mohaeng.common.fixtures.ClubFixture.FULL_CLUB;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -29,26 +29,16 @@ import static org.mockito.Mockito.when;
 class ApplicationFormTest {
 
     private final Member applicant = member(10L);
-    private final Participant officer = mock(Participant.class);
-    private final Participant general = mock(Participant.class);
-    private final Participant president = mock(Participant.class);
     private final Club club = club(1L);
-    private ApplicationForm applicationForm;
-    private ApplicationForm applicationForm2;
+    private Participant general;
+    private Participant president;
+    private ApplicationForm applicationForm = applicationForm(club, applicant);
+    private ApplicationForm applicationForm2 = applicationForm(club, applicant);
 
     @BeforeEach
     void init() {
-        given(president.club()).willReturn(club);
-        given(president.isManager()).willReturn(true);
-        given(president.isPresident()).willReturn(true);
-        given(officer.isManager()).willReturn(true);
-        given(officer.isPresident()).willReturn(false);
-        given(officer.club()).willReturn(club);
-        given(general.isManager()).willReturn(false);
-        given(general.isPresident()).willReturn(false);
-        given(general.club()).willReturn(club);
-        applicationForm = ApplicationForm.create(club, applicant);
-        applicationForm2 = ApplicationForm.create(club, applicant);
+        this.general = ParticipantFixture.mockGeneral(club);
+        this.president = ParticipantFixture.mockPresident(club);
     }
 
     @Test
