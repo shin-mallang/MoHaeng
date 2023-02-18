@@ -73,8 +73,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
     class FailTest {
 
         @Test
-        @DisplayName("이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우 400을 반환한다.")
-        void fail_test_1() throws Exception {
+        void 이미_가입_신청을_보냈으며_해당_요청이_처리되지_않았는데_재요청한_경우_400을_반환한다() throws Exception {
             // given
             when(fillOutApplicationFormUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
             final Long memberId = 1L;
@@ -97,8 +96,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("이미 모임에 가입한 사람의 경우 400을 반환한다.")
-        void fail_test_2() throws Exception {
+        void 이미_모임에_가입한_사람의_경우_400을_반환한다() throws Exception {
             // given
             when(fillOutApplicationFormUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
             final Long memberId = 1L;
@@ -121,8 +119,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
         }
 
         @Test
-        @DisplayName("인증되지 않은 사용자의 경우 401을 반환한다.")
-        void fail_test_3() throws Exception {
+        void 인증되지_않은_사용자의_경우_401을_반환한다() throws Exception {
             // given
             final Long clubId = 1L;
             ResultActions resultActions = mockMvc.perform(

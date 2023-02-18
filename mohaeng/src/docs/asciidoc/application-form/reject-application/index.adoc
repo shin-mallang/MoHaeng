@@ -22,11 +22,11 @@ operation::reject-join-club-application fail(no authority)[snippets='http-respon
 
 ==== - 이미 처리된 신청서인 경우
 
-operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
+operation::reject-join-club-application fail(already processed)[snippets='http-response']
 
 ==== - 없는 신청서의 경우
 
-operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
+operation::reject-join-club-application fail(no application form)[snippets='http-response']
 
 ==== - 요청 시 Header에 AccessToken이 없는 경우
 
