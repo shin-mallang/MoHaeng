@@ -41,7 +41,7 @@ public class FillOutApplicationForm implements FillOutApplicationFormUseCase {
     @Override
     public Long command(final Command command) {
         Member member = memberRepository.findById(command.applicantId()).orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER));
-        Club club = clubRepository.findById(command.targetClubId()).orElseThrow(() -> new ClubException(NOT_FOUND_CLUB));
+        Club club = clubRepository.findById(command.clubId()).orElseThrow(() -> new ClubException(NOT_FOUND_CLUB));
 
         // 이미 가입된 회원이거나, 이미 가입 신청을 한 회원이라면 오류
         validate(member, club);

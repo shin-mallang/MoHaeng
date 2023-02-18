@@ -13,7 +13,7 @@ public interface FillOutApplicationFormUseCase {
 
     record Command(
             Long applicantId,
-            Long targetClubId
+            Long clubId
     ) {
     }
 }

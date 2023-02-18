@@ -120,7 +120,6 @@ class FillOutApplicationFormTest {
     void 이미_처리되지_않은_가입_신청서가_있는_경우_신청할_수_없다() {
         // given
         가입_신청을_할_수_있다();
-        //applicationFormRepository.save(ApplicationForm.create(club, applicant));
 
         // when & then
         BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
