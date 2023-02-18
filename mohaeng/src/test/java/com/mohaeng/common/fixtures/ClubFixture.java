@@ -25,4 +25,8 @@ public class ClubFixture {
     public static Club clubWithMember(final Member member) {
         return new Club(ANA_NAME, ANA_DESCRIPTION, ANA_MAX_PARTICIPANT_COUNT, member);
     }
+
+    public static Club fullClubWithMember(final Member member) {
+        return new Club(ANA_NAME, ANA_DESCRIPTION, FULL_PARTICIPANT_COUNT, member);
+    }
 }

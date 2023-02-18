@@ -1,5 +1,6 @@
 package com.mohaeng.club.participant.domain.model;
 
+import com.mohaeng.club.participant.exception.ParticipantException;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.mohaeng.club.participant.exception.ParticipantExceptionType.NOT_PRESIDENT;
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
@@ -26,7 +28,14 @@ public class Participants {
     }
 
     public static Participants initWithPresident(final Participant president) {
+        validatePresident(president);
         return new Participants(president);
+    }
+
+    private static void validatePresident(final Participant president) {
+        if (!president.isPresident()) {
+            throw new ParticipantException(NOT_PRESIDENT);
+        }
     }
 
     public List<Participant> participants() {
@@ -38,8 +47,14 @@ public class Participants {
     }
 
     public Optional<Participant> findByMemberId(final Long id) {
-        return participants.stream()
+        return participants().stream()
                 .filter(it -> it.member().id().equals(id))
                 .findAny();
+    }
+
+    public List<Participant> findAllManager() {
+        return participants().stream()
+                .filter(Participant::isManager)
+                .toList();
     }
 }

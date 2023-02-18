@@ -10,6 +10,9 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import java.util.List;
+import java.util.Optional;
+
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
@@ -30,7 +33,7 @@ public class Club extends BaseEntity {
     @Embedded
     private Participants participants;
 
-    protected Club() {
+    protected Club(final String name, final String description, final int maxParticipantCount) {
     }
 
     public Club(final String name,
@@ -96,5 +99,13 @@ public class Club extends BaseEntity {
         if (participants().findByMemberId(member.id()).isPresent()) {
             throw new ParticipantException(ALREADY_EXIST_PARTICIPANT);
         }
+    }
+
+    public Optional<Participant> findParticipantByMemberId(final Long memberId) {
+        return participants().findByMemberId(memberId);
+    }
+
+    public List<Participant> findAllManager() {
+        return participants().findAllManager();
     }
 }
