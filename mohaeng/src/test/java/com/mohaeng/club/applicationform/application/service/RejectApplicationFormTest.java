@@ -22,6 +22,7 @@ import org.springframework.test.context.event.ApplicationEvents;
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED;
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
+import static com.mohaeng.common.fixtures.ClubFixture.fullClubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
 import static com.mohaeng.common.fixtures.ParticipantFixture.saveOfficer;
@@ -59,13 +60,21 @@ class RejectApplicationFormTest {
 
     private Member applicant;
     private Club club;
+    private Club fullClub;
     private Member presidentMember;
+    private Participant president;
+    private Participant officer;
+    private Participant general;
 
     @BeforeEach
     void init() {
         presidentMember = saveMember(memberRepository, member(null));
         applicant = saveMember(memberRepository, member(null));
         club = saveClub(clubRepository, clubWithMember(presidentMember));
+        fullClub = saveClub(clubRepository, fullClubWithMember(presidentMember));
+        president = club.participants().findByMemberId(presidentMember.id()).get();
+        officer = saveOfficer(memberRepository, club);
+        general = saveGeneral(memberRepository, club);
     }
 
     @Nested
@@ -92,34 +101,25 @@ class RejectApplicationFormTest {
 
         @Test
         void 회장이_가입_신청을_거절한_경우_이벤트는_한개만_발행된다() {
-            // given
-            ApplicationForm applicationForm = saveApplicationForm(applicationFormRepository, ApplicationForm.create(club, applicant));
-
             // when
-            rejectApplicationFormUseCase.command(
-                    new RejectApplicationFormUseCase.Command(applicationForm.id(), presidentMember.id())
-            );
+            가입_신청서_거절_시_처리상태로_만든_후_회원을_모임에_가입시키지_않는다();
 
             // then
-            ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
             assertAll(
                     () -> assertThat(participantRepository.findByMemberIdAndClubId(applicant.id(), club.id())).isEmpty(),
-                    () -> assertThat(findApplicationForm.processed()).isTrue(),
                     () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
                     () -> assertThat(events.stream(OfficerRejectApplicationEvent.class).count()).isEqualTo(0L)
             );
         }
 
         @Test
-        @DisplayName("임원진이 가입 신청을 처리한 경우 이벤트는 두개가 발행한다.")
-        void success_test_3() {
+        void 임원진이_가입_신청을_처리한_경우_이벤트는_두개가_발행한다() {
             // given
             ApplicationForm applicationForm = saveApplicationForm(applicationFormRepository, ApplicationForm.create(club, applicant));
-            Participant participant = saveOfficer(memberRepository, club);
 
             // when
             rejectApplicationFormUseCase.command(
-                    new RejectApplicationFormUseCase.Command(applicationForm.id(), participant.member().id())
+                    new RejectApplicationFormUseCase.Command(applicationForm.id(), officer.member().id())
             );
 
             // then
@@ -140,13 +140,12 @@ class RejectApplicationFormTest {
         @Test
         void 관리자가_아닌_경우_회원의_가입_신청을_거절할_수_없다() {
             // given
-            Participant savedParticipant = saveGeneral(memberRepository, club);
             ApplicationForm applicationForm = saveApplicationForm(applicationFormRepository, ApplicationForm.create(club, applicant));
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
                     rejectApplicationFormUseCase.command(
-                            new RejectApplicationFormUseCase.Command(applicationForm.id(), savedParticipant.member().id())
+                            new RejectApplicationFormUseCase.Command(applicationForm.id(), general.member().id())
                     )
             ).exceptionType();
 
