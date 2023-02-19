@@ -31,7 +31,7 @@ public class Club extends BaseEntity {
     @Embedded
     private Participants participants;
 
-    protected Club(final String name, final String description, final int maxParticipantCount) {
+    protected Club() {
     }
 
     public Club(final String name,

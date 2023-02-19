@@ -52,6 +52,8 @@ class CreateClubTest {
             );
 
             // then
+            em.flush();
+            em.clear();
             Club club = clubRepository.findById(clubId).get();
             assertAll(
                     () -> assertThat(club.name()).isEqualTo(NAME),
