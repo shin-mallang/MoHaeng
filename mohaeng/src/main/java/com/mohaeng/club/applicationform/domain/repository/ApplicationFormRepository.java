@@ -4,6 +4,7 @@ import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.member.domain.model.Member;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ApplicationFormRepository {
@@ -13,4 +14,10 @@ public interface ApplicationFormRepository {
     Optional<ApplicationForm> findById(final Long id);
 
     boolean existsByApplicantAndClubAndProcessedFalse(final Member applicant, final Club club);
+
+    List<ApplicationForm> findAllWithApplicantByClubIdAndProcessedFalse(Long clubId);
+
+    void deleteAllByClubId(Long clubId);
+
+    List<ApplicationForm> findAll();
 }

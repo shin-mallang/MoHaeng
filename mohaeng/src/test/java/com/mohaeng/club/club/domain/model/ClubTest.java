@@ -124,4 +124,17 @@ class ClubTest {
         // then
         assertThat(baseExceptionType).isEqualTo(PRESIDENT_CAN_NOT_LEAVE_CLUB);
     }
+
+    @Test
+    void findAllParticipant_는_모든_참가자를_반환한다() {
+        // given
+        club.registerParticipant(member(10L));
+        club.registerParticipant(member(11L));
+
+        // when
+        List<Participant> allParticipant = club.findAllParticipant();
+
+        // then
+        assertThat(allParticipant.size()).isEqualTo(3);
+    }
 }
