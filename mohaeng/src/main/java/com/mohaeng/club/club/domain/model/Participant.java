@@ -1,11 +1,13 @@
 package com.mohaeng.club.club.domain.model;
 
+import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.*;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT;
 
 @Entity
 @Table(name = "participant")
@@ -56,9 +58,17 @@ public class Participant extends BaseEntity {
      * 회원 추방 기능
      */
     public void expel(final Participant expelTarget) {
-//        validateAutority();
-//        validateSameClub();
+        validateExpelAuthority(expelTarget);
 
         club.deleteParticipant(expelTarget);
+    }
+
+    private void validateExpelAuthority(final Participant expelTarget) {
+        if (!expelTarget.club().equals(this.club())) {
+            throw new ParticipantException(NO_AUTHORITY_EXPEL_PARTICIPANT);
+        }
+        if (!this.isPresident()) {
+            throw new ParticipantException(NO_AUTHORITY_EXPEL_PARTICIPANT);
+        }
     }
 }
