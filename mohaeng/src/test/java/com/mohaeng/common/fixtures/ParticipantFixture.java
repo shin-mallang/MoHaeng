@@ -1,7 +1,7 @@
 package com.mohaeng.common.fixtures;
 
 import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.participant.domain.model.Participant;
+import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.member.domain.repository.MemberRepository;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;

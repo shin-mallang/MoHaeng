@@ -1,7 +1,5 @@
-package com.mohaeng.club.participant.domain.model;
+package com.mohaeng.club.club.domain.model;
 
-import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.*;

@@ -1,11 +1,6 @@
-package com.mohaeng.club.participant.model;
+package com.mohaeng.club.club.domain.model;
 
-import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.ClubRole;
-import com.mohaeng.club.club.domain.model.ClubRoleCategory;
-import com.mohaeng.club.participant.domain.model.Participant;
-import com.mohaeng.club.participant.domain.model.Participants;
-import com.mohaeng.club.participant.exception.ParticipantException;
+import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import org.junit.jupiter.api.*;
 
@@ -14,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
-import static com.mohaeng.club.participant.exception.ParticipantExceptionType.NOT_PRESIDENT;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_PRESIDENT;
 import static com.mohaeng.common.fixtures.ClubFixture.ANA_CLUB;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,5 +82,14 @@ class ParticipantsTest {
         // then
         assertThat(allManager)
                 .containsExactlyInAnyOrder(president, officer);
+    }
+
+    @Test
+    void findPresident_는_회장을_반환한다() {
+        // when
+        Participant president = participants.findPresident();
+
+        // then
+        assertThat(president.clubRole().clubRoleCategory()).isEqualTo(PRESIDENT);
     }
 }

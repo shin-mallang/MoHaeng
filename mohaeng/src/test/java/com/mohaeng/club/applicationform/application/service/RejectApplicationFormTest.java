@@ -7,9 +7,8 @@ import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.club.domain.model.Club;
+import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
-import com.mohaeng.club.participant.domain.model.Participant;
-import com.mohaeng.club.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
@@ -53,9 +52,6 @@ class RejectApplicationFormTest {
     private ClubRepository clubRepository;
 
     @Autowired
-    private ParticipantRepository participantRepository;
-
-    @Autowired
     private ApplicationEvents events;
 
     private Member applicant;
@@ -94,7 +90,7 @@ class RejectApplicationFormTest {
             // then
             ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
             assertAll(
-                    () -> assertThat(participantRepository.findByMemberIdAndClubId(applicant.id(), club.id())).isEmpty(),
+                    () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
                     () -> assertThat(findApplicationForm.processed()).isTrue()
             );
         }
@@ -106,7 +102,7 @@ class RejectApplicationFormTest {
 
             // then
             assertAll(
-                    () -> assertThat(participantRepository.findByMemberIdAndClubId(applicant.id(), club.id())).isEmpty(),
+                    () -> assertThat(club.findParticipantByMemberId(applicant.id())).isEmpty(),
                     () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
                     () -> assertThat(events.stream(OfficerRejectApplicationEvent.class).count()).isEqualTo(0L)
             );
@@ -125,7 +121,7 @@ class RejectApplicationFormTest {
             // then
             ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
             assertAll(
-                    () -> assertThat(participantRepository.findByMemberIdAndClubId(applicant.id(), club.id())).isEmpty(),
+                    () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
                     () -> assertThat(findApplicationForm.processed()).isTrue(),
                     () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
                     () -> assertThat(events.stream(OfficerRejectApplicationEvent.class).count()).isEqualTo(1L)
@@ -154,7 +150,7 @@ class RejectApplicationFormTest {
                     .orElseThrow(IllegalArgumentException::new);
             assertAll(
                     () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION),
-                    () -> assertThat(participantRepository.findByMemberIdAndClubId(applicant.id(), club.id())).isEmpty(),
+                    () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
                     () -> assertThat(findApplicationForm.processed()).isFalse()
             );
         }

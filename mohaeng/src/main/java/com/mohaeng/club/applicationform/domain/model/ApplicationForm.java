@@ -2,7 +2,7 @@ package com.mohaeng.club.applicationform.domain.model;
 
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.participant.domain.model.Participant;
+import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.*;

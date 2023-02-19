@@ -7,10 +7,9 @@ import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.club.domain.model.Club;
+import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.club.club.exception.ClubException;
-import com.mohaeng.club.participant.domain.model.Participant;
-import com.mohaeng.club.participant.domain.repository.ParticipantRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.event.BaseEvent;
 import com.mohaeng.common.exception.BaseExceptionType;
@@ -54,9 +53,6 @@ class ApproveApplicationFormTest {
 
     @Autowired
     private ClubRepository clubRepository;
-
-    @Autowired
-    private ParticipantRepository participantRepository;
 
     @Autowired
     private ApplicationEvents events;
@@ -149,7 +145,7 @@ class ApproveApplicationFormTest {
                 .orElseThrow(IllegalArgumentException::new);
         assertAll(
                 () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION),
-                () -> assertThat(participantRepository.findByMemberIdAndClubId(applicant.id(), club.id())).isEmpty(),
+                () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
                 () -> assertThat(findApplicationForm.processed()).isFalse()
         );
     }

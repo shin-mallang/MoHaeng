@@ -1,9 +1,7 @@
 package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.club.club.exception.ClubException;
-import com.mohaeng.club.participant.domain.model.Participant;
-import com.mohaeng.club.participant.domain.model.Participants;
-import com.mohaeng.club.participant.exception.ParticipantException;
+import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.Embedded;
@@ -16,7 +14,7 @@ import java.util.Optional;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
-import static com.mohaeng.club.participant.exception.ParticipantExceptionType.ALREADY_EXIST_PARTICIPANT;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.ALREADY_EXIST_PARTICIPANT;
 
 @Entity
 @Table(name = "club")
@@ -107,5 +105,9 @@ public class Club extends BaseEntity {
 
     public List<Participant> findAllManager() {
         return participants().findAllManager();
+    }
+
+    public Participant findPresident() {
+        return participants().findPresident();
     }
 }

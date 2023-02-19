@@ -1,6 +1,5 @@
 package com.mohaeng.club.club.domain.model;
 
-import com.mohaeng.club.participant.domain.model.Participant;
 import com.mohaeng.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -70,5 +69,14 @@ class ClubTest {
 
         // then
         assertThat(participantByMemberId).isEmpty();
+    }
+
+    @Test
+    void findPresident_는_회장을_반환한다() {
+        // when
+        Participant president = club.findPresident();
+
+        // then
+        assertThat(president.clubRole().clubRoleCategory()).isEqualTo(PRESIDENT);
     }
 }

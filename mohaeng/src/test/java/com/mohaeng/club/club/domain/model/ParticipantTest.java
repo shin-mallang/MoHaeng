@@ -1,8 +1,5 @@
-package com.mohaeng.club.participant.domain.model;
+package com.mohaeng.club.club.domain.model;
 
-import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.ClubRole;
-import com.mohaeng.club.club.domain.model.ClubRoleCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

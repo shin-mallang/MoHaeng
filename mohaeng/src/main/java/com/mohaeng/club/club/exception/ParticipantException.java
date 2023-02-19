@@ -1,4 +1,4 @@
-package com.mohaeng.club.participant.exception;
+package com.mohaeng.club.club.exception;
 
 import com.mohaeng.common.exception.BaseException;
 import com.mohaeng.common.exception.BaseExceptionType;

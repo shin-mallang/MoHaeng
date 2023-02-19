@@ -1,6 +1,6 @@
-package com.mohaeng.club.participant.domain.model;
+package com.mohaeng.club.club.domain.model;
 
-import com.mohaeng.club.participant.exception.ParticipantException;
+import com.mohaeng.club.club.exception.ParticipantException;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 
@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mohaeng.club.participant.exception.ParticipantExceptionType.NOT_PRESIDENT;
-import static jakarta.persistence.CascadeType.PERSIST;
-import static jakarta.persistence.CascadeType.REMOVE;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PRESIDENT;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_PRESIDENT;
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Embeddable
 public class Participants {
 
-    @OneToMany(mappedBy = "club", fetch = LAZY, cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "club", fetch = LAZY, cascade = ALL, orphanRemoval = true)
     private List<Participant> participants = new ArrayList<>();
 
     protected Participants() {
@@ -56,5 +56,12 @@ public class Participants {
         return participants().stream()
                 .filter(Participant::isManager)
                 .toList();
+    }
+
+    public Participant findPresident() {
+        return participants().stream()
+                .filter(it -> it.clubRole().clubRoleCategory() == ClubRoleCategory.PRESIDENT)
+                .findAny()
+                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
     }
 }
