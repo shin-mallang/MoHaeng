@@ -90,6 +90,8 @@ class ApproveApplicationFormTest {
         );
 
         // then
+        flushAndClear();
+        club = clubRepository.findById(club.id()).orElse(null);
         assertThat(club.findParticipantByMemberId(applicant.id())).isPresent();
         assertThat(applicationFormRepository.findById(applicationForm.id()).orElse(null).processed()).isTrue();
         assertThat(club.currentParticipantCount()).isEqualTo(before + 1);
@@ -185,5 +187,10 @@ class ApproveApplicationFormTest {
 
         // then
         assertThat(baseExceptionType).isEqualTo(CLUB_IS_FULL);
+    }
+
+    private void flushAndClear() {
+        em.flush();
+        em.clear();
     }
 }

@@ -88,6 +88,8 @@ class RejectApplicationFormTest {
             );
 
             // then
+            flushAndClear();
+            club = clubRepository.findById(club.id()).orElse(null);
             ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
             assertAll(
                     () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
@@ -101,6 +103,8 @@ class RejectApplicationFormTest {
             가입_신청서_거절_시_처리상태로_만든_후_회원을_모임에_가입시키지_않는다();
 
             // then
+            flushAndClear();
+            club = clubRepository.findById(club.id()).orElse(null);
             assertAll(
                     () -> assertThat(club.findParticipantByMemberId(applicant.id())).isEmpty(),
                     () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
@@ -119,6 +123,7 @@ class RejectApplicationFormTest {
             );
 
             // then
+
             ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
             assertAll(
                     () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
@@ -174,5 +179,10 @@ class RejectApplicationFormTest {
             // then
             assertThat(baseExceptionType).isEqualTo(ALREADY_PROCESSED);
         }
+    }
+
+    private void flushAndClear() {
+        em.flush();
+        em.clear();
     }
 }

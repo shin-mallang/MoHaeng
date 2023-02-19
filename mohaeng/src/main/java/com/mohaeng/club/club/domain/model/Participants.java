@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PRESIDENT;
-import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_PRESIDENT;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.*;
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -63,5 +62,13 @@ public class Participants {
                 .filter(it -> it.clubRole().clubRoleCategory() == ClubRoleCategory.PRESIDENT)
                 .findAny()
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
+    }
+
+    public void delete(final Participant participant) {
+        if (participant.isPresident()) {
+            throw new ParticipantException(PRESIDENT_CAN_NOT_LEAVE_CLUB);
+        }
+
+        participants().remove(participant);
     }
 }

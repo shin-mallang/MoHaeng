@@ -1,5 +1,7 @@
 package com.mohaeng.club.club.domain.model;
 
+import com.mohaeng.club.club.exception.ParticipantException;
+import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -10,10 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
 import static com.mohaeng.common.fixtures.ClubFixture.*;
 import static com.mohaeng.common.fixtures.MemberFixture.MALLANG;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -78,5 +82,35 @@ class ClubTest {
 
         // then
         assertThat(president.clubRole().clubRoleCategory()).isEqualTo(PRESIDENT);
+    }
+
+    @Test
+    void deleteParticipant_는_회원을_모임에서_제거한다() {
+        // given
+        Member target = member(10L);
+        club.registerParticipant(target);
+        Participant participant = club.findParticipantByMemberId(target.id()).orElse(null);
+        int before = club.currentParticipantCount();
+
+        // when
+        club.deleteParticipant(participant);
+
+        // then
+        assertThat(club.findParticipantByMemberId(target.id())).isEmpty();
+        assertThat(club.currentParticipantCount()).isEqualTo(before - 1);
+    }
+
+    @Test
+    void deleteParticipant_시_회장은_모임을_탈퇴할_수_없다() {
+        // given
+        Participant president = club.findPresident();
+
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                club.deleteParticipant(president)
+        ).exceptionType();
+
+        // then
+        assertThat(baseExceptionType).isEqualTo(PRESIDENT_CAN_NOT_LEAVE_CLUB);
     }
 }

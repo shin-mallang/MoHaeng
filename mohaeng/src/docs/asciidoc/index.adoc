@@ -201,27 +201,19 @@ operation::reject-join-club-application fail(No Access Token)[snippets='http-res
 [[Participant-제거]]
 === - 모임에서 탈퇴
 
-operation::leave-participant-from-club[snippets='http-request,path-parameters,request-headers,http-response']
+operation::leave-club[snippets='http-request,path-parameters,request-headers,http-response']
 
 ==== - 요청 시 Header에 AccessToken이 없는 경우
 
-operation::leave-participant-from-club(No Access Token)[snippets='http-response']
+operation::leave-club(No Access Token)[snippets='http-response']
 
-==== - 없는 참여자 ID인 경우
+==== - 없는 모임 ID인 경우
 
-operation::leave-participant-from-club(Nonexistent Participant ID)[snippets='http-response']
-
-==== - 요청한 회원의 ID가, 탈퇴하려는 참여자의 회원 ID와 일치하지 않는 경우
-
-operation::leave-participant-from-club(requested memberId does not match the participant's MemberId)[snippets='http-response']
+operation::leave-club(Nonexistent Club ID)[snippets='http-response']
 
 ==== - 회장이 탈퇴를 시도한 경우
 
-operation::leave-participant-from-club(president requests to leave the club)[snippets='http-response']
-
-==== - 모임에 사람이 1명밖에 남지 않아 탈퇴할 수 없는 경우 (회장이 항상 먼저 검사되므로 발생하지 않는 상황이다.)
-
-operation::leave-participant-from-club(club has only one participant)[snippets='http-response']
+operation::leave-club(president requests to leave the club)[snippets='http-response']
 
 [[Participant-추방]]
 === - 모임에서 추방
