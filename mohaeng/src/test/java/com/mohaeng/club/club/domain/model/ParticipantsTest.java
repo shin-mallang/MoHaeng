@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_PRESIDENT;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
 import static com.mohaeng.common.fixtures.ClubFixture.ANA_CLUB;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,5 +92,37 @@ class ParticipantsTest {
 
         // then
         assertThat(president.clubRole().clubRoleCategory()).isEqualTo(PRESIDENT);
+    }
+
+    @Test
+    void register_시_회원을_등록한다() {
+        // given
+        Participant participant = new Participant(member(3L), ANA_CLUB, clubRoleMap.get(GENERAL));
+
+        // when
+        participants.register(participant);
+
+        // then
+        assertThat(participants.participants()).contains(participant);
+    }
+
+    @Test
+    void delete_시_참여자를_제거한다() {
+        // when
+        participants.delete(general);
+
+        // then
+        assertThat(participants.participants()).doesNotContain(general);
+    }
+
+    @Test
+    void delete_시_회장은_모임을_탈퇴할_수_없다() {
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                participants.delete(president)
+        ).exceptionType();
+
+        // then
+        assertThat(baseExceptionType).isEqualTo(PRESIDENT_CAN_NOT_LEAVE_CLUB);
     }
 }

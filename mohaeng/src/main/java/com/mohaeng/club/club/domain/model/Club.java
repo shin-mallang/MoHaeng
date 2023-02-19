@@ -46,13 +46,6 @@ public class Club extends BaseEntity {
         participantCountUp();
     }
 
-    private void participantCountUp() {
-        if (currentParticipantCount >= maxParticipantCount) {
-            throw new ClubException(CLUB_IS_FULL);
-        }
-        currentParticipantCount++;
-    }
-
     public String name() {
         return name;
     }
@@ -81,6 +74,18 @@ public class Club extends BaseEntity {
         return clubRoles().findDefaultRoleByCategory(category);
     }
 
+    public Optional<Participant> findParticipantByMemberId(final Long memberId) {
+        return participants().findByMemberId(memberId);
+    }
+
+    public List<Participant> findAllManager() {
+        return participants().findAllManager();
+    }
+
+    public Participant findPresident() {
+        return participants().findPresident();
+    }
+
     /**
      * 회원을 모임에 등록한다.
      */
@@ -99,15 +104,24 @@ public class Club extends BaseEntity {
         }
     }
 
-    public Optional<Participant> findParticipantByMemberId(final Long memberId) {
-        return participants().findByMemberId(memberId);
+    private void participantCountUp() {
+        if (currentParticipantCount >= maxParticipantCount) {
+            throw new ClubException(CLUB_IS_FULL);
+        }
+        currentParticipantCount++;
     }
 
-    public List<Participant> findAllManager() {
-        return participants().findAllManager();
+    /**
+     * 회원을 모임에서 제거한다.
+     * 단, 회장은 모임에서 제거될 수 없다.
+     */
+    public void deleteParticipant(final Participant participant) {
+        participants().delete(participant);
+
+        participantCountDown();
     }
 
-    public Participant findPresident() {
-        return participants().findPresident();
+    private void participantCountDown() {
+        currentParticipantCount--;
     }
 }
