@@ -1,7 +1,9 @@
 package com.mohaeng.club.club.domain.model;
 
+import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.domain.BaseEntity;
+import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.*;
 
@@ -59,8 +61,8 @@ public class Participant extends BaseEntity {
      */
     public void expel(final Participant expelTarget) {
         validateExpelAuthority(expelTarget);
-
         club.deleteParticipant(expelTarget);
+        Events.raise(new ExpelParticipantEvent(this, expelTarget.member.id(), club().id()));
     }
 
     private void validateExpelAuthority(final Participant expelTarget) {
