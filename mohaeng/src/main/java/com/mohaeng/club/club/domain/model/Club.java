@@ -78,6 +78,13 @@ public class Club extends BaseEntity {
         return participants().findByMemberId(memberId);
     }
 
+    /**
+     * ParticipantId로 해당하는 참여자 찾기
+     */
+    public Optional<Participant> findParticipantById(final Long id) {
+        return participants().findById(id);
+    }
+
     public List<Participant> findAllManager() {
         return participants().findAllManager();
     }

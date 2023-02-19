@@ -16,8 +16,8 @@ import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptio
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.ALREADY_EXIST_PARTICIPANT;
 import static com.mohaeng.common.fixtures.ApplicationFormFixture.applicationForm;
-import static com.mohaeng.common.fixtures.ClubFixture.FULL_CLUB;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
+import static com.mohaeng.common.fixtures.ClubFixture.fullClubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 @DisplayName("ApplicationForm 은")
 class ApplicationFormTest {
 
-    private final Member applicant = member(10L);
+    private final Member applicant = member(10000L);
     private final Club club = club(1L);
     private Participant general;
     private Participant president;
@@ -77,8 +77,10 @@ class ApplicationFormTest {
     @Test
     void 수락_시_모임이_가득_찬_경우_예외가_발생한다() {
         // given
-        ApplicationForm applicationForm = ApplicationForm.create(FULL_CLUB, applicant);
-        when(president.club()).thenReturn(FULL_CLUB);
+        Member member = member(10L);
+        Club full = fullClubWithMember(member);
+        ApplicationForm applicationForm = applicationForm(full, applicant);
+        when(president.club()).thenReturn(full);
 
         // when
         BaseExceptionType baseExceptionType =
@@ -94,7 +96,7 @@ class ApplicationFormTest {
     @DisplayName("수락 혹은 거절시 처리자가 권한이 없는 경우(회장 / 임원이 아닌 경우) 가입 신청은 처리되지 않은 상태로 유지된다")
     void 수락_혹은_거절시_처리자가_권한이_없는_경우_가입_신청은_처리되지_않은_상태로_유지된다() {
         // given
-        ApplicationForm applicationForm = ApplicationForm.create(FULL_CLUB, applicant);
+        ApplicationForm applicationForm = ApplicationForm.create(club, applicant);
 
         // when
         BaseExceptionType baseExceptionType =
