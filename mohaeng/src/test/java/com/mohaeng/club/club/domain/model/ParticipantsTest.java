@@ -95,6 +95,13 @@ class ParticipantsTest {
     }
 
     @Test
+    void findById_는_참여자의_id_를_통해_참여자를_찾는다() {
+        // when & then
+        assertThat(participants.findById(officer.id()).get()).isEqualTo(officer);
+        assertThat(participants.findById(1000L)).isEmpty();
+    }
+
+    @Test
     void register_시_회원을_등록한다() {
         // given
         Participant participant = new Participant(member(3L), club, clubRoleMap.get(GENERAL));

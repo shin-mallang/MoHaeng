@@ -71,4 +71,10 @@ public class Participants {
 
         participants().remove(participant);
     }
+
+    public Optional<Participant> findById(final Long id) {
+        return participants().stream()
+                .filter(it -> it.id().equals(id))
+                .findAny();
+    }
 }

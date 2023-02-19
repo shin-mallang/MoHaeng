@@ -85,6 +85,19 @@ class ClubTest {
     }
 
     @Test
+    void findParticipantById_는_참여자_ID_를_통해_참여자를_찾는다() {
+        // given
+        Long memberId1 = 2L;
+        Member member1 = member(memberId1);
+        club.registerParticipant(member1);
+        Participant participant = club.findParticipantByMemberId(memberId1).get();
+
+        // when & then
+        assertThat(club.findParticipantById(participant.id()).get()).isEqualTo(participant);
+        assertThat(club.findParticipantById(9999L)).isEmpty();
+    }
+
+    @Test
     void deleteParticipant_는_회원을_모임에서_제거한다() {
         // given
         Member target = member(10L);
