@@ -49,7 +49,7 @@ class SignUpTest {
         @DisplayName("중복되는 아이디가 있다면 오류를 반환한다.")
         void fail_test_1() {
             // given
-            Member mallang = MALLANG;
+            Member mallang = member(null);
             memberRepository.save(mallang);
 
             // when, then

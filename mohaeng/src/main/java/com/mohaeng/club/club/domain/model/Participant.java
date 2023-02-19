@@ -51,4 +51,14 @@ public class Participant extends BaseEntity {
     public boolean isPresident() {
         return this.clubRole().clubRoleCategory() == PRESIDENT;
     }
+
+    /**
+     * 회원 추방 기능
+     */
+    public void expel(final Participant expelTarget) {
+//        validateAutority();
+//        validateSameClub();
+
+        club.deleteParticipant(expelTarget);
+    }
 }

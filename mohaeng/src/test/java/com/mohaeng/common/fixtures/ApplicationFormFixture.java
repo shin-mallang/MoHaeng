@@ -9,14 +9,11 @@ import static com.mohaeng.common.fixtures.MemberFixture.member;
 
 public class ApplicationFormFixture {
 
-    private static final Member applicant = member(1L);
-    private static final Club club = club(1L);
-
     public static ApplicationForm applicationForm(final Club club, final Member member) {
         return ApplicationForm.create(club, member);
     }
 
     public static ApplicationForm applicationForm() {
-        return ApplicationForm.create(club, applicant);
+        return ApplicationForm.create(club(1L), member(1L));
     }
 }

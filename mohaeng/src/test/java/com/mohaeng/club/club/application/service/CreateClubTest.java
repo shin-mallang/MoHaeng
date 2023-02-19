@@ -10,7 +10,7 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.mohaeng.common.fixtures.MemberFixture.MALLANG;
+import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -23,7 +23,6 @@ class CreateClubTest {
     private static final String NAME = "ANA";
     private static final String DESCRIPTION = "알고리즘 동아리";
     private static final int MAX_PARTICIPANT_COUNT = 10;
-    private final Member member = MALLANG;
 
     @Autowired
     private EntityManager em;
@@ -44,7 +43,7 @@ class CreateClubTest {
         @Test
         void 모임_생성_시_모임의_기본_역할과_회장을_같이_생성한다() {
             // given
-            Member member = memberRepository.save(MALLANG);
+            Member member = memberRepository.save(member(1L));
 
             // when
             Long clubId = clubUseCase.command(

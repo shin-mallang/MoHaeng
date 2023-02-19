@@ -15,8 +15,6 @@ public class MemberFixture {
     public static final String MALLANG_NAME = "mallang";
     public static final int MALLANG_AGE = 24;
     public static final Gender MALLANG_GENDER = Gender.MAN;
-    public static final Member MALLANG = new Member(MALLANG_USERNAME, MALLANG_PASSWORD, MALLANG_NAME, MALLANG_AGE, MALLANG_GENDER);
-    public static final Member MALLANG_WITH_ID = member(1L);
 
     private static final String USERNAME_FORMAT = "username%d";
     private static long sequence = 0L;

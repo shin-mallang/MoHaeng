@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_PRESIDENT;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
-import static com.mohaeng.common.fixtures.ClubFixture.ANA_CLUB;
+import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayName("Participants 은")
 class ParticipantsTest {
 
-    private final Club club = ANA_CLUB;
+    private final Club club = club(1L);
     private final Map<ClubRoleCategory, ClubRole> clubRoleMap =
             ClubRole.defaultRoles(club).stream()
                     .collect(Collectors.toMap(ClubRole::clubRoleCategory, it -> it));
@@ -33,9 +33,9 @@ class ParticipantsTest {
 
     @BeforeEach
     void init() {
-        president = new Participant(member(1L), ANA_CLUB, clubRoleMap.get(PRESIDENT));
-        officer = new Participant(member(2L), ANA_CLUB, clubRoleMap.get(OFFICER));
-        general = new Participant(member(3L), ANA_CLUB, clubRoleMap.get(GENERAL));
+        president = new Participant(member(1L), club, clubRoleMap.get(PRESIDENT));
+        officer = new Participant(member(2L), club, clubRoleMap.get(OFFICER));
+        general = new Participant(member(3L), club, clubRoleMap.get(GENERAL));
         participants = Participants.initWithPresident(president);
         participants.register(officer);
         participants.register(general);
@@ -97,7 +97,7 @@ class ParticipantsTest {
     @Test
     void register_시_회원을_등록한다() {
         // given
-        Participant participant = new Participant(member(3L), ANA_CLUB, clubRoleMap.get(GENERAL));
+        Participant participant = new Participant(member(3L), club, clubRoleMap.get(GENERAL));
 
         // when
         participants.register(participant);

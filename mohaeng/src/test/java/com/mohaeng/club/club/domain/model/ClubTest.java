@@ -13,8 +13,7 @@ import java.util.Optional;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
-import static com.mohaeng.common.fixtures.ClubFixture.*;
-import static com.mohaeng.common.fixtures.MemberFixture.MALLANG;
+import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayName("Club 은")
 class ClubTest {
 
-    private final Club club = new Club(ANA_NAME, ANA_DESCRIPTION, ANA_MAX_PARTICIPANT_COUNT, MALLANG);
+    private final Member presidentMember = member(1L);
+    private final Club club = clubWithMember(presidentMember);
 
     @Test
     void 생성_시_모임의_기본_역할과_회장을_같이_저장한다() {
@@ -45,9 +45,9 @@ class ClubTest {
     @Test
     void memberId_를_통해_참여자를_찾을_수_있다() {
         // given
-        Long memberId1 = 1L;
-        Long memberId2 = 2L;
-        Long memberId3 = 3L;
+        Long memberId1 = 2L;
+        Long memberId2 = 3L;
+        Long memberId3 = 4L;
         Member member1 = member(memberId1);
         Member member2 = member(memberId2);
         Member member3 = member(memberId3);
@@ -69,7 +69,7 @@ class ClubTest {
     @Test
     void memberId_를_가진_참여자가_없는_경우() {
         // when
-        Optional<Participant> participantByMemberId = club.findParticipantByMemberId(1L);
+        Optional<Participant> participantByMemberId = club.findParticipantByMemberId(100L);
 
         // then
         assertThat(participantByMemberId).isEmpty();
