@@ -22,11 +22,11 @@ operation::approve-join-club-application fail(no authority)[snippets='http-respo
 
 ==== - 이미 처리된 신청서인 경우
 
-operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
+operation::approve-join-club-application fail(already processed)[snippets='http-response']
 
 ==== - 없는 신청서의 경우
 
-operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
+operation::approve-join-club-application fail(no application form)[snippets='http-response']
 
 ==== - 모임이 가득 찬 경우
 

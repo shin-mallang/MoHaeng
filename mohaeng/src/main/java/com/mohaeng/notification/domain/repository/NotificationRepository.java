@@ -14,4 +14,8 @@ public interface NotificationRepository {
     Optional<Notification> findById(final Long id);
 
     List<Notification> findAll();
+
+    List<Notification> findApplicationProcessedNotificationByApplicationFormId(final Long applicationFormId);
+
+    void deleteAllInBatch(final List<Notification> notifications);
 }
