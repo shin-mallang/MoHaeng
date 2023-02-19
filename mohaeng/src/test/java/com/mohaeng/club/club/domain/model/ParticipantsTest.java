@@ -3,6 +3,7 @@ package com.mohaeng.club.club.domain.model;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import org.junit.jupiter.api.*;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -26,16 +27,18 @@ class ParticipantsTest {
             ClubRole.defaultRoles(club).stream()
                     .collect(Collectors.toMap(ClubRole::clubRoleCategory, it -> it));
 
-    private Participant president;
+    private Participant president = club.findPresident();
     private Participant officer;
     private Participant general;
     private Participants participants;
 
     @BeforeEach
     void init() {
-        president = new Participant(member(1L), club, clubRoleMap.get(PRESIDENT));
         officer = new Participant(member(2L), club, clubRoleMap.get(OFFICER));
         general = new Participant(member(3L), club, clubRoleMap.get(GENERAL));
+        ReflectionTestUtils.setField(president, "id", 1L);
+        ReflectionTestUtils.setField(officer, "id", 2L);
+        ReflectionTestUtils.setField(general, "id", 3L);
         participants = Participants.initWithPresident(president);
         participants.register(officer);
         participants.register(general);

@@ -3,10 +3,8 @@ package com.mohaeng.club.club.domain.model;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +23,12 @@ class ClubTest {
 
     private final Member presidentMember = member(1L);
     private final Club club = clubWithMember(presidentMember);
+    private final Participant president = club.findPresident();
+
+    @BeforeEach
+    void init() {
+        ReflectionTestUtils.setField(president, "id", 1L);
+    }
 
     @Test
     void 생성_시_모임의_기본_역할과_회장을_같이_저장한다() {
@@ -86,14 +90,8 @@ class ClubTest {
 
     @Test
     void findParticipantById_는_참여자_ID_를_통해_참여자를_찾는다() {
-        // given
-        Long memberId1 = 2L;
-        Member member1 = member(memberId1);
-        club.registerParticipant(member1);
-        Participant participant = club.findParticipantByMemberId(memberId1).get();
-
         // when & then
-        assertThat(club.findParticipantById(participant.id()).get()).isEqualTo(participant);
+        assertThat(club.findParticipantById(1L).get()).isEqualTo(president);
         assertThat(club.findParticipantById(9999L)).isEmpty();
     }
 
