@@ -131,4 +131,8 @@ public class Club extends BaseEntity {
     private void participantCountDown() {
         currentParticipantCount--;
     }
+
+    public List<Participant> findAllParticipant() {
+        return participants().participants();
+    }
 }
