@@ -497,5 +497,27 @@ class ClubTest {
             assertThat(club.clubRoles().findById(officerRoleId).get().name()).isEqualTo(변경이름2);
             assertThat(club.clubRoles().findById(generalRoleId).get().name()).isEqualTo(변경이름3);
         }
+
+        @Test
+        void 회원을_찾을_수_없는_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                    club.changeRoleName(100000L, presidentRoleId, "변경이름")
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT);
+        }
+
+        @Test
+        void 바꿀_역할을_찾을_수_없는_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    club.changeRoleName(presidentMemberId, 10000L, "변경이름")
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
+        }
     }
 }

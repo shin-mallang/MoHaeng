@@ -208,5 +208,17 @@ class ClubRolesTest {
             assertThat(officerRole.name()).isEqualTo(name2);
             assertThat(presidentRole.name()).isEqualTo(name3);
         }
+
+        @Test
+        void 바꿀_역할을_찾을_수_없는_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    clubRoles.changeRoleName(PRESIDENT, 1000000L, "임시이름")
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType)
+                    .isEqualTo(NOT_FOUND_ROLE);
+        }
     }
 }
