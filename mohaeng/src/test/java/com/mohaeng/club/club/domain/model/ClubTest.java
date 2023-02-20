@@ -1,5 +1,6 @@
 package com.mohaeng.club.club.domain.model;
 
+import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
+import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.*;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
@@ -105,6 +107,21 @@ class ClubTest {
     }
 
     @Test
+    void findRoleById는_Role의_ID를_통해_해당_역할을_조회한다() {
+        // given
+        ClubRoles clubRoles = club.clubRoles();
+        for (int i = 1; i <= clubRoles.clubRoles().size(); i++) {
+            ReflectionTestUtils.setField(clubRoles.clubRoles().get(i - 1), "id", (long) i);
+        }
+
+        // when & then
+        assertThat(club.findRoleById(1L)).isPresent();
+        assertThat(club.findRoleById(2L)).isPresent();
+        assertThat(club.findRoleById(3L)).isPresent();
+        assertThat(club.findRoleById(4L)).isEmpty();
+    }
+
+    @Test
     void deleteParticipant_는_회원을_모임에서_제거한다() {
         // given
         Member target = member(10L);
@@ -143,68 +160,160 @@ class ClubTest {
         assertThat(allParticipant.size()).isEqualTo(club.participants().participants().size());
     }
 
-    @Test
-    void expel_시_대상_참여자를_모임에서_추방한다() {
-        // given
-        int before = club.currentParticipantCount();
+    @Nested
+    @DisplayName("추방(expel)")
+    class ExpelTest {
 
-        // when
-        club.expel(president.member().id(), officer.id());
-        club.expel(president.member().id(), general.id());
+        @Test
+        void expel_시_대상_참여자를_모임에서_추방한다() {
+            // given
+            int before = club.currentParticipantCount();
 
-        // then
-        assertThat(club.currentParticipantCount()).isEqualTo(before - 2);
-        assertThat(club.findParticipantByMemberId(officer.member().id())).isEmpty();
-        assertThat(club.findParticipantByMemberId(general.member().id())).isEmpty();
+            // when
+            club.expel(president.member().id(), officer.id());
+            club.expel(president.member().id(), general.id());
+
+            // then
+            assertThat(club.currentParticipantCount()).isEqualTo(before - 2);
+            assertThat(club.findParticipantByMemberId(officer.member().id())).isEmpty();
+            assertThat(club.findParticipantByMemberId(general.member().id())).isEmpty();
+        }
+
+        @Test
+        void expel_시_회장이_아닌_경우_추방할_수_없다() {
+            // given
+            int before = club.currentParticipantCount();
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                    club.expel(officer.member().id(), general.id())
+            ).exceptionType();
+
+            // then
+            assertThat(club.currentParticipantCount()).isEqualTo(before);
+            assertThat(club.findParticipantByMemberId(general.member().id())).isPresent();
+            assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT);
+        }
+
+        @Test
+        void expel_시_대상_참여자와_같은_모임이_아닌_경우_추방할_수_없다() {
+            // given
+            Long presidentId = 11L;
+            Long generalId = 12L;
+            Club other = clubWithMember(member(presidentId));
+            Participant otherPresident = other.findPresident();
+            ReflectionTestUtils.setField(otherPresident, "id", 10L);
+            other.participants().participants().add(participantWithId(13L, member(generalId), other, other.clubRoles().findDefaultRoleByCategory(GENERAL)));
+            Participant otherGeneral = other.findParticipantByMemberId(generalId).get();
+
+            // when
+            BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
+                    club.expel(president.member().id(), otherPresident.id())
+            ).exceptionType();
+
+            BaseExceptionType baseExceptionType2 = assertThrows(ParticipantException.class, () ->
+                    club.expel(president.member().id(), otherGeneral.id())
+            ).exceptionType();
+            BaseExceptionType baseExceptionType3 = assertThrows(ParticipantException.class, () ->
+                    club.expel(otherPresident.member().id(), president.id())
+            ).exceptionType();
+
+            BaseExceptionType baseExceptionType4 = assertThrows(ParticipantException.class, () ->
+                    club.expel(otherPresident.member().id(), general.id())
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType1).isEqualTo(NOT_FOUND_PARTICIPANT);
+            assertThat(baseExceptionType2).isEqualTo(NOT_FOUND_PARTICIPANT);
+            assertThat(baseExceptionType3).isEqualTo(NOT_FOUND_PARTICIPANT);
+            assertThat(baseExceptionType4).isEqualTo(NOT_FOUND_PARTICIPANT);
+        }
     }
 
-    @Test
-    void expel_시_회장이_아닌_경우_추방할_수_없다() {
-        // given
-        int before = club.currentParticipantCount();
+    @Nested
+    @DisplayName("역할 변경(changeParticipantRole)")
+    class ChangeParticipantRoleTest {
 
-        // when
-        BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
-                club.expel(officer.member().id(), general.id())
-        ).exceptionType();
+        private final Long presidentRoleId = 1L;
+        private final Long officerRoleId = 2L;
+        private final Long generalRoleId = 3L;
 
-        // then
-        assertThat(club.currentParticipantCount()).isEqualTo(before);
-        assertThat(club.findParticipantByMemberId(general.member().id())).isPresent();
-        assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT);
-    }
+        @BeforeEach
+        void init() {
+            ReflectionTestUtils.setField(club.findDefaultRoleByCategory(PRESIDENT), "id", presidentRoleId);
+            ReflectionTestUtils.setField(club.findDefaultRoleByCategory(OFFICER), "id", officerRoleId);
+            ReflectionTestUtils.setField(club.findDefaultRoleByCategory(GENERAL), "id", generalRoleId);
+        }
 
-    @Test
-    void expel_시_대상_참여자와_같은_모임이_아닌_경우_추방할_수_없다() {
-        // given
-        Long presidentId = 11L;
-        Long generalId = 12L;
-        Club other = clubWithMember(member(presidentId));
-        Participant otherPresident = other.findPresident();
-        ReflectionTestUtils.setField(otherPresident, "id", 10L);
-        other.participants().participants().add(participantWithId(13L, member(generalId), other, other.clubRoles().findDefaultRoleByCategory(GENERAL)));
-        Participant otherGeneral = other.findParticipantByMemberId(generalId).get();
+        @Test
+        void changeParticipantRole_시_대상의_역할을_변경한다() {
+            // given
+            assertThat(club.findParticipantById(officerId).get().isManager()).isTrue();
+            assertThat(club.findParticipantById(generalId).get().isManager()).isFalse();
 
-        // when
-        BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
-                club.expel(president.member().id(), otherPresident.id())
-        ).exceptionType();
+            // when
+            club.changeParticipantRole(presidentMemberId, officerId, generalRoleId);
+            club.changeParticipantRole(presidentMemberId, generalId, officerRoleId);
 
-        BaseExceptionType baseExceptionType2 = assertThrows(ParticipantException.class, () ->
-                club.expel(president.member().id(), otherGeneral.id())
-        ).exceptionType();
-        BaseExceptionType baseExceptionType3 = assertThrows(ParticipantException.class, () ->
-                club.expel(otherPresident.member().id(), president.id())
-        ).exceptionType();
+            // then
+            assertThat(club.findParticipantById(officerId).get().isManager()).isFalse();
+            assertThat(club.findParticipantById(generalId).get().isManager()).isTrue();
+        }
 
-        BaseExceptionType baseExceptionType4 = assertThrows(ParticipantException.class, () ->
-                club.expel(otherPresident.member().id(), general.id())
-        ).exceptionType();
+        @Test
+        void changeParticipantRole_시_회장이_아닌_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
+                    club.changeParticipantRole(officerMemberId, generalId, officerRoleId)
+            ).exceptionType();
+            BaseExceptionType baseExceptionType2 = assertThrows(ParticipantException.class, () ->
+                    club.changeParticipantRole(generalMemberId, officerId, generalRoleId)
+            ).exceptionType();
 
-        // then
-        assertThat(baseExceptionType1).isEqualTo(NOT_FOUND_PARTICIPANT);
-        assertThat(baseExceptionType2).isEqualTo(NOT_FOUND_PARTICIPANT);
-        assertThat(baseExceptionType3).isEqualTo(NOT_FOUND_PARTICIPANT);
-        assertThat(baseExceptionType4).isEqualTo(NOT_FOUND_PARTICIPANT);
+            // then
+            assertThat(club.findParticipantById(officerId).get().isManager()).isTrue();
+            assertThat(club.findParticipantById(generalId).get().isManager()).isFalse();
+            assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE);
+            assertThat(baseExceptionType2).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE);
+        }
+
+        @Test
+        void changeParticipantRole_시_회장으로_변경하려는_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                    club.changeParticipantRole(presidentMemberId, generalId, presidentRoleId)
+            ).exceptionType();
+
+            // then
+            assertThat(club.findParticipantById(officerId).get().isPresident()).isFalse();
+            assertThat(baseExceptionType).isEqualTo(NOT_CHANGE_PRESIDENT_ROLE);
+        }
+
+        @Test
+        void changeParticipantRole_시_존재하지_않는_참가자인_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
+                    club.changeParticipantRole(presidentMemberId + 100L, generalId, officerRoleId)
+            ).exceptionType();
+            BaseExceptionType baseExceptionType2 = assertThrows(ParticipantException.class, () ->
+                    club.changeParticipantRole(presidentMemberId, generalId + 100L, officerRoleId)
+            ).exceptionType();
+
+            // then
+            assertThat(club.findParticipantById(generalId).get().isManager()).isFalse();
+            assertThat(baseExceptionType1).isEqualTo(NOT_FOUND_PARTICIPANT);
+            assertThat(baseExceptionType2).isEqualTo(NOT_FOUND_PARTICIPANT);
+        }
+
+        @Test
+        void changeParticipantRole_시_역할이_없는_경우_혹은_다른_모임의_역할인_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    club.changeParticipantRole(presidentMemberId, generalId, officerRoleId + 100L)
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
+        }
     }
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
@@ -28,14 +29,20 @@ public class ClubRoles {
         return new ClubRoles(ClubRole.defaultRoles(club));
     }
 
-    public List<ClubRole> clubRoles() {
-        return clubRoles;
-    }
-
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
-        return clubRoles.stream().filter(ClubRole::isDefault)
+        return clubRoles().stream().filter(ClubRole::isDefault)
                 .filter(it -> it.clubRoleCategory() == category)
                 .findAny()
                 .orElseThrow(() -> new ClubRoleException(ClubRoleExceptionType.NOT_FOUND_DEFAULT_ROLE));
+    }
+
+    public Optional<ClubRole> findById(final Long id) {
+        return clubRoles().stream()
+                .filter(it -> id.equals(it.id()))
+                .findAny();
+    }
+
+    public List<ClubRole> clubRoles() {
+        return clubRoles;
     }
 }

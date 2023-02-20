@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
@@ -38,5 +39,20 @@ class ClubRolesTest {
         assertThat(clubRoles.findDefaultRoleByCategory(PRESIDENT).clubRoleCategory()).isEqualTo(PRESIDENT);
         assertThat(clubRoles.findDefaultRoleByCategory(OFFICER).clubRoleCategory()).isEqualTo(OFFICER);
         assertThat(clubRoles.findDefaultRoleByCategory(GENERAL).clubRoleCategory()).isEqualTo(GENERAL);
+    }
+
+    @Test
+    void findById_는_id를_통해_역할을_조회한다() {
+        // given
+        ClubRoles clubRoles = ClubRoles.defaultRoles(club);
+        for (int i = 1; i <= clubRoles.clubRoles().size(); i++) {
+            ReflectionTestUtils.setField(clubRoles.clubRoles().get(i - 1), "id", (long) i);
+        }
+
+        // when
+        assertThat(clubRoles.findById(1L)).isPresent();
+        assertThat(clubRoles.findById(2L)).isPresent();
+        assertThat(clubRoles.findById(3L)).isPresent();
+        assertThat(clubRoles.findById(4L)).isEmpty();
     }
 }

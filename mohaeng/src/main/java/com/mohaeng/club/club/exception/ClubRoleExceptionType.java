@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 public enum ClubRoleExceptionType implements BaseExceptionType {
 
     NOT_FOUND_DEFAULT_ROLE(400, HttpStatus.INTERNAL_SERVER_ERROR, "기본 역할을 찾을 수 없습니다. (발생하면 안됨)"),
+    NOT_FOUND_ROLE(401, HttpStatus.NOT_FOUND, "역할을 찾을 수 없습니다."),
     ;
 
     private final int errorCode;

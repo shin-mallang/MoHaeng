@@ -10,6 +10,7 @@ import static com.mohaeng.club.club.domain.model.ClubRoleCategory.OFFICER;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -46,5 +47,15 @@ class ParticipantTest {
         assertThat(president.isPresident()).isTrue();
         assertThat(officer.isPresident()).isFalse();
         assertThat(general.isPresident()).isFalse();
+    }
+
+    @Test
+    void changeRole_시_역할이_변경된다() {
+        // when
+        ClubRole mock = mock(ClubRole.class);
+        officer.changeRole(mock);
+
+        // then
+        assertThat(officer.clubRole()).isEqualTo(mock);
     }
 }

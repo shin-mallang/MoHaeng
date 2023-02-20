@@ -32,6 +32,10 @@ public class Participant extends BaseEntity {
         this.clubRole = clubRole;
     }
 
+    public void changeRole(final ClubRole role) {
+        this.clubRole = role;
+    }
+
     public Member member() {
         return member;
     }
