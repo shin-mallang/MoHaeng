@@ -4,6 +4,7 @@ import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
 import com.mohaeng.club.club.domain.event.ParticipantClubRoleChangedEvent;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
+import com.mohaeng.club.club.exception.ClubRoleExceptionType;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.common.event.Events;
@@ -98,8 +99,8 @@ public class Club extends BaseEntity {
      * 회원 추방 기능
      */
     public void expel(final Long requesterMemberId, final Long targetParticipantId) {
-        Participant requester = findParticipantByMemberId(requesterMemberId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
-        Participant target = findParticipantById(targetParticipantId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        Participant requester = findParticipantByMemberId(requesterMemberId);
+        Participant target = findParticipantById(targetParticipantId);
         validateExpelAuthority(requester);
         deleteParticipant(target);
         Events.raise(new ExpelParticipantEvent(this, target.member().id(), id()));
@@ -117,11 +118,11 @@ public class Club extends BaseEntity {
     public void changeParticipantRole(final Long requesterMemberId,
                                       final Long targetParticipantId,
                                       final Long clubRoleId) {
-        ClubRole clubRole = findRoleById(clubRoleId).orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
+        ClubRole clubRole = findRoleById(clubRoleId);
         validateChangedRoleIsPresident(clubRole);
-        Participant requester = findParticipantByMemberId(requesterMemberId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        Participant requester = findParticipantByMemberId(requesterMemberId);
         validateChangeRoleAuthority(requester);
-        Participant target = findParticipantById(targetParticipantId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        Participant target = findParticipantById(targetParticipantId);
         target.changeRole(clubRole);
 
         Events.raise(new ParticipantClubRoleChangedEvent(this,
@@ -146,15 +147,25 @@ public class Club extends BaseEntity {
         return clubRoles().findDefaultRoleByCategory(category);
     }
 
-    public Optional<Participant> findParticipantByMemberId(final Long memberId) {
-        return participants().findByMemberId(memberId);
+    public ClubRole findRoleById(final Long clubRoleId) {
+        return clubRoles.findById(clubRoleId).orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
+    }
+
+    public Participant findParticipantByMemberId(final Long memberId) {
+        return participants().findByMemberId(memberId)
+                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+    }
+
+    public boolean existParticipantByMemberId(final Long memberId) {
+        return participants().findByMemberId(memberId).isPresent();
     }
 
     /**
      * ParticipantId로 해당하는 참여자 찾기
      */
-    public Optional<Participant> findParticipantById(final Long id) {
-        return participants().findById(id);
+    public Participant findParticipantById(final Long id) {
+        return participants().findById(id)
+                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
     }
 
     public List<Participant> findAllManager() {
@@ -163,10 +174,6 @@ public class Club extends BaseEntity {
 
     public Participant findPresident() {
         return participants().findPresident();
-    }
-
-    public Optional<ClubRole> findRoleById(final Long clubRoleId) {
-        return clubRoles.findById(clubRoleId);
     }
 
     public String name() {

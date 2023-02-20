@@ -90,7 +90,7 @@ class ChangeParticipantRoleTest {
         flushAndClear();
 
         // then
-        assertThat(club.findParticipantById(officer.id()).get().clubRole().id())
+        assertThat(club.findParticipantById(officer.id()).clubRole().id())
                 .isEqualTo(changed.id());
     }
 
@@ -123,7 +123,7 @@ class ChangeParticipantRoleTest {
         // then
         assertAll(
                 () -> assertThat(events.stream(ParticipantClubRoleChangedEvent.class).count()).isEqualTo(0),
-                () -> assertThat(club.findParticipantById(general.id()).get().clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
+                () -> assertThat(club.findParticipantById(general.id()).clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
                 () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE)
         );
     }
@@ -148,7 +148,7 @@ class ChangeParticipantRoleTest {
         // then
         assertAll(
                 () -> assertThat(events.stream(ParticipantClubRoleChangedEvent.class).count()).isEqualTo(0),
-                () -> assertThat(club.findParticipantById(general.id()).get().clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
+                () -> assertThat(club.findParticipantById(general.id()).clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
                 () -> assertThat(baseExceptionType).isEqualTo(NOT_CHANGE_PRESIDENT_ROLE)
         );
     }
@@ -173,7 +173,7 @@ class ChangeParticipantRoleTest {
         // then
         assertAll(
                 () -> assertThat(events.stream(ParticipantClubRoleChangedEvent.class).count()).isEqualTo(0),
-                () -> assertThat(club.findParticipantById(general.id()).get().clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
+                () -> assertThat(club.findParticipantById(general.id()).clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
                 () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT)
         );
     }
@@ -195,7 +195,7 @@ class ChangeParticipantRoleTest {
         // then
         assertAll(
                 () -> assertThat(events.stream(ParticipantClubRoleChangedEvent.class).count()).isEqualTo(0),
-                () -> assertThat(club.findParticipantById(general.id()).get().clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
+                () -> assertThat(club.findParticipantById(general.id()).clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
                 () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE)
         );
     }

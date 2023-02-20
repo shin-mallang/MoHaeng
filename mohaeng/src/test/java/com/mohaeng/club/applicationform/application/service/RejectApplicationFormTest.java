@@ -92,7 +92,7 @@ class RejectApplicationFormTest {
             club = clubRepository.findById(club.id()).orElse(null);
             ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
             assertAll(
-                    () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
+                    () -> assertThat(applicationForm.club().existParticipantByMemberId(applicant.id())).isFalse(),
                     () -> assertThat(findApplicationForm.processed()).isTrue()
             );
         }
@@ -106,7 +106,7 @@ class RejectApplicationFormTest {
             flushAndClear();
             club = clubRepository.findById(club.id()).orElse(null);
             assertAll(
-                    () -> assertThat(club.findParticipantByMemberId(applicant.id())).isEmpty(),
+                    () -> assertThat(club.existParticipantByMemberId(applicant.id())).isFalse(),
                     () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
                     () -> assertThat(events.stream(OfficerRejectApplicationEvent.class).count()).isEqualTo(0L)
             );
@@ -126,7 +126,7 @@ class RejectApplicationFormTest {
 
             ApplicationForm findApplicationForm = applicationFormRepository.findById(applicationForm.id()).orElseThrow(() -> new IllegalArgumentException("발생하면 안됨"));
             assertAll(
-                    () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
+                    () -> assertThat(applicationForm.club().existParticipantByMemberId(applicant.id())).isFalse(),
                     () -> assertThat(findApplicationForm.processed()).isTrue(),
                     () -> assertThat(events.stream(ApplicationProcessedEvent.class).count()).isEqualTo(1L),
                     () -> assertThat(events.stream(OfficerRejectApplicationEvent.class).count()).isEqualTo(1L)
@@ -155,7 +155,7 @@ class RejectApplicationFormTest {
                     .orElseThrow(IllegalArgumentException::new);
             assertAll(
                     () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION),
-                    () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
+                    () -> assertThat(applicationForm.club().existParticipantByMemberId(applicant.id())).isFalse(),
                     () -> assertThat(findApplicationForm.processed()).isFalse()
             );
         }

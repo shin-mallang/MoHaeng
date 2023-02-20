@@ -79,8 +79,7 @@ class ExpelParticipantTest {
         // then
         club = clubRepository.findById(club.id()).get();
         assertAll(
-                () -> assertThat(club.findParticipantByMemberId(officer.member().id())).isEmpty(),
-                () -> assertThat(club.findParticipantById(officer.id())).isEmpty(),
+                () -> assertThat(club.existParticipantByMemberId(officer.member().id())).isFalse(),
                 () -> assertThat(club.currentParticipantCount()).isEqualTo(before - 1),
                 () -> assertThat(events.stream(ExpelParticipantEvent.class).count()).isEqualTo(1L)
         );
@@ -118,8 +117,7 @@ class ExpelParticipantTest {
         club = clubRepository.findById(club.id()).get();
         assertAll(
                 () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT),
-                () -> assertThat(club.findParticipantByMemberId(general.member().id())).isPresent(),
-                () -> assertThat(club.findParticipantById(general.id())).isPresent(),
+                () -> assertThat(club.existParticipantByMemberId(general.member().id())).isTrue(),
                 () -> assertThat(events.stream(ExpelParticipantEvent.class).count()).isEqualTo(0L)
         );
     }
@@ -138,8 +136,7 @@ class ExpelParticipantTest {
         club = clubRepository.findById(club.id()).get();
         assertAll(
                 () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_CLUB),
-                () -> assertThat(club.findParticipantByMemberId(general.member().id())).isPresent(),
-                () -> assertThat(club.findParticipantById(general.id())).isPresent(),
+                () -> assertThat(club.existParticipantByMemberId(general.member().id())).isTrue(),
                 () -> assertThat(events.stream(ExpelParticipantEvent.class).count()).isEqualTo(0L)
         );
     }

@@ -9,7 +9,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
@@ -19,6 +18,7 @@ import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static com.mohaeng.common.fixtures.ParticipantFixture.participantWithId;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -73,8 +73,8 @@ class ClubTest {
     @Test
     void memberId_를_통해_참여자를_찾을_수_있다() {
         // when
-        Participant participant1 = club.findParticipantByMemberId(officerMemberId).orElse(null);
-        Participant participant2 = club.findParticipantByMemberId(generalMemberId).orElse(null);
+        Participant participant1 = club.findParticipantByMemberId(officerMemberId);
+        Participant participant2 = club.findParticipantByMemberId(generalMemberId);
 
         // then
         assertThat(participant1.member()).isEqualTo(officer.member());
@@ -83,11 +83,8 @@ class ClubTest {
 
     @Test
     void memberId_를_가진_참여자가_없는_경우() {
-        // when
-        Optional<Participant> participantByMemberId = club.findParticipantByMemberId(100L);
-
         // then
-        assertThat(participantByMemberId).isEmpty();
+        assertThat(club.existParticipantByMemberId(100L)).isFalse();
     }
 
     @Test
@@ -102,8 +99,8 @@ class ClubTest {
     @Test
     void findParticipantById_는_참여자_ID_를_통해_참여자를_찾는다() {
         // when & then
-        assertThat(club.findParticipantById(1L).get()).isEqualTo(president);
-        assertThat(club.findParticipantById(9999L)).isEmpty();
+        assertThat(club.findParticipantById(1L)).isEqualTo(president);
+        assertThatThrownBy(() -> club.findParticipantById(9999L));
     }
 
     @Test
@@ -115,10 +112,10 @@ class ClubTest {
         }
 
         // when & then
-        assertThat(club.findRoleById(1L)).isPresent();
-        assertThat(club.findRoleById(2L)).isPresent();
-        assertThat(club.findRoleById(3L)).isPresent();
-        assertThat(club.findRoleById(4L)).isEmpty();
+        assertThat(club.findRoleById(1L).id()).isNotNull();
+        assertThat(club.findRoleById(2L).id()).isNotNull();
+        assertThat(club.findRoleById(3L).id()).isNotNull();
+        assertThatThrownBy(() -> club.findRoleById(4L));
     }
 
     @Test
@@ -126,14 +123,14 @@ class ClubTest {
         // given
         Member target = member(10L);
         club.registerParticipant(target);
-        Participant participant = club.findParticipantByMemberId(target.id()).orElse(null);
+        Participant participant = club.findParticipantByMemberId(target.id());
         int before = club.currentParticipantCount();
 
         // when
         club.deleteParticipant(participant);
 
         // then
-        assertThat(club.findParticipantByMemberId(target.id())).isEmpty();
+        assertThat(club.existParticipantByMemberId(target.id())).isFalse();
         assertThat(club.currentParticipantCount()).isEqualTo(before - 1);
     }
 
@@ -175,8 +172,8 @@ class ClubTest {
 
             // then
             assertThat(club.currentParticipantCount()).isEqualTo(before - 2);
-            assertThat(club.findParticipantByMemberId(officer.member().id())).isEmpty();
-            assertThat(club.findParticipantByMemberId(general.member().id())).isEmpty();
+            assertThat(club.existParticipantByMemberId(officer.member().id())).isFalse();
+            assertThat(club.existParticipantByMemberId(general.member().id())).isFalse();
         }
 
         @Test
@@ -191,7 +188,7 @@ class ClubTest {
 
             // then
             assertThat(club.currentParticipantCount()).isEqualTo(before);
-            assertThat(club.findParticipantByMemberId(general.member().id())).isPresent();
+            assertThat(club.existParticipantByMemberId(general.member().id())).isTrue();
             assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT);
         }
 
@@ -204,7 +201,7 @@ class ClubTest {
             Participant otherPresident = other.findPresident();
             ReflectionTestUtils.setField(otherPresident, "id", 10L);
             other.participants().participants().add(participantWithId(13L, member(generalId), other, other.clubRoles().findDefaultRoleByCategory(GENERAL)));
-            Participant otherGeneral = other.findParticipantByMemberId(generalId).get();
+            Participant otherGeneral = other.findParticipantByMemberId(generalId);
 
             // when
             BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
@@ -248,16 +245,16 @@ class ClubTest {
         @Test
         void changeParticipantRole_시_대상의_역할을_변경한다() {
             // given
-            assertThat(club.findParticipantById(officerId).get().isManager()).isTrue();
-            assertThat(club.findParticipantById(generalId).get().isManager()).isFalse();
+            assertThat(club.findParticipantById(officerId).isManager()).isTrue();
+            assertThat(club.findParticipantById(generalId).isManager()).isFalse();
 
             // when
             club.changeParticipantRole(presidentMemberId, officerId, generalRoleId);
             club.changeParticipantRole(presidentMemberId, generalId, officerRoleId);
 
             // then
-            assertThat(club.findParticipantById(officerId).get().isManager()).isFalse();
-            assertThat(club.findParticipantById(generalId).get().isManager()).isTrue();
+            assertThat(club.findParticipantById(officerId).isManager()).isFalse();
+            assertThat(club.findParticipantById(generalId).isManager()).isTrue();
         }
 
         @Test
@@ -271,8 +268,8 @@ class ClubTest {
             ).exceptionType();
 
             // then
-            assertThat(club.findParticipantById(officerId).get().isManager()).isTrue();
-            assertThat(club.findParticipantById(generalId).get().isManager()).isFalse();
+            assertThat(club.findParticipantById(officerId).isManager()).isTrue();
+            assertThat(club.findParticipantById(generalId).isManager()).isFalse();
             assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE);
             assertThat(baseExceptionType2).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE);
         }
@@ -285,7 +282,7 @@ class ClubTest {
             ).exceptionType();
 
             // then
-            assertThat(club.findParticipantById(officerId).get().isPresident()).isFalse();
+            assertThat(club.findParticipantById(officerId).isPresident()).isFalse();
             assertThat(baseExceptionType).isEqualTo(NOT_CHANGE_PRESIDENT_ROLE);
         }
 
@@ -300,7 +297,7 @@ class ClubTest {
             ).exceptionType();
 
             // then
-            assertThat(club.findParticipantById(generalId).get().isManager()).isFalse();
+            assertThat(club.findParticipantById(generalId).isManager()).isFalse();
             assertThat(baseExceptionType1).isEqualTo(NOT_FOUND_PARTICIPANT);
             assertThat(baseExceptionType2).isEqualTo(NOT_FOUND_PARTICIPANT);
         }

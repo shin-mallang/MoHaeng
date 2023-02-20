@@ -76,7 +76,7 @@ public class FillOutApplicationForm implements FillOutApplicationFormUseCase {
      * @throws ApplicationFormException (ALREADY_MEMBER_JOINED_CLUB) 이미 회원이 모임에 가입되어 있는 경우
      */
     private void validateAlreadyJoinedMember(final Member applicant, final Club club) throws ApplicationFormException {
-        if (club.findParticipantByMemberId(applicant.id()).isPresent())
+        if (club.existParticipantByMemberId(applicant.id()))
             throw new ApplicationFormException(ALREADY_MEMBER_JOINED_CLUB);
     }
 
