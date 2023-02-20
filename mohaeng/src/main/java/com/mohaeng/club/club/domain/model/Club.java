@@ -4,7 +4,6 @@ import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
 import com.mohaeng.club.club.domain.event.ParticipantClubRoleChangedEvent;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
-import com.mohaeng.club.club.exception.ClubRoleExceptionType;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.common.event.Events;
@@ -14,12 +13,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
+import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NO_AUTHORITY_CREATE_ROLE;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.*;
 
 @Entity
@@ -140,6 +139,21 @@ public class Club extends BaseEntity {
     private void validateChangeRoleAuthority(final Participant requester) {
         if (!requester.isPresident()) {
             throw new ParticipantException(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE);
+        }
+    }
+
+    /**
+     * 모임 역할 생성
+     */
+    public ClubRole createRole(final Long memberId, final String name, final ClubRoleCategory category) {
+        Participant participant = findParticipantByMemberId(memberId);
+        validateAuthorityCreateRole(participant);
+        return clubRoles.add(this, name, category);
+    }
+
+    private void validateAuthorityCreateRole(final Participant participant) {
+        if (!participant.isManager()) {
+            throw new ClubRoleException(NO_AUTHORITY_CREATE_ROLE);
         }
     }
 
