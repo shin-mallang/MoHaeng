@@ -284,6 +284,10 @@ operation::create-club-role(requester does not president or officer)[snippets='h
 
 operation::create-club-role(when create president role)[snippets='http-response']
 
+==== - 이미 동일한 이름의 역할이 모임 내에 존재하는 경우
+
+operation::create-club-role(duplicated name)[snippets='http-response']
+
 ==== - 요청 시 비어있는 필드가 있는 경우
 
 operation::create-club-role(request fields contains empty value)[snippets='http-request,http-response']

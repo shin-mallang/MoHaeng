@@ -109,7 +109,7 @@ class CreateClubRoleTest {
         BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
                 createClubRoleUseCase.command(
                         new CreateClubRoleUseCase.Command(
-                                general.id(), club.id(),
+                                general.member().id(), club.id(),
                                 generalRoleName, GENERAL
                         ))
         ).exceptionType();
