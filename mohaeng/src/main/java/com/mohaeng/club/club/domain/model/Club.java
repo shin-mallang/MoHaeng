@@ -1,6 +1,7 @@
 package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
+import com.mohaeng.club.club.domain.event.ParticipantClubRoleChangedEvent;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
@@ -122,7 +123,11 @@ public class Club extends BaseEntity {
         validateChangeRoleAuthority(requester);
         Participant target = findParticipantById(targetParticipantId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
         target.changeRole(clubRole);
-        // TODO 역할 변경 알림 발생
+
+        Events.raise(new ParticipantClubRoleChangedEvent(this,
+                target.member().id(),
+                id(), clubRole.id(), clubRole.name(),
+                clubRole.clubRoleCategory()));
     }
 
     private void validateChangedRoleIsPresident(final ClubRole clubRole) {
