@@ -7,13 +7,11 @@ import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.event.Events;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.NOT_FOUND_APPLICATION_FORM;
-import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
 
 @Service
 @Transactional
@@ -30,8 +28,7 @@ public class RejectApplicationForm implements RejectApplicationFormUseCase {
         ApplicationForm applicationForm = applicationFormRepository.findById(command.applicationFormId())
                 .orElseThrow(() -> new ApplicationFormException(NOT_FOUND_APPLICATION_FORM));
 
-        Participant manager = applicationForm.club().findParticipantByMemberId(command.managerId())
-                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        Participant manager = applicationForm.club().findParticipantByMemberId(command.managerId());
 
         applicationForm.reject(manager);
 

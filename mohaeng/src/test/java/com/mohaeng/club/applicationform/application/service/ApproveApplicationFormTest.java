@@ -92,7 +92,7 @@ class ApproveApplicationFormTest {
         // then
         flushAndClear();
         club = clubRepository.findById(club.id()).orElse(null);
-        assertThat(club.findParticipantByMemberId(applicant.id())).isPresent();
+        assertThat(club.existParticipantByMemberId(applicant.id())).isTrue();
         assertThat(applicationFormRepository.findById(applicationForm.id()).orElse(null).processed()).isTrue();
         assertThat(club.currentParticipantCount()).isEqualTo(before + 1);
     }
@@ -147,7 +147,7 @@ class ApproveApplicationFormTest {
                 .orElseThrow(IllegalArgumentException::new);
         assertAll(
                 () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_PROCESS_APPLICATION),
-                () -> assertThat(applicationForm.club().findParticipantByMemberId(applicant.id())).isEmpty(),
+                () -> assertThat(applicationForm.club().existParticipantByMemberId(applicant.id())).isFalse(),
                 () -> assertThat(findApplicationForm.processed()).isFalse()
         );
     }

@@ -1,7 +1,5 @@
 package com.mohaeng.club.club.domain.model;
 
-import com.mohaeng.club.club.exception.ParticipantException;
-import com.mohaeng.common.exception.BaseExceptionType;
 import org.junit.jupiter.api.*;
 
 import java.util.Map;
@@ -9,12 +7,10 @@ import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.OFFICER;
-import static com.mohaeng.club.club.exception.ParticipantExceptionType.NO_AUTHORITY_EXPEL_PARTICIPANT;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -54,66 +50,12 @@ class ParticipantTest {
     }
 
     @Test
-    void expel_시_대상_참여자를_모임에서_추방한다() {
-        // given
-        int before = club.currentParticipantCount();
-
+    void changeRole_시_역할이_변경된다() {
         // when
-        president.expel(officer);
-        president.expel(general);
+        ClubRole mock = mock(ClubRole.class);
+        officer.changeRole(mock);
 
         // then
-        assertThat(club.currentParticipantCount()).isEqualTo(before - 2);
-        assertThat(club.findParticipantByMemberId(officer.member().id())).isEmpty();
-        assertThat(club.findParticipantByMemberId(general.member().id())).isEmpty();
-    }
-
-    @Test
-    void expel_시_회장이_아닌_경우_추방할_수_없다() {
-        // given
-        int before = club.currentParticipantCount();
-
-        // when
-        BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
-                officer.expel(general)
-        ).exceptionType();
-
-        // then
-        assertThat(club.currentParticipantCount()).isEqualTo(before);
-        assertThat(club.findParticipantByMemberId(general.member().id())).isPresent();
-        assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT);
-    }
-
-    @Test
-    void expel_시_대상_참여자와_같은_모임이_아닌_경우_추방할_수_없다() {
-        // given
-        Long presidentId = 11L;
-        Long generalId = 12L;
-        Club other = clubWithMember(member(presidentId));
-        other.registerParticipant(member(generalId));
-        Participant otherPresident = other.findParticipantByMemberId(presidentId).get();
-        Participant otherGeneral = other.findParticipantByMemberId(generalId).get();
-
-        // when
-        BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
-                president.expel(otherPresident)
-        ).exceptionType();
-
-        BaseExceptionType baseExceptionType2 = assertThrows(ParticipantException.class, () ->
-                president.expel(otherGeneral)
-        ).exceptionType();
-        BaseExceptionType baseExceptionType3 = assertThrows(ParticipantException.class, () ->
-                otherPresident.expel(president)
-        ).exceptionType();
-
-        BaseExceptionType baseExceptionType4 = assertThrows(ParticipantException.class, () ->
-                otherPresident.expel(general)
-        ).exceptionType();
-
-        // then
-        assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT);
-        assertThat(baseExceptionType2).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT);
-        assertThat(baseExceptionType3).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT);
-        assertThat(baseExceptionType4).isEqualTo(NO_AUTHORITY_EXPEL_PARTICIPANT);
+        assertThat(officer.clubRole()).isEqualTo(mock);
     }
 }

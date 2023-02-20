@@ -65,7 +65,7 @@ class LeaveClubTest {
     @Test
     void 회원을_모임에서_탈퇴시킨다() {
         // given
-        assertThat(club.findParticipantByMemberId(general.member().id())).isPresent();
+        assertThat(club.existParticipantByMemberId(general.member().id())).isTrue();
         int before = club.currentParticipantCount();
 
         // when
@@ -80,8 +80,8 @@ class LeaveClubTest {
         flushAndClear();
         club = clubRepository.findById(club.id()).orElse(null);
         assertAll(
-                () -> assertThat(club.findParticipantByMemberId(general.member().id())).isEmpty(),
-                () -> assertThat(club.findParticipantByMemberId(officer.member().id())).isEmpty(),
+                () -> assertThat(club.existParticipantByMemberId(general.member().id())).isFalse(),
+                () -> assertThat(club.existParticipantByMemberId(officer.member().id())).isFalse(),
                 () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(before - 2)
         );
     }
@@ -142,7 +142,7 @@ class LeaveClubTest {
         club = clubRepository.findById(club.id()).orElse(null);
         assertAll(
                 () -> assertThat(baseExceptionType).isEqualTo(PRESIDENT_CAN_NOT_LEAVE_CLUB),
-                () -> assertThat(club.findParticipantByMemberId(presidentMember.id())).isPresent(),
+                () -> assertThat(club.existParticipantByMemberId(presidentMember.id())).isTrue(),
                 () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(currentParticipantCount)
         );
     }

@@ -1,8 +1,13 @@
 package com.mohaeng.club.club.domain.model;
 
+import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
+import com.mohaeng.club.club.domain.event.ParticipantClubRoleChangedEvent;
 import com.mohaeng.club.club.exception.ClubException;
+import com.mohaeng.club.club.exception.ClubRoleException;
+import com.mohaeng.club.club.exception.ClubRoleExceptionType;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.domain.BaseEntity;
+import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,7 +19,8 @@ import java.util.Optional;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
-import static com.mohaeng.club.club.exception.ParticipantExceptionType.ALREADY_EXIST_PARTICIPANT;
+import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.*;
 
 @Entity
 @Table(name = "club")
@@ -46,53 +52,6 @@ public class Club extends BaseEntity {
         participantCountUp();
     }
 
-    public String name() {
-        return name;
-    }
-
-    public String description() {
-        return description;
-    }
-
-    public int maxParticipantCount() {
-        return maxParticipantCount;
-    }
-
-    public int currentParticipantCount() {
-        return currentParticipantCount;
-    }
-
-    public ClubRoles clubRoles() {
-        return clubRoles;
-    }
-
-    public Participants participants() {
-        return participants;
-    }
-
-    public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
-        return clubRoles().findDefaultRoleByCategory(category);
-    }
-
-    public Optional<Participant> findParticipantByMemberId(final Long memberId) {
-        return participants().findByMemberId(memberId);
-    }
-
-    /**
-     * ParticipantId로 해당하는 참여자 찾기
-     */
-    public Optional<Participant> findParticipantById(final Long id) {
-        return participants().findById(id);
-    }
-
-    public List<Participant> findAllManager() {
-        return participants().findAllManager();
-    }
-
-    public Participant findPresident() {
-        return participants().findPresident();
-    }
-
     /**
      * 회원을 모임에 등록한다.
      */
@@ -102,7 +61,7 @@ public class Club extends BaseEntity {
 
         participantCountUp();
 
-        participants().register(new Participant(member, this, findDefaultRoleByCategory(GENERAL)));
+        participants().register(member, this, findDefaultRoleByCategory(GENERAL));
     }
 
     private void validateAlreadyRegistered(final Member member) {
@@ -134,5 +93,110 @@ public class Club extends BaseEntity {
 
     public List<Participant> findAllParticipant() {
         return participants().participants();
+    }
+
+    /**
+     * 회원 추방 기능
+     */
+    public void expel(final Long requesterMemberId, final Long targetParticipantId) {
+        Participant requester = findParticipantByMemberId(requesterMemberId);
+        Participant target = findParticipantById(targetParticipantId);
+        validateExpelAuthority(requester);
+        deleteParticipant(target);
+        Events.raise(new ExpelParticipantEvent(this, target.member().id(), id()));
+    }
+
+    private void validateExpelAuthority(final Participant requester) {
+        if (!requester.isPresident()) {
+            throw new ParticipantException(NO_AUTHORITY_EXPEL_PARTICIPANT);
+        }
+    }
+
+    /**
+     * 대상 참여자 역할 변경
+     */
+    public void changeParticipantRole(final Long requesterMemberId,
+                                      final Long targetParticipantId,
+                                      final Long clubRoleId) {
+        ClubRole clubRole = findRoleById(clubRoleId);
+        validateChangedRoleIsPresident(clubRole);
+        Participant requester = findParticipantByMemberId(requesterMemberId);
+        validateChangeRoleAuthority(requester);
+        Participant target = findParticipantById(targetParticipantId);
+        target.changeRole(clubRole);
+
+        Events.raise(new ParticipantClubRoleChangedEvent(this,
+                target.member().id(),
+                id(), clubRole.id(), clubRole.name(),
+                clubRole.clubRoleCategory()));
+    }
+
+    private void validateChangedRoleIsPresident(final ClubRole clubRole) {
+        if (clubRole.clubRoleCategory() == PRESIDENT) {
+            throw new ParticipantException(NOT_CHANGE_PRESIDENT_ROLE);
+        }
+    }
+
+    private void validateChangeRoleAuthority(final Participant requester) {
+        if (!requester.isPresident()) {
+            throw new ParticipantException(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE);
+        }
+    }
+
+    public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
+        return clubRoles().findDefaultRoleByCategory(category);
+    }
+
+    public ClubRole findRoleById(final Long clubRoleId) {
+        return clubRoles.findById(clubRoleId).orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
+    }
+
+    public Participant findParticipantByMemberId(final Long memberId) {
+        return participants().findByMemberId(memberId)
+                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+    }
+
+    public boolean existParticipantByMemberId(final Long memberId) {
+        return participants().findByMemberId(memberId).isPresent();
+    }
+
+    /**
+     * ParticipantId로 해당하는 참여자 찾기
+     */
+    public Participant findParticipantById(final Long id) {
+        return participants().findById(id)
+                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+    }
+
+    public List<Participant> findAllManager() {
+        return participants().findAllManager();
+    }
+
+    public Participant findPresident() {
+        return participants().findPresident();
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public String description() {
+        return description;
+    }
+
+    public int maxParticipantCount() {
+        return maxParticipantCount;
+    }
+
+    public int currentParticipantCount() {
+        return currentParticipantCount;
+    }
+
+    public ClubRoles clubRoles() {
+        return clubRoles;
+    }
+
+    public Participants participants() {
+        return participants;
     }
 }

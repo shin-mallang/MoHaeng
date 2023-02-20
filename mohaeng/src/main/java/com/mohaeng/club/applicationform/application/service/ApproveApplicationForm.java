@@ -7,13 +7,11 @@ import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.event.Events;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.NOT_FOUND_APPLICATION_FORM;
-import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
 
 @Service
 @Transactional
@@ -30,8 +28,7 @@ public class ApproveApplicationForm implements ApproveApplicationFormUseCase {
         ApplicationForm applicationForm = applicationFormRepository.findById(command.applicationFormId())
                 .orElseThrow(() -> new ApplicationFormException(NOT_FOUND_APPLICATION_FORM));
 
-        Participant manager = applicationForm.club().findParticipantByMemberId(command.managerId())
-                .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        Participant manager = applicationForm.club().findParticipantByMemberId(command.managerId());
 
         applicationForm.approve(manager);
 
@@ -51,7 +48,7 @@ public class ApproveApplicationForm implements ApproveApplicationFormUseCase {
         }
         Participant president = applicationForm.club().findPresident();
         Long applicantId = applicationForm.applicant().id();
-        Participant registerParticipant = applicationForm.club().findParticipantByMemberId(applicantId).orElseThrow(IllegalStateException::new);
+        Participant registerParticipant = applicationForm.club().findParticipantByMemberId(applicantId);
         Events.raise(new OfficerApproveApplicationEvent(this,
                 president.member().id(),
                 manager.member().id(),
