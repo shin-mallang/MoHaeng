@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("ExpelParticipant 은")
 @ApplicationTest
 class ExpelParticipantTest {

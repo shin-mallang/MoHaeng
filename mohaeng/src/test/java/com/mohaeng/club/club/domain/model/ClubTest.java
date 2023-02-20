@@ -1,6 +1,7 @@
 package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.club.club.exception.ClubRoleException;
+import com.mohaeng.club.club.exception.ClubRoleExceptionType;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
@@ -311,6 +312,87 @@ class ClubTest {
 
             // then
             assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
+        }
+    }
+
+    @Nested
+    @DisplayName("역할 생성(createRole)")
+    class CreateRole {
+
+        @Test
+        void 회장과_임원은_모임_역할을_생성할_수_있다() {
+            // given
+            String name1 = "새로 생성할 역할 이름1";
+            String name2 = "새로 생성할 역할 이름2";
+
+            // when
+            ClubRole role1 = club.createRole(officerMemberId, name1, OFFICER);
+            ClubRole role2 = club.createRole(presidentMemberId, name2, GENERAL);
+
+            // then
+            assertThat(club.clubRoles().clubRoles()).contains(role1, role2);
+        }
+
+        @Test
+        void 새로_생성된_역할을_모두_기본_역할이_아니다() {
+            // given
+            String name1 = "새로 생성할 역할 이름1";
+            String name2 = "새로 생성할 역할 이름2";
+
+            // when
+            ClubRole role1 = club.createRole(officerMemberId, name1, OFFICER);
+            ClubRole role2 = club.createRole(presidentMemberId, name2, GENERAL);
+
+            // then
+            assertThat(role1.isDefault()).isFalse();
+            assertThat(role2.isDefault()).isFalse();
+        }
+
+        @Test
+        void 일반_회원은_모임_역할을_생성할_수_없다() {
+            // given
+            int before = club.clubRoles().clubRoles().size();
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class,
+                    () -> club.createRole(generalMemberId, "새로 생성할 이름", GENERAL)
+            ).exceptionType();
+
+            // then
+            assertThat(club.clubRoles().clubRoles().size()).isEqualTo(before);
+            assertThat(baseExceptionType).isEqualTo(ClubRoleExceptionType.NO_AUTHORITY_CREATE_ROLE);
+        }
+
+        @Test
+        void 회장_역할을_새로_생성할_수_없다() {
+            // given
+            int before = club.clubRoles().clubRoles().size();
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class,
+                    () -> club.createRole(presidentMemberId, "새로 생성할 이름", PRESIDENT)
+            ).exceptionType();
+
+            // then
+            assertThat(club.clubRoles().clubRoles().size()).isEqualTo(before);
+            assertThat(baseExceptionType).isEqualTo(ClubRoleExceptionType.CAN_NOT_CREATE_PRESIDENT_ROLE);
+        }
+
+        @Test
+        void 역할의_이름은_모임_내에서_중복될_수_없다() {
+            // given
+            String duplicatedName = "중복";
+            club.createRole(presidentMemberId, duplicatedName, OFFICER);
+            int before = club.clubRoles().clubRoles().size();
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class,
+                    () -> club.createRole(presidentMemberId, duplicatedName, GENERAL)
+            ).exceptionType();
+
+            // then
+            assertThat(club.clubRoles().clubRoles().size()).isEqualTo(before);
+            assertThat(baseExceptionType).isEqualTo(ClubRoleExceptionType.DUPLICATED_NAME);
         }
     }
 }
