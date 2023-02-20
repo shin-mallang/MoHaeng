@@ -57,9 +57,7 @@ public class Club extends BaseEntity {
     public void registerParticipant(final Member member) {
         // 이미 가입되어있는지 확인
         validateAlreadyRegistered(member);
-
         participantCountUp();
-
         participants().register(member, this, findDefaultRoleByCategory(GENERAL));
     }
 
@@ -82,7 +80,6 @@ public class Club extends BaseEntity {
      */
     public void deleteParticipant(final Participant participant) {
         participants().delete(participant);
-
         participantCountDown();
     }
 
@@ -155,6 +152,14 @@ public class Club extends BaseEntity {
         if (!participant.isManager()) {
             throw new ClubRoleException(NO_AUTHORITY_CREATE_ROLE);
         }
+    }
+
+    /**
+     * 역할 이름 변경
+     */
+    public void changeRoleName(final Long memberId, final Long roleId, final String name) {
+        Participant participant = findParticipantByMemberId(memberId);
+        clubRoles().changeRoleName(participant.clubRole().clubRoleCategory(), roleId, name);
     }
 
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {

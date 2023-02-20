@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "club_role")
@@ -59,6 +59,10 @@ public class ClubRole extends BaseEntity {
                 defaultOfficerRole(club),
                 defaultGeneralRole(club)
         );
+    }
+
+    public void changeName(final String name) {
+        this.name = name;
     }
 
     public String name() {
