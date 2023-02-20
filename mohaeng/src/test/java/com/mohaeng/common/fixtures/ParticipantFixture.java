@@ -1,8 +1,11 @@
 package com.mohaeng.common.fixtures;
 
 import com.mohaeng.club.club.domain.model.Club;
+import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.Participant;
+import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.OFFICER;
@@ -46,6 +49,12 @@ public class ParticipantFixture {
     public static Participant saveGeneral(final MemberRepository memberRepository, final Club club) {
         Participant participant = new Participant(saveMember(memberRepository, member(null)), club, club.findDefaultRoleByCategory(GENERAL));
         club.participants().register(participant);
+        return participant;
+    }
+
+    public static Participant participantWithId(final Long id, final Member member, final Club club, final ClubRole clubRole) {
+        Participant participant = new Participant(member, club, clubRole);
+        ReflectionTestUtils.setField(participant, "id", id);
         return participant;
     }
 }

@@ -47,7 +47,7 @@ public class Participants {
 
     public Optional<Participant> findByMemberId(final Long id) {
         return participants().stream()
-                .filter(it -> it.member().id().equals(id))
+                .filter(it -> id.equals(it.member().id()))
                 .findAny();
     }
 
@@ -74,7 +74,7 @@ public class Participants {
 
     public Optional<Participant> findById(final Long id) {
         return participants().stream()
-                .filter(it -> it.id().equals(id))
+                .filter(it -> id.equals(it.id()))
                 .findAny();
     }
 }

@@ -1,8 +1,10 @@
 package com.mohaeng.club.club.domain.model;
 
+import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.domain.BaseEntity;
+import com.mohaeng.common.event.Events;
 import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,7 +16,7 @@ import java.util.Optional;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
-import static com.mohaeng.club.club.exception.ParticipantExceptionType.ALREADY_EXIST_PARTICIPANT;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.*;
 
 @Entity
 @Table(name = "club")
@@ -134,5 +136,22 @@ public class Club extends BaseEntity {
 
     public List<Participant> findAllParticipant() {
         return participants().participants();
+    }
+
+    /**
+     * 회원 추방 기능
+     */
+    public void expel(final Long requesterMemberId, final Long targetParticipantId) {
+        Participant requester = findParticipantByMemberId(requesterMemberId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        Participant target = findParticipantById(targetParticipantId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        validateExpelAuthority(requester);
+        deleteParticipant(target);
+        Events.raise(new ExpelParticipantEvent(this, target.member().id(), id()));
+    }
+
+    private void validateExpelAuthority(final Participant requester) {
+        if (!requester.isPresident()) {
+            throw new ParticipantException(NO_AUTHORITY_EXPEL_PARTICIPANT);
+        }
     }
 }
