@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
-import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
+import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.*;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
@@ -229,7 +229,7 @@ class ClubTest {
     }
 
     @Nested
-    @DisplayName("역할 변경(changeParticipantRole)")
+    @DisplayName("참가자의 역할 변경(changeParticipantRole)")
     class ChangeParticipantRoleTest {
 
         private final Long presidentRoleId = 1L;
@@ -393,6 +393,131 @@ class ClubTest {
             // then
             assertThat(club.clubRoles().clubRoles().size()).isEqualTo(before);
             assertThat(baseExceptionType).isEqualTo(ClubRoleExceptionType.DUPLICATED_NAME);
+        }
+    }
+
+    @Nested
+    @DisplayName("역할 이름 변경(changeRoleName) 테스트")
+    class ChangeRoleNameTest {
+
+        private final Long presidentRoleId = 1L;
+        private final Long officerRoleId = 2L;
+        private final Long generalRoleId = 3L;
+
+        @BeforeEach
+        void init() {
+            ReflectionTestUtils.setField(club.findDefaultRoleByCategory(PRESIDENT), "id", presidentRoleId);
+            ReflectionTestUtils.setField(club.findDefaultRoleByCategory(OFFICER), "id", officerRoleId);
+            ReflectionTestUtils.setField(club.findDefaultRoleByCategory(GENERAL), "id", generalRoleId);
+        }
+
+        @Test
+        void 역할_이름을_변경한다() {
+            // given
+            String 변경이름 = "변경이름";
+
+            // when
+            club.changeRoleName(presidentMemberId, presidentRoleId, 변경이름);
+
+            // then
+            assertThat(club.clubRoles().findById(presidentRoleId).get().name())
+                    .isEqualTo(변경이름);
+        }
+
+        @Test
+        void 역할_이름_변경_시_변경될_이름이_중복되는_경우_예외가_발생한다() {
+            // given
+            String 변경이름 = club.findDefaultRoleByCategory(OFFICER).name();
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    club.changeRoleName(presidentMemberId, presidentRoleId, 변경이름)
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(DUPLICATED_NAME);
+            assertThat(club.clubRoles().findById(presidentRoleId).get().name())
+                    .isNotEqualTo(변경이름);
+        }
+
+        @Test
+        void 일반_회원은_역할_이름을_변경할_수_없다() {
+            // given
+            String 변경이름 = "변경이름";
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    club.changeRoleName(generalMemberId, generalRoleId, 변경이름)
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
+            assertThat(club.clubRoles().findById(generalRoleId).get().name())
+                    .isNotEqualTo(변경이름);
+        }
+
+        @Test
+        void 임원은_일반_역할만을_변경할_수_있다() {
+            // given
+            String 변경이름1 = "변경이름1";
+            String 변경이름2 = "변경이름2";
+            String 변경이름3 = "변경이름3";
+
+            // when
+            BaseExceptionType baseExceptionType1 = assertThrows(ClubRoleException.class, () ->
+                    club.changeRoleName(officerMemberId, presidentRoleId, 변경이름1)
+            ).exceptionType();
+            BaseExceptionType baseExceptionType2 = assertThrows(ClubRoleException.class, () ->
+                    club.changeRoleName(officerMemberId, officerRoleId, 변경이름2)
+            ).exceptionType();
+            club.changeRoleName(officerMemberId, generalRoleId, 변경이름3);
+
+            // then
+            assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
+            assertThat(baseExceptionType2).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
+            assertThat(club.clubRoles().findById(presidentRoleId).get().name()).isNotEqualTo(변경이름1);
+            assertThat(club.clubRoles().findById(officerRoleId).get().name()).isNotEqualTo(변경이름2);
+            assertThat(club.clubRoles().findById(generalRoleId).get().name()).isEqualTo(변경이름3);
+        }
+
+        @Test
+        void 회장은_모든_역할의_이름을_다_변경할_수_있다() {
+            // given
+            String 변경이름1 = "변경이름1";
+            String 변경이름2 = "변경이름2";
+            String 변경이름3 = "변경이름3";
+
+            // when
+            club.changeRoleName(presidentMemberId, presidentRoleId, 변경이름1);
+            club.changeRoleName(presidentMemberId, officerRoleId, 변경이름2);
+            club.changeRoleName(presidentMemberId, generalRoleId, 변경이름3);
+
+            // then
+            assertThat(club.clubRoles().findById(presidentRoleId).get().name()).isEqualTo(변경이름1);
+            assertThat(club.clubRoles().findById(officerRoleId).get().name()).isEqualTo(변경이름2);
+            assertThat(club.clubRoles().findById(generalRoleId).get().name()).isEqualTo(변경이름3);
+        }
+
+        @Test
+        void 회원을_찾을_수_없는_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                    club.changeRoleName(100000L, presidentRoleId, "변경이름")
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT);
+        }
+
+        @Test
+        void 바꿀_역할을_찾을_수_없는_경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    club.changeRoleName(presidentMemberId, 10000L, "변경이름")
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
         }
     }
 }

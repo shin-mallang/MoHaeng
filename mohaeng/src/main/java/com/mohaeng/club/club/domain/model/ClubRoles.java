@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mohaeng.club.club.exception.ClubRoleExceptionType.CAN_NOT_CREATE_PRESIDENT_ROLE;
-import static com.mohaeng.club.club.exception.ClubRoleExceptionType.DUPLICATED_NAME;
+import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -44,11 +43,8 @@ public class ClubRoles {
                 .findAny();
     }
 
-    public List<ClubRole> clubRoles() {
-        return clubRoles;
-    }
-
-    public ClubRole add(final Club club, final String name, final ClubRoleCategory category) {
+    /* Club에서 호출하여 사용하는 용도 */
+    ClubRole add(final Club club, final String name, final ClubRoleCategory category) {
         validatePresidentRole(category);
         validateDuplicatedName(name);
         ClubRole clubRole = new ClubRole(name, category, club, false);
@@ -69,5 +65,31 @@ public class ClubRoles {
                 .ifPresent((it) -> {
                     throw new ClubRoleException(DUPLICATED_NAME);
                 });
+    }
+
+    /* Club에서 호출하여 사용하는 용도 */
+    void changeRoleName(final ClubRoleCategory requesterRoleCategory, final Long roleId, final String name) {
+        ClubRole role = findById(roleId).orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
+        // 회장 -> 모두 가능, 임원 -> 일반 역할만 변경 가능
+        validateChangeRoleNameAuthority(requesterRoleCategory, role);
+        validateDuplicatedName(name);
+        role.changeName(name);
+    }
+
+    private void validateChangeRoleNameAuthority(final ClubRoleCategory requesterRoleCategory, final ClubRole role) {
+        if (requesterRoleCategory == ClubRoleCategory.GENERAL) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_ROLE_NAME);
+        }
+        if (requesterRoleCategory == ClubRoleCategory.PRESIDENT) {
+            return;
+        }
+        // when OFFICER
+        if (role.clubRoleCategory() != ClubRoleCategory.GENERAL) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_ROLE_NAME);
+        }
+    }
+
+    public List<ClubRole> clubRoles() {
+        return clubRoles;
     }
 }
