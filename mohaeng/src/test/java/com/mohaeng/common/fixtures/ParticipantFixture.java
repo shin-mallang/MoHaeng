@@ -41,15 +41,11 @@ public class ParticipantFixture {
     }
 
     public static Participant saveOfficer(final MemberRepository memberRepository, final Club club) {
-        Participant participant = new Participant(saveMember(memberRepository, member(null)), club, club.findDefaultRoleByCategory(OFFICER));
-        club.participants().register(participant);
-        return participant;
+        return club.participants().register(saveMember(memberRepository, member(null)), club, club.findDefaultRoleByCategory(OFFICER));
     }
 
     public static Participant saveGeneral(final MemberRepository memberRepository, final Club club) {
-        Participant participant = new Participant(saveMember(memberRepository, member(null)), club, club.findDefaultRoleByCategory(GENERAL));
-        club.participants().register(participant);
-        return participant;
+        return club.participants().register(saveMember(memberRepository, member(null)), club, club.findDefaultRoleByCategory(GENERAL));
     }
 
     public static Participant participantWithId(final Long id, final Member member, final Club club, final ClubRole clubRole) {

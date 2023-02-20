@@ -1,6 +1,7 @@
 package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.club.club.exception.ParticipantException;
+import com.mohaeng.member.domain.model.Member;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 
@@ -41,8 +42,10 @@ public class Participants {
         return participants;
     }
 
-    public void register(final Participant participant) {
+    public Participant register(final Member member, final Club club, final ClubRole clubRole) {
+        Participant participant = new Participant(member, club, clubRole);
         this.participants().add(participant);
+        return participant;
     }
 
     public Optional<Participant> findByMemberId(final Long id) {

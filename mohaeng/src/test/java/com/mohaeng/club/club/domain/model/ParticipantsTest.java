@@ -34,14 +34,12 @@ class ParticipantsTest {
 
     @BeforeEach
     void init() {
-        officer = new Participant(member(2L), club, clubRoleMap.get(OFFICER));
-        general = new Participant(member(3L), club, clubRoleMap.get(GENERAL));
+        participants = Participants.initWithPresident(president);
+        officer = participants.register(member(2L), club, clubRoleMap.get(OFFICER));
+        general = participants.register(member(3L), club, clubRoleMap.get(GENERAL));
         ReflectionTestUtils.setField(president, "id", 1L);
         ReflectionTestUtils.setField(officer, "id", 2L);
         ReflectionTestUtils.setField(general, "id", 3L);
-        participants = Participants.initWithPresident(president);
-        participants.register(officer);
-        participants.register(general);
     }
 
     @Test
@@ -106,11 +104,8 @@ class ParticipantsTest {
 
     @Test
     void register_시_회원을_등록한다() {
-        // given
-        Participant participant = new Participant(member(3L), club, clubRoleMap.get(GENERAL));
-
         // when
-        participants.register(participant);
+        Participant participant = participants.register(member(3L), club, clubRoleMap.get(GENERAL));
 
         // then
         assertThat(participants.participants()).contains(participant);

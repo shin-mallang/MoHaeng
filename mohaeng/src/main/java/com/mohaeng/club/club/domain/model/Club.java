@@ -60,7 +60,7 @@ public class Club extends BaseEntity {
 
         participantCountUp();
 
-        participants().register(new Participant(member, this, findDefaultRoleByCategory(GENERAL)));
+        participants().register(member, this, findDefaultRoleByCategory(GENERAL));
     }
 
     private void validateAlreadyRegistered(final Member member) {
