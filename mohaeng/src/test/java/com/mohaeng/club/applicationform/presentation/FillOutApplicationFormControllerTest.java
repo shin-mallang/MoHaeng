@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_REQUEST_JOIN_CLUB;
 import static com.mohaeng.club.applicationform.presentation.FillOutApplicationFormController.FILL_OUT_APPLICATION_FORM_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
@@ -98,7 +99,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
         @Test
         void 이미_모임에_가입한_사람의_경우_400을_반환한다() throws Exception {
             // given
-            when(fillOutApplicationFormUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_REQUEST_JOIN_CLUB));
+            when(fillOutApplicationFormUseCase.command(any())).thenThrow(new ApplicationFormException(ALREADY_MEMBER_JOINED_CLUB));
             final Long memberId = 1L;
             setAuthentication(memberId);
             final Long clubId = 1L;
