@@ -17,8 +17,7 @@ import java.util.List;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
-import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
-import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NO_AUTHORITY_CREATE_ROLE;
+import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.*;
 
 @Entity
@@ -87,10 +86,6 @@ public class Club extends BaseEntity {
         currentParticipantCount--;
     }
 
-    public List<Participant> findAllParticipant() {
-        return participants().participants();
-    }
-
     /**
      * 회원 추방 기능
      */
@@ -110,6 +105,8 @@ public class Club extends BaseEntity {
 
     /**
      * 대상 참여자 역할 변경
+     * 회장만이 역할을 변경할 수 있으며,
+     * 회장으로는 변경할 수 없다.
      */
     public void changeParticipantRole(final Long requesterMemberId,
                                       final Long targetParticipantId,
@@ -162,6 +159,30 @@ public class Club extends BaseEntity {
         clubRoles().changeRoleName(participant.clubRole().clubRoleCategory(), roleId, name);
     }
 
+    /**
+     * 역할을 제거한다.
+     * 기본 역할이 아닌 역할만 제거 가능하며,
+     * 제거된 역할을 가진 참여자들은 해당 범주의 기본 역할로 변경된다
+     */
+    public void deleteRole(final Long memberId, final Long targetRoleId) {
+        Participant participant = findParticipantByMemberId(memberId);
+        validateAuthorityDeleteRole(participant);
+        ClubRole targetRole = findRoleById(targetRoleId);
+
+        clubRoles().delete(targetRole);
+        // TODO 순서???
+        List<Participant> changeRoleTargets = findAllParticipantByClubRole(targetRole);
+        ClubRole changedRole = findDefaultRoleByCategory(targetRole.clubRoleCategory());
+        changeRoleTargets.forEach(it -> it.changeRole(changedRole));
+    }
+
+    /* 회장 혹은 임원만이 역할 제거가 가능하다 */
+    private void validateAuthorityDeleteRole(final Participant participant) {
+        if (!participant.isManager()) {
+            throw new ClubRoleException(NO_AUTHORITY_DELETE_ROLE);
+        }
+    }
+
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
         return clubRoles().findDefaultRoleByCategory(category);
     }
@@ -187,12 +208,20 @@ public class Club extends BaseEntity {
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
     }
 
+    public List<Participant> findAllParticipant() {
+        return participants().participants();
+    }
+
     public List<Participant> findAllManager() {
         return participants().findAllManager();
     }
 
     public Participant findPresident() {
         return participants().findPresident();
+    }
+
+    private List<Participant> findAllParticipantByClubRole(final ClubRole targetRole) {
+        return participants().findAllParticipantByClubRole(targetRole);
     }
 
     public String name() {

@@ -3,6 +3,8 @@ package com.mohaeng.club.club.domain.model;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -219,6 +221,49 @@ class ClubRolesTest {
             // then
             assertThat(baseExceptionType)
                     .isEqualTo(NOT_FOUND_ROLE);
+        }
+    }
+
+    @Nested
+    @DisplayName("역할 제거(delete) 테스트")
+    class DeleteTest {
+
+        ClubRole 임원역할;
+        ClubRole 일반역할;
+
+        @BeforeEach
+        void init() {
+            임원역할 = clubRoles.add(club, "임원역할", OFFICER);
+            일반역할 = clubRoles.add(club, "일반역할", GENERAL);
+            for (int i = 0; i < clubRoles.clubRoles().size(); i++) {
+                ReflectionTestUtils.setField(clubRoles.clubRoles().get(i), "id", (long) i + 100L);
+            }
+        }
+
+        @Test
+        void 역할을_제거한다() {
+            // when
+            clubRoles.delete(임원역할);
+            clubRoles.delete(일반역할);
+
+            // then
+            assertThat(clubRoles.clubRoles()).doesNotContain(임원역할, 일반역할);
+        }
+
+        @ParameterizedTest(name = "기본 역할은 제거할 수 없다")
+        @EnumSource(mode = EnumSource.Mode.EXCLUDE)
+        void 기본_역할은_제거할_수_없다(final ClubRoleCategory category) {
+            // given
+            ClubRole defaultRole = clubRoles.findDefaultRoleByCategory(category);
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    clubRoles.delete(defaultRole)
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(CAN_NOT_DELETE_DEFAULT_ROLE);
+            assertThat(clubRoles.clubRoles()).contains(defaultRole);
         }
     }
 }
