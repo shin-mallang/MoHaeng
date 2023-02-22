@@ -170,7 +170,7 @@ public class Club extends BaseEntity {
         ClubRole targetRole = findRoleById(targetRoleId);
 
         clubRoles().delete(targetRole);
-        // TODO 순서???
+        // 쿼리는 나중에 나가므로 삭제 먼저 해도 상관이 없다
         List<Participant> changeRoleTargets = findAllParticipantByClubRole(targetRole);
         ClubRole changedRole = findDefaultRoleByCategory(targetRole.clubRoleCategory());
         changeRoleTargets.forEach(it -> it.changeRole(changedRole));
