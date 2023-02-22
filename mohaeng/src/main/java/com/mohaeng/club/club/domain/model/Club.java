@@ -199,6 +199,13 @@ public class Club extends BaseEntity {
         }
     }
 
+    /**
+     * 회장 역할을 위임한다
+     */
+    public void delegatePresident(final Long presidentMemberId, final Long candidateParticipantId) {
+        participants().delegatePresident(presidentMemberId, candidateParticipantId, findDefaultRoleByCategory(GENERAL));
+    }
+
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
         return clubRoles().findDefaultRoleByCategory(category);
     }

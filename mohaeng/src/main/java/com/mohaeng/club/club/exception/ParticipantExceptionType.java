@@ -11,6 +11,7 @@ public enum ParticipantExceptionType implements BaseExceptionType {
     NO_AUTHORITY_EXPEL_PARTICIPANT(603, HttpStatus.FORBIDDEN, "참여자를 추방시킬 권한이 없습니다.(같은 모임의 회장만이 가능합니다)"),
     NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE(604, HttpStatus.FORBIDDEN, "참여자의 역할을 변경할 권한이 없습니다.(같은 모임의 회장만이 가능합니다)"),
     NOT_CHANGE_PRESIDENT_ROLE(605, HttpStatus.BAD_REQUEST, "회장의 역할로 변경할수는 없습니다."),
+    NO_AUTHORITY_DELEGATE_PRESIDENT(606, HttpStatus.FORBIDDEN, "회장만이 회장의 역할을 위임할 수 있습니다."),
     NOT_PRESIDENT(698, HttpStatus.INTERNAL_SERVER_ERROR, "회장이 아닙니다."),
     NOT_FOUND_PRESIDENT(699, HttpStatus.INTERNAL_SERVER_ERROR, "회장이 존재하지 않습니다."),
     ;
