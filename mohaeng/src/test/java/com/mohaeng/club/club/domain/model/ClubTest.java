@@ -6,8 +6,11 @@ import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,6 +23,7 @@ import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static com.mohaeng.common.fixtures.ParticipantFixture.participantWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -518,6 +522,130 @@ class ClubTest {
 
             // then
             assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
+        }
+    }
+
+    @Nested
+    @DisplayName("역할 제거(deleteRole) 테스트")
+    class DeleteRoleTest {
+
+        ClubRole 새로생성된_임원_역할1;
+        ClubRole 새로생성된_임원_역할2;
+        ClubRole 새로생성된_일반_역할1;
+        ClubRole 새로생성된_일반_역할2;
+
+        @BeforeEach
+        void init() {
+            새로생성된_임원_역할1 = club.createRole(presidentMemberId, "새로생성된임원역할1", OFFICER);
+            새로생성된_임원_역할2 = club.createRole(presidentMemberId, "새로생성된임원역할2", OFFICER);
+            새로생성된_일반_역할1 = club.createRole(presidentMemberId, "새로생성된일반역할1", GENERAL);
+            새로생성된_일반_역할2 = club.createRole(presidentMemberId, "새로생성된일반역할2", GENERAL);
+            for (int i = 0; i < club.clubRoles().clubRoles().size(); i++) {
+                ReflectionTestUtils.setField(club.clubRoles().clubRoles().get(i), "id", (long) i + 100L);
+            }
+        }
+
+        @Test
+        void 회장과_임원진은_기본_역할이_아닌_역할을_제거할_수_있다() {
+            // when
+            club.deleteRole(presidentMemberId, 새로생성된_임원_역할1.id());
+            club.deleteRole(officerMemberId, 새로생성된_임원_역할2.id());
+            club.deleteRole(presidentMemberId, 새로생성된_일반_역할1.id());
+            club.deleteRole(officerMemberId, 새로생성된_일반_역할2.id());
+
+            // then
+            assertAll(
+                    () -> assertThat(club.clubRoles().findById(새로생성된_임원_역할1.id())).isEmpty(),
+                    () -> assertThat(club.clubRoles().findById(새로생성된_임원_역할2.id())).isEmpty(),
+                    () -> assertThat(club.clubRoles().findById(새로생성된_일반_역할1.id())).isEmpty(),
+                    () -> assertThat(club.clubRoles().findById(새로생성된_일반_역할2.id())).isEmpty()
+            );
+        }
+
+        @ParameterizedTest(name = "기본 역할은 제거할 수 없다")
+        @EnumSource(mode = EnumSource.Mode.EXCLUDE)
+        void 기본_역할은_제거할_수_없다(final ClubRoleCategory category) {
+            // given
+            ClubRole defaultRoleByCategory = club.findDefaultRoleByCategory(category);
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    club.deleteRole(presidentMemberId, defaultRoleByCategory.id())
+            ).exceptionType();
+
+            // then
+            assertAll(
+                    () -> assertThat(baseExceptionType).isEqualTo(CAN_NOT_DELETE_DEFAULT_ROLE),
+                    () -> assertThat(club.clubRoles().clubRoles()).contains(defaultRoleByCategory)
+            );
+        }
+
+        @Test
+        void 일반_회원을_역할을_제거할_수_없다() {
+            // given
+            List<ClubRole> clubRoles = List.of(새로생성된_일반_역할1, 새로생성된_일반_역할2, 새로생성된_임원_역할1, 새로생성된_임원_역할2);
+
+            // when & then
+            clubRoles.forEach(it -> {
+                BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                        club.deleteRole(generalMemberId, it.id())
+                ).exceptionType();
+                assertAll(
+                        () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_DELETE_ROLE),
+                        () -> assertThat(club.clubRoles().findById(it.id())).isPresent()
+                );
+            });
+        }
+
+        @Test
+        void 제거되는_역할을_가진_참여자들은_해당_분야의_기본_역할로_변경된다() {
+            // given
+            List<Participant> participants1 = saveParticipantWithRole(새로생성된_일반_역할1);
+            List<Participant> participants2 = saveParticipantWithRole(새로생성된_일반_역할2);
+            List<Participant> participants3 = saveParticipantWithRole(새로생성된_임원_역할1);
+            List<Participant> participants4 = saveParticipantWithRole(새로생성된_임원_역할2);
+
+            List<Participant> generalParticipants = new ArrayList<>();
+            generalParticipants.addAll(participants1);
+            generalParticipants.addAll(participants2);
+            List<Participant> officerParticipants = new ArrayList<>();
+            officerParticipants.addAll(participants3);
+            officerParticipants.addAll(participants4);
+            ClubRole generalDefaultRole = club.findDefaultRoleByCategory(GENERAL);
+            ClubRole officerDefaultRole = club.findDefaultRoleByCategory(OFFICER);
+
+            // when
+            club.deleteRole(presidentMemberId, 새로생성된_일반_역할1.id());
+            club.deleteRole(presidentMemberId, 새로생성된_일반_역할2.id());
+            club.deleteRole(presidentMemberId, 새로생성된_임원_역할1.id());
+            club.deleteRole(presidentMemberId, 새로생성된_임원_역할2.id());
+
+            // then
+            assertAll(
+                    () -> assertThat(club.clubRoles().findById(새로생성된_일반_역할1.id())).isEmpty(),
+                    () -> assertThat(club.clubRoles().findById(새로생성된_일반_역할2.id())).isEmpty(),
+                    () -> assertThat(club.clubRoles().findById(새로생성된_임원_역할1.id())).isEmpty(),
+                    () -> assertThat(club.clubRoles().findById(새로생성된_임원_역할2.id())).isEmpty()
+            );
+            generalParticipants.forEach(it -> assertThat(it.clubRole()).isEqualTo(generalDefaultRole));
+            officerParticipants.forEach(it -> assertThat(it.clubRole()).isEqualTo(officerDefaultRole));
+        }
+
+        private static long uniqueId = 1000L;
+
+        private static long uniqueId() {
+            return uniqueId++;
+        }
+
+        private List<Participant> saveParticipantWithRole(final ClubRole clubRole) {
+            List<Long> ids = List.of(uniqueId(), uniqueId());
+            return ids.stream().map(it -> {
+                club.registerParticipant(member(it));
+                Participant participant = club.findParticipantByMemberId(it);
+                ReflectionTestUtils.setField(participant, "id", it);
+                club.changeParticipantRole(presidentMemberId, it, clubRole.id());
+                return participant;
+            }).toList();
         }
     }
 }

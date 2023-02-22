@@ -30,19 +30,6 @@ public class ClubRoles {
         return new ClubRoles(ClubRole.defaultRoles(club));
     }
 
-    public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
-        return clubRoles().stream().filter(ClubRole::isDefault)
-                .filter(it -> it.clubRoleCategory() == category)
-                .findAny()
-                .orElseThrow(() -> new ClubRoleException(ClubRoleExceptionType.NOT_FOUND_DEFAULT_ROLE));
-    }
-
-    public Optional<ClubRole> findById(final Long id) {
-        return clubRoles().stream()
-                .filter(it -> id.equals(it.id()))
-                .findAny();
-    }
-
     /* Club에서 호출하여 사용하는 용도 */
     ClubRole add(final Club club, final String name, final ClubRoleCategory category) {
         validatePresidentRole(category);
@@ -87,6 +74,32 @@ public class ClubRoles {
         if (role.clubRoleCategory() != ClubRoleCategory.GENERAL) {
             throw new ClubRoleException(NO_AUTHORITY_CHANGE_ROLE_NAME);
         }
+    }
+
+    /* Club에서 호출하여 사용하는 용도 */
+    void delete(final ClubRole targetRole) {
+        validateDeletedTargetIsDefaultRole(targetRole);
+        this.clubRoles().remove(targetRole);
+    }
+
+    /* 기본 역할은 제거할 수 없다 */
+    private void validateDeletedTargetIsDefaultRole(final ClubRole targetRole) {
+        if (targetRole.isDefault()) {
+            throw new ClubRoleException(CAN_NOT_DELETE_DEFAULT_ROLE);
+        }
+    }
+
+    public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
+        return clubRoles().stream().filter(ClubRole::isDefault)
+                .filter(it -> it.clubRoleCategory() == category)
+                .findAny()
+                .orElseThrow(() -> new ClubRoleException(ClubRoleExceptionType.NOT_FOUND_DEFAULT_ROLE));
+    }
+
+    public Optional<ClubRole> findById(final Long id) {
+        return clubRoles().stream()
+                .filter(it -> id.equals(it.id()))
+                .findAny();
     }
 
     public List<ClubRole> clubRoles() {

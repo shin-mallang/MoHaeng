@@ -341,6 +341,10 @@ operation::delete-club-role(No Access Token)[snippets='http-response']
 
 operation::delete-club-role(Nonexistent Participant)[snippets='http-response']
 
+==== - 모임이 존재하지 않는 경우
+
+operation::delete-club-role(Nonexistent Club)[snippets='http-response']
+
 ==== - 제거하려는 역할이 존재하지 않는 경우
 
 operation::delete-club-role(Nonexistent ClubRole)[snippets='http-response']
@@ -349,13 +353,9 @@ operation::delete-club-role(Nonexistent ClubRole)[snippets='http-response']
 
 operation::delete-club-role(requester does not president or officer)[snippets='http-response']
 
-==== - 회장 역할을 제하려는 경우
+==== - 기본 역할을 제거하려는 경우
 
-operation::delete-club-role(when delete president role)[snippets='http-response']
-
-==== - 해당 범주에 속하는 역할이 단 한개 뿐이어서 제거할 수 없는 경우
-
-operation::delete-club-role(only one role belonging to that category, so cannot be removed)[snippets='http-response']
+operation::delete-club-role(when delete default role)[snippets='http-response']
 
 [[Club-Role-기본역할변경]]
 === - 기본역할 변경

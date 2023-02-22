@@ -11,6 +11,8 @@ public enum ClubRoleExceptionType implements BaseExceptionType {
     CAN_NOT_CREATE_PRESIDENT_ROLE(403, HttpStatus.BAD_REQUEST, "회장 역할을 새로 생성할 수 없습니다."),
     DUPLICATED_NAME(404, HttpStatus.CONFLICT, "중복되는 이름입니다."),
     NO_AUTHORITY_CHANGE_ROLE_NAME(405, HttpStatus.FORBIDDEN, "역할 이름을 바꿀 권한이 없습니다"),
+    NO_AUTHORITY_DELETE_ROLE(406, HttpStatus.FORBIDDEN, "역할을 제거할 권한이 없습니다"),
+    CAN_NOT_DELETE_DEFAULT_ROLE(407, HttpStatus.BAD_REQUEST, "기본 역할은 제거할 수 없습니다"),
     ;
 
     private final int errorCode;

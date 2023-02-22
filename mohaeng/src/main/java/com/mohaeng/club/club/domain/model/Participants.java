@@ -80,4 +80,10 @@ public class Participants {
                 .filter(it -> id.equals(it.id()))
                 .findAny();
     }
+
+    public List<Participant> findAllParticipantByClubRole(final ClubRole targetRole) {
+        return participants().stream()
+                .filter(it -> it.clubRole().equals(targetRole))
+                .toList();
+    }
 }
