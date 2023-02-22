@@ -135,19 +135,19 @@ operation::notification-query-by-id: DeleteParticipantBecauseClubIsDeletedNotifi
 [[모임-가입-신청]]
 === - 모임 가입 신청
 
-operation::request-join-club[snippets='http-request,path-parameters,http-response']
+operation::fill out application form[snippets='http-request,path-parameters,http-response']
 
 ==== - 이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우
 
-operation::request-join-club fail(already request join club)[snippets='http-response']
+operation::fill out application form fail(already request join club)[snippets='http-response']
 
 ==== - 이미 모임에 가입된 회원이 같은 모임에 또다시 가입 신청을 보낸 경우
 
-operation::request-join-club fail(member already joined club)[snippets='http-response']
+operation::fill out application form fail(member already joined club)[snippets='http-response']
 
 ==== - 요청 시 Header에 AccessToken이 없는 경우
 
-operation::request-join-club fail(No Access Token)[snippets='http-response']
+operation::fill out application form fail(No Access Token)[snippets='http-response']
 
 [[모임-가입-신청-수락]]
 === - 모임 가입 신청 수락
@@ -160,11 +160,11 @@ operation::approve-join-club-application fail(no authority)[snippets='http-respo
 
 ==== - 이미 처리된 신청서인 경우
 
-operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
+operation::approve-join-club-application fail(already processed)[snippets='http-response']
 
 ==== - 없는 신청서의 경우
 
-operation::approve-join-club-application fail(No Access Token)[snippets='http-response']
+operation::approve-join-club-application fail(no application form)[snippets='http-response']
 
 ==== - 모임이 가득 찬 경우
 
@@ -185,11 +185,11 @@ operation::reject-join-club-application fail(no authority)[snippets='http-respon
 
 ==== - 이미 처리된 신청서인 경우
 
-operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
+operation::reject-join-club-application fail(already processed)[snippets='http-response']
 
 ==== - 없는 신청서의 경우
 
-operation::reject-join-club-application fail(No Access Token)[snippets='http-response']
+operation::reject-join-club-application fail(no application form)[snippets='http-response']
 
 ==== - 요청 시 Header에 AccessToken이 없는 경우
 
@@ -201,27 +201,22 @@ operation::reject-join-club-application fail(No Access Token)[snippets='http-res
 [[Participant-제거]]
 === - 모임에서 탈퇴
 
-operation::leave-participant-from-club[snippets='http-request,path-parameters,request-headers,http-response']
+operation::leave-club[snippets='http-request,path-parameters,request-headers,http-response']
 
 ==== - 요청 시 Header에 AccessToken이 없는 경우
 
-operation::leave-participant-from-club(No Access Token)[snippets='http-response']
+operation::leave-club(No Access Token)[snippets='http-response']
 
-==== - 없는 참여자 ID인 경우
+==== - 없는 모임 ID인 경우
 
-operation::leave-participant-from-club(Nonexistent Participant ID)[snippets='http-response']
-
-==== - 요청한 회원의 ID가, 탈퇴하려는 참여자의 회원 ID와 일치하지 않는 경우
-
-operation::leave-participant-from-club(requested memberId does not match the participant's MemberId)[snippets='http-response']
+operation::leave-club(Nonexistent Club ID)[snippets='http-response']
 
 ==== - 회장이 탈퇴를 시도한 경우
 
-operation::leave-participant-from-club(president requests to leave the club)[snippets='http-response']
+operation::leave-club(president requests to leave the club)[snippets='http-response']
 
-==== - 모임에 사람이 1명밖에 남지 않아 탈퇴할 수 없는 경우 (회장이 항상 먼저 검사되므로 발생하지 않는 상황이다.)
-
-operation::leave-participant-from-club(club has only one participant)[snippets='http-response']
+[[Participant-API]]
+== Participant API
 
 [[Participant-추방]]
 === - 모임에서 추방
@@ -232,17 +227,13 @@ operation::expel-participant-from-club[snippets='http-request,path-parameters,re
 
 operation::expel-participant-from-club(No Access Token)[snippets='http-response']
 
-==== - 없는 참여자 ID인 경우
+==== - 없는 참여자인 경우
 
-operation::expel-participant-from-club(Nonexistent Participant ID)[snippets='http-response']
+operation::expel-participant-from-club(Nonexistent Participant)[snippets='http-response']
 
-==== - 요청자가 회장이 아닌 경우
+==== - 요청자가 같은 모임이 아니거나, 회장이 아닌 경우
 
 operation::expel-participant-from-club(requester does not president)[snippets='http-response']
-
-==== - 모임에 회장이 없는 경우 (발생하지 않는 상황)
-
-operation::expel-participant-from-club(Nonexistent president in club)[snippets='http-response']
 
 [[Participant-역할-변경]]
 === - 다른 참여자 역할 변경
@@ -253,33 +244,21 @@ operation::change-participant's-role[snippets='http-request,path-parameters,requ
 
 operation::change-participant's-role(No Access Token)[snippets='http-response']
 
-==== - 역할을 변경할 대상 참가자의 ID가 없는 경우
+==== - 역할을 변경할 대상 참가자의 ID가 없거나 내가 해당 모임에 가입되지 않은 경우
 
 operation::change-participant's-role(Nonexistent Participant ID)[snippets='http-response']
 
-==== - 변경하고자 하는 역할의 ID가 없는 경우
+==== - 변경하고자 하는 역할의 ID가 없거나 다른 모임에 속한 역할의 ID인 경우
 
 operation::change-participant's-role(Nonexistent ClubRole ID)[snippets='http-response']
 
-==== - 일반 회원이 변경을 요청한 경우
+==== - 회장이 아닌 회원이 변경을 요청한 경우
 
 operation::change-participant's-role(requester is general participant)[snippets='http-response']
-
-==== - 바꾸려는 역할이 다른 모임의 역할인 경우
-
-operation::change-participant's-role(change other club role)[snippets='http-response']
-
-==== - 바꾸려는 회원이 다른 모임의 회원인 경우
-
-operation::change-participant's-role(target is other club)[snippets='http-response']
 
 ==== - 회장으로 변경하려는 경우
 
 operation::change-participant's-role(change to president role)[snippets='http-response']
-
-==== - 자신과 계급이 동일하거나, 자신보다 높은 계급의 회원의 역할을 변경하려는 경우
-
-operation::change-participant's-role(target is same rank or higher rank than requester)[snippets='http-response']
 
 [[Club-Role-API]]
 == Club Role API
@@ -305,6 +284,10 @@ operation::create-club-role(requester does not president or officer)[snippets='h
 
 operation::create-club-role(when create president role)[snippets='http-response']
 
+==== - 이미 동일한 이름의 역할이 모임 내에 존재하는 경우
+
+operation::create-club-role(duplicated name)[snippets='http-response']
+
 ==== - 요청 시 비어있는 필드가 있는 경우
 
 operation::create-club-role(request fields contains empty value)[snippets='http-request,http-response']
@@ -312,6 +295,9 @@ operation::create-club-role(request fields contains empty value)[snippets='http-
 ==== - 역할 카테고리를 잘못 입력한 경우
 
 operation::create-club-role(category enum mapping fail)[snippets='http-request,http-response']
+
+[[Club-Role-API]]
+== Club Role API
 
 [[Club-Role-이름변경]]
 === - 역할 이름 변경
@@ -330,9 +316,13 @@ operation::change-club-role-name(Nonexistent Participant)[snippets='http-respons
 
 operation::change-club-role-name(Nonexistent ClubRole)[snippets='http-response']
 
-==== - 요청자가 회장 혹은 임원이 아닌 경우
+==== - 요청자가 일반 회원인 경우
 
-operation::change-club-role-name(requester does not president or officer)[snippets='http-response']
+operation::change-club-role-name(requester is general)[snippets='http-response']
+
+==== - 요청자가 임원이지만, 임원의 역할 혹은 회장의 역할 이름을 바꾸려고 요청한 경우
+
+operation::change-club-role-name(requester is officer and try to change officer role name or president role name)[snippets='http-response']
 
 ==== - 요청 시 비어있는 필드가 있는 경우
 
@@ -351,6 +341,10 @@ operation::delete-club-role(No Access Token)[snippets='http-response']
 
 operation::delete-club-role(Nonexistent Participant)[snippets='http-response']
 
+==== - 모임이 존재하지 않는 경우
+
+operation::delete-club-role(Nonexistent Club)[snippets='http-response']
+
 ==== - 제거하려는 역할이 존재하지 않는 경우
 
 operation::delete-club-role(Nonexistent ClubRole)[snippets='http-response']
@@ -359,18 +353,18 @@ operation::delete-club-role(Nonexistent ClubRole)[snippets='http-response']
 
 operation::delete-club-role(requester does not president or officer)[snippets='http-response']
 
-==== - 회장 역할을 제하려는 경우
+==== - 기본 역할을 제거하려는 경우
 
-operation::delete-club-role(when delete president role)[snippets='http-response']
-
-==== - 해당 범주에 속하는 역할이 단 한개 뿐이어서 제거할 수 없는 경우
-
-operation::delete-club-role(only one role belonging to that category, so cannot be removed)[snippets='http-response']
+operation::delete-club-role(when delete default role)[snippets='http-response']
 
 [[Club-Role-기본역할변경]]
 === - 기본역할 변경
 
 operation::change-default-club-role[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 요청자가 일반 회원인 경우
+
+operation::change-default-club-role(requester is general)[snippets='http-response']
 
 ==== - 요청 시 Header에 AccessToken이 없는 경우
 
@@ -384,10 +378,6 @@ operation::change-default-club-role(Nonexistent Participant)[snippets='http-resp
 
 operation::change-default-club-role(Nonexistent ClubRole)[snippets='http-response']
 
-==== - 요청자가 회장 혹은 임원이 아닌 경우
+==== - 모임이 존재하지 않는 경우
 
-operation::change-default-club-role(requester does not president or officer)[snippets='http-response']
-
-==== - 이미 기본 역할인 경우
-
-operation::change-default-club-role(already default role)[snippets='http-response']
+operation::change-default-club-role(Nonexistent Club)[snippets='http-response']

@@ -1,10 +1,10 @@
 package com.mohaeng.notification.domain.model.strategy;
 
+import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.NotificationMakeStrategy;
-import com.mohaeng.notification.domain.model.kind.ExpelParticipantNotification;
-import com.mohaeng.notification.domain.model.value.Receiver;
-import com.mohaeng.participant.domain.event.ExpelParticipantEvent;
+import com.mohaeng.notification.domain.model.Receiver;
+import com.mohaeng.notification.domain.model.type.ExpelParticipantNotification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

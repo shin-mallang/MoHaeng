@@ -35,7 +35,7 @@ class SignUpTest {
             // when, then
             assertAll(
                     () -> assertDoesNotThrow(() -> signUp.command(signUpUseCaseCommand())),
-                    () -> assertThat(memberRepository.findByUsername(USERNAME)).isNotNull()
+                    () -> assertThat(memberRepository.findByUsername(MALLANG_USERNAME)).isNotNull()
             );
         }
         // TODO 비밀번호 암호화 되는 테스트
@@ -49,12 +49,12 @@ class SignUpTest {
         @DisplayName("중복되는 아이디가 있다면 오류를 반환한다.")
         void fail_test_1() {
             // given
-            Member member = member(null);
-            memberRepository.save(member);
+            Member mallang = member(null);
+            memberRepository.save(mallang);
 
             // when, then
             assertThat(assertThrows(MemberException.class,
-                    () -> signUp.command(new SignUpUseCase.Command(member.username(), member.password(), member.name(), member.age(), member.gender()))
+                    () -> signUp.command(new SignUpUseCase.Command(mallang.username(), mallang.password(), mallang.name(), mallang.age(), mallang.gender()))
             ).exceptionType()).isEqualTo(DUPLICATE_USERNAME);
         }
     }

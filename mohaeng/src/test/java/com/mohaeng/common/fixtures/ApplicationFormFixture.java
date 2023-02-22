@@ -1,21 +1,19 @@
 package com.mohaeng.common.fixtures;
 
-import com.mohaeng.applicationform.application.usecase.WriteApplicationFormUseCase;
-import com.mohaeng.applicationform.domain.model.ApplicationForm;
-import org.springframework.test.util.ReflectionTestUtils;
+import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
+import com.mohaeng.club.club.domain.model.Club;
+import com.mohaeng.member.domain.model.Member;
 
 import static com.mohaeng.common.fixtures.ClubFixture.club;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 
 public class ApplicationFormFixture {
 
-    public static WriteApplicationFormUseCase.Command requestJoinClubUseCaseCommand(final Long applicantId, final Long targetClubId) {
-        return new WriteApplicationFormUseCase.Command(applicantId, targetClubId);
+    public static ApplicationForm applicationForm(final Club club, final Member member) {
+        return ApplicationForm.create(club, member);
     }
 
-    public static ApplicationForm applicationForm(final Long memberId, final Long clubId, final Long applicationFormId) {
-        ApplicationForm applicationForm = ApplicationForm.create(member(memberId), club(clubId));
-        ReflectionTestUtils.setField(applicationForm, "id", applicationFormId);
-        return applicationForm;
+    public static ApplicationForm applicationForm() {
+        return ApplicationForm.create(club(1L), member(1L));
     }
 }

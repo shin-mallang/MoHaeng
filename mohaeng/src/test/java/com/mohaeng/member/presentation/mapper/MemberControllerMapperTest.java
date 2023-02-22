@@ -17,7 +17,7 @@ class MemberControllerMapperTest {
     @DisplayName("SignUpRequest 를 SignUpUseCase.Command 로 변환한다.")
     void test() {
         // given
-        SignUpController.SignUpRequest signUpRequest = signUpRequest(USERNAME, PASSWORD, NAME, AGE, Gender.MAN);
+        SignUpController.SignUpRequest signUpRequest = signUpRequest(MALLANG_USERNAME, MALLANG_PASSWORD, MALLANG_NAME, MALLANG_AGE, Gender.MAN);
 
         // when
         SignUpUseCase.Command command = MemberControllerMapper.toApplicationDto(signUpRequest);

@@ -2,7 +2,6 @@ package com.mohaeng.notification.domain.model;
 
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.notification.application.dto.NotificationDto;
-import com.mohaeng.notification.domain.model.value.Receiver;
 import jakarta.persistence.*;
 
 /**

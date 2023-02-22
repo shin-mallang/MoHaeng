@@ -1,31 +1,29 @@
 package com.mohaeng.common.fixtures;
 
-import com.mohaeng.club.application.usecase.CreateClubUseCase;
-import com.mohaeng.club.domain.model.Club;
-import com.mohaeng.club.presentation.CreateClubController;
+import com.mohaeng.club.club.domain.model.Club;
+import com.mohaeng.member.domain.model.Member;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import static com.mohaeng.common.fixtures.MemberFixture.member;
 
 public class ClubFixture {
 
-    public static final String NAME = "name";
-    public static final String DESCRIPTION = "des";
-    public static final int MAX_PARTICIPANT_COUNT = 100;
+    public static final String ANA_NAME = "AMA";
+    public static final String ANA_DESCRIPTION = "알고리즘 동아리";
+    public static final int ANA_MAX_PARTICIPANT_COUNT = 100;
+    public static final int FULL_PARTICIPANT_COUNT = 1;
 
-    public static Club clubWithMaxParticipantCount(final int maxParticipantCount) {
-        return new Club(NAME, DESCRIPTION, maxParticipantCount);
-    }
-
-    public static Club club(final Long clubId) {
-        Club club = new Club(NAME, DESCRIPTION, MAX_PARTICIPANT_COUNT);
-        ReflectionTestUtils.setField(club, "id", clubId);
+    public static Club club(final Long id) {
+        Club club = new Club(ANA_NAME, ANA_DESCRIPTION, ANA_MAX_PARTICIPANT_COUNT, member(1L));
+        ReflectionTestUtils.setField(club, "id", id);
         return club;
     }
 
-    public static CreateClubUseCase.Command createClubUseCaseCommand(Long memberId) {
-        return new CreateClubUseCase.Command(memberId, NAME, DESCRIPTION, MAX_PARTICIPANT_COUNT);
+    public static Club clubWithMember(final Member member) {
+        return new Club(ANA_NAME, ANA_DESCRIPTION, ANA_MAX_PARTICIPANT_COUNT, member);
     }
 
-    public static CreateClubController.CreateClubRequest createClubRequest(String name, String des, int maxParticipantCount) {
-        return new CreateClubController.CreateClubRequest(name, des, maxParticipantCount);
+    public static Club fullClubWithMember(final Member member) {
+        return new Club(ANA_NAME, ANA_DESCRIPTION, FULL_PARTICIPANT_COUNT, member);
     }
 }
