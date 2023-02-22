@@ -6,7 +6,9 @@ import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.ClubRoleCategory;
 import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
+import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
+import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
@@ -20,7 +22,9 @@ import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.OFFICER;
+import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
@@ -161,5 +165,41 @@ class CreateClubRoleTest {
         // then
         assertThat(baseExceptionType).isEqualTo(DUPLICATED_NAME);
         assertThat(club.clubRoles().clubRoles().size()).isEqualTo(before);
+    }
+
+    @Test
+    void 모임이_없는_경우_예외가_발생한다() {
+        // given
+        final String generalRoleName = "새로생성한 일반회원역할";
+
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ClubException.class, () ->
+                createClubRoleUseCase.command(
+                        new CreateClubRoleUseCase.Command(
+                                presidentMember.id(), club.id() + 123L,
+                                generalRoleName, GENERAL
+                        ))
+        ).exceptionType();
+
+        // then
+        org.assertj.core.api.Assertions.assertThat(baseExceptionType).isEqualTo(NOT_FOUND_CLUB);
+    }
+
+    @Test
+    void 요청자가_해당_모임에_없는경우_예외가_발생한다() {
+        // given
+        final String generalRoleName = "새로생성한 일반회원역할";
+
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                createClubRoleUseCase.command(
+                        new CreateClubRoleUseCase.Command(
+                                presidentMember.id() + 123L, club.id(),
+                                generalRoleName, GENERAL
+                        ))
+        ).exceptionType();
+
+        // then
+        org.assertj.core.api.Assertions.assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT);
     }
 }
