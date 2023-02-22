@@ -362,6 +362,10 @@ operation::delete-club-role(when delete default role)[snippets='http-response']
 
 operation::change-default-club-role[snippets='http-request,path-parameters,request-headers,http-response']
 
+==== - 요청자가 일반 회원인 경우
+
+operation::change-default-club-role(requester is general)[snippets='http-response']
+
 ==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::change-default-club-role(No Access Token)[snippets='http-response']
@@ -374,10 +378,6 @@ operation::change-default-club-role(Nonexistent Participant)[snippets='http-resp
 
 operation::change-default-club-role(Nonexistent ClubRole)[snippets='http-response']
 
-==== - 요청자가 회장 혹은 임원이 아닌 경우
+==== - 모임이 존재하지 않는 경우
 
-operation::change-default-club-role(requester does not president or officer)[snippets='http-response']
-
-==== - 이미 기본 역할인 경우
-
-operation::change-default-club-role(already default role)[snippets='http-response']
+operation::change-default-club-role(Nonexistent Club)[snippets='http-response']
