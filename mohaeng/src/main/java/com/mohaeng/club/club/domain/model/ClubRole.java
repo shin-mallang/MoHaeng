@@ -65,6 +65,14 @@ public class ClubRole extends BaseEntity {
         this.name = name;
     }
 
+    public void makeDefault() {
+        this.isDefault = true;
+    }
+
+    public void makeNonDefault() {
+        this.isDefault = false;
+    }
+
     public String name() {
         return name;
     }

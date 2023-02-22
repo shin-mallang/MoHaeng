@@ -13,6 +13,7 @@ public enum ClubRoleExceptionType implements BaseExceptionType {
     NO_AUTHORITY_CHANGE_ROLE_NAME(405, HttpStatus.FORBIDDEN, "역할 이름을 바꿀 권한이 없습니다"),
     NO_AUTHORITY_DELETE_ROLE(406, HttpStatus.FORBIDDEN, "역할을 제거할 권한이 없습니다"),
     CAN_NOT_DELETE_DEFAULT_ROLE(407, HttpStatus.BAD_REQUEST, "기본 역할은 제거할 수 없습니다"),
+    NO_AUTHORITY_CHANGE_DEFAULT_ROLE(408, HttpStatus.FORBIDDEN, "기본 역할을 바꿀 권한이 없습니다"),
     ;
 
     private final int errorCode;

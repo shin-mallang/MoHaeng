@@ -89,6 +89,15 @@ public class ClubRoles {
         }
     }
 
+    /* 해당 역할을 기본 역할로 변경한다.
+       Club에서 호출하여 사용하는 용도 */
+    void changeDefaultRole(final Long id) {
+        ClubRole defaultRoleCandidate = findById(id).orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
+        ClubRole originalDefaultRole = findDefaultRoleByCategory(defaultRoleCandidate.clubRoleCategory());
+        defaultRoleCandidate.makeDefault();
+        originalDefaultRole.makeNonDefault();
+    }
+
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
         return clubRoles().stream().filter(ClubRole::isDefault)
                 .filter(it -> it.clubRoleCategory() == category)

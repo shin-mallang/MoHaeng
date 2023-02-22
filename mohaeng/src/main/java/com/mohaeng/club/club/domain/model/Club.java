@@ -183,6 +183,22 @@ public class Club extends BaseEntity {
         }
     }
 
+    /**
+     * 기본 역할을 변경한다.
+     * 회장과 임원만이 가능하다
+     */
+    public void changeDefaultRole(final Long memberId, final Long roleId) {
+        Participant participant = findParticipantByMemberId(memberId);
+        validateAuthorityChangeDefaultRole(participant);
+        clubRoles().changeDefaultRole(roleId);
+    }
+
+    private void validateAuthorityChangeDefaultRole(final Participant participant) {
+        if (!participant.isManager()) {
+            throw new ClubRoleException(NO_AUTHORITY_CHANGE_DEFAULT_ROLE);
+        }
+    }
+
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
         return clubRoles().findDefaultRoleByCategory(category);
     }
