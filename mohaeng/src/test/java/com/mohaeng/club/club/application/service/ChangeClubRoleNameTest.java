@@ -6,6 +6,7 @@ import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.ClubRoleCategory;
 import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
+import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
+import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NO_AUTHORITY_CHANGE_ROLE_NAME;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
@@ -207,5 +209,25 @@ class ChangeClubRoleNameTest {
 
         // then
         assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
+    }
+
+    @Test
+    void 모임이_없는_경우_예외가_발생한다() {
+        // given
+        String name = "변경할이름";
+
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ClubException.class, () ->
+                changeClubRoleNameUseCase.command(
+                        new ChangeClubRoleNameUseCase.Command(
+                                general.member().id(),
+                                club.id() + 1233L,
+                                clubRoleMap.get(PRESIDENT).id(),
+                                name
+                        ))
+        ).exceptionType();
+
+        // then
+        assertThat(baseExceptionType).isEqualTo(NOT_FOUND_CLUB);
     }
 }

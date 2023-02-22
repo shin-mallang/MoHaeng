@@ -6,7 +6,9 @@ import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.ClubRoleCategory;
 import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
+import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
+import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
@@ -21,7 +23,9 @@ import org.springframework.test.context.event.ApplicationEvents;
 import java.util.List;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
+import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
+import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
@@ -224,5 +228,49 @@ class DeleteClubRoleTest {
                 () -> assertThat(club.findParticipantByMemberId(member2.id()).clubRole())
                         .isEqualTo(club.findDefaultRoleByCategory(GENERAL))
         );
+    }
+
+    @Test
+    void 모임이_없는_경우_예외가_발생한다() {
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ClubException.class, () ->
+                deleteClubRoleUseCase.command(
+                        new DeleteClubRoleUseCase.Command(
+                                presidentMember.id(),
+                                club.id() + 11123L,
+                                clubRoles.get(0).id()))
+        ).exceptionType();
+
+        // then
+        assertThat(baseExceptionType).isEqualTo(NOT_FOUND_CLUB);
+    }
+
+    @Test
+    void 참가자가_해당_모임에_없는경우_예외가_발생한다() {
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                deleteClubRoleUseCase.command(
+                        new DeleteClubRoleUseCase.Command(
+                                presidentMember.id() + 123124L,
+                                club.id(),
+                                clubRoles.get(0).id()))
+        ).exceptionType();
+        // then
+        assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT);
+    }
+
+    @Test
+    void 역할이_없는_경우_예외가_발생한다() {
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                deleteClubRoleUseCase.command(
+                        new DeleteClubRoleUseCase.Command(
+                                presidentMember.id(),
+                                club.id(),
+                                12354123L))
+        ).exceptionType();
+
+        // then
+        assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
     }
 }

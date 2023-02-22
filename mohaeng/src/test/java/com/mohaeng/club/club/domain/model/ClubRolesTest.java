@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
@@ -264,6 +265,52 @@ class ClubRolesTest {
             // then
             assertThat(baseExceptionType).isEqualTo(CAN_NOT_DELETE_DEFAULT_ROLE);
             assertThat(clubRoles.clubRoles()).contains(defaultRole);
+        }
+    }
+
+    @Nested
+    @DisplayName("기본 역할 변경(changeDefaultRole) 테스트")
+    class ChangeDefaultRoleTest {
+
+        ClubRole 임원역할;
+        ClubRole 일반역할;
+
+        @BeforeEach
+        void init() {
+            임원역할 = clubRoles.add(club, "임원역할", OFFICER);
+            일반역할 = clubRoles.add(club, "일반역할", GENERAL);
+            for (int i = 0; i < clubRoles.clubRoles().size(); i++) {
+                ReflectionTestUtils.setField(clubRoles.clubRoles().get(i), "id", (long) i + 100L);
+            }
+        }
+
+        @Test
+        void 기본_역할을_변경한다() {
+            // when
+            clubRoles.changeDefaultRole(임원역할.id());
+            clubRoles.changeDefaultRole(일반역할.id());
+
+            // then
+            assertAll(
+                    () -> assertThat(clubRoles.findDefaultRoleByCategory(OFFICER)).isEqualTo(임원역할),
+                    () -> assertThat(clubRoles.findDefaultRoleByCategory(GENERAL)).isEqualTo(일반역할)
+            );
+        }
+
+        @Test
+        void 기본_역할_변경_시_기존_기본_역할은_기본_역할이_아니게_된다() {
+            // given
+            ClubRole originalDefaultOfficer = clubRoles.findDefaultRoleByCategory(OFFICER);
+            ClubRole originalDefaultGeneral = clubRoles.findDefaultRoleByCategory(GENERAL);
+
+            // when
+            기본_역할을_변경한다();
+
+            // then
+            assertAll(
+                    () -> assertThat(originalDefaultOfficer.isDefault()).isFalse(),
+                    () -> assertThat(originalDefaultGeneral.isDefault()).isFalse()
+            );
         }
     }
 }

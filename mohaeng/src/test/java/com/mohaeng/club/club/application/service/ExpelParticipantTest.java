@@ -12,7 +12,9 @@ import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 
@@ -135,6 +137,25 @@ class ExpelParticipantTest {
         club = clubRepository.findById(club.id()).get();
         assertAll(
                 () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_CLUB),
+                () -> assertThat(club.existParticipantByMemberId(general.member().id())).isTrue(),
+                () -> assertThat(events.stream(ExpelParticipantEvent.class).count()).isEqualTo(0L)
+        );
+    }
+
+    @Test
+    void 요청자가_해당_모임에_가입하지_않은_경우_예외가_발생한다() {
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () ->
+                expelParticipant.command(
+                        new ExpelParticipantUseCase.Command(president.member().id() + 123L, club.id(), general.id())
+                )
+        ).exceptionType();
+
+        // then
+        flushAndClear();
+        club = clubRepository.findById(club.id()).get();
+        assertAll(
+                () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT),
                 () -> assertThat(club.existParticipantByMemberId(general.member().id())).isTrue(),
                 () -> assertThat(events.stream(ExpelParticipantEvent.class).count()).isEqualTo(0L)
         );

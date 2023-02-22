@@ -6,6 +6,7 @@ import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
+import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
@@ -13,11 +14,14 @@ import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
+import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.*;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
@@ -197,5 +201,25 @@ class ChangeParticipantRoleTest {
                 () -> assertThat(club.findParticipantById(general.id()).clubRole()).isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
                 () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE)
         );
+    }
+
+    @Test
+    void 모임이_없는_경우_예외가_발생한다() {
+        // given
+        ClubRole changed = club.findDefaultRoleByCategory(OFFICER);
+
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ClubException.class, () ->
+                changeParticipantRoleUseCase.command(
+                        new ChangeParticipantRoleUseCase.Command(
+                                president.member().id(),
+                                club.id() + 123L,
+                                general.id(),
+                                changed.id()
+                        ))
+        ).exceptionType();
+
+        // then
+        assertThat(baseExceptionType).isEqualTo(NOT_FOUND_CLUB);
     }
 }

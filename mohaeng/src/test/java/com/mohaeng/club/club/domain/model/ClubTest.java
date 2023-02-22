@@ -648,4 +648,70 @@ class ClubTest {
             }).toList();
         }
     }
+
+    @Nested
+    @DisplayName("기본 역할 변경(changeDefaultRole) 테스트")
+    class ChangeDefaultRoleTest {
+
+        ClubRole 임원역할;
+        ClubRole 일반역할;
+
+        @BeforeEach
+        void init() {
+            임원역할 = club.clubRoles().add(club, "임원역할", OFFICER);
+            일반역할 = club.clubRoles().add(club, "일반역할", GENERAL);
+            for (int i = 0; i < club.clubRoles().clubRoles().size(); i++) {
+                ReflectionTestUtils.setField(club.clubRoles().clubRoles().get(i), "id", (long) i + 100L);
+            }
+        }
+
+        @Test
+        void 회장과_임원진은_기본_역할을_변경할_수_있다() {
+            // when
+            club.changeDefaultRole(officer.member().id(), 임원역할.id());
+            club.changeDefaultRole(presidentMember.id(), 일반역할.id());
+
+            // then
+            assertAll(
+                    () -> assertThat(club.findDefaultRoleByCategory(OFFICER)).isEqualTo(임원역할),
+                    () -> assertThat(club.findDefaultRoleByCategory(GENERAL)).isEqualTo(일반역할)
+            );
+        }
+
+        @Test
+        void 기본_역할_변경_시_기존_기본_역할은_기본_역할이_아니게_된다() {
+            // given
+            ClubRole originalDefaultOfficer = club.findDefaultRoleByCategory(OFFICER);
+            ClubRole originalDefaultGeneral = club.findDefaultRoleByCategory(GENERAL);
+
+            // when
+            회장과_임원진은_기본_역할을_변경할_수_있다();
+
+            // then
+            assertAll(
+                    () -> assertThat(originalDefaultOfficer.isDefault()).isFalse(),
+                    () -> assertThat(originalDefaultGeneral.isDefault()).isFalse()
+            );
+        }
+
+        @Test
+        void 일반_회원은_기본_역할을_변경할_수_없다() {
+            // given
+            ClubRole originalDefaultGeneral = club.findDefaultRoleByCategory(GENERAL);
+
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    club.changeDefaultRole(general.member().id(), 일반역할.id())
+            ).exceptionType();
+
+            // then
+            assertAll(
+                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_CHANGE_DEFAULT_ROLE),
+                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_CHANGE_DEFAULT_ROLE),
+                    () -> assertThat(originalDefaultGeneral.isDefault()).isTrue(),
+                    () -> assertThat(club.findDefaultRoleByCategory(OFFICER)).isNotEqualTo(일반역할),
+                    () -> assertThat(일반역할.isDefault()).isFalse()
+            );
+        }
+    }
 }
