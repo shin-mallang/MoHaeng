@@ -260,6 +260,35 @@ operation::change-participant's-role(requester is general participant)[snippets=
 
 operation::change-participant's-role(change to president role)[snippets='http-response']
 
+[[Participant-회장-위임]]
+=== - 회장 위임
+
+operation::delegate-president[snippets='http-request,request-headers,request-fields,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::delegate-president(No Access Token)[snippets='http-response']
+
+==== - 모임이 없는 경우
+
+operation::delegate-president(Nonexistent Club)[snippets='http-response']
+
+==== - 요청한 회원이 모임에 가입되어있지 않은 경우
+
+operation::delegate-president(Nonexistent Participant)[snippets='http-response']
+
+==== - 차기 회장 대상이 해당 모임에 가입되어있지 않은 경우
+
+operation::delegate-president(president candidate is non joined club)[snippets='http-response']
+
+==== - 요청자가 회장이 아닌 경우
+
+operation::delegate-president(requester does not president or officer)[snippets='http-response']
+
+==== - 회장 위임 요청 시 Request Body 필드가 없는 경우
+
+operation::delegate-president(request fields contains empty value)[snippets='http-response']
+
 [[Club-Role-API]]
 == Club Role API
 
@@ -271,6 +300,10 @@ operation::create-club-role[snippets='http-request,path-parameters,request-heade
 ==== - 요청 시 Header에 AccessToken이 없는 경우
 
 operation::create-club-role(No Access Token)[snippets='http-response']
+
+==== - 모임이 없는 경우
+
+operation::create-club-role(Nonexistent Club)[snippets='http-request,http-response']
 
 ==== - 해당 회원이 역할을 생성하려는 모임에 가입되어있지 않은 경우
 

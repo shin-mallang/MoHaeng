@@ -4,6 +4,7 @@ import com.mohaeng.club.club.application.usecase.DelegatePresidentUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
+import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 
+import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NO_AUTHORITY_DELEGATE_PRESIDENT;
 import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
@@ -92,6 +94,24 @@ class DelegatePresidentTest {
         // then
         president = club.findParticipantById(president.id());
         assertThat(president.isManager()).isFalse();
+    }
+
+    @Test
+    void 모임이_없다면_예외가_발생한다() {
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(ClubException.class, () ->
+                delegatePresidentUseCase.command(
+                        new DelegatePresidentUseCase.Command(
+                                presidentMember.id(), 123124L, general.id()
+                        )
+                )).exceptionType();
+
+        // then
+        general = club.findParticipantById(general.id());
+        assertAll(
+                () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_CLUB),
+                () -> assertThat(general.isPresident()).isFalse()
+        );
     }
 
     @Test
