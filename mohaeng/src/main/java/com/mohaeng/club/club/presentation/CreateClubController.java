@@ -16,7 +16,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 public class CreateClubController {
 
-    static final String CREATE_CLUB_URL = "/api/club";
+    public static final String CREATE_CLUB_URL = "/api/club";
 
     private final CreateClubUseCase createClubUseCase;
 
@@ -30,7 +30,7 @@ public class CreateClubController {
     @PostMapping(path = CREATE_CLUB_URL)
     public ResponseEntity<Void> create(
             @Auth final Long memberId,
-            @Valid @RequestBody final CreateClubRequest request
+            @Valid @RequestBody final Request request
     ) {
         createClubUseCase.command(
                 new CreateClubUseCase.Command(
@@ -41,7 +41,7 @@ public class CreateClubController {
         return status(CREATED).build();
     }
 
-    public record CreateClubRequest(
+    public record Request(
             @NotBlank(message = "모임의 이름은 필수입니다.")
             String name,
 

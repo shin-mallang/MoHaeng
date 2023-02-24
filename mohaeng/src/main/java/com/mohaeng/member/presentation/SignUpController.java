@@ -2,7 +2,6 @@ package com.mohaeng.member.presentation;
 
 import com.mohaeng.member.application.usecase.SignUpUseCase;
 import com.mohaeng.member.domain.model.enums.Gender;
-import com.mohaeng.member.presentation.mapper.MemberControllerMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.mohaeng.member.application.usecase.SignUpUseCase.Command;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -29,8 +29,12 @@ public class SignUpController {
     public ResponseEntity<Void> signUp(
             @Valid @RequestBody final SignUpRequest signUpRequest
     ) {
-        signUpUseCase.command(
-                MemberControllerMapper.toApplicationDto(signUpRequest)
+        signUpUseCase.command(new Command(
+                signUpRequest.username(),
+                signUpRequest.password(),
+                signUpRequest.name(),
+                signUpRequest.age(),
+                signUpRequest.gender())
         );
         return ResponseEntity.status(CREATED).build();
     }
