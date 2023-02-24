@@ -1,6 +1,6 @@
 package com.mohaeng.club.club.application.service.command;
 
-import com.mohaeng.club.club.application.usecase.DeleteClubRoleUseCase;
+import com.mohaeng.club.club.application.usecase.command.DeleteClubRoleUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.ClubRoleCategory;

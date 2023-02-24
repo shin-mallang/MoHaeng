@@ -1,4 +1,4 @@
-package com.mohaeng.club.club.application.usecase;
+package com.mohaeng.club.club.application.usecase.command;
 
 /**
  * 모임에서 탈퇴

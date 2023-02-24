@@ -1,7 +1,7 @@
-package com.mohaeng.club.club.presentation;
+package com.mohaeng.club.club.presentation.command;
 
 import com.mohaeng.authentication.presentation.argumentresolver.Auth;
-import com.mohaeng.club.club.application.usecase.CreateClubUseCase;
+import com.mohaeng.club.club.application.usecase.command.CreateClubUseCase;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

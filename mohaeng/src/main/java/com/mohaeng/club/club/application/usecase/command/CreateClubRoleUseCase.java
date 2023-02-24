@@ -1,4 +1,4 @@
-package com.mohaeng.club.club.application.usecase;
+package com.mohaeng.club.club.application.usecase.command;
 
 import com.mohaeng.club.club.domain.model.ClubRoleCategory;
 

@@ -1,6 +1,6 @@
 package com.mohaeng.club.club.application.service.command;
 
-import com.mohaeng.club.club.application.usecase.DelegatePresidentUseCase;
+import com.mohaeng.club.club.application.usecase.command.DelegatePresidentUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubRepository;

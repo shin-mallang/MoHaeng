@@ -1,6 +1,6 @@
 package com.mohaeng.club.club.application.service.command;
 
-import com.mohaeng.club.club.application.usecase.CreateClubUseCase;
+import com.mohaeng.club.club.application.usecase.command.CreateClubUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.member.domain.model.Member;

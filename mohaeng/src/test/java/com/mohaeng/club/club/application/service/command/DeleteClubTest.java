@@ -3,7 +3,7 @@ package com.mohaeng.club.club.application.service.command;
 import com.mohaeng.club.applicationform.domain.event.DeleteApplicationFormEvent;
 import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
-import com.mohaeng.club.club.application.usecase.DeleteClubUseCase;
+import com.mohaeng.club.club.application.usecase.command.DeleteClubUseCase;
 import com.mohaeng.club.club.domain.event.DeleteClubEvent;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.ClubRole;

@@ -1,7 +1,6 @@
 package com.mohaeng.club.club.application.service.command;
 
-import com.mohaeng.club.club.application.service.command.ExpelParticipant;
-import com.mohaeng.club.club.application.usecase.ExpelParticipantUseCase;
+import com.mohaeng.club.club.application.usecase.command.ExpelParticipantUseCase;
 import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.Participant;

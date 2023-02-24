@@ -1,6 +1,6 @@
-package com.mohaeng.club.club.presentation;
+package com.mohaeng.club.club.presentation.command;
 
-import com.mohaeng.club.club.application.usecase.DeleteClubRoleUseCase;
+import com.mohaeng.club.club.application.usecase.command.DeleteClubRoleUseCase;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
-import static com.mohaeng.club.club.presentation.DeleteClubRoleController.DELETE_CLUB_ROLE_URL;
+import static com.mohaeng.club.club.presentation.command.DeleteClubRoleController.DELETE_CLUB_ROLE_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;

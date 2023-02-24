@@ -1,6 +1,6 @@
-package com.mohaeng.club.club.presentation;
+package com.mohaeng.club.club.presentation.command;
 
-import com.mohaeng.club.club.application.usecase.CreateClubUseCase;
+import com.mohaeng.club.club.application.usecase.command.CreateClubUseCase;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -9,7 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.mohaeng.club.club.presentation.CreateClubController.CREATE_CLUB_URL;
+import static com.mohaeng.club.club.presentation.command.CreateClubController.CREATE_CLUB_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;

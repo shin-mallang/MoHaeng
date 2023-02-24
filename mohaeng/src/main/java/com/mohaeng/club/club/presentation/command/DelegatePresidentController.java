@@ -1,8 +1,8 @@
-package com.mohaeng.club.club.presentation;
+package com.mohaeng.club.club.presentation.command;
 
 import com.mohaeng.authentication.presentation.argumentresolver.Auth;
-import com.mohaeng.club.club.application.usecase.DelegatePresidentUseCase;
-import com.mohaeng.club.club.application.usecase.DelegatePresidentUseCase.Command;
+import com.mohaeng.club.club.application.usecase.command.DelegatePresidentUseCase;
+import com.mohaeng.club.club.application.usecase.command.DelegatePresidentUseCase.Command;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;

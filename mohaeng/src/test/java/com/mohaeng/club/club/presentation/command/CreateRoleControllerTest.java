@@ -1,10 +1,10 @@
-package com.mohaeng.club.club.presentation;
+package com.mohaeng.club.club.presentation.command;
 
-import com.mohaeng.club.club.application.usecase.CreateClubRoleUseCase;
+import com.mohaeng.club.club.application.usecase.command.CreateClubRoleUseCase;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
-import com.mohaeng.club.club.presentation.CreateRoleController.Request;
+import com.mohaeng.club.club.presentation.command.CreateRoleController.Request;
 import com.mohaeng.common.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -22,7 +22,7 @@ import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
 import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
-import static com.mohaeng.club.club.presentation.CreateRoleController.CREATE_CLUB_ROLE_URL;
+import static com.mohaeng.club.club.presentation.command.CreateRoleController.CREATE_CLUB_ROLE_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;

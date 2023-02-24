@@ -1,6 +1,6 @@
 package com.mohaeng.club.club.application.service.command;
 
-import com.mohaeng.club.club.application.usecase.ChangeParticipantRoleUseCase;
+import com.mohaeng.club.club.application.usecase.command.ChangeParticipantRoleUseCase;
 import com.mohaeng.club.club.domain.event.ParticipantClubRoleChangedEvent;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.ClubRole;

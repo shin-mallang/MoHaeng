@@ -1,6 +1,6 @@
-package com.mohaeng.club.club.presentation;
+package com.mohaeng.club.club.presentation.command;
 
-import com.mohaeng.club.club.application.usecase.ChangeDefaultRoleUseCase;
+import com.mohaeng.club.club.application.usecase.command.ChangeDefaultRoleUseCase;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
@@ -19,7 +19,7 @@ import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NO_AUTHORITY_CHANGE_DEFAULT_ROLE;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
-import static com.mohaeng.club.club.presentation.ChangeDefaultRoleController.CHANGE_DEFAULT_ROLE_URL;
+import static com.mohaeng.club.club.presentation.command.ChangeDefaultRoleController.CHANGE_DEFAULT_ROLE_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;

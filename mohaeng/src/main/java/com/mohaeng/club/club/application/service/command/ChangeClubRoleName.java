@@ -1,6 +1,6 @@
 package com.mohaeng.club.club.application.service.command;
 
-import com.mohaeng.club.club.application.usecase.ChangeClubRoleNameUseCase;
+import com.mohaeng.club.club.application.usecase.command.ChangeClubRoleNameUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.club.club.exception.ClubException;

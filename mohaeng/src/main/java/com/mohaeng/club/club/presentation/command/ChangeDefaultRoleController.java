@@ -1,7 +1,7 @@
-package com.mohaeng.club.club.presentation;
+package com.mohaeng.club.club.presentation.command;
 
 import com.mohaeng.authentication.presentation.argumentresolver.Auth;
-import com.mohaeng.club.club.application.usecase.ChangeDefaultRoleUseCase;
+import com.mohaeng.club.club.application.usecase.command.ChangeDefaultRoleUseCase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

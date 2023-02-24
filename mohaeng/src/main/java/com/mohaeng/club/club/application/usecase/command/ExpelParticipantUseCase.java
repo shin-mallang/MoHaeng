@@ -1,4 +1,4 @@
-package com.mohaeng.club.club.application.usecase;
+package com.mohaeng.club.club.application.usecase.command;
 
 /**
  * 회원 추방 기능

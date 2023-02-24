@@ -1,6 +1,6 @@
-package com.mohaeng.club.club.presentation;
+package com.mohaeng.club.club.presentation.command;
 
-import com.mohaeng.club.club.application.usecase.ChangeClubRoleNameUseCase;
+import com.mohaeng.club.club.application.usecase.command.ChangeClubRoleNameUseCase;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.ControllerTest;
@@ -17,8 +17,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NO_AUTHORITY_CHANGE_ROLE_NAME;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
-import static com.mohaeng.club.club.presentation.ChangeClubRoleNameController.CHANGE_CLUB_ROLE_NAME_URL;
-import static com.mohaeng.club.club.presentation.ChangeClubRoleNameController.Request;
+import static com.mohaeng.club.club.presentation.command.ChangeClubRoleNameController.CHANGE_CLUB_ROLE_NAME_URL;
+import static com.mohaeng.club.club.presentation.command.ChangeClubRoleNameController.Request;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.AuthenticationFixture.BEARER_ACCESS_TOKEN;
