@@ -1,6 +1,7 @@
 package com.mohaeng.club.club.presentation;
 
 import com.mohaeng.club.club.application.usecase.CreateClubRoleUseCase;
+import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.club.club.presentation.CreateRoleController.Request;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.OFFICER;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
+import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.mohaeng.club.club.presentation.CreateRoleController.CREATE_CLUB_ROLE_URL;
@@ -103,6 +105,30 @@ class CreateRoleControllerTest extends ControllerTest {
 
         resultActions.andDo(
                 document("create-club-role(No Access Token)",
+                        getDocumentResponse()
+                )
+        );
+    }
+
+    @Test
+    void 모임이_없는_경우_404를_빤환한다() throws Exception {
+        // given
+        final Long memberId = 1L;
+        setAuthentication(memberId);
+        doThrow(new ClubException(NOT_FOUND_CLUB))
+                .when(createClubRoleUseCase).command(any());
+
+        // when & then
+        ResultActions resultActions = mockMvc.perform(
+                post(CREATE_CLUB_ROLE_URL, 1L)
+                        .header(HttpHeaders.AUTHORIZATION, BEARER_ACCESS_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+        ).andExpect(status().isNotFound());
+
+        then(createClubRoleUseCase).should().command(any());
+        resultActions.andDo(
+                document("create-club-role(Nonexistent Club)",
                         getDocumentResponse()
                 )
         );
