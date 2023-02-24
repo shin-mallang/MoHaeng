@@ -1,3 +1,9 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.2'
@@ -44,9 +50,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.2.1'
 
     // QueryDSL 설정
-    implementation 'com.querydsl:querydsl-jpa'
-    implementation 'com.querydsl:querydsl-core'
-    implementation 'com.querydsl:querydsl-collections'
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -124,7 +128,7 @@ tasks.withType(JavaCompile) {
 
 // java source set 에 QueryDSL Q class 위치 추가
 sourceSets {
-    main.java.srcDirs += [ generated ]
+    main.java.srcDirs += [generated]
 }
 
 
