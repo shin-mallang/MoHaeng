@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.1'
+    id 'org.springframework.boot' version '3.0.2'
     id 'io.spring.dependency-management' version '1.1.0'
 
     // Asciidoctor 플러그인 적용
@@ -21,6 +21,9 @@ repositories {
 }
 
 dependencies {
+    // BatchSize 오류 해결
+    implementation 'org.hibernate.orm:hibernate-core:6.2.0.CR2'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
