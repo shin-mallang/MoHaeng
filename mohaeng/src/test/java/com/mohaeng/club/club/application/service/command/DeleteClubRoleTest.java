@@ -1,4 +1,4 @@
-package com.mohaeng.club.club.application.service;
+package com.mohaeng.club.club.application.service.command;
 
 import com.mohaeng.club.club.application.usecase.DeleteClubRoleUseCase;
 import com.mohaeng.club.club.domain.model.Club;

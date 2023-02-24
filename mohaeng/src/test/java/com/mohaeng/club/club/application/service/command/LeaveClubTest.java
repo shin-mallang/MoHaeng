@@ -1,4 +1,4 @@
-package com.mohaeng.club.club.application.service;
+package com.mohaeng.club.club.application.service.command;
 
 import com.mohaeng.club.club.application.usecase.LeaveClubUseCase;
 import com.mohaeng.club.club.domain.model.Club;
@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("LeaveClub 은")
 @ApplicationTest
 class LeaveClubTest {

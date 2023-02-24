@@ -1,5 +1,6 @@
-package com.mohaeng.club.club.application.service;
+package com.mohaeng.club.club.application.service.command;
 
+import com.mohaeng.club.club.application.service.command.CreateClub;
 import com.mohaeng.club.club.application.usecase.CreateClubUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.repository.ClubRepository;
@@ -14,9 +15,10 @@ import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@ApplicationTest
 @SuppressWarnings("NonAsciiCharacters")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("CreateClub 은")
+@ApplicationTest
 class CreateClubTest {
 
     private static final String NAME = "ANA";

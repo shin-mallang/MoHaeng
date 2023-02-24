@@ -1,4 +1,4 @@
-package com.mohaeng.club.club.application.service;
+package com.mohaeng.club.club.application.service.command;
 
 import com.mohaeng.club.club.application.usecase.ChangeDefaultRoleUseCase;
 import com.mohaeng.club.club.domain.model.Club;

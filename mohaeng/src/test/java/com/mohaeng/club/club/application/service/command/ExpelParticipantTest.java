@@ -1,5 +1,6 @@
-package com.mohaeng.club.club.application.service;
+package com.mohaeng.club.club.application.service.command;
 
+import com.mohaeng.club.club.application.service.command.ExpelParticipant;
 import com.mohaeng.club.club.application.usecase.ExpelParticipantUseCase;
 import com.mohaeng.club.club.domain.event.ExpelParticipantEvent;
 import com.mohaeng.club.club.domain.model.Club;
@@ -12,9 +13,7 @@ import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
 import com.mohaeng.member.domain.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 
@@ -32,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("ExpelParticipant 은")
 @ApplicationTest
 class ExpelParticipantTest {

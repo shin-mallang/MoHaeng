@@ -1,4 +1,4 @@
-package com.mohaeng.club.club.application.service;
+package com.mohaeng.club.club.application.service.command;
 
 import com.mohaeng.club.applicationform.domain.event.DeleteApplicationFormEvent;
 import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("DeleteClub 은")
 @ApplicationTest
 class DeleteClubTest {
@@ -119,7 +120,6 @@ class DeleteClubTest {
     }
 
     @Test
-    @DisplayName("모임이 없는 경우 예외가 발생한다.")
     void 모임이_없는_경우_예외가_발생한다() {
         BaseExceptionType baseExceptionType = assertThrows(ClubException.class, () -> deleteClubUseCase.command(
                 new DeleteClubUseCase.Command(officer.member().id(), 100L)
