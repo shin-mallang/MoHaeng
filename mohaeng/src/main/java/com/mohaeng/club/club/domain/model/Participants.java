@@ -86,4 +86,20 @@ public class Participants {
                 .filter(it -> it.clubRole().equals(targetRole))
                 .toList();
     }
+
+    /* 회장 역할 위임 기능 */
+    void delegatePresident(final Long presidentMemberId, final Long candidateParticipantId, final ClubRole generalRole) {
+        Participant president = findByMemberId(presidentMemberId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        Participant candidate = findById(candidateParticipantId).orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
+        validateDeletePresident(president);
+        ClubRole presidentRole = president.clubRole();
+        president.changeRole(generalRole);
+        candidate.changeRole(presidentRole);
+    }
+
+    private void validateDeletePresident(final Participant president) {
+        if (!president.isPresident()) {
+            throw new ParticipantException(NO_AUTHORITY_DELEGATE_PRESIDENT);
+        }
+    }
 }

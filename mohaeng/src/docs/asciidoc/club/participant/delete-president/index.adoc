@@ -1,0 +1,42 @@
+= MoHaeng API Docs
+:doctype: book
+:icons: font
+// 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:source-highlighter: highlightjs
+// toc (Table Of Contents)를 문서의 좌측에 두기
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Participant-API]]
+== Participant API
+
+[[Participant-회장-위임]]
+=== - 회장 위임
+
+operation::delegate-president[snippets='http-request,request-headers,request-fields,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::delegate-president(No Access Token)[snippets='http-response']
+
+==== - 모임이 없는 경우
+
+operation::delegate-president(Nonexistent Club)[snippets='http-response']
+
+==== - 요청한 회원이 모임에 가입되어있지 않은 경우
+
+operation::delegate-president(Nonexistent Participant)[snippets='http-response']
+
+==== - 차기 회장 대상이 해당 모임에 가입되어있지 않은 경우
+
+operation::delegate-president(president candidate is non joined club)[snippets='http-response']
+
+==== - 요청자가 회장이 아닌 경우
+
+operation::delegate-president(requester does not president or officer)[snippets='http-response']
+
+==== - 회장 위임 요청 시 Request Body 필드가 없는 경우
+
+operation::delegate-president(request fields contains empty value)[snippets='http-response']
+

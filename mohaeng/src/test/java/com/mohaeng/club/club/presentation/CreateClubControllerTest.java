@@ -35,17 +35,17 @@ class CreateClubControllerTest extends ControllerTest {
     @MockBean
     private CreateClubUseCase createClubUseCase;
 
-    private final CreateClubController.CreateClubRequest correctRequest =
-            new CreateClubController.CreateClubRequest("name", "dex", 10);
+    private final CreateClubController.Request correctRequest =
+            new CreateClubController.Request("name", "dex", 10);
 
-    private final CreateClubController.CreateClubRequest emptyFieldRequest =
-            new CreateClubController.CreateClubRequest("   ", "   ", 10);
+    private final CreateClubController.Request emptyFieldRequest =
+            new CreateClubController.Request("   ", "   ", 10);
 
-    private final CreateClubController.CreateClubRequest zeroMaxPeopleCountRequest =
-            new CreateClubController.CreateClubRequest("name", "dex", 0);
+    private final CreateClubController.Request zeroMaxPeopleCountRequest =
+            new CreateClubController.Request("name", "dex", 0);
 
-    private final CreateClubController.CreateClubRequest negativeMaxPeopleCountRequest =
-            new CreateClubController.CreateClubRequest("name", "dex", -1);
+    private final CreateClubController.Request negativeMaxPeopleCountRequest =
+            new CreateClubController.Request("name", "dex", -1);
 
     @Nested
     @DisplayName("성공 테스트")

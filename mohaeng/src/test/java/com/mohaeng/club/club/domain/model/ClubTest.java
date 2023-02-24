@@ -714,4 +714,75 @@ class ClubTest {
             );
         }
     }
+
+    @Nested
+    @DisplayName("회장 위임(delegatePresident) 테스트")
+    class DelegatePresident {
+
+        @Test
+        void 회장은_임임의_회원을_차기_회장으로_위임할_수_있다() {
+            // when
+            club.delegatePresident(president.member().id(), general.id());
+
+            // then
+            assertThat(general.clubRole().clubRoleCategory()).isEqualTo(PRESIDENT);
+        }
+
+        @Test
+        void 기존_회장은_위임_이후_일반_회원이_된다() {
+            // when
+            회장은_임임의_회원을_차기_회장으로_위임할_수_있다();
+
+            // then
+            assertAll(
+                    () -> assertThat(president.clubRole().clubRoleCategory()).isEqualTo(GENERAL),
+                    () -> assertThat(president.clubRole().isDefault()).isTrue()
+            );
+        }
+
+        @Test
+        void 요청자가_회장이_아닌경우_예외가_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () -> {
+                club.delegatePresident(officer.member().id(), general.id());
+            }).exceptionType();
+
+            // then
+            assertAll(
+                    () -> assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_DELEGATE_PRESIDENT),
+                    () -> assertThat(president.clubRole().clubRoleCategory()).isEqualTo(PRESIDENT),
+                    () -> assertThat(general.clubRole().clubRoleCategory()).isEqualTo(GENERAL)
+            );
+        }
+
+        @Test
+        void 요청자가_해당_모임의_참여자_목록에_없는경우_예외() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () -> {
+                club.delegatePresident(10000L, general.id());
+            }).exceptionType();
+
+            // then
+            assertAll(
+                    () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT),
+                    () -> assertThat(president.clubRole().clubRoleCategory()).isEqualTo(PRESIDENT),
+                    () -> assertThat(general.clubRole().clubRoleCategory()).isEqualTo(GENERAL)
+            );
+        }
+
+        @Test
+        void 대상자가_해당_모임의_참여자_목록에_없는경우_예외() {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () -> {
+                club.delegatePresident(president.member().id(), 10000L);
+            }).exceptionType();
+
+            // then
+            assertAll(
+                    () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT),
+                    () -> assertThat(president.clubRole().clubRoleCategory()).isEqualTo(PRESIDENT),
+                    () -> assertThat(general.clubRole().clubRoleCategory()).isEqualTo(GENERAL)
+            );
+        }
+    }
 }
