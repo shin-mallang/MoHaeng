@@ -76,6 +76,7 @@ public class Club extends BaseEntity {
     /**
      * 회원을 모임에서 제거한다.
      * 단, 회장은 모임에서 제거될 수 없다.
+     * TODO : Participant 대신 ID 받기
      */
     public void deleteParticipant(final Participant participant) {
         participants().delete(participant);
