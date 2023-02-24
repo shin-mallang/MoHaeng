@@ -2,12 +2,14 @@ package com.mohaeng.authentication.presentation.config;
 
 import com.mohaeng.authentication.presentation.argumentresolver.AuthArgumentResolver;
 import com.mohaeng.authentication.presentation.interceptor.LogInInterceptor;
+import com.mohaeng.common.interceptor.PathAndMethodMatcherInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.mohaeng.authentication.presentation.LogInController.LOGIN_URL;
 import static com.mohaeng.member.presentation.SignUpController.SIGN_UP_URL;
@@ -26,9 +28,13 @@ public class AuthenticationConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
-        registry.addInterceptor(logInInterceptor)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns(SIGN_UP_URL, LOGIN_URL);
+        PathAndMethodMatcherInterceptor interceptor = new PathAndMethodMatcherInterceptor(logInInterceptor);
+        interceptor
+                .addPathPatterns(Set.of("/api/**"))
+                .excludePathPattern(Set.of(SIGN_UP_URL, LOGIN_URL));
+
+        // 모든 경로에 대해 매핑된다
+        registry.addInterceptor(interceptor);
     }
 
     @Override
