@@ -1,11 +1,5 @@
 # 모임 관리 서비스
 
-패키지 간 의존성
-
-![](image/dependency.png)
-
-
-<br>
 <br>
 <br>
 
@@ -74,6 +68,23 @@ BeanPostProcessor와 프록시의 동작 방법을 이해하신다는 가정 하
 `instanceOf`를 사용할 때 보다 코드도 깔끔해 졌으며, 무엇보다 이후 새로운 알림의 종류가 추가되었을 때 이를 위한 코드의 변경이 불필요해지며, 실수할 위험성도 줄어들었음을 느끼고,
 이러한 장점이 더 크다 생각해 변경된 구조를 선택하였습니다.
 
+<br>
+<br>
+<br>
+
+## @TransactionalEventListener 호출 시 발생하는 문제
+
+[@TransactionalEventListener 호출 시 발생하는 문제](https://ttl-blog.tistory.com/1130)
+
+<br>
+<br>
+<br>
+
+## BatchSize 적용 시 영속성 컨텍스트에 포함된 Entity 가 1개인 경우 In 절에 ID가 중복되어 설정되는 문제
+
+[ BatchSize 적용 시 Entity 가 1개인 경우 In 절에 ID가 중복되어 설정되는 문제](https://ttl-blog.tistory.com/1202)
 
 
-
+<br>
+<br>
+<br>
