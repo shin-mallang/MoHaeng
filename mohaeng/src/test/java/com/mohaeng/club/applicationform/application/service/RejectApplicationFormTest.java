@@ -1,31 +1,19 @@
 package com.mohaeng.club.applicationform.application.service;
 
+import com.mohaeng.club.applicationform.application.ApplicationFormCommandTest;
 import com.mohaeng.club.applicationform.application.usecase.RejectApplicationFormUseCase;
 import com.mohaeng.club.applicationform.domain.event.ApplicationProcessedEvent;
 import com.mohaeng.club.applicationform.domain.event.OfficerRejectApplicationEvent;
 import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
-import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
-import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.event.ApplicationEvents;
 
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED;
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
-import static com.mohaeng.common.fixtures.ClubFixture.fullClubWithMember;
-import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveOfficer;
-import static com.mohaeng.common.util.RepositoryUtil.*;
+import static com.mohaeng.common.util.RepositoryUtil.saveApplicationForm;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,44 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ApplicationTest
 @DisplayName("RejectApplicationForm(가입 신청서 거절) 은")
-class RejectApplicationFormTest {
-
-    @Autowired
-    private EntityManager em;
+class RejectApplicationFormTest extends ApplicationFormCommandTest {
 
     @Autowired
     private RejectApplicationFormUseCase rejectApplicationFormUseCase;
-
-    @Autowired
-    private ApplicationFormRepository applicationFormRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @Autowired
-    private ApplicationEvents events;
-
-    private Member applicant;
-    private Club club;
-    private Club fullClub;
-    private Member presidentMember;
-    private Participant president;
-    private Participant officer;
-    private Participant general;
-
-    @BeforeEach
-    void init() {
-        presidentMember = saveMember(memberRepository, member(null));
-        applicant = saveMember(memberRepository, member(null));
-        club = saveClub(clubRepository, clubWithMember(presidentMember));
-        fullClub = saveClub(clubRepository, fullClubWithMember(presidentMember));
-        president = club.participants().findByMemberId(presidentMember.id()).get();
-        officer = saveOfficer(memberRepository, club);
-        general = saveGeneral(memberRepository, club);
-    }
 
     @Nested
     @DisplayName("성공 테스트")
@@ -179,10 +133,5 @@ class RejectApplicationFormTest {
             // then
             assertThat(baseExceptionType).isEqualTo(ALREADY_PROCESSED);
         }
-    }
-
-    private void flushAndClear() {
-        em.flush();
-        em.clear();
     }
 }

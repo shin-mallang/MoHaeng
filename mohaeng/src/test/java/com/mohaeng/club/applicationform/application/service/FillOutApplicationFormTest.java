@@ -1,29 +1,20 @@
 package com.mohaeng.club.applicationform.application.service;
 
+import com.mohaeng.club.applicationform.application.ApplicationFormCommandTest;
 import com.mohaeng.club.applicationform.application.usecase.FillOutApplicationFormUseCase;
 import com.mohaeng.club.applicationform.domain.event.FillOutApplicationFormEvent;
 import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
-import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
-import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.event.ApplicationEvents;
 
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_MEMBER_JOINED_CLUB;
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_REQUEST_JOIN_CLUB;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
-import static com.mohaeng.common.fixtures.ClubFixture.fullClubWithMember;
-import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static com.mohaeng.common.util.RepositoryUtil.saveClub;
-import static com.mohaeng.common.util.RepositoryUtil.saveMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -31,45 +22,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ApplicationTest
 @DisplayName("FillOutApplicationForm(가입 신청서 작성) 은")
-class FillOutApplicationFormTest {
+class FillOutApplicationFormTest extends ApplicationFormCommandTest {
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
-    private FillOutApplicationForm fillOutApplicationForm;
-
-    @Autowired
-    private ApplicationFormRepository applicationFormRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @Autowired
-    private ApplicationEvents events;
-
-    private Member applicant;
-    private Club club;
-    private Club fullClub;
-    private Member presidentMember;
-    private Participant president;
-
-    @BeforeEach
-    void init() {
-        presidentMember = saveMember(memberRepository, member(null));
-        applicant = saveMember(memberRepository, member(null));
-        club = saveClub(clubRepository, clubWithMember(presidentMember));
-        fullClub = saveClub(clubRepository, fullClubWithMember(presidentMember));
-        president = club.participants().findByMemberId(presidentMember.id()).get();
-    }
+    private FillOutApplicationFormUseCase fillOutApplicationFormUseCase;
 
     @Test
     void 가입_신청을_할_수_있다() {
         // when
-        Long applicationFormId = fillOutApplicationForm.command(
+        Long applicationFormId = fillOutApplicationFormUseCase.command(
                 new FillOutApplicationFormUseCase.Command(applicant.id(), club.id())
         );
 
@@ -80,11 +41,12 @@ class FillOutApplicationFormTest {
     @Test
     void 가입이_거절되었더라도_다시_신청할_수_있다() {
         // given
+        president = club.participants().findByMemberId(presidentMember.id()).get();  // equals 비교를 위해 영속성 컨텍스트에 올리기
         ApplicationForm saved = applicationFormRepository.save(ApplicationForm.create(club, applicant));
         saved.reject(president);
 
         // when
-        Long applicationFormId = fillOutApplicationForm.command(
+        Long applicationFormId = fillOutApplicationFormUseCase.command(
                 new FillOutApplicationFormUseCase.Command(applicant.id(), club.id())
         );
 
@@ -95,7 +57,7 @@ class FillOutApplicationFormTest {
     @Test
     void 모임이_가득_찬_경우에도_가입_신청을_보낼_수_있다() {
         // when
-        Long applicationFormId = fillOutApplicationForm.command(
+        Long applicationFormId = fillOutApplicationFormUseCase.command(
                 new FillOutApplicationFormUseCase.Command(applicant.id(), fullClub.id())
         );
 
@@ -119,7 +81,7 @@ class FillOutApplicationFormTest {
 
         // when & then
         BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
-                fillOutApplicationForm.command(
+                fillOutApplicationFormUseCase.command(
                         new FillOutApplicationFormUseCase.Command(applicant.id(), club.id())
                 )
         ).exceptionType();
@@ -135,7 +97,7 @@ class FillOutApplicationFormTest {
 
         // when & then
         BaseExceptionType baseExceptionType = assertThrows(ApplicationFormException.class, () ->
-                fillOutApplicationForm.command(
+                fillOutApplicationFormUseCase.command(
                         new FillOutApplicationFormUseCase.Command(applicant.id(), club.id())
                 )
         ).exceptionType();

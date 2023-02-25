@@ -1,26 +1,20 @@
 package com.mohaeng.club.club.application.service.command;
 
+import com.mohaeng.club.club.application.service.ClubCommandTest;
 import com.mohaeng.club.club.application.usecase.command.ChangeClubRoleNameUseCase;
-import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.ClubRoleCategory;
-import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
@@ -28,12 +22,6 @@ import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NO_AUTHORITY_CHANGE_ROLE_NAME;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
-import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveOfficer;
-import static com.mohaeng.common.util.RepositoryUtil.saveClub;
-import static com.mohaeng.common.util.RepositoryUtil.saveMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
@@ -42,45 +30,10 @@ import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("ChangeClubRoleName(모임 역할 이름 변경) 은")
 @ApplicationTest
-class ChangeClubRoleNameTest {
+class ChangeClubRoleNameTest extends ClubCommandTest {
 
     @Autowired
     private ChangeClubRoleNameUseCase changeClubRoleNameUseCase;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @Autowired
-    private EntityManager em;
-
-    private Club club;
-    private Member presidentMember;
-    private Participant president;
-    private Participant officer;
-    private Participant general;
-    private Map<ClubRoleCategory, ClubRole> clubRoleMap;
-
-    @BeforeEach
-    void init() {
-        presidentMember = saveMember(memberRepository, member(null));
-        club = saveClub(clubRepository, clubWithMember(presidentMember));
-        president = club.participants().findByMemberId(presidentMember.id()).get();
-        officer = saveOfficer(memberRepository, club);
-        general = saveGeneral(memberRepository, club);
-        flushAndClear();
-        clubRoleMap = club.clubRoles().clubRoles()
-                .stream()
-                .collect(Collectors.toMap(ClubRole::clubRoleCategory, it -> it));
-    }
-
-    private void flushAndClear() {
-        em.flush();
-        em.clear();
-        club = clubRepository.findById(club.id()).get();
-    }
 
     @ParameterizedTest(name = "회장은 모든 역할의 이름을 변경할 수 있다")
     @EnumSource(mode = EXCLUDE)
@@ -93,13 +46,13 @@ class ChangeClubRoleNameTest {
                 new ChangeClubRoleNameUseCase.Command(
                         presidentMember.id(),
                         club.id(),
-                        clubRoleMap.get(category).id(),
+                        club.findDefaultRoleByCategory(category).id(),
                         name
                 ));
         flushAndClear();
 
         // then
-        assertThat(club.findRoleById(clubRoleMap.get(category).id()).name())
+        assertThat(club.findRoleById(club.findDefaultRoleByCategory(category).id()).name())
                 .isEqualTo(name);
     }
 
@@ -113,13 +66,13 @@ class ChangeClubRoleNameTest {
                 new ChangeClubRoleNameUseCase.Command(
                         officer.member().id(),
                         club.id(),
-                        clubRoleMap.get(GENERAL).id(),
+                        club.findDefaultRoleByCategory(GENERAL).id(),
                         name
                 ));
         flushAndClear();
 
         // then
-        assertThat(club.findRoleById(clubRoleMap.get(GENERAL).id()).name())
+        assertThat(club.findRoleById(club.findDefaultRoleByCategory(GENERAL).id()).name())
                 .isEqualTo(name);
     }
 
@@ -135,13 +88,13 @@ class ChangeClubRoleNameTest {
                         new ChangeClubRoleNameUseCase.Command(
                                 officer.member().id(),
                                 club.id(),
-                                clubRoleMap.get(category).id(),
+                                club.findDefaultRoleByCategory(category).id(),
                                 name
                         ))
         ).exceptionType();
 
         // then
-        assertThat(club.findRoleById(clubRoleMap.get(category).id()).name())
+        assertThat(club.findRoleById(club.findDefaultRoleByCategory(category).id()).name())
                 .isNotEqualTo(name);
         assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
     }
@@ -158,13 +111,13 @@ class ChangeClubRoleNameTest {
                         new ChangeClubRoleNameUseCase.Command(
                                 general.member().id(),
                                 club.id(),
-                                clubRoleMap.get(category).id(),
+                                club.findDefaultRoleByCategory(category).id(),
                                 name
                         ))
         ).exceptionType();
 
         // then
-        assertThat(club.findRoleById(clubRoleMap.get(category).id()).name())
+        assertThat(club.findRoleById(club.findDefaultRoleByCategory(category).id()).name())
                 .isNotEqualTo(name);
         assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
     }
@@ -180,13 +133,13 @@ class ChangeClubRoleNameTest {
                         new ChangeClubRoleNameUseCase.Command(
                                 10000L,
                                 club.id(),
-                                clubRoleMap.get(PRESIDENT).id(),
+                                club.findDefaultRoleByCategory(PRESIDENT).id(),
                                 name
                         ))
         ).exceptionType();
 
         // then
-        assertThat(club.findRoleById(clubRoleMap.get(PRESIDENT).id()).name())
+        assertThat(club.findRoleById(club.findDefaultRoleByCategory(PRESIDENT).id()).name())
                 .isNotEqualTo(name);
         assertThat(baseExceptionType).isEqualTo(NOT_FOUND_PARTICIPANT);
     }
@@ -222,7 +175,7 @@ class ChangeClubRoleNameTest {
                         new ChangeClubRoleNameUseCase.Command(
                                 general.member().id(),
                                 club.id() + 1233L,
-                                clubRoleMap.get(PRESIDENT).id(),
+                                club.findDefaultRoleByCategory(PRESIDENT).id(),
                                 name
                         ))
         ).exceptionType();

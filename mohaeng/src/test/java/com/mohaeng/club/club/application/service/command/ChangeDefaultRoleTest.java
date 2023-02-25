@@ -1,19 +1,14 @@
 package com.mohaeng.club.club.application.service.command;
 
+import com.mohaeng.club.club.application.service.ClubCommandTest;
 import com.mohaeng.club.club.application.usecase.command.ChangeDefaultRoleUseCase;
-import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.ClubRoleCategory;
-import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,12 +22,6 @@ import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NOT_FOUND_ROLE;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.NO_AUTHORITY_CHANGE_DEFAULT_ROLE;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
-import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveOfficer;
-import static com.mohaeng.common.util.RepositoryUtil.saveClub;
-import static com.mohaeng.common.util.RepositoryUtil.saveMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,38 +30,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("ChangeDefaultRole(기본 역할 변경) 은")
 @ApplicationTest
-class ChangeDefaultRoleTest {
+class ChangeDefaultRoleTest extends ClubCommandTest {
 
     @Autowired
     private ChangeDefaultRoleUseCase changeDefaultRoleUseCase;
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @Autowired
-    private EntityManager em;
-
-    private Club club;
-    private Member presidentMember;
-    private Participant president;
-    private Participant officer;
-    private Participant general;
     private Map<ClubRoleCategory, ClubRole> originalClubRoleMap;
 
     private ClubRole 새로생성한_일반역할;
     private ClubRole 새로생성한_임원역할;
     private List<ClubRole> 새로생성한_역할들;
 
+    @Override
     @BeforeEach
-    void init() {
-        presidentMember = saveMember(memberRepository, member(null));
-        club = saveClub(clubRepository, clubWithMember(presidentMember));
-        president = club.participants().findByMemberId(presidentMember.id()).get();
-        officer = saveOfficer(memberRepository, club);
-        general = saveGeneral(memberRepository, club);
+    protected void 모임을_저장하고_한명의_임원진과_한명의_일반_참여자를_저장한다() {
+        super.모임을_저장하고_한명의_임원진과_한명의_일반_참여자를_저장한다();
         originalClubRoleMap = club.clubRoles().clubRoles()
                 .stream()
                 .collect(Collectors.toMap(ClubRole::clubRoleCategory, it -> it));
@@ -81,12 +53,6 @@ class ChangeDefaultRoleTest {
         새로생성한_임원역할 = club.createRole(presidentMember.id(), "새로생성한 임원역할", OFFICER);
         새로생성한_역할들 = List.of(새로생성한_일반역할, 새로생성한_임원역할);
         flushAndClear();
-    }
-
-    private void flushAndClear() {
-        em.flush();
-        em.clear();
-        club = clubRepository.findById(club.id()).get();
     }
 
     @Test

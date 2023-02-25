@@ -1,28 +1,20 @@
 package com.mohaeng.club.club.application.service.command;
 
+import com.mohaeng.club.club.application.service.ClubCommandTest;
 import com.mohaeng.club.club.application.usecase.command.LeaveClubUseCase;
-import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.PRESIDENT_CAN_NOT_LEAVE_CLUB;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
-import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveOfficer;
-import static com.mohaeng.common.util.RepositoryUtil.saveClub;
-import static com.mohaeng.common.util.RepositoryUtil.saveMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -31,36 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("LeaveClub(모임 탈) 은")
 @ApplicationTest
-class LeaveClubTest {
-
-    @Autowired
-    private EntityManager em;
+class LeaveClubTest extends ClubCommandTest {
 
     @Autowired
     private LeaveClubUseCase leaveClubUseCase;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    private Club club;
-    private Member presidentMember;
-    private Participant president;
-    private Participant officer;
-    private Participant general;
-
-    @BeforeEach
-    void init() {
-        presidentMember = saveMember(memberRepository, member(null));
-
-        club = saveClub(clubRepository, clubWithMember(presidentMember));
-
-        president = club.participants().findByMemberId(presidentMember.id()).get();
-        officer = saveOfficer(memberRepository, club);
-        general = saveGeneral(memberRepository, club);
-    }
 
     @Test
     void 회원을_모임에서_탈퇴시킨다() {
@@ -145,10 +111,5 @@ class LeaveClubTest {
                 () -> assertThat(club.existParticipantByMemberId(presidentMember.id())).isTrue(),
                 () -> assertThat(clubRepository.findById(club.id()).get().currentParticipantCount()).isEqualTo(currentParticipantCount)
         );
-    }
-
-    private void flushAndClear() {
-        em.flush();
-        em.clear();
     }
 }
