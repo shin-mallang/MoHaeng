@@ -5,6 +5,8 @@ import com.mohaeng.club.club.domain.repository.ClubQueryRepository.ClubSearchCon
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+
 public interface QueryAllClubBySearchCondUseCase {
 
     Page<Result> query(final Query query, Pageable pageable);
@@ -19,7 +21,8 @@ public interface QueryAllClubBySearchCondUseCase {
             String name,  // 모임의 이름
             String description,  // 모임의 설명
             int maxParticipantCount,  // 최대 참여자 수
-            int currentParticipantCount  // 현재 가입한 회원 수
+            int currentParticipantCount,  // 현재 가입한 회원 수
+            LocalDateTime createdAt
     ) {
         public static Result from(final Club club) {
             return new Result(
@@ -27,7 +30,8 @@ public interface QueryAllClubBySearchCondUseCase {
                     club.name(),
                     club.description(),
                     club.maxParticipantCount(),
-                    club.currentParticipantCount()
+                    club.currentParticipantCount(),
+                    club.createdAt()
             );
         }
     }

@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.DATE_TIME;
 import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.presentation.query.QueryClubByIdController.ClubResponse;
 import static com.mohaeng.club.club.presentation.query.QueryClubByIdController.QUERY_CLUB_BY_ID_URL;
@@ -68,7 +69,8 @@ class QueryClubByIdControllerTest extends ControllerTest {
                                 fieldWithPath("data.name").type(STRING).description("모임의 이름"),
                                 fieldWithPath("data.description").type(STRING).description("모임에 대한 설명"),
                                 fieldWithPath("data.maxParticipantCount").type(NUMBER).description("모임의 최대 인원 수"),
-                                fieldWithPath("data.currentParticipantCount").type(NUMBER).description("현재 모임에 참여중인 인원 수")
+                                fieldWithPath("data.currentParticipantCount").type(NUMBER).description("현재 모임에 참여중인 인원 수"),
+                                fieldWithPath("data.createdAt").type(DATE_TIME).description("생성일")
                         )
                 )
         ).andReturn();

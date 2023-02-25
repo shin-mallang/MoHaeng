@@ -4,6 +4,8 @@ import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.member.domain.model.Member;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDateTime;
+
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 
 public class ClubFixture {
@@ -17,6 +19,7 @@ public class ClubFixture {
         Club club = new Club(name, des, maxParticipantCount, member(1L));
         ReflectionTestUtils.setField(club, "id", id);
         ReflectionTestUtils.setField(club, "currentParticipantCount", currentParticipantCount);
+        ReflectionTestUtils.setField(club, "createdAt", LocalDateTime.now());
         return club;
     }
 
