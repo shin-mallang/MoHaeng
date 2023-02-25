@@ -2,6 +2,7 @@ package com.mohaeng.club.club.presentation.query;
 
 import com.mohaeng.club.club.application.usecase.query.QueryClubByIdUseCase;
 import com.mohaeng.club.club.application.usecase.query.QueryClubByIdUseCase.Query;
+import com.mohaeng.common.presentation.query.CommonResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,13 +22,13 @@ public class QueryClubByIdController {
     }
 
     @GetMapping(QUERY_CLUB_BY_ID_URL)
-    public ResponseEntity<ClubResponse> query(
+    public ResponseEntity<CommonResponse<ClubResponse>> query(
             @PathVariable(name = "clubId") final Long clubId
     ) {
         Result result = queryClubByIdUseCase.query(
                 new Query(clubId)
         );
-        return ResponseEntity.ok(ClubResponse.from(result));
+        return ResponseEntity.ok(CommonResponse.from(ClubResponse.from(result)));
     }
 
     public record ClubResponse(

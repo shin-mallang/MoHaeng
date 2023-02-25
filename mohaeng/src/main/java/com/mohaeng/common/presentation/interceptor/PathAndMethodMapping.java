@@ -1,4 +1,4 @@
-package com.mohaeng.common.interceptor;
+package com.mohaeng.common.presentation.interceptor;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.util.AntPathMatcher;

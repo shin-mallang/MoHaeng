@@ -2,7 +2,7 @@ package com.mohaeng.authentication.presentation.config;
 
 import com.mohaeng.authentication.presentation.argumentresolver.AuthArgumentResolver;
 import com.mohaeng.authentication.presentation.interceptor.LogInInterceptor;
-import com.mohaeng.common.interceptor.PathAndMethodMatcherInterceptor;
+import com.mohaeng.common.presentation.interceptor.PathAndMethodMatcherInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

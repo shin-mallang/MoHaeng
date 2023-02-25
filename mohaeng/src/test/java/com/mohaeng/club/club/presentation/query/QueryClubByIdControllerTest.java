@@ -1,9 +1,11 @@
 package com.mohaeng.club.club.presentation.query;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.mohaeng.club.club.application.usecase.query.QueryClubByIdUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.common.ControllerTest;
+import com.mohaeng.common.presentation.query.CommonResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -15,6 +17,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
+import static com.mohaeng.club.club.presentation.query.QueryClubByIdController.ClubResponse;
 import static com.mohaeng.club.club.presentation.query.QueryClubByIdController.QUERY_CLUB_BY_ID_URL;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
 import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
@@ -27,7 +30,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,25 +63,26 @@ class QueryClubByIdControllerTest extends ControllerTest {
                                 parameterWithName("clubId").description("모임 ID")
                         )
                         ,
-                        responseFields(
-                                fieldWithPath("id").type(NUMBER).description("모임의 id"),
-                                fieldWithPath("name").type(STRING).description("모임의 이름"),
-                                fieldWithPath("description").type(STRING).description("모임에 대한 설명"),
-                                fieldWithPath("maxParticipantCount").type(NUMBER).description("모임의 최대 인원 수"),
-                                fieldWithPath("currentParticipantCount").type(NUMBER).description("현재 모임에 참여중인 인원 수")
+                        relaxedResponseFields(
+                                fieldWithPath("data.id").type(NUMBER).description("모임의 id"),
+                                fieldWithPath("data.name").type(STRING).description("모임의 이름"),
+                                fieldWithPath("data.description").type(STRING).description("모임에 대한 설명"),
+                                fieldWithPath("data.maxParticipantCount").type(NUMBER).description("모임의 최대 인원 수"),
+                                fieldWithPath("data.currentParticipantCount").type(NUMBER).description("현재 모임에 참여중인 인원 수")
                         )
                 )
         ).andReturn();
 
         // then
-        QueryClubByIdController.ClubResponse response =
-                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), QueryClubByIdController.ClubResponse.class);
+        CommonResponse<ClubResponse> response
+                = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<ClubResponse>>() {
+        });
         assertAll(
-                () -> assertThat(response.id()).isEqualTo(club.id()),
-                () -> assertThat(response.name()).isEqualTo(club.name()),
-                () -> assertThat(response.description()).isEqualTo(club.description()),
-                () -> assertThat(response.maxParticipantCount()).isEqualTo(club.maxParticipantCount()),
-                () -> assertThat(response.currentParticipantCount()).isEqualTo(club.currentParticipantCount())
+                () -> assertThat(response.data().id()).isEqualTo(club.id()),
+                () -> assertThat(response.data().name()).isEqualTo(club.name()),
+                () -> assertThat(response.data().description()).isEqualTo(club.description()),
+                () -> assertThat(response.data().maxParticipantCount()).isEqualTo(club.maxParticipantCount()),
+                () -> assertThat(response.data().currentParticipantCount()).isEqualTo(club.currentParticipantCount())
         );
     }
 
