@@ -5,7 +5,7 @@ package com.mohaeng.authentication.presentation;
 import com.mohaeng.authentication.application.usecase.LogInUseCase;
 import com.mohaeng.authentication.domain.model.AccessToken;
 import com.mohaeng.authentication.exception.AuthenticationException;
-import com.mohaeng.common.ControllerTest;
+import com.mohaeng.common.presentation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,18 +15,14 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.mohaeng.authentication.exception.AuthenticationExceptionType.INCORRECT_AUTHENTICATION;
 import static com.mohaeng.authentication.presentation.LogInController.LOGIN_URL;
-import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
-import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
+import static com.mohaeng.common.presentation.ApiDocumentUtils.getDocumentRequest;
+import static com.mohaeng.common.presentation.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = LogInController.class)
 @DisplayName("LogInController(로그인 컨트롤러) 는")
@@ -49,13 +45,12 @@ class LogInControllerTest extends ControllerTest {
             when(logInUseCase.command(any()))
                     .thenReturn(new AccessToken(jwt));
 
-            ResultActions resultActions = mockMvc.perform(
-                            post(LOGIN_URL)
-                                    .contentType(APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsBytes(loginRequest))
-                    )
-                    .andDo(print())
-                    .andExpect(status().isOk());
+            ResultActions resultActions = postRequest()
+                    .url(LOGIN_URL)
+                    .noLogin()
+                    .jsonContent(loginRequest)
+                    .expect()
+                    .ok();
 
             resultActions.andDo(
                     document("authentication/login",
@@ -79,13 +74,12 @@ class LogInControllerTest extends ControllerTest {
             when(logInUseCase.command(any()))
                     .thenThrow(new AuthenticationException(INCORRECT_AUTHENTICATION));
 
-            ResultActions resultActions = mockMvc.perform(
-                            post(LOGIN_URL)
-                                    .contentType(APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsBytes(loginRequest))
-                    )
-                    .andDo(print())
-                    .andExpect(status().isUnauthorized());
+            ResultActions resultActions = postRequest()
+                    .url(LOGIN_URL)
+                    .noLogin()
+                    .jsonContent(loginRequest)
+                    .expect()
+                    .unAuthorized();
 
             resultActions.andDo(
                     document("authentication/login/fail/username or password miss match",
@@ -96,13 +90,12 @@ class LogInControllerTest extends ControllerTest {
         @Test
         @DisplayName("요청 필드가 없는 경우 400 예외를 반환한다.")
         void fail_test_2() throws Exception {
-            ResultActions resultActions = mockMvc.perform(
-                            post(LOGIN_URL)
-                                    .contentType(APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsBytes(emptyLoginRequest))
-                    )
-                    .andDo(print())
-                    .andExpect(status().isBadRequest());
+            ResultActions resultActions = postRequest()
+                    .url(LOGIN_URL)
+                    .noLogin()
+                    .jsonContent(emptyLoginRequest)
+                    .expect()
+                    .badRequest();
 
             resultActions.andDo(
                     document("authentication/login/fail/request fields contains empty value",

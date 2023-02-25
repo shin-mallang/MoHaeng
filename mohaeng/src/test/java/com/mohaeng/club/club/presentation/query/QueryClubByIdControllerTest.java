@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.mohaeng.club.club.application.usecase.query.QueryClubByIdUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.exception.ClubException;
-import com.mohaeng.common.ControllerTest;
+import com.mohaeng.common.presentation.ControllerTest;
 import com.mohaeng.common.presentation.query.CommonResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -20,21 +20,19 @@ import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.
 import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.presentation.query.QueryClubByIdController.ClubResponse;
 import static com.mohaeng.club.club.presentation.query.QueryClubByIdController.QUERY_CLUB_BY_ID_URL;
-import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
-import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
+import static com.mohaeng.common.presentation.ApiDocumentUtils.getDocumentRequest;
+import static com.mohaeng.common.presentation.ApiDocumentUtils.getDocumentResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -55,9 +53,13 @@ class QueryClubByIdControllerTest extends ControllerTest {
                 .willReturn(QueryClubByIdUseCase.Result.from(club));
 
         // when
-        MvcResult mvcResult = mockMvc.perform(
-                get(QUERY_CLUB_BY_ID_URL, clubId)
-        ).andDo(document("club/club/query/club by id",
+        ResultActions resultActions = getRequest()
+                .url(QUERY_CLUB_BY_ID_URL, clubId)
+                .noLogin()
+                .expect()
+                .ok();
+
+        MvcResult mvcResult = resultActions.andDo(document("club/club/query/club by id",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
@@ -95,9 +97,11 @@ class QueryClubByIdControllerTest extends ControllerTest {
                 .willThrow(new ClubException(NOT_FOUND_CLUB));
 
         // when
-        ResultActions resultActions = mockMvc.perform(
-                get(QUERY_CLUB_BY_ID_URL, clubId)
-        ).andExpect(status().isNotFound());
+        ResultActions resultActions = getRequest()
+                .url(QUERY_CLUB_BY_ID_URL, clubId)
+                .noLogin()
+                .expect()
+                .notFound();
 
         resultActions.andDo(
                 document("club/club/query/club by id/fail/not found club",
