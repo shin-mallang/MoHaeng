@@ -18,3 +18,7 @@ operation::query club by id[snippets='http-request,path-parameters,http-response
 
 operation::query club by id (not found club)[snippets='http-response']
 
+[[Club-모임-검색]]
+=== - 모임검색
+
+operation::club/query/search[snippets='http-request,http-response,response-fields']
