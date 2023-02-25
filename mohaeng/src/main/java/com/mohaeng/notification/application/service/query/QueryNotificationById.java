@@ -22,7 +22,7 @@ public class QueryNotificationById implements QueryNotificationByIdUseCase {
 
     @Override
     public NotificationDto query(final Query query) {
-        Notification notification = notificationRepository.findById(query.id()).orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
+        Notification notification = notificationRepository.findByIdAndReceiverId(query.notificationId(), query.memberId()).orElseThrow(() -> new NotificationException(NOT_FOUND_NOTIFICATION));
         notification.read();
         return notification.toDto();
     }

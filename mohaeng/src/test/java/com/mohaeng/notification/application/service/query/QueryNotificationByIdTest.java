@@ -54,7 +54,7 @@ class QueryNotificationByIdTest {
             assertThat(it.isRead()).isFalse();
 
             NotificationDto notificationDto = queryNotificationByIdUseCase.query(
-                    new QueryNotificationByIdUseCase.Query(it.id())
+                    new QueryNotificationByIdUseCase.Query(it.receiver().receiverId(), it.id())
             );
 
             // then
@@ -71,7 +71,19 @@ class QueryNotificationByIdTest {
         // when
         BaseExceptionType baseExceptionType = assertThrows(NotificationException.class, () ->
                 queryNotificationByIdUseCase.query(
-                        new QueryNotificationByIdUseCase.Query(100L)
+                        new QueryNotificationByIdUseCase.Query(notifications.get(0).receiver().receiverId(), 1213123123L)
+                )).exceptionType();
+
+        // then
+        assertThat(baseExceptionType).isEqualTo(NOT_FOUND_NOTIFICATION);
+    }
+
+    @Test
+    void 본인의_알림이_아닌_경우_예외가_발생한다() {
+        // when
+        BaseExceptionType baseExceptionType = assertThrows(NotificationException.class, () ->
+                queryNotificationByIdUseCase.query(
+                        new QueryNotificationByIdUseCase.Query(notifications.get(0).receiver().receiverId() + 100L, notifications.get(0).id())
                 )).exceptionType();
 
         // then

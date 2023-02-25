@@ -7,7 +7,8 @@ public interface QueryNotificationByIdUseCase {
     NotificationDto query(final Query query);
 
     record Query(
-            Long id
+            Long memberId,
+            Long notificationId
     ) {
     }
 }

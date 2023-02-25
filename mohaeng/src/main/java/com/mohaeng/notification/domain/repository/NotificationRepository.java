@@ -13,6 +13,8 @@ public interface NotificationRepository {
 
     Optional<Notification> findById(final Long id);
 
+    Optional<Notification> findByIdAndReceiverId(final Long id, final Long receiverId);
+
     List<Notification> findAll();
 
     List<Notification> findApplicationProcessedNotificationByApplicationFormId(final Long applicationFormId);
