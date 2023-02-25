@@ -8,6 +8,8 @@
 :toclevels: 2
 :sectlinks:
 
+*link:../index.html[메인화면으로 돌아가기]*
+
 [[Notification-API]]
 == Notification API
 

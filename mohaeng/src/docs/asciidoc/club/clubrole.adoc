@@ -8,11 +8,13 @@
 :toclevels: 2
 :sectlinks:
 
+*link:../index.html[메인화면으로 돌아가기]*
+
 [[Club-Role-API]]
 == Club Role API
 
 [[Club-Role-역할생성]]
-=== - 역할 생성
+=== `역할 생성`
 
 operation::club/clubRole/create-club-role[snippets='http-request,path-parameters,request-headers,request-fields,http-response']
 
@@ -49,7 +51,7 @@ operation::club/clubRole/create-club-role/fail/request fields contains empty val
 operation::club/clubRole/create-club-role/fail/category enum mapping fail[snippets='http-request,http-response']
 
 [[Club-Role-기본역할변경]]
-=== - 기본역할 변경
+=== `기본역할 변경`
 
 operation::club/clubRole/change-default-club-role[snippets='http-request,path-parameters,request-headers,http-response']
 
@@ -74,7 +76,7 @@ operation::club/clubRole/change-default-club-role/fail/Nonexistent ClubRole[snip
 operation::club/clubRole/change-default-club-role/fail/Nonexistent Club[snippets='http-response']
 
 [[Club-Role-이름변경]]
-=== - 역할 이름 변경
+=== `역할 이름 변경`
 
 operation::club/clubRole/change-club-role-name[snippets='http-request,path-parameters,request-headers,request-fields,http-response']
 
@@ -103,7 +105,7 @@ operation::club/clubRole/change-club-role-name/fail/requester is officer and try
 operation::club/clubRole/change-club-role-name/fail/request fields contains empty value[snippets='http-request,http-response']
 
 [[Club-Role-역할제거]]
-=== - 역할 제거
+=== `역할 제거`
 
 operation::club/clubRole/delete-club-role[snippets='http-request,path-parameters,request-headers,http-response']
 

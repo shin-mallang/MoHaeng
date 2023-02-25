@@ -8,11 +8,13 @@
 :toclevels: 2
 :sectlinks:
 
+*link:../index.html[메인화면으로 돌아가기]*
+
 [[ApplicationForm-API]]
 == ApplicationForm API
 
 [[모임-가입-신청]]
-=== - 모임 가입 신청
+=== `모임 가입 신청`
 
 operation::applicationForm/fill-out-application-form[snippets='http-request,path-parameters,http-response']
 
@@ -29,7 +31,7 @@ operation::applicationForm/fill-out-application-form/fail/member already joined 
 operation::applicationForm/fill-out-application-form/fail/No Access Token[snippets='http-response']
 
 [[모임-가입-신청-수락]]
-=== - 모임 가입 신청 수락
+=== `모임 가입 신청 수락`
 
 operation::applicationForm/approve[snippets='http-request,path-parameters,request-headers,http-response']
 
@@ -54,7 +56,7 @@ operation::applicationForm/approve/fail/club is full[snippets='http-response']
 operation::applicationForm/approve/fail/No Access Token[snippets='http-response']
 
 [[모임-가입-신청-거절]]
-=== - 모임 가입 신청 거절
+=== `모임 가입 신청 거절`
 
 operation::applicationForm/reject[snippets='http-request,path-parameters,request-headers,http-response']
 

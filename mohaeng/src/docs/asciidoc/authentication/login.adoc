@@ -8,13 +8,13 @@
 :toclevels: 2
 :sectlinks:
 
-*link:index.html[메인화면으로 돌아가기]*
+*link:../index.html[메인화면으로 돌아가기]*
 
 [[Authentication-API]]
 == Authentication API
 
 [[Authentication-로그인]]
-=== - 로그인
+=== `로그인`
 
 operation::authentication/login[snippets='http-request,request-body,request-fields,http-response']
 

@@ -8,11 +8,13 @@
 :toclevels: 2
 :sectlinks:
 
+*link:../index.html[메인화면으로 돌아가기]*
+
 [[Club-API]]
 == Club API
 
 [[Club-모임생성]]
-=== - 모임생성
+===  `모임생성`
 
 operation::club/club/create-club[snippets='http-request,request-body,request-fields,http-response']
 
@@ -31,7 +33,7 @@ operation::club/club/create-club/option/max people count is 0 then setting MAX[s
 
 
 [[Club-모임제거]]
-=== - 모임제거
+===  `모임제거`
 
 operation::club/club/delete-club[snippets='http-request,path-parameters,request-headers,http-response']
 
@@ -50,7 +52,7 @@ operation::club/club/delete-club/fail/requester does not president[snippets='htt
 
 
 [[Club-모임-조회]]
-=== - 모임조회
+=== `모임조회`
 
 operation::club/club/query/club by id[snippets='http-request,path-parameters,http-response,response-fields']
 
@@ -60,6 +62,6 @@ operation::club/club/query/club by id/fail/not found club[snippets='http-respons
 
 
 [[Club-모임-검색]]
-=== - 모임검색
+=== `모임검색`
 
 operation::club/query/search[snippets='http-request,http-response,response-fields']

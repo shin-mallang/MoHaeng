@@ -8,11 +8,13 @@
 :toclevels: 2
 :sectlinks:
 
+*link:../index.html[메인화면으로 돌아가기]*
+
 [[Member-API]]
 == Member API
 
 [[Member-회원가입]]
-=== - Member 회원가입
+=== `회원가입`
 
 operation::member/sign-up[snippets='http-request,request-body,request-fields,http-response']
 
