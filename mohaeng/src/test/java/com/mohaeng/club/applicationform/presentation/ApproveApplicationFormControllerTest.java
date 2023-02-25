@@ -44,7 +44,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(APPROVE_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .ok();
 
         verify(approveApplicationFormUseCase, times(1)).command(any());
@@ -74,7 +74,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(APPROVE_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .forbidden();
 
         verify(approveApplicationFormUseCase, times(1)).command(any());
@@ -97,7 +97,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(APPROVE_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .badRequest();
 
         verify(approveApplicationFormUseCase, times(1)).command(any());
@@ -120,7 +120,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(APPROVE_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .notFound();
 
         verify(approveApplicationFormUseCase, times(1)).command(any());
@@ -141,7 +141,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(APPROVE_JOIN_CLUB_URL, applicationFormId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .unAuthorized();
 
         verify(approveApplicationFormUseCase, times(0)).command(any());
@@ -164,7 +164,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(APPROVE_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .badRequest();
 
         verify(approveApplicationFormUseCase, times(1)).command(any());

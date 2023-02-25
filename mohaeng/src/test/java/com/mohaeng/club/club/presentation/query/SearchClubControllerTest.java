@@ -63,7 +63,7 @@ class SearchClubControllerTest extends ControllerTest {
         ResultActions resultActions = getRequest()
                 .url(SEARCH_CLUB_URL + "?name=clubName&page=1&size=10&sort=createdAt,desc")
                 .noLogin()
-                .expect()
+                .noContent()
                 .ok();
 
         resultActions.andDo(document("club/club/query/search",

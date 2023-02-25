@@ -55,7 +55,6 @@ class CreateClubControllerTest extends ControllerTest {
                     .url(CREATE_CLUB_URL)
                     .login()
                     .jsonContent(correctRequest)
-                    .expect()
                     .expectStatus(HttpStatus.CREATED);
 
             verify(createClubUseCase, times(1)).command(any());
@@ -83,7 +82,6 @@ class CreateClubControllerTest extends ControllerTest {
                     .url(CREATE_CLUB_URL)
                     .login()
                     .jsonContent(zeroMaxPeopleCountRequest)
-                    .expect()
                     .expectStatus(HttpStatus.CREATED);
 
             verify(createClubUseCase, times(1)).command(any());
@@ -107,7 +105,6 @@ class CreateClubControllerTest extends ControllerTest {
                     .url(CREATE_CLUB_URL)
                     .login()
                     .jsonContent(emptyFieldRequest)
-                    .expect()
                     .expectStatus(HttpStatus.BAD_REQUEST);
 
             verify(createClubUseCase, times(0)).command(any());
@@ -125,7 +122,6 @@ class CreateClubControllerTest extends ControllerTest {
                     .url(CREATE_CLUB_URL)
                     .login()
                     .jsonContent(negativeMaxPeopleCountRequest)
-                    .expect()
                     .expectStatus(HttpStatus.BAD_REQUEST);
 
             verify(createClubUseCase, times(0)).command(any());
@@ -142,7 +138,7 @@ class CreateClubControllerTest extends ControllerTest {
             ResultActions resultActions = postRequest()
                     .url(CREATE_CLUB_URL)
                     .noLogin()
-                    .expect()
+                    .noContent()
                     .expectStatus(HttpStatus.UNAUTHORIZED);
 
             verify(createClubUseCase, times(0)).command(any());

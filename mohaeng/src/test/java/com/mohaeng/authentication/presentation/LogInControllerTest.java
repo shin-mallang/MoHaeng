@@ -49,7 +49,6 @@ class LogInControllerTest extends ControllerTest {
                     .url(LOGIN_URL)
                     .noLogin()
                     .jsonContent(loginRequest)
-                    .expect()
                     .ok();
 
             resultActions.andDo(
@@ -78,7 +77,6 @@ class LogInControllerTest extends ControllerTest {
                     .url(LOGIN_URL)
                     .noLogin()
                     .jsonContent(loginRequest)
-                    .expect()
                     .unAuthorized();
 
             resultActions.andDo(
@@ -94,7 +92,6 @@ class LogInControllerTest extends ControllerTest {
                     .url(LOGIN_URL)
                     .noLogin()
                     .jsonContent(emptyLoginRequest)
-                    .expect()
                     .badRequest();
 
             resultActions.andDo(

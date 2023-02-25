@@ -56,7 +56,7 @@ class QueryClubByIdControllerTest extends ControllerTest {
         ResultActions resultActions = getRequest()
                 .url(QUERY_CLUB_BY_ID_URL, clubId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .ok();
 
         MvcResult mvcResult = resultActions.andDo(document("club/club/query/club by id",
@@ -100,7 +100,7 @@ class QueryClubByIdControllerTest extends ControllerTest {
         ResultActions resultActions = getRequest()
                 .url(QUERY_CLUB_BY_ID_URL, clubId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .notFound();
 
         resultActions.andDo(

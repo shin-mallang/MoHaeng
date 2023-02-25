@@ -41,7 +41,7 @@ class DeleteClubControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_URL, 1L)
                 .login()
-                .expect()
+                .noContent()
                 .ok();
 
         then(deleteClubUseCase).should().command(any());
@@ -65,7 +65,7 @@ class DeleteClubControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_URL, 1L)
                 .noLogin()
-                .expect()
+                .noContent()
                 .unAuthorized();
 
         then(deleteClubUseCase).shouldHaveNoInteractions();
@@ -87,7 +87,7 @@ class DeleteClubControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_URL, 1L)
                 .login()
-                .expect()
+                .noContent()
                 .notFound();
 
         then(deleteClubUseCase).should().command(any());
@@ -108,7 +108,7 @@ class DeleteClubControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_URL, 1L)
                 .login()
-                .expect()
+                .noContent()
                 .forbidden();
 
         then(deleteClubUseCase).should().command(any());

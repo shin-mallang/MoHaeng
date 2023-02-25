@@ -48,7 +48,7 @@ class LeaveClubControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(LEAVE_CLUB_URL, participantId)
                 .login()
-                .expect()
+                .noContent()
                 .ok();
 
         // then
@@ -77,7 +77,7 @@ class LeaveClubControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(LEAVE_CLUB_URL, participantId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .unAuthorized();
 
         then(leaveClubUseCase).shouldHaveNoInteractions();
@@ -99,7 +99,7 @@ class LeaveClubControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(LEAVE_CLUB_URL, participantId)
                 .login()
-                .expect()
+                .noContent()
                 .notFound();
 
         then(leaveClubUseCase).should().command(any());
@@ -121,7 +121,7 @@ class LeaveClubControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(LEAVE_CLUB_URL, participantId)
                 .login()
-                .expect()
+                .noContent()
                 .badRequest();
 
         verify(leaveClubUseCase, times(1)).command(any());
