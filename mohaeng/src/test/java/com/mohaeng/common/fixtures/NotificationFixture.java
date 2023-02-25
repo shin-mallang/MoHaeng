@@ -7,6 +7,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.OFFICER;
 import static com.mohaeng.common.fixtures.ClubFixture.ANA_DESCRIPTION;
@@ -83,5 +84,18 @@ public class NotificationFixture {
                 officerRejectApplicationNotification(null),
                 participantClubRoleChangedNotification(null)
         );
+    }
+
+    public static List<Notification> allKindNotificationsWithReceiverId(final Long receiverId) {
+        return Stream.of(
+                officerApproveApplicationNotification(null),
+                applicationProcessedNotification(null),
+                deleteApplicationFormCauseByClubDeletedNotification(null),
+                deleteParticipantCauseByClubDeletedNotification(null),
+                expelParticipantNotification(null),
+                fillOutApplicationFormNotification(null),
+                officerRejectApplicationNotification(null),
+                participantClubRoleChangedNotification(null)
+        ).peek(it -> ReflectionTestUtils.setField(it, "receiver", Receiver.of(receiverId))).toList();
     }
 }

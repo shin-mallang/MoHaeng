@@ -31,7 +31,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("QueryNotificationByIdController 은")
+@DisplayName("QueryNotificationByIdController(알림 ID로 단일 조회 컨트롤러) 은")
 @WebMvcTest(QueryNotificationByIdController.class)
 class QueryNotificationByIdControllerTest extends ControllerTest {
 
