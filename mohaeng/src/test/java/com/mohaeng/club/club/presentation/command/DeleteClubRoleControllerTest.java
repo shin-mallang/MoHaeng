@@ -50,7 +50,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .ok();
 
         then(deleteClubRoleUseCase).should().command(any());
@@ -75,7 +75,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_ROLE_URL, clubId, clubRoleId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .unAuthorized();
 
         then(deleteClubRoleUseCase).shouldHaveNoInteractions();
@@ -96,7 +96,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .notFound();
 
         verify(deleteClubRoleUseCase, times(1)).command(any());
@@ -118,7 +118,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .forbidden();
 
         then(deleteClubRoleUseCase).should().command(any());
@@ -139,7 +139,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .badRequest();
 
         verify(deleteClubRoleUseCase, times(1)).command(any());
@@ -162,7 +162,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .notFound();
 
         verify(deleteClubRoleUseCase, times(1)).command(any());
@@ -184,7 +184,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(DELETE_CLUB_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .notFound();
 
         verify(deleteClubRoleUseCase, times(1)).command(any());

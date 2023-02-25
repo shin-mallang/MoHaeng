@@ -51,7 +51,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_DEFAULT_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(HttpStatus.OK);
 
         then(changeDefaultRoleUseCase).should().command(any());
@@ -77,7 +77,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_DEFAULT_ROLE_URL, clubId, clubRoleId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .expectStatus(HttpStatus.UNAUTHORIZED);
 
         then(changeDefaultRoleUseCase).shouldHaveNoInteractions();
@@ -99,7 +99,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_DEFAULT_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(HttpStatus.NOT_FOUND);
 
         then(changeDefaultRoleUseCase).should().command(any());
@@ -120,7 +120,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_DEFAULT_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(HttpStatus.FORBIDDEN);
 
         then(changeDefaultRoleUseCase).should().command(any());
@@ -142,7 +142,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_DEFAULT_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(HttpStatus.NOT_FOUND);
 
         then(changeDefaultRoleUseCase).should().command(any());
@@ -164,7 +164,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_DEFAULT_ROLE_URL, clubId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(HttpStatus.NOT_FOUND);
 
         then(changeDefaultRoleUseCase).should().command(any());

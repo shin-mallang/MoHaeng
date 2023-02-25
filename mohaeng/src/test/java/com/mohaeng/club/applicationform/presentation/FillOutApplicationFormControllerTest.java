@@ -45,7 +45,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
             ResultActions resultActions = postRequest()
                     .url(FILL_OUT_APPLICATION_FORM_URL, clubId)
                     .login()
-                    .expect()
+                    .noContent()
                     .created();
 
             then(fillOutApplicationFormUseCase).should().command(any());
@@ -79,7 +79,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
             ResultActions resultActions = postRequest()
                     .url(FILL_OUT_APPLICATION_FORM_URL, clubId)
                     .login()
-                    .expect()
+                    .noContent()
                     .badRequest();
 
             then(fillOutApplicationFormUseCase).should().command(any());
@@ -101,7 +101,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
             ResultActions resultActions = postRequest()
                     .url(FILL_OUT_APPLICATION_FORM_URL, clubId)
                     .login()
-                    .expect()
+                    .noContent()
                     .badRequest();
 
             then(fillOutApplicationFormUseCase).should().command(any());
@@ -122,7 +122,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
             ResultActions resultActions = postRequest()
                     .url(FILL_OUT_APPLICATION_FORM_URL, clubId)
                     .noLogin()
-                    .expect()
+                    .noContent()
                     .unAuthorized();
 
             then(fillOutApplicationFormUseCase).shouldHaveNoInteractions();

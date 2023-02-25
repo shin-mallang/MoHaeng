@@ -52,7 +52,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_PARTICIPANT_ROLE_URL, clubId, participantId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(OK);
 
         // then
@@ -83,7 +83,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_PARTICIPANT_ROLE_URL, clubId, participantId, clubRoleId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .expectStatus(UNAUTHORIZED);
 
         // when & then
@@ -106,7 +106,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_PARTICIPANT_ROLE_URL, clubId, participantId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(NOT_FOUND);
 
         // then
@@ -129,7 +129,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_PARTICIPANT_ROLE_URL, clubId, participantId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(NOT_FOUND);
 
         // then
@@ -151,7 +151,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_PARTICIPANT_ROLE_URL, clubId, participantId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(FORBIDDEN);
 
         then(changeParticipantRoleUseCase).should().command(any());
@@ -171,7 +171,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(CHANGE_PARTICIPANT_ROLE_URL, clubId, participantId, clubRoleId)
                 .login()
-                .expect()
+                .noContent()
                 .expectStatus(BAD_REQUEST);
 
         // when & then

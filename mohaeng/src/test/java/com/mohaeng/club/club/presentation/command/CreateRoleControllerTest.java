@@ -58,7 +58,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .created();
 
         then(createClubRoleUseCase).should().command(any());
@@ -90,7 +89,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .noLogin()
                 .jsonContent(request)
-                .expect()
                 .unAuthorized();
 
         then(createClubRoleUseCase).shouldHaveNoInteractions();
@@ -113,7 +111,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .notFound();
 
         then(createClubRoleUseCase).should().command(any());
@@ -135,7 +132,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .notFound();
 
         then(createClubRoleUseCase).should().command(any());
@@ -156,7 +152,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .forbidden();
 
         // when & then
@@ -180,7 +175,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .badRequest();
 
         // when & then
@@ -205,7 +199,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .conflict();
 
         // when & then
@@ -230,7 +223,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .login()
                 .jsonContent(emptyRequest)
-                .expect()
                 .badRequest();
 
         then(createClubRoleUseCase).shouldHaveNoInteractions();
@@ -250,7 +242,6 @@ class CreateRoleControllerTest extends ControllerTest {
                 .url(CREATE_CLUB_ROLE_URL, 1L)
                 .login()
                 .jsonContent("{\"name\": \"name\",\"category\":  \"cateGory\"}")
-                .expect()
                 .badRequest();
 
         then(createClubRoleUseCase).shouldHaveNoInteractions();

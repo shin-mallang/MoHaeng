@@ -46,7 +46,6 @@ class SignUpControllerTest extends ControllerTest {
                     .url(SIGN_UP_URL)
                     .noLogin()
                     .jsonContent(signUpRequest)
-                    .expect()
                     .created();
 
             resultActions.andDo(
@@ -79,7 +78,6 @@ class SignUpControllerTest extends ControllerTest {
                     .url(SIGN_UP_URL)
                     .noLogin()
                     .jsonContent(signUpRequest)
-                    .expect()
                     .conflict();
 
             resultActions.andDo(
@@ -96,7 +94,6 @@ class SignUpControllerTest extends ControllerTest {
                     .url(SIGN_UP_URL)
                     .noLogin()
                     .jsonContent(nullRequest)
-                    .expect()
                     .badRequest();
 
             resultActions.andDo(

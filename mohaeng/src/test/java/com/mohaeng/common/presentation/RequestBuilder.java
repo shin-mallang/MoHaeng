@@ -116,13 +116,13 @@ public class RequestBuilder {
     }
 
     public class Content {
-        public Content jsonContent(final Object object) {
+        public Expect jsonContent(final Object object) {
             contentType = MediaType.APPLICATION_JSON;
             content = object;
-            return new Content();
+            return new Expect();
         }
 
-        public Expect expect() {
+        public Expect noContent() {
             return new Expect();
         }
     }
@@ -130,7 +130,6 @@ public class RequestBuilder {
     public class Expect {
         public ResultActions expectStatus(HttpStatus expectStatus) throws Exception {
             status = expectStatus;
-
             return makeRequest();
         }
 

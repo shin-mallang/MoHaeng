@@ -46,7 +46,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(EXPEL_PARTICIPANT_URL, clubId, participantId)
                 .login()
-                .expect()
+                .noContent()
                 .ok();
 
         // then
@@ -76,7 +76,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(EXPEL_PARTICIPANT_URL, clubId, participantId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .unAuthorized();
 
         verify(expelParticipantUseCase, times(0)).command(any());
@@ -98,7 +98,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(EXPEL_PARTICIPANT_URL, clubId, participantId)
                 .login()
-                .expect()
+                .noContent()
                 .notFound();
 
         verify(expelParticipantUseCase, times(1)).command(any());
@@ -120,7 +120,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
         ResultActions resultActions = deleteRequest()
                 .url(EXPEL_PARTICIPANT_URL, clubId, participantId)
                 .login()
-                .expect()
+                .noContent()
                 .forbidden();
 
         verify(expelParticipantUseCase, times(1)).command(any());

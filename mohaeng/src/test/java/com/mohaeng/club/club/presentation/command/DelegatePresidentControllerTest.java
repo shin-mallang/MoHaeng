@@ -52,7 +52,6 @@ class DelegatePresidentControllerTest extends ControllerTest {
                 .url(DELEGATE_PRESIDENT_URL)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .ok();
 
         then(delegatePresidentUseCase).should().command(any());
@@ -79,7 +78,6 @@ class DelegatePresidentControllerTest extends ControllerTest {
                 .url(DELEGATE_PRESIDENT_URL)
                 .noLogin()
                 .jsonContent(request)
-                .expect()
                 .unAuthorized();
 
         then(delegatePresidentUseCase).shouldHaveNoInteractions();
@@ -102,7 +100,6 @@ class DelegatePresidentControllerTest extends ControllerTest {
                 .url(DELEGATE_PRESIDENT_URL)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .notFound();
 
         then(delegatePresidentUseCase).should().command(any());
@@ -124,7 +121,6 @@ class DelegatePresidentControllerTest extends ControllerTest {
                 .url(DELEGATE_PRESIDENT_URL)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .notFound();
 
         then(delegatePresidentUseCase).should().command(any());
@@ -146,7 +142,6 @@ class DelegatePresidentControllerTest extends ControllerTest {
                 .url(DELEGATE_PRESIDENT_URL)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .notFound();
 
         then(delegatePresidentUseCase).should().command(any());
@@ -168,7 +163,6 @@ class DelegatePresidentControllerTest extends ControllerTest {
                 .url(DELEGATE_PRESIDENT_URL)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .forbidden();
 
         then(delegatePresidentUseCase).should().command(any());
@@ -190,7 +184,6 @@ class DelegatePresidentControllerTest extends ControllerTest {
                 .url(DELEGATE_PRESIDENT_URL)
                 .login()
                 .jsonContent(emptyRequest)
-                .expect()
                 .badRequest();
 
         then(delegatePresidentUseCase).shouldHaveNoInteractions();

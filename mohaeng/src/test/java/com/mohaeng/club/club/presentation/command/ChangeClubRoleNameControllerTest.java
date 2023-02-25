@@ -58,7 +58,6 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
                 .url(CHANGE_CLUB_ROLE_NAME_URL, clubId, clubRoleId)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .expectStatus(HttpStatus.OK);
 
         then(changeClubRoleNameUseCase).should().command(any());
@@ -89,7 +88,6 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
                 .url(CHANGE_CLUB_ROLE_NAME_URL, clubId, clubRoleId)
                 .noLogin()
                 .jsonContent(request)
-                .expect()
                 .expectStatus(HttpStatus.UNAUTHORIZED);
         then(changeClubRoleNameUseCase).shouldHaveNoInteractions();
 
@@ -111,7 +109,6 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
                 .url(CHANGE_CLUB_ROLE_NAME_URL, clubId, clubRoleId)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .expectStatus(HttpStatus.NOT_FOUND);
 
         then(changeClubRoleNameUseCase).should().command(any());
@@ -133,7 +130,6 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
                 .url(CHANGE_CLUB_ROLE_NAME_URL, clubId, clubRoleId)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .expectStatus(HttpStatus.FORBIDDEN);
 
         // when & then
@@ -156,7 +152,6 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
                 .url(CHANGE_CLUB_ROLE_NAME_URL, clubId, clubRoleId)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .expectStatus(HttpStatus.FORBIDDEN);
 
         // when & then
@@ -177,7 +172,6 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
                 .url(CHANGE_CLUB_ROLE_NAME_URL, clubId, clubRoleId)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .expectStatus(HttpStatus.BAD_REQUEST);
 
         then(changeClubRoleNameUseCase).shouldHaveNoInteractions();
@@ -198,7 +192,6 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
                 .url(CHANGE_CLUB_ROLE_NAME_URL, clubId, clubRoleId)
                 .login()
                 .jsonContent(request)
-                .expect()
                 .expectStatus(HttpStatus.NOT_FOUND);
 
         then(changeClubRoleNameUseCase).should().command(any());

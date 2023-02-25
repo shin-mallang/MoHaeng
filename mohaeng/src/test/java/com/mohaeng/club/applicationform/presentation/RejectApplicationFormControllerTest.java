@@ -43,7 +43,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(REJECT_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .ok();
 
         verify(rejectApplicationFormUseCase, times(1)).command(any());
@@ -73,7 +73,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(REJECT_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .forbidden();
 
         verify(rejectApplicationFormUseCase, times(1)).command(any());
@@ -96,7 +96,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(REJECT_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .badRequest();
 
         then(rejectApplicationFormUseCase).should().command(any());
@@ -119,7 +119,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(REJECT_JOIN_CLUB_URL, applicationFormId)
                 .login()
-                .expect()
+                .noContent()
                 .notFound();
 
         then(rejectApplicationFormUseCase).should().command(any());
@@ -139,7 +139,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         ResultActions resultActions = postRequest()
                 .url(REJECT_JOIN_CLUB_URL, applicationFormId)
                 .noLogin()
-                .expect()
+                .noContent()
                 .unAuthorized();
 
         then(rejectApplicationFormUseCase).shouldHaveNoInteractions();
