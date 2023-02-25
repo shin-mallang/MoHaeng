@@ -1,4 +1,4 @@
-package com.mohaeng.common;
+package com.mohaeng.common.presentation;
 
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;

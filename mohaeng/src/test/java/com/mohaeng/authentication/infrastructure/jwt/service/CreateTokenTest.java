@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("CreateToken 은 ")
+@DisplayName("CreateToken(토큰 생성) 은")
 class CreateTokenTest {
 
     private final CreateTokenUseCase createTokenUseCase = new CreateToken(new AuthenticationFixture.MockJwtProperties());

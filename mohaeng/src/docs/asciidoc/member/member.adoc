@@ -8,18 +8,20 @@
 :toclevels: 2
 :sectlinks:
 
+*link:../index.html[메인화면으로 돌아가기]*
+
 [[Member-API]]
 == Member API
 
 [[Member-회원가입]]
-=== - Member 회원가입
+=== `회원가입`
 
-operation::sign-up[snippets='http-request,request-body,request-fields,http-response']
+operation::member/sign-up[snippets='http-request,request-body,request-fields,http-response']
 
 ==== - 중복 아이디로 회원가입 시
 
-operation::sign-up fail(duplicated username)[snippets='http-response']
+operation::member/sign-up/fail/duplicated username[snippets='http-response']
 
 ==== - 필드가 다 채워지지 않은 경우
 
-operation::sign-up fail(request fields contains empty value)[snippets='http-response']
+operation::member/sign-up/fail/request fields contains empty value[snippets='http-response']

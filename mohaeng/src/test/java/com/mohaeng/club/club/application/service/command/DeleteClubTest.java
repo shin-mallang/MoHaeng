@@ -3,29 +3,20 @@ package com.mohaeng.club.club.application.service.command;
 import com.mohaeng.club.applicationform.domain.event.DeleteApplicationFormEvent;
 import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
+import com.mohaeng.club.club.application.service.ClubCommandTest;
 import com.mohaeng.club.club.application.usecase.command.DeleteClubUseCase;
 import com.mohaeng.club.club.domain.event.DeleteClubEvent;
-import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.event.ApplicationEvents;
 
 import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubExceptionType.NO_AUTHORITY_DELETE_CLUB;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveOfficer;
-import static com.mohaeng.common.util.RepositoryUtil.saveClub;
 import static com.mohaeng.common.util.RepositoryUtil.saveMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -33,41 +24,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("DeleteClub 은")
+@DisplayName("DeleteClub(모임 제거) 은")
 @ApplicationTest
-class DeleteClubTest {
+class DeleteClubTest extends ClubCommandTest {
 
     @Autowired
     private DeleteClubUseCase deleteClubUseCase;
 
     @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @Autowired
-    private EntityManager em;
-
-    @Autowired
     private ApplicationFormRepository applicationFormRepository;
 
-    @Autowired
-    private ApplicationEvents events;
-
-    private Club club;
-    private Member presidentMember;
-    private Participant president;
-    private Participant officer;
-    private Participant general;
-
     @BeforeEach
-    void init() {
-        presidentMember = saveMember(memberRepository, member(null));
-        club = saveClub(clubRepository, clubWithMember(presidentMember));
-        president = club.participants().findByMemberId(presidentMember.id()).get();
-        officer = saveOfficer(memberRepository, club);
-        general = saveGeneral(memberRepository, club);
+    protected void init() {
         applicationFormRepository.save(ApplicationForm.create(club, saveMember(memberRepository, member(null))));
         applicationFormRepository.save(ApplicationForm.create(club, saveMember(memberRepository, member(null))));
         applicationFormRepository.save(ApplicationForm.create(club, saveMember(memberRepository, member(null))));
@@ -129,10 +97,5 @@ class DeleteClubTest {
                 () -> assertThat(baseExceptionType).isEqualTo(NOT_FOUND_CLUB),
                 () -> assertThat(clubRepository.findById(club.id())).isNotEmpty()
         );
-    }
-
-    private void flushAndClear() {
-        em.flush();
-        em.clear();
     }
 }

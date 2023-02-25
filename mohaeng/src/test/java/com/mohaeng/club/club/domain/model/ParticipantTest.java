@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("Participant 은")
+@DisplayName("Participant(참여자) 은")
 class ParticipantTest {
 
     private final Club club = club(1L);

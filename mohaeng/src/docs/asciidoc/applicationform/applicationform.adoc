@@ -1,0 +1,77 @@
+= 모임 가입 신청 API
+:doctype: book
+:icons: font
+// 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:source-highlighter: highlightjs
+// toc (Table Of Contents)를 문서의 좌측에 두기
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+*link:../index.html[메인화면으로 돌아가기]*
+
+[[ApplicationForm-API]]
+== ApplicationForm API
+
+[[모임-가입-신청]]
+=== `모임 가입 신청`
+
+operation::applicationForm/fill-out-application-form[snippets='http-request,path-parameters,http-response']
+
+==== - 이미 가입 신청을 보냈으며, 해당 요청이 처리되지 않았는데 재요청한 경우
+
+operation::applicationForm/fill-out-application-form/fail/already request join club[snippets='http-response']
+
+==== - 이미 모임에 가입된 회원이 같은 모임에 또다시 가입 신청을 보낸 경우
+
+operation::applicationForm/fill-out-application-form/fail/member already joined club[snippets='http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::applicationForm/fill-out-application-form/fail/No Access Token[snippets='http-response']
+
+[[모임-가입-신청-수락]]
+=== `모임 가입 신청 수락`
+
+operation::applicationForm/approve[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 회장 & 임원진이 아닌 사람이 요청을 처리하려는 경우
+
+operation::applicationForm/approve/fail/no authority[snippets='http-response']
+
+==== - 이미 처리된 신청서인 경우
+
+operation::applicationForm/approve/fail/already processed[snippets='http-response']
+
+==== - 없는 신청서의 경우
+
+operation::applicationForm/approve/fail/no application form[snippets='http-response']
+
+==== - 모임이 가득 찬 경우
+
+operation::applicationForm/approve/fail/club is full[snippets='http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::applicationForm/approve/fail/No Access Token[snippets='http-response']
+
+[[모임-가입-신청-거절]]
+=== `모임 가입 신청 거절`
+
+operation::applicationForm/reject[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 회장 & 임원진이 아닌 사람이 요청을 처리하려는 경우
+
+operation::applicationForm/reject/fail/no authority[snippets='http-response']
+
+==== - 이미 처리된 신청서인 경우
+
+operation::applicationForm/reject/fail/already processed[snippets='http-response']
+
+==== - 없는 신청서의 경우
+
+operation::applicationForm/reject/fail/no application form[snippets='http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::applicationForm/reject/fail/No Access Token[snippets='http-response']

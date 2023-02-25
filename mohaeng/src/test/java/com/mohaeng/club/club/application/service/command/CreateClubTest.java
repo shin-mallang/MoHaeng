@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("CreateClub 은")
+@DisplayName("CreateClub(모임 생성) 은")
 @ApplicationTest
 class CreateClubTest {
 

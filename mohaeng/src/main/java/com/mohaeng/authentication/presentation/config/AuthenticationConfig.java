@@ -1,7 +1,7 @@
 package com.mohaeng.authentication.presentation.config;
 
 import com.mohaeng.authentication.presentation.argumentresolver.AuthArgumentResolver;
-import com.mohaeng.authentication.presentation.interceptor.LogInInterceptor;
+import com.mohaeng.authentication.presentation.interceptor.AuthInterceptor;
 import com.mohaeng.common.presentation.interceptor.PathAndMethodMatcherInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -20,18 +20,18 @@ import static org.springframework.http.HttpMethod.GET;
 @Configuration
 public class AuthenticationConfig implements WebMvcConfigurer {
 
-    private final LogInInterceptor logInInterceptor;
+    private final AuthInterceptor authInterceptor;
     private final AuthArgumentResolver authArgumentResolver;
 
-    public AuthenticationConfig(final LogInInterceptor logInInterceptor,
+    public AuthenticationConfig(final AuthInterceptor authInterceptor,
                                 final AuthArgumentResolver authArgumentResolver) {
-        this.logInInterceptor = logInInterceptor;
+        this.authInterceptor = authInterceptor;
         this.authArgumentResolver = authArgumentResolver;
     }
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
-        PathAndMethodMatcherInterceptor interceptor = new PathAndMethodMatcherInterceptor(logInInterceptor);
+        PathAndMethodMatcherInterceptor interceptor = new PathAndMethodMatcherInterceptor(authInterceptor);
         interceptor
                 .addPathPatterns(Set.of("/api/**"))
                 .excludePathPattern(Set.of(SIGN_UP_URL, LOGIN_URL))

@@ -22,13 +22,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@DisplayName("LogInInterceptor 는 ")
-class LogInInterceptorTest {
+@DisplayName("AuthInterceptor(인증 처리 인터셉터) 는")
+class AuthInterceptorTest {
 
     private final ExtractAccessTokenUseCase extractAccessTokenUseCase = new ExtractAccessToken();
     private final ExtractClaimsUseCase extractClaimsUseCase = mock(ExtractClaimsUseCase.class);
     private final AuthenticationContext authenticationContext = mock(AuthenticationContext.class);
-    private final LogInInterceptor logInInterceptor = new LogInInterceptor(extractAccessTokenUseCase,
+    private final AuthInterceptor authInterceptor = new AuthInterceptor(extractAccessTokenUseCase,
             extractClaimsUseCase, authenticationContext);
 
     private final HttpServletRequest request = mock(HttpServletRequest.class);
@@ -45,7 +45,7 @@ class LogInInterceptorTest {
             when(request.getHeader(AUTHORIZATION_HEADER)).thenReturn(BEARER_ACCESS_TOKEN);
             when(extractClaimsUseCase.command(any())).thenReturn(claims);
 
-            assertThat(logInInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class))).isEqualTo(true);
+            assertThat(authInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class))).isEqualTo(true);
         }
     }
 
@@ -59,7 +59,7 @@ class LogInInterceptorTest {
             when(request.getHeader(AUTHORIZATION_HEADER)).thenReturn(null);
 
             BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
-                    () -> logInInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class))
+                    () -> authInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class))
             ).exceptionType();
             assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ACCESS_TOKEN);
         }
@@ -70,7 +70,7 @@ class LogInInterceptorTest {
             when(request.getHeader(AUTHORIZATION_HEADER)).thenReturn(ACCESS_TOKEN);
 
             BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
-                    () -> logInInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class))
+                    () -> authInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class))
             ).exceptionType();
             assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ACCESS_TOKEN);
         }
@@ -82,7 +82,7 @@ class LogInInterceptorTest {
             when(extractClaimsUseCase.command(any())).thenReturn(new Claims());
 
             BaseExceptionType baseExceptionType = assertThrows(AuthenticationException.class,
-                    () -> logInInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class))
+                    () -> authInterceptor.preHandle(request, mock(HttpServletResponse.class), mock(Object.class))
             ).exceptionType();
             assertThat(baseExceptionType).isEqualTo(INVALID_ACCESS_TOKEN);
         }

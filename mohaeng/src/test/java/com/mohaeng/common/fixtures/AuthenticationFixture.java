@@ -23,7 +23,7 @@ public class AuthenticationFixture {
             "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g";
 
     public static final String BEARER_ACCESS_TOKEN =
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2ODA2ODI4NTEsIm1lbWJlcklkIjoiMSJ9.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g";
+            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.xxx.s2E4VEA_w16a9Z9QxCSDtq8DNHD-VgRLRKluMA1frxZBEt6WERbrkAlNLYybF4-IH6s4Ogei52zSpEBq_LG9-g";
 
     public static class MockJwtProperties extends JwtProperties {
         public MockJwtProperties() {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("Notification 은")
+@DisplayName("Notification(알림) 은")
 class NotificationTest {
 
     @Test

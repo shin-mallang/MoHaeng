@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("ApplicationForm 은")
+@DisplayName("ApplicationForm(가입 신청서) 은")
 class ApplicationFormTest {
 
     private final Member applicant = member(10000L);

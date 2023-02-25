@@ -1,82 +1,37 @@
 package com.mohaeng.club.applicationform.application.service;
 
+import com.mohaeng.club.applicationform.application.ApplicationFormCommandTest;
 import com.mohaeng.club.applicationform.application.usecase.ApproveApplicationFormUseCase;
 import com.mohaeng.club.applicationform.domain.event.ApplicationProcessedEvent;
 import com.mohaeng.club.applicationform.domain.event.OfficerApproveApplicationEvent;
 import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
-import com.mohaeng.club.applicationform.domain.repository.ApplicationFormRepository;
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
-import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.event.BaseEvent;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.event.ApplicationEvents;
 
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED;
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
-import static com.mohaeng.common.fixtures.ClubFixture.fullClubWithMember;
-import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveOfficer;
-import static com.mohaeng.common.util.RepositoryUtil.*;
+import static com.mohaeng.common.util.RepositoryUtil.saveApplicationForm;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("ApproveApplicationForm 은")
+@DisplayName("ApproveApplicationForm(가입 신청서 수락) 은")
 @ApplicationTest
-class ApproveApplicationFormTest {
-
-    @Autowired
-    private EntityManager em;
+class ApproveApplicationFormTest extends ApplicationFormCommandTest {
 
     @Autowired
     private ApproveApplicationFormUseCase approveApplicationFormUseCase;
-
-    @Autowired
-    private ApplicationFormRepository applicationFormRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @Autowired
-    private ApplicationEvents events;
-
-    private Member applicant;
-    private Club club;
-    private Club fullClub;
-    private Member presidentMember;
-    private Participant president;
-    private Participant officer;
-    private Participant general;
-
-    @BeforeEach
-    void init() {
-        presidentMember = saveMember(memberRepository, member(null));
-        applicant = saveMember(memberRepository, member(null));
-
-        fullClub = saveClub(clubRepository, fullClubWithMember(presidentMember));
-        club = saveClub(clubRepository, clubWithMember(presidentMember));
-
-        president = club.participants().findByMemberId(presidentMember.id()).get();
-        officer = saveOfficer(memberRepository, club);
-        general = saveGeneral(memberRepository, club);
-    }
 
     @Test
     void 회원을_모임에_기본_역할로_가입시킨다() {
@@ -187,10 +142,5 @@ class ApproveApplicationFormTest {
 
         // then
         assertThat(baseExceptionType).isEqualTo(CLUB_IS_FULL);
-    }
-
-    private void flushAndClear() {
-        em.flush();
-        em.clear();
     }
 }

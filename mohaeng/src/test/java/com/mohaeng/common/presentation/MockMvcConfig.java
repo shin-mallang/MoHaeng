@@ -1,4 +1,4 @@
-package com.mohaeng.common;
+package com.mohaeng.common.presentation;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcBuilderCustomizer;
 import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;

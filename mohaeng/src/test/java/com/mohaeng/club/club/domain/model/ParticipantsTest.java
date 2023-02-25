@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("Participants 은")
+@DisplayName("Participants(참여자들) 은")
 class ParticipantsTest {
 
     private final Club club = club(1L);

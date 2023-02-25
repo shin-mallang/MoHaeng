@@ -1,20 +1,18 @@
 package com.mohaeng.club.club.application.service.command;
 
+import com.mohaeng.club.club.application.service.ClubCommandTest;
 import com.mohaeng.club.club.application.usecase.command.CreateClubRoleUseCase;
-import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.ClubRole;
 import com.mohaeng.club.club.domain.model.ClubRoleCategory;
-import com.mohaeng.club.club.domain.model.Participant;
-import com.mohaeng.club.club.domain.repository.ClubRepository;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.annotation.ApplicationTest;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.member.domain.model.Member;
-import com.mohaeng.member.domain.repository.MemberRepository;
-import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
@@ -25,53 +23,18 @@ import static com.mohaeng.club.club.domain.model.ClubRoleCategory.OFFICER;
 import static com.mohaeng.club.club.exception.ClubExceptionType.NOT_FOUND_CLUB;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.NOT_FOUND_PARTICIPANT;
-import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
-import static com.mohaeng.common.fixtures.MemberFixture.member;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveGeneral;
-import static com.mohaeng.common.fixtures.ParticipantFixture.saveOfficer;
-import static com.mohaeng.common.util.RepositoryUtil.saveClub;
-import static com.mohaeng.common.util.RepositoryUtil.saveMember;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("CreateClubRole 은 ")
+@DisplayName("CreateClubRole(모임 역할 생성) 은")
 @ApplicationTest
-class CreateClubRoleTest {
+class CreateClubRoleTest extends ClubCommandTest {
 
     @Autowired
     private CreateClubRoleUseCase createClubRoleUseCase;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private ClubRepository clubRepository;
-
-    @Autowired
-    private EntityManager em;
-
-    private Club club;
-    private Member presidentMember;
-    private Participant officer;
-    private Participant general;
-
-    @BeforeEach
-    void init() {
-        presidentMember = saveMember(memberRepository, member(null));
-        club = saveClub(clubRepository, clubWithMember(presidentMember));
-        officer = saveOfficer(memberRepository, club);
-        general = saveGeneral(memberRepository, club);
-        flushAndClear();
-    }
-
-    private void flushAndClear() {
-        em.flush();
-        em.clear();
-        club = clubRepository.findById(club.id()).get();
-    }
 
     @Test
     void 회장_혹은_임원은_새로운_역할을_생성할_수_있으며_새로_생성된_역할은_기본_역할이_아니다() {

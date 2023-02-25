@@ -1,6 +1,7 @@
-package com.mohaeng.member.domain.model;
+package com.mohaeng.club.club.presentation.query.domain.model;
 
 import com.mohaeng.authentication.exception.AuthenticationException;
+import com.mohaeng.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("Member 는 ")
+@DisplayName("Member(회원) 는")
 class MemberTest {
 
     @Nested

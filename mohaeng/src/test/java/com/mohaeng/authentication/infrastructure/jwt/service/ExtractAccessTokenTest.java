@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("ExtractAccessToken 은 ")
+@DisplayName("ExtractAccessToken(AccessToken 추출) 은")
 class ExtractAccessTokenTest {
 
     private final ExtractAccessTokenUseCase extractAccessTokenUseCase = new ExtractAccessToken();

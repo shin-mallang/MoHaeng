@@ -2,7 +2,7 @@ package com.mohaeng.club.club.presentation.query;
 
 import com.mohaeng.club.club.application.usecase.query.QueryAllClubBySearchCondUseCase;
 import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.common.ControllerTest;
+import com.mohaeng.common.presentation.ControllerTest;
 import org.junit.jupiter.api.*;
 import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,19 +11,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.DATE_TIME;
 import static com.mohaeng.club.club.presentation.query.SearchClubController.SEARCH_CLUB_URL;
-import static com.mohaeng.common.ApiDocumentUtils.getDocumentRequest;
-import static com.mohaeng.common.ApiDocumentUtils.getDocumentResponse;
 import static com.mohaeng.common.fixtures.ClubFixture.club;
+import static com.mohaeng.common.presentation.ApiDocumentUtils.getDocumentRequest;
+import static com.mohaeng.common.presentation.ApiDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -61,9 +60,13 @@ class SearchClubControllerTest extends ControllerTest {
                 .willReturn(club);
 
         // when
-        MvcResult mvcResult = mockMvc.perform(
-                get(SEARCH_CLUB_URL + "?name=clubName&page=1&size=10&sort=createdAt,desc")
-        ).andDo(document("club/query/search",
+        ResultActions resultActions = getRequest()
+                .url(SEARCH_CLUB_URL + "?name=clubName&page=1&size=10&sort=createdAt,desc")
+                .noLogin()
+                .expect()
+                .ok();
+
+        resultActions.andDo(document("club/club/query/search",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         queryParameters(
@@ -86,6 +89,6 @@ class SearchClubControllerTest extends ControllerTest {
                                 fieldWithPath("pageInfo.totalElements").type(NUMBER).description("생성일")
                         )
                 )
-        ).andReturn();
+        );
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-@DisplayName("AuthArgumentResolver 는 ")
+@DisplayName("AuthArgumentResolver 는")
 class AuthArgumentResolverTest {
 
     private final AuthenticationContext context = mock(AuthenticationContext.class);

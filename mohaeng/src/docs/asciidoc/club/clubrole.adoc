@@ -1,0 +1,134 @@
+= 모임 역할 API
+:doctype: book
+:icons: font
+// 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:source-highlighter: highlightjs
+// toc (Table Of Contents)를 문서의 좌측에 두기
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+*link:../index.html[메인화면으로 돌아가기]*
+
+[[Club-Role-API]]
+== Club Role API
+
+[[Club-Role-역할생성]]
+=== `역할 생성`
+
+operation::club/clubRole/create-club-role[snippets='http-request,path-parameters,request-headers,request-fields,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/clubRole/create-club-role/fail/No Access Token[snippets='http-response']
+
+==== - 모임이 없는 경우
+
+operation::club/clubRole/create-club-role/fail/Nonexistent Club[snippets='http-request,http-response']
+
+==== - 해당 회원이 역할을 생성하려는 모임에 가입되어있지 않은 경우
+
+operation::club/clubRole/create-club-role/fail/Nonexistent Participant[snippets='http-response']
+
+==== - 요청자가 회장 혹은 임원이 아닌 경우
+
+operation::club/clubRole/create-club-role/fail/requester does not president or officer[snippets='http-response']
+
+==== - 회장 역할을 생성하려는 경우
+
+operation::club/clubRole/create-club-role/fail/when create president role[snippets='http-response']
+
+==== - 이미 동일한 이름의 역할이 모임 내에 존재하는 경우
+
+operation::club/clubRole/create-club-role/fail/duplicated name[snippets='http-response']
+
+==== - 요청 시 비어있는 필드가 있는 경우
+
+operation::club/clubRole/create-club-role/fail/request fields contains empty value[snippets='http-request,http-response']
+
+==== - 역할 카테고리를 잘못 입력한 경우
+
+operation::club/clubRole/create-club-role/fail/category enum mapping fail[snippets='http-request,http-response']
+
+[[Club-Role-기본역할변경]]
+=== `기본역할 변경`
+
+operation::club/clubRole/change-default-club-role[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 요청자가 일반 회원인 경우
+
+operation::club/clubRole/change-default-club-role/fail/requester is general[snippets='http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/clubRole/change-default-club-role/fail/No Access Token[snippets='http-response']
+
+==== - 해당 회원이 역할을 제거하려는 모임에 가입되어있지 않은 경우
+
+operation::club/clubRole/change-default-club-role/fail/Nonexistent Participant[snippets='http-response']
+
+==== - 기본 역할로 변경하려는 역할이 존재하지 않는 경우
+
+operation::club/clubRole/change-default-club-role/fail/Nonexistent ClubRole[snippets='http-response']
+
+==== - 모임이 존재하지 않는 경우
+
+operation::club/clubRole/change-default-club-role/fail/Nonexistent Club[snippets='http-response']
+
+[[Club-Role-이름변경]]
+=== `역할 이름 변경`
+
+operation::club/clubRole/change-club-role-name[snippets='http-request,path-parameters,request-headers,request-fields,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/clubRole/change-club-role-name/fail/No Access Token[snippets='http-response']
+
+==== - 해당 회원이 역할 이름블 변경하려는 모임에 가입되어있지 않은 경우
+
+operation::club/clubRole/change-club-role-name/fail/Nonexistent Participant[snippets='http-response']
+
+==== - 이름을 변경하려는 역할이 존재하지 않는 경우
+
+operation::club/clubRole/change-club-role-name/fail/Nonexistent ClubRole[snippets='http-response']
+
+==== - 요청자가 일반 회원인 경우
+
+operation::club/clubRole/change-club-role-name/fail/requester is general[snippets='http-response']
+
+==== - 요청자가 임원이지만, 임원의 역할 혹은 회장의 역할 이름을 바꾸려고 요청한 경우
+
+operation::club/clubRole/change-club-role-name/fail/requester is officer and try to change officer role name or president role name[snippets='http-response']
+
+==== - 요청 시 비어있는 필드가 있는 경우
+
+operation::club/clubRole/change-club-role-name/fail/request fields contains empty value[snippets='http-request,http-response']
+
+[[Club-Role-역할제거]]
+=== `역할 제거`
+
+operation::club/clubRole/delete-club-role[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/clubRole/delete-club-role/fail/No Access Token[snippets='http-response']
+
+==== - 해당 회원이 역할을 제거하려는 모임에 가입되어있지 않은 경우
+
+operation::club/clubRole/delete-club-role/fail/Nonexistent Participant[snippets='http-response']
+
+==== - 모임이 존재하지 않는 경우
+
+operation::club/clubRole/delete-club-role/fail/Nonexistent Club[snippets='http-response']
+
+==== - 제거하려는 역할이 존재하지 않는 경우
+
+operation::club/clubRole/delete-club-role/fail/Nonexistent ClubRole[snippets='http-response']
+
+==== - 요청자가 회장 혹은 임원이 아닌 경우
+
+operation::club/clubRole/delete-club-role/fail/requester does not president or officer[snippets='http-response']
+
+==== - 기본 역할을 제거하려는 경우
+
+operation::club/clubRole/delete-club-role/fail/when delete default role[snippets='http-response']
