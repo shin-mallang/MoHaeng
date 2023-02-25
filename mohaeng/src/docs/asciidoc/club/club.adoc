@@ -64,4 +64,4 @@ operation::club/club/query/club by id/fail/not found club[snippets='http-respons
 [[Club-모임-검색]]
 === `모임검색`
 
-operation::club/query/search[snippets='http-request,http-response,response-fields']
+operation::club/club/query/search[snippets='http-request,http-response,response-fields']
