@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @WebMvcTest(DelegatePresidentController.class)
-@DisplayName("DelegatePresidentController 은")
+@DisplayName("DelegatePresidentController(회장 위임 컨트롤러) 는")
 class DelegatePresidentControllerTest extends ControllerTest {
 
     @MockBean

@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("DelegatePresident 은")
+@DisplayName("DelegatePresident(회장 위임) 은")
 @ApplicationTest
 class DelegatePresidentTest {
 

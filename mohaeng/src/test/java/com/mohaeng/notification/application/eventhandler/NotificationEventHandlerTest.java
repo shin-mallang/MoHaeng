@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Import({MockNotificationConfig.class})
-@DisplayName("NotificationEventHandler 는")
+@DisplayName("NotificationEventHandler(알림 이벤트 처리 핸들러) 는")
 class NotificationEventHandlerTest {
 
     @Autowired
@@ -40,8 +40,7 @@ class NotificationEventHandlerTest {
     }
 
     @Test
-    @DisplayName("알림 관련 이벤트를 받아 알림을 생성하여 저장한다.")
-    void success_test_1() {
+    void 알림_관련_이벤트를_받아_알림을_생성하여_저장한다() {
         // given
         List<Long> longs = List.of(1L, 2L);
         eventHandler.handle(new MockNotificationEvent(this, longs));

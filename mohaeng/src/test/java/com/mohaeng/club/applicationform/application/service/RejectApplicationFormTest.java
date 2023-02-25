@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ApplicationTest
-@DisplayName("RejectApplicationForm 은")
+@DisplayName("RejectApplicationForm(가입 신청서 거절) 은")
 class RejectApplicationFormTest {
 
     @Autowired

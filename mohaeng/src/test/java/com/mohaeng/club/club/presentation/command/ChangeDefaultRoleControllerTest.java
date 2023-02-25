@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("ChangeDefaultRoleController 는 ")
+@DisplayName("ChangeDefaultRoleController(기본 역할 변경 컨트롤러) 는")
 @WebMvcTest(ChangeDefaultRoleController.class)
 class ChangeDefaultRoleControllerTest extends ControllerTest {
 

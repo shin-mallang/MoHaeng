@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ApplicationTest
-@DisplayName("SignUp 은 ")
+@DisplayName("SignUp(회원가입) 은")
 class SignUpTest {
 
     @Autowired

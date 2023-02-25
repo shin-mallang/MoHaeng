@@ -6,8 +6,8 @@ import com.mohaeng.authentication.application.usecase.ExtractClaimsUseCase;
 import com.mohaeng.authentication.domain.model.Claims;
 import com.mohaeng.authentication.infrastructure.jwt.service.ExtractAccessToken;
 import com.mohaeng.authentication.presentation.argumentresolver.AuthArgumentResolver;
+import com.mohaeng.authentication.presentation.interceptor.AuthInterceptor;
 import com.mohaeng.authentication.presentation.interceptor.AuthenticationContext;
-import com.mohaeng.authentication.presentation.interceptor.LogInInterceptor;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -42,7 +42,7 @@ public abstract class ControllerTest {
     protected AuthArgumentResolver authArgumentResolver;
 
     @Autowired
-    protected LogInInterceptor logInInterceptor;
+    protected AuthInterceptor authInterceptor;
 
     @Autowired
     protected ExtractAccessTokenUseCase extractAccessTokenUseCase;

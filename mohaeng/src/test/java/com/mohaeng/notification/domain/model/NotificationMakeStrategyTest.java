@@ -12,7 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("NotificationMakeStrategy 은")
+@DisplayName("NotificationMakeStrategy(알림 생성 전략) 은")
 class NotificationMakeStrategyTest {
 
     @Test

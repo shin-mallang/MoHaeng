@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("ClubRoles 은")
+@DisplayName("ClubRoles(모임 역할들) 은")
 class ClubRolesTest {
 
     private final Club club = mock(Club.class);

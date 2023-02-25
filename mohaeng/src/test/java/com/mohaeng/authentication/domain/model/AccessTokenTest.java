@@ -11,7 +11,7 @@ import static com.mohaeng.authentication.exception.AuthenticationExceptionType.N
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("AccessToken 은 ")
+@DisplayName("AccessToken 은")
 class AccessTokenTest {
 
     private static final String TOKEN_TYPE = "Bearer ";

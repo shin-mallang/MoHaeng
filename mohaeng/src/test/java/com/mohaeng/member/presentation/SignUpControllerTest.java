@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = SignUpController.class)
-@DisplayName("SignUpController 는 ")
+@DisplayName("SignUpController(회원가입 컨트롤러) 는 ")
 class SignUpControllerTest extends ControllerTest {
 
     @MockBean

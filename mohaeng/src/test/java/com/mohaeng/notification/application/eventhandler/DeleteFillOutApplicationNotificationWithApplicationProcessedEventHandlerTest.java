@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("DeleteFillOutApplicationNotificationWithApplicationProcessedEventHandler 은")
+@DisplayName("(가입 신청서 처리 시, 관련된 알람 제거 핸들러)DeleteFillOutApplicationNotificationWithApplicationProcessedEventHandler 은")
 class DeleteFillOutApplicationNotificationWithApplicationProcessedEventHandlerTest extends EventHandlerTest {
 
     private final NotificationRepository notificationRepository =

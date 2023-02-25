@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @WebMvcTest(CreateClubController.class)
-@DisplayName("CreateClubController 은")
+@DisplayName("CreateClubController(모임 생성 컨트롤러) 는")
 class CreateClubControllerTest extends ControllerTest {
 
     @MockBean

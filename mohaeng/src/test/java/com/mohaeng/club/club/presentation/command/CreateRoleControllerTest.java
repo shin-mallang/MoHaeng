@@ -43,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("CreateRoleController 은")
+@DisplayName("CreateRoleController(모임 역할 생성 컨트롤러) 는")
 @WebMvcTest(CreateRoleController.class)
 class CreateRoleControllerTest extends ControllerTest {
 

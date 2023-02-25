@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("Club 은")
+@DisplayName("Club(모임) 은")
 class ClubTest {
 
     private final Long presidentMemberId = 1L;

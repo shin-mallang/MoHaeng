@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("DeleteApplicationFormWithDeleteClubEventHandler 는")
+@DisplayName("DeleteApplicationFormWithDeleteClubEventHandler(모임 제거 시 가입 신청서 제거 핸들러) 는")
 class DeleteApplicationFormWithDeletedClubEventHandlerTest extends EventHandlerTest {
 
     @Autowired

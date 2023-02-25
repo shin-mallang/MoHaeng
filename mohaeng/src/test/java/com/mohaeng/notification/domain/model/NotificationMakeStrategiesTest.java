@@ -22,8 +22,7 @@ class NotificationMakeStrategiesTest {
     private NotificationMakeStrategies notificationMakeStrategies;
 
     @Test
-    @DisplayName("이벤트에 대응되는 알림 생성 전략이 있다면 알림을 생성한다.")
-    void success_test_1() {
+    void 이벤트에_대응되는_알림_생성_전략이_있다면_알림을_생성한다() {
         // given
         NotificationMakeStrategy<MockNotificationEvent> mockStrategy = new NotificationMakeStrategy<>() {
             @Override
@@ -44,8 +43,7 @@ class NotificationMakeStrategiesTest {
     }
 
     @Test
-    @DisplayName("이벤트에 대응되는 알림 생성 전략이 없다면 오류를 발생시킨다..")
-    void fail_test_1() {
+    void 이벤트에_대응되는_알림_생성_전략이_없다면_오류를_발생시킨다() {
         // when & then
         assertThatThrownBy(() -> notificationMakeStrategies.make(mock(NotificationEvent.class)))
                 .isInstanceOf(NullPointerException.class);

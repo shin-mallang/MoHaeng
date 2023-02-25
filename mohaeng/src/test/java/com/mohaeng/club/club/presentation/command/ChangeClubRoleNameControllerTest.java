@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("ChangeClubRoleNameController 는 ")
+@DisplayName("ChangeClubRoleNameController(모임의 역할 이름 변경 컨트롤러) 는")
 @WebMvcTest(ChangeClubRoleNameController.class)
 class ChangeClubRoleNameControllerTest extends ControllerTest {
 

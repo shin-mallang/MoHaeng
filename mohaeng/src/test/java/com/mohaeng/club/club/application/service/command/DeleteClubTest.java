@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("DeleteClub 은")
+@DisplayName("DeleteClub(모임 제거) 은")
 @ApplicationTest
 class DeleteClubTest {
 

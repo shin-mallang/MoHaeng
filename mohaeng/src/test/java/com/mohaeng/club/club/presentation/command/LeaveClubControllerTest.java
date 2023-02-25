@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("LeaveClubController 은")
+@DisplayName("LeaveClubController(모임 탈퇴 컨트롤러) 는")
 @WebMvcTest(LeaveClubController.class)
 class LeaveClubControllerTest extends ControllerTest {
 

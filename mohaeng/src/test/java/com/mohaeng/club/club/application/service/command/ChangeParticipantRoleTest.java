@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("ChangeParticipantRole 은")
+@DisplayName("ChangeParticipantRole(참여자 역할 변경) 은")
 @ApplicationTest
 class ChangeParticipantRoleTest {
 

@@ -16,15 +16,15 @@ import static com.mohaeng.authentication.exception.AuthenticationExceptionType.I
 import static java.lang.Long.parseLong;
 
 @Component
-public class LogInInterceptor implements HandlerInterceptor {
+public class AuthInterceptor implements HandlerInterceptor {
 
     private final ExtractAccessTokenUseCase extractAccessTokenUseCase;
     private final ExtractClaimsUseCase extractClaimsUseCase;
     private final AuthenticationContext authenticationContext;
 
-    public LogInInterceptor(final ExtractAccessTokenUseCase extractAccessTokenUseCase,
-                            final ExtractClaimsUseCase extractClaimsUseCase,
-                            final AuthenticationContext authenticationContext) {
+    public AuthInterceptor(final ExtractAccessTokenUseCase extractAccessTokenUseCase,
+                           final ExtractClaimsUseCase extractClaimsUseCase,
+                           final AuthenticationContext authenticationContext) {
         this.extractAccessTokenUseCase = extractAccessTokenUseCase;
         this.extractClaimsUseCase = extractClaimsUseCase;
         this.authenticationContext = authenticationContext;

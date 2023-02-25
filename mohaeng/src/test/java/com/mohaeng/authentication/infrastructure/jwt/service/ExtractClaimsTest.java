@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("ExtractClaims 은 ")
+@DisplayName("ExtractClaims(Claims 추출) 은")
 class ExtractClaimsTest {
 
     private final ExtractClaimsUseCase extractClaimsUseCase = new ExtractClaims(new AuthenticationFixture.MockJwtProperties());

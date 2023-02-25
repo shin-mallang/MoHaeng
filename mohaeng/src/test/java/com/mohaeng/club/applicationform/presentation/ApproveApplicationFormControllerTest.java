@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("ApproveApplicationFormController 는 ")
+@DisplayName("ApproveApplicationFormController(모임 가입 신청 수락 컨트롤러) 는")
 @WebMvcTest(ApproveApplicationFormController.class)
 class ApproveApplicationFormControllerTest extends ControllerTest {
 

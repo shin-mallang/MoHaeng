@@ -40,7 +40,7 @@ import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("ChangeClubRoleName 은")
+@DisplayName("ChangeClubRoleName(모임 역할 이름 변경) 은")
 @ApplicationTest
 class ChangeClubRoleNameTest {
 

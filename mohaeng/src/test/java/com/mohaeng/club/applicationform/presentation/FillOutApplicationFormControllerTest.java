@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("FillOutApplicationFormController 는")
+@DisplayName("FillOutApplicationFormController(가입 신청서 작성 컨트롤러) 는")
 @WebMvcTest(controllers = FillOutApplicationFormController.class)
 class FillOutApplicationFormControllerTest extends ControllerTest {
 
