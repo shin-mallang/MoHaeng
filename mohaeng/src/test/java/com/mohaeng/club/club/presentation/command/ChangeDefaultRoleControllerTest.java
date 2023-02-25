@@ -61,7 +61,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         then(changeDefaultRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-default-club-role",
+                document("club/clubRole/change-default-club-role",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -91,7 +91,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         then(changeDefaultRoleUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("change-default-club-role(No Access Token)",
+                document("club/clubRole/change-default-club-role/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -114,7 +114,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
 
         then(changeDefaultRoleUseCase).should().command(any());
         resultActions.andDo(
-                document("change-default-club-role(Nonexistent Participant)",
+                document("club/clubRole/change-default-club-role/fail/Nonexistent Participant",
                         getDocumentResponse()
                 )
         );
@@ -140,7 +140,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         then(changeDefaultRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-default-club-role(requester is general)",
+                document("club/clubRole/change-default-club-role/fail/requester is general",
                         getDocumentResponse()
                 )
         );
@@ -161,7 +161,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         then(changeDefaultRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-default-club-role(Nonexistent Club)",
+                document("club/clubRole/change-default-club-role/fail/Nonexistent Club",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));
@@ -182,7 +182,7 @@ class ChangeDefaultRoleControllerTest extends ControllerTest {
         then(changeDefaultRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-default-club-role(Nonexistent ClubRole)",
+                document("club/clubRole/change-default-club-role/fail/Nonexistent ClubRole",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));

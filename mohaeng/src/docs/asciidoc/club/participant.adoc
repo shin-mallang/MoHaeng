@@ -1,0 +1,102 @@
+= 모임 참여자 API
+:doctype: book
+:icons: font
+// 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:source-highlighter: highlightjs
+// toc (Table Of Contents)를 문서의 좌측에 두기
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[Participant-API]]
+== Participant API
+
+[[Participant-역할-변경]]
+=== - 다른 참여자 역할 변경
+
+operation::club/participant/change-participant's-role[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/participant/change-participant's-role/fail/No Access Token[snippets='http-response']
+
+==== - 역할을 변경할 대상 참가자의 ID가 없거나 내가 해당 모임에 가입되지 않은 경우
+
+operation::club/participant/change-participant's-role/fail/Nonexistent Participant ID[snippets='http-response']
+
+==== - 변경하고자 하는 역할의 ID가 없거나 다른 모임에 속한 역할의 ID인 경우
+
+operation::club/participant/change-participant's-role/fail/Nonexistent ClubRole ID[snippets='http-response']
+
+==== - 회장이 아닌 회원이 변경을 요청한 경우
+
+operation::club/participant/change-participant's-role/fail/requester is general participant[snippets='http-response']
+
+==== - 회장으로 변경하려는 경우
+
+operation::club/participant/change-participant's-role/fail/change to president role[snippets='http-response']
+
+[[Participant-회장-위임]]
+=== - 회장 위임
+
+operation::club/participant/delegate-president[snippets='http-request,request-headers,request-fields,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/participant/delegate-president/fail/No Access Token[snippets='http-response']
+
+==== - 모임이 없는 경우
+
+operation::club/participant/delegate-president/fail/Nonexistent Club[snippets='http-response']
+
+==== - 요청한 회원이 모임에 가입되어있지 않은 경우
+
+operation::club/participant/delegate-president/fail/Nonexistent Participant[snippets='http-response']
+
+==== - 차기 회장 대상이 해당 모임에 가입되어있지 않은 경우
+
+operation::club/participant/delegate-president/fail/president candidate is non joined club[snippets='http-response']
+
+==== - 요청자가 회장이 아닌 경우
+
+operation::club/participant/delegate-president/fail/requester does not president or officer[snippets='http-response']
+
+==== - 회장 위임 요청 시 Request Body 필드가 없는 경우
+
+operation::club/participant/delegate-president/fail/request fields contains empty value[snippets='http-response']
+
+[[Participant-추방]]
+=== - 모임에서 추방
+
+operation::club/participant/expel-participant-from-club[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/participant/expel-participant-from-club/fail/No Access Token[snippets='http-response']
+
+==== - 없는 참여자인 경우
+
+operation::club/participant/expel-participant-from-club/fail/Nonexistent Participant[snippets='http-response']
+
+==== - 요청자가 같은 모임이 아니거나, 회장이 아닌 경우
+
+operation::club/participant/expel-participant-from-club/fail/requester does not president[snippets='http-response']
+
+[[Participant-제거]]
+=== - 모임에서 탈퇴
+
+operation::club/participant/leave-club[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/participant/leave-club/fail/No Access Token[snippets='http-response']
+
+==== - 없는 모임 ID인 경우
+
+operation::club/participant/leave-club/fail/Nonexistent Club ID[snippets='http-response']
+
+==== - 회장이 탈퇴를 시도한 경우
+
+operation::club/participant/leave-club/fail/president requests to leave the club[snippets='http-response']
+

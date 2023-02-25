@@ -52,7 +52,7 @@ class DeleteClubControllerTest extends ControllerTest {
 
         BDDMockito.then(deleteClubUseCase).should().command(any());
         resultActions.andDo(
-                document("delete-club",
+                document("club/club/delete-club",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -80,7 +80,7 @@ class DeleteClubControllerTest extends ControllerTest {
         BDDMockito.then(deleteClubUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("delete-club(No Access Token)",
+                document("club/club/delete-club/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -103,7 +103,7 @@ class DeleteClubControllerTest extends ControllerTest {
 
         BDDMockito.then(deleteClubUseCase).should().command(any());
         resultActions.andDo(
-                document("delete-club(Nonexistent Club ID)",
+                document("club/club/delete-club/fail/Nonexistent Club ID",
                         getDocumentResponse()
                 )
         );
@@ -127,7 +127,7 @@ class DeleteClubControllerTest extends ControllerTest {
         BDDMockito.then(deleteClubUseCase).should().command(any());
 
         resultActions.andDo(
-                document("delete-club(requester does not president)",
+                document("club/club/delete-club/fail/requester does not president",
                         getDocumentResponse()
                 )
         );

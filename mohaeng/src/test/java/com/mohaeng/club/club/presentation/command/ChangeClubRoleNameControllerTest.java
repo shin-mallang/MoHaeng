@@ -68,7 +68,7 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
 
         then(changeClubRoleNameUseCase).should().command(any());
         resultActions.andDo(
-                document("change-club-role-name",
+                document("club/clubRole/change-club-role-name",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -102,7 +102,7 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
         then(changeClubRoleNameUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("change-club-role-name(No Access Token)",
+                document("club/clubRole/change-club-role-name/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -127,7 +127,7 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
         then(changeClubRoleNameUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-club-role-name(Nonexistent Participant)",
+                document("club/clubRole/change-club-role-name/fail/Nonexistent Participant",
                         getDocumentResponse()
                 )
         );
@@ -154,7 +154,7 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
         then(changeClubRoleNameUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-club-role-name(requester is general)",
+                document("club/clubRole/change-club-role-name/fail/requester is general",
                         getDocumentResponse()
                 )
         );
@@ -181,7 +181,7 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
         then(changeClubRoleNameUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-club-role-name(requester is officer and try to change officer role name or president role name)",
+                document("club/clubRole/change-club-role-name/fail/requester is officer and try to change officer role name or president role name",
                         getDocumentResponse()
                 )
         );
@@ -201,7 +201,7 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
         then(changeClubRoleNameUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("change-club-role-name(request fields contains empty value)",
+                document("club/clubRole/change-club-role-name/fail/request fields contains empty value",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));
@@ -223,7 +223,7 @@ class ChangeClubRoleNameControllerTest extends ControllerTest {
         then(changeClubRoleNameUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-club-role-name(Nonexistent ClubRole)",
+                document("club/clubRole/change-club-role-name/fail/Nonexistent ClubRole",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));

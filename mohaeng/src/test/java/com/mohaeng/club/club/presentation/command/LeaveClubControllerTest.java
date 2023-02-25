@@ -60,7 +60,7 @@ class LeaveClubControllerTest extends ControllerTest {
         then(leaveClubUseCase).should().command(any());
 
         resultActions.andDo(
-                document("leave-club",
+                document("club/participant/leave-club",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -91,7 +91,7 @@ class LeaveClubControllerTest extends ControllerTest {
         then(leaveClubUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("leave-club(No Access Token)",
+                document("club/participant/leave-club/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -117,7 +117,7 @@ class LeaveClubControllerTest extends ControllerTest {
         then(leaveClubUseCase).should().command(any());
 
         resultActions.andDo(
-                document("leave-club(Nonexistent Club ID)",
+                document("club/participant/leave-club/fail/Nonexistent Club ID",
                         getDocumentResponse()
                 )
         );
@@ -143,7 +143,7 @@ class LeaveClubControllerTest extends ControllerTest {
         verify(leaveClubUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("leave-club(president requests to leave the club)",
+                document("club/participant/leave-club/fail/president requests to leave the club",
                         getDocumentResponse()
                 )
         );

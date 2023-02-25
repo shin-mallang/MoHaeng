@@ -61,7 +61,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         then(changeParticipantRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-participant's-role",
+                document("club/participant/change-participant's-role",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -91,7 +91,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         BDDMockito.then(changeParticipantRoleUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("change-participant's-role(No Access Token)",
+                document("club/participant/change-participant's-role/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -114,7 +114,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         then(changeParticipantRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("change-participant's-role(Nonexistent Participant ID)",
+                document("club/participant/change-participant's-role/fail/Nonexistent Participant ID",
                         getDocumentResponse()
                 )
         );
@@ -136,7 +136,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         // then
         then(changeParticipantRoleUseCase).should().command(any());
         resultActions.andDo(
-                document("change-participant's-role(Nonexistent ClubRole ID)",
+                document("club/participant/change-participant's-role/fail/Nonexistent ClubRole ID",
                         getDocumentResponse()
                 )
         );
@@ -157,7 +157,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         // when & then
         then(changeParticipantRoleUseCase).should().command(any());
         resultActions.andDo(
-                document("change-participant's-role(requester is general participant)",
+                document("club/participant/change-participant's-role/fail/requester is general participant",
                         getDocumentResponse()
                 )
         );
@@ -178,7 +178,7 @@ class ChangeParticipantRoleControllerTest extends ControllerTest {
         // when & then
         then(changeParticipantRoleUseCase).should().command(any());
         resultActions.andDo(
-                document("change-participant's-role(change to president role)",
+                document("club/participant/change-participant's-role/fail/change to president role",
                         getDocumentResponse()
                 )
         );

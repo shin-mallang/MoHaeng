@@ -63,7 +63,7 @@ class SearchClubControllerTest extends ControllerTest {
         // when
         MvcResult mvcResult = mockMvc.perform(
                 get(SEARCH_CLUB_URL + "?name=clubName&page=1&size=10&sort=createdAt,desc")
-        ).andDo(document("club/query/search",
+        ).andDo(document("club/club/query/search",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         queryParameters(

@@ -53,7 +53,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         verify(rejectApplicationFormUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("reject-join-club-application",
+                document("applicationForm/reject",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -84,7 +84,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         verify(rejectApplicationFormUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("reject-join-club-application fail(no authority)",
+                document("applicationForm/reject/fail/no authority",
                         getDocumentResponse()
                 )
         );
@@ -108,7 +108,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         then(rejectApplicationFormUseCase).should().command(any());
 
         resultActions.andDo(
-                document("reject-join-club-application fail(already processed)",
+                document("applicationForm/reject/fail/already processed",
                         getDocumentResponse()
                 )
         );
@@ -131,7 +131,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         // when & then
         then(rejectApplicationFormUseCase).should().command(any());
         resultActions.andDo(
-                document("reject-join-club-application fail(no application form)",
+                document("applicationForm/reject/fail/no application form",
                         getDocumentResponse()
                 )
         );
@@ -149,7 +149,7 @@ class RejectApplicationFormControllerTest extends ControllerTest {
         // when & then
         then(rejectApplicationFormUseCase).shouldHaveNoInteractions();
         resultActions.andDo(
-                document("reject-join-club-application fail(No Access Token)",
+                document("applicationForm/reject/fail/No Access Token",
                         getDocumentResponse()
                 )
         );

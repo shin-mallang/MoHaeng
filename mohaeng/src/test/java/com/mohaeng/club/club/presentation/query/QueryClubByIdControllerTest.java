@@ -57,7 +57,7 @@ class QueryClubByIdControllerTest extends ControllerTest {
         // when
         MvcResult mvcResult = mockMvc.perform(
                 get(QUERY_CLUB_BY_ID_URL, clubId)
-        ).andDo(document("query club by id",
+        ).andDo(document("club/club/query/club by id",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(
@@ -100,7 +100,7 @@ class QueryClubByIdControllerTest extends ControllerTest {
         ).andExpect(status().isNotFound());
 
         resultActions.andDo(
-                document("query club by id (not found club)",
+                document("club/club/query/club by id/fail/not found club",
                         getDocumentResponse()
                 )
         );

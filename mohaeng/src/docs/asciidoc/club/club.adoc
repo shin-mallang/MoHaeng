@@ -1,0 +1,65 @@
+= MoHaeng API Docs
+:doctype: book
+:icons: font
+// 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:source-highlighter: highlightjs
+// toc (Table Of Contents)를 문서의 좌측에 두기
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Club-API]]
+== Club API
+
+[[Club-모임생성]]
+=== - 모임생성
+
+operation::club/club/create-club[snippets='http-request,request-body,request-fields,http-response']
+
+==== - 생성 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/club/create-club/fail/No Access Token[snippets='http-response']
+
+
+==== - 필드가 다 채워지지 않은 경우
+
+operation::club/club/create-club/fail/request fields contains empty value[snippets='http-response']
+
+==== - 인원을 0으로 설정한 경우(-> 최대 인원으로 설정)
+
+operation::club/club/create-club/option/max people count is 0 then setting MAX[snippets='request-body,http-response']
+
+
+[[Club-모임제거]]
+=== - 모임제거
+
+operation::club/club/delete-club[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/club/delete-club/fail/No Access Token[snippets='http-response']
+
+==== - 없는 모임 ID인 경우
+
+operation::club/club/delete-club/fail/Nonexistent Club ID[snippets='http-response']
+
+==== - 요청자가 회장이 아닌 경우
+
+operation::club/club/delete-club/fail/requester does not president[snippets='http-response']
+
+
+
+[[Club-모임-조회]]
+=== - 모임조회
+
+operation::club/club/query/club by id[snippets='http-request,path-parameters,http-response,response-fields']
+
+==== - 모임이 없는 경우
+
+operation::club/club/query/club by id/fail/not found club[snippets='http-response']
+
+
+[[Club-모임-검색]]
+=== - 모임검색
+
+operation::club/query/search[snippets='http-request,http-response,response-fields']

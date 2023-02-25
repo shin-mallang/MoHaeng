@@ -55,7 +55,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
             then(fillOutApplicationFormUseCase).should().command(any());
 
             resultActions.andDo(
-                    document("fill out application form",
+                    document("applicationForm/fill-out-application-form",
                             getDocumentRequest(),
                             getDocumentResponse(),
                             requestHeaders(
@@ -90,7 +90,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
             then(fillOutApplicationFormUseCase).should().command(any());
 
             resultActions.andDo(
-                    document("fill out application form fail(already request join club)",
+                    document("applicationForm/fill-out-application-form/fail/already request join club",
                             getDocumentResponse()
                     )
             );
@@ -113,7 +113,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
             then(fillOutApplicationFormUseCase).should().command(any());
 
             resultActions.andDo(
-                    document("fill out application form fail(member already joined club)",
+                    document("applicationForm/fill-out-application-form/fail/member already joined club",
                             getDocumentResponse()
                     )
             );
@@ -131,7 +131,7 @@ class FillOutApplicationFormControllerTest extends ControllerTest {
             // when & then
             then(fillOutApplicationFormUseCase).shouldHaveNoInteractions();
             resultActions.andDo(
-                    document("fill out application form fail(No Access Token)",
+                    document("applicationForm/fill-out-application-form/fail/No Access Token",
                             getDocumentResponse()
                     )
             );

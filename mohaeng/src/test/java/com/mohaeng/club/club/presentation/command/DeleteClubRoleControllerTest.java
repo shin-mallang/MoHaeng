@@ -61,7 +61,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
 
         then(deleteClubRoleUseCase).should().command(any());
         resultActions.andDo(
-                document("delete-club-role",
+                document("club/clubRole/delete-club-role",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -88,7 +88,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
 
         then(deleteClubRoleUseCase).shouldHaveNoInteractions();
         resultActions.andDo(
-                document("delete-club-role(No Access Token)",
+                document("club/clubRole/delete-club-role/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -111,7 +111,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         verify(deleteClubRoleUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("delete-club-role(Nonexistent Participant)",
+                document("club/clubRole/delete-club-role/fail/Nonexistent Participant",
                         getDocumentResponse()
                 )
         );
@@ -134,7 +134,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         // when & then
         then(deleteClubRoleUseCase).should().command(any());
         resultActions.andDo(
-                document("delete-club-role(requester does not president or officer)",
+                document("club/clubRole/delete-club-role/fail/requester does not president or officer",
                         getDocumentResponse()
                 )
         );
@@ -158,7 +158,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         verify(deleteClubRoleUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("delete-club-role(when delete default role)",
+                document("club/clubRole/delete-club-role/fail/when delete default role",
                         getDocumentRequest(),
                         getDocumentResponse()
                 )
@@ -178,7 +178,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         verify(deleteClubRoleUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("delete-club-role(Nonexistent Club)",
+                document("club/clubRole/delete-club-role/fail/Nonexistent Club",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));
@@ -197,7 +197,7 @@ class DeleteClubRoleControllerTest extends ControllerTest {
         verify(deleteClubRoleUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("delete-club-role(Nonexistent ClubRole)",
+                document("club/clubRole/delete-club-role/fail/Nonexistent ClubRole",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));

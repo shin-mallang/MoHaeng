@@ -58,7 +58,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
         verify(expelParticipantUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("expel-participant-from-club",
+                document("club/participant/expel-participant-from-club",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -88,7 +88,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
         verify(expelParticipantUseCase, times(0)).command(any());
 
         resultActions.andDo(
-                document("expel-participant-from-club(No Access Token)",
+                document("club/participant/expel-participant-from-club/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -111,7 +111,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
         verify(expelParticipantUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("expel-participant-from-club(Nonexistent Participant)",
+                document("club/participant/expel-participant-from-club/fail/Nonexistent Participant",
                         getDocumentResponse()
                 )
         );
@@ -135,7 +135,7 @@ class ExpelParticipantControllerTest extends ControllerTest {
         verify(expelParticipantUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("expel-participant-from-club(requester does not president)",
+                document("club/participant/expel-participant-from-club/fail/requester does not president",
                         getDocumentResponse()
                 )
         );

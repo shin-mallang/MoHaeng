@@ -54,7 +54,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         verify(approveApplicationFormUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("approve-join-club-application",
+                document("applicationForm/approve",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -85,7 +85,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         verify(approveApplicationFormUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("approve-join-club-application fail(no authority)",
+                document("applicationForm/approve/fail/no authority",
                         getDocumentResponse()
                 )
         );
@@ -109,7 +109,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         verify(approveApplicationFormUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("approve-join-club-application fail(already processed)",
+                document("applicationForm/approve/fail/already processed",
                         getDocumentResponse()
                 )
         );
@@ -133,7 +133,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         verify(approveApplicationFormUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("approve-join-club-application fail(no application form)",
+                document("applicationForm/approve/fail/no application form",
                         getDocumentResponse()
                 )
         );
@@ -152,7 +152,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         verify(approveApplicationFormUseCase, times(0)).command(any());
 
         resultActions.andDo(
-                document("approve-join-club-application fail(No Access Token)",
+                document("applicationForm/approve/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -176,7 +176,7 @@ class ApproveApplicationFormControllerTest extends ControllerTest {
         verify(approveApplicationFormUseCase, times(1)).command(any());
 
         resultActions.andDo(
-                document("approve-join-club-application fail(club is full)",
+                document("applicationForm/approve/fail/club is full",
                         getDocumentResponse()
                 )
         );

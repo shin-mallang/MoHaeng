@@ -71,7 +71,7 @@ class CreateRoleControllerTest extends ControllerTest {
         then(createClubRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("create-club-role",
+                document("club/clubRole/create-club-role",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -104,7 +104,7 @@ class CreateRoleControllerTest extends ControllerTest {
         then(createClubRoleUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("create-club-role(No Access Token)",
+                document("club/clubRole/create-club-role/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -128,7 +128,7 @@ class CreateRoleControllerTest extends ControllerTest {
 
         then(createClubRoleUseCase).should().command(any());
         resultActions.andDo(
-                document("create-club-role(Nonexistent Club)",
+                document("club/clubRole/create-club-role/fail/Nonexistent Club",
                         getDocumentResponse()
                 )
         );
@@ -152,7 +152,7 @@ class CreateRoleControllerTest extends ControllerTest {
 
         then(createClubRoleUseCase).should().command(any());
         resultActions.andDo(
-                document("create-club-role(Nonexistent Participant)",
+                document("club/clubRole/create-club-role/fail/Nonexistent Participant",
                         getDocumentResponse()
                 )
         );
@@ -177,7 +177,7 @@ class CreateRoleControllerTest extends ControllerTest {
         then(createClubRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("create-club-role(requester does not president or officer)",
+                document("club/clubRole/create-club-role/fail/requester does not president or officer",
                         getDocumentResponse()
                 )
         );
@@ -203,7 +203,7 @@ class CreateRoleControllerTest extends ControllerTest {
         then(createClubRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("create-club-role(when create president role)",
+                document("club/clubRole/create-club-role/fail/when create president role",
                         getDocumentRequest(),
                         getDocumentResponse()
                 )
@@ -230,7 +230,7 @@ class CreateRoleControllerTest extends ControllerTest {
         then(createClubRoleUseCase).should().command(any());
 
         resultActions.andDo(
-                document("create-club-role(duplicated name)",
+                document("club/clubRole/create-club-role/fail/duplicated name",
                         getDocumentRequest(),
                         getDocumentResponse()
                 )
@@ -253,7 +253,7 @@ class CreateRoleControllerTest extends ControllerTest {
         then(createClubRoleUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("create-club-role(request fields contains empty value)",
+                document("club/clubRole/create-club-role/fail/request fields contains empty value",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));
@@ -273,7 +273,7 @@ class CreateRoleControllerTest extends ControllerTest {
         then(createClubRoleUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("create-club-role(category enum mapping fail)",
+                document("club/clubRole/create-club-role/fail/category enum mapping fail",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));

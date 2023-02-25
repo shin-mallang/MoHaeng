@@ -69,7 +69,7 @@ class CreateClubControllerTest extends ControllerTest {
             verify(createClubUseCase, times(1)).command(any());
 
             resultActions.andDo(
-                    document("create-club",
+                    document("club/club/create-club",
                             getDocumentRequest(),
                             getDocumentResponse(),
                             requestHeaders(
@@ -102,7 +102,7 @@ class CreateClubControllerTest extends ControllerTest {
             verify(createClubUseCase, times(1)).command(any());
 
             resultActions.andDo(
-                    document("create-club(max people count is 0 then setting MAX)",
+                    document("club/club/create-club/option/max people count is 0 then setting MAX",
                             getDocumentRequest()
                     )
             );
@@ -131,7 +131,7 @@ class CreateClubControllerTest extends ControllerTest {
             verify(createClubUseCase, times(0)).command(any());
 
             resultActions.andDo(
-                    document("create-club fail(request fields contains empty value)",
+                    document("club/club/create-club/fail/request fields contains empty value",
                             getDocumentResponse()
                     ));
         }
@@ -154,7 +154,7 @@ class CreateClubControllerTest extends ControllerTest {
             verify(createClubUseCase, times(0)).command(any());
 
             resultActions.andDo(
-                    document("create-club fail(max people count is negative)",
+                    document("club/club/create-club/fail/max people count is negative",
                             getDocumentResponse()
                     ));
         }
@@ -174,7 +174,7 @@ class CreateClubControllerTest extends ControllerTest {
             verify(createClubUseCase, times(0)).command(any());
 
             resultActions.andDo(
-                    document("create-club fail(No Access Token)",
+                    document("club/club/create-club/fail/No Access Token",
                             getDocumentResponse()
                     ));
         }

@@ -65,7 +65,7 @@ class DelegatePresidentControllerTest extends ControllerTest {
         then(delegatePresidentUseCase).should().command(any());
 
         resultActions.andDo(
-                document("delegate-president",
+                document("club/participant/delegate-president",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
@@ -95,7 +95,7 @@ class DelegatePresidentControllerTest extends ControllerTest {
         then(delegatePresidentUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("delegate-president(No Access Token)",
+                document("club/participant/delegate-president/fail/No Access Token",
                         getDocumentResponse()
                 )
         );
@@ -119,7 +119,7 @@ class DelegatePresidentControllerTest extends ControllerTest {
 
         then(delegatePresidentUseCase).should().command(any());
         resultActions.andDo(
-                document("delegate-president(Nonexistent Club)",
+                document("club/participant/delegate-president/fail/Nonexistent Club",
                         getDocumentResponse()
                 )
         );
@@ -143,7 +143,7 @@ class DelegatePresidentControllerTest extends ControllerTest {
 
         then(delegatePresidentUseCase).should().command(any());
         resultActions.andDo(
-                document("delegate-president(Nonexistent Participant)",
+                document("club/participant/delegate-president/fail/Nonexistent Participant",
                         getDocumentResponse()
                 )
         );
@@ -167,7 +167,7 @@ class DelegatePresidentControllerTest extends ControllerTest {
 
         then(delegatePresidentUseCase).should().command(any());
         resultActions.andDo(
-                document("delegate-president(president candidate is non joined club)",
+                document("club/participant/delegate-president/fail/president candidate is non joined club",
                         getDocumentResponse()
                 )
         );
@@ -192,7 +192,7 @@ class DelegatePresidentControllerTest extends ControllerTest {
         then(delegatePresidentUseCase).should().command(any());
 
         resultActions.andDo(
-                document("delegate-president(requester does not president or officer)",
+                document("club/participant/delegate-president/fail/requester does not president or officer",
                         getDocumentResponse()
                 )
         );
@@ -213,7 +213,7 @@ class DelegatePresidentControllerTest extends ControllerTest {
         then(delegatePresidentUseCase).shouldHaveNoInteractions();
 
         resultActions.andDo(
-                document("delegate-president(request fields contains empty value)",
+                document("club/participant/delegate-president/fail/request fields contains empty value",
                         getDocumentRequest(),
                         getDocumentResponse()
                 ));

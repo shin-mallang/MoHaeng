@@ -58,7 +58,7 @@ class LogInControllerTest extends ControllerTest {
                     .andExpect(status().isOk());
 
             resultActions.andDo(
-                    document("login",
+                    document("authentication/login",
                             getDocumentRequest(),
                             getDocumentResponse(),
                             requestFields(
@@ -88,7 +88,7 @@ class LogInControllerTest extends ControllerTest {
                     .andExpect(status().isUnauthorized());
 
             resultActions.andDo(
-                    document("login fail(username or password miss match)",
+                    document("authentication/login/fail/username or password miss match",
                             getDocumentResponse()
                     ));
         }
@@ -105,7 +105,7 @@ class LogInControllerTest extends ControllerTest {
                     .andExpect(status().isBadRequest());
 
             resultActions.andDo(
-                    document("login fail(request fields contains empty value)",
+                    document("authentication/login/fail/request fields contains empty value",
                             getDocumentResponse()
                     ));
         }

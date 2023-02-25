@@ -1,6 +1,7 @@
-package com.mohaeng.member.domain.model;
+package com.mohaeng.club.club.presentation.query.domain.model;
 
 import com.mohaeng.authentication.exception.AuthenticationException;
+import com.mohaeng.member.domain.model.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

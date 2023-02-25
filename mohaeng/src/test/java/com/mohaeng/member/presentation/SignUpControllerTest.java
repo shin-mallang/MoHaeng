@@ -55,7 +55,7 @@ class SignUpControllerTest extends ControllerTest {
                     .andExpect(status().isCreated());
 
             resultActions.andDo(
-                    document("sign-up",
+                    document("member/sign-up",
                             getDocumentRequest(),
                             getDocumentResponse(),
                             requestFields(
@@ -88,7 +88,7 @@ class SignUpControllerTest extends ControllerTest {
                     .andExpect(status().isConflict());
 
             resultActions.andDo(
-                    document("sign-up fail(duplicated username)",
+                    document("member/sign-up/fail/duplicated username",
                             getDocumentResponse()
                     ));
         }
@@ -105,7 +105,7 @@ class SignUpControllerTest extends ControllerTest {
                     .andExpect(status().isBadRequest());
 
             resultActions.andDo(
-                    document("sign-up fail(request fields contains empty value)",
+                    document("member/sign-up/fail/request fields contains empty value",
                             getDocumentResponse()
                     ));
         }
