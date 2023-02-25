@@ -8,8 +8,8 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 /**
- * 모임이 삭제되어 가입 신청서가 삭제되었을 때
- * 신청자들에게 알려주기 위한 알림
+ * 모임이 삭제되어 모임에서 탈퇴되었을 때
+ * 기존 참여자들에게 알려주기 위한 알림
  * <p>
  * 참고 - Club은 제거될 것이므로 ClubId를 통해서 할 수 있는것이 없다.
  * 따라서 ClubId 대신 Club 의 이름과 설명을 통해 어떤 모임이 제거되었는지 알 수 있도록 구현하였다.

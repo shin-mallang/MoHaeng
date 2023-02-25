@@ -4,7 +4,6 @@ import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.application.dto.type.ExpelParticipantNotificationDto;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.Receiver;
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -15,7 +14,6 @@ import jakarta.persistence.Entity;
 @Entity
 public class ExpelParticipantNotification extends Notification {
 
-    @Column(nullable = false)
     private Long clubId;  // 추방된 모임의 id
 
     protected ExpelParticipantNotification() {
