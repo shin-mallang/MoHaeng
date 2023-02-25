@@ -1,5 +1,6 @@
 package com.mohaeng.common.interceptor;
 
+import com.mohaeng.common.presentation.interceptor.PathAndMethodMapping;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
