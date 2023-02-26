@@ -1,6 +1,5 @@
 package com.mohaeng.notification.domain.model.type;
 
-import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.application.dto.type.FillOutApplicationFormNotificationDto;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.Receiver;
@@ -47,7 +46,7 @@ public class FillOutApplicationFormNotification extends Notification {
     }
 
     @Override
-    public NotificationDto toDto() {
+    public FillOutApplicationFormNotificationDto toDto() {
         return new FillOutApplicationFormNotificationDto(
                 id(),
                 createdAt(),

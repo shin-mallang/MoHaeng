@@ -2,6 +2,7 @@ package com.mohaeng.notification.application.service.query;
 
 import com.mohaeng.notification.application.dto.type.FillOutApplicationFormNotificationDto;
 import com.mohaeng.notification.application.usecase.query.QueryFillOutApplicationFormNotificationUseCase;
+import com.mohaeng.notification.domain.model.type.FillOutApplicationFormNotification;
 import com.mohaeng.notification.domain.repository.NotificationQueryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,6 @@ public class QueryFillOutApplicationFormNotification implements QueryFillOutAppl
     @Override
     public Page<FillOutApplicationFormNotificationDto> query(final Query query) {
         return notificationQueryRepository.findAllFillOutApplicationFormNotificationByReceiverId(query.memberId(), query.pageable())
-                .map(it -> (FillOutApplicationFormNotificationDto) it.toDto());
+                .map(FillOutApplicationFormNotification::toDto);
     }
 }
