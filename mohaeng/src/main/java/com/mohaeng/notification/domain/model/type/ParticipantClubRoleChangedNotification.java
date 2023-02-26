@@ -8,6 +8,9 @@ import com.mohaeng.notification.domain.model.Receiver;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+/**
+ * 참여자의 역할이 변경되었다는 알림
+ */
 @DiscriminatorValue(value = "ParticipantClubRoleChangedNotification")
 @Entity
 public class ParticipantClubRoleChangedNotification extends Notification {

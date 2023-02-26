@@ -29,6 +29,8 @@ BeanPostProcessor와 프록시의 동작 방법을 이해하신다는 가정 하
 <br>
 <br>
 <br>
+<hr>
+<br>
 
 ## instanceOf 분리하기
 
@@ -71,6 +73,8 @@ BeanPostProcessor와 프록시의 동작 방법을 이해하신다는 가정 하
 <br>
 <br>
 <br>
+<hr>
+<br>
 
 ## @TransactionalEventListener 호출 시 발생하는 문제
 
@@ -79,12 +83,25 @@ BeanPostProcessor와 프록시의 동작 방법을 이해하신다는 가정 하
 <br>
 <br>
 <br>
+<hr>
+<br>
 
 ## BatchSize 적용 시 영속성 컨텍스트에 포함된 Entity 가 1개인 경우 In 절에 ID가 중복되어 설정되는 문제
 
-[ BatchSize 적용 시 Entity 가 1개인 경우 In 절에 ID가 중복되어 설정되는 문제](https://ttl-blog.tistory.com/1202)
-
+[BatchSize 적용 시 Entity 가 1개인 경우 In 절에 ID가 중복되어 설정되는 문제](https://ttl-blog.tistory.com/1202)
 
 <br>
 <br>
+<br>
+<hr>
+<br>
+
+## MockMvc 테스트코드를 메서드 체이닝을 통해 간편화하기
+
+[체이닝을 통해 MockMvc 테스트 간편화시키기](https://ttl-blog.tistory.com/1209)
+
+<br>
+<br>
+<br>
+<hr>
 <br>

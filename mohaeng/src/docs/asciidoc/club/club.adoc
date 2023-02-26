@@ -16,12 +16,11 @@
 [[Club-모임생성]]
 ===  `모임생성`
 
-operation::club/club/create-club[snippets='http-request,request-body,request-fields,http-response']
+operation::club/club/create-club[snippets='http-request,request-headers,request-body,request-fields,http-response']
 
 ==== - 생성 요청 시 Header에 AccessToken이 없는 경우
 
 operation::club/club/create-club/fail/No Access Token[snippets='http-response']
-
 
 ==== - 필드가 다 채워지지 않은 경우
 
@@ -30,7 +29,6 @@ operation::club/club/create-club/fail/request fields contains empty value[snippe
 ==== - 인원을 0으로 설정한 경우(-> 최대 인원으로 설정)
 
 operation::club/club/create-club/option/max people count is 0 then setting MAX[snippets='request-body,http-response']
-
 
 [[Club-모임제거]]
 ===  `모임제거`
@@ -49,8 +47,6 @@ operation::club/club/delete-club/fail/Nonexistent Club ID[snippets='http-respons
 
 operation::club/club/delete-club/fail/requester does not president[snippets='http-response']
 
-
-
 [[Club-모임-조회]]
 === `모임조회`
 
@@ -60,8 +56,7 @@ operation::club/club/query/club by id[snippets='http-request,path-parameters,htt
 
 operation::club/club/query/club by id/fail/not found club[snippets='http-response']
 
-
 [[Club-모임-검색]]
 === `모임검색`
 
-operation::club/query/search[snippets='http-request,http-response,response-fields']
+operation::club/club/query/search[snippets='http-request,http-response,response-fields']

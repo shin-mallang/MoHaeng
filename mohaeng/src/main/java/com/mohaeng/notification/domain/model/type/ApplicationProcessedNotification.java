@@ -4,7 +4,6 @@ import com.mohaeng.notification.application.dto.NotificationDto;
 import com.mohaeng.notification.application.dto.type.ApplicationProcessedNotificationDto;
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.model.Receiver;
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -15,7 +14,6 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue(value = "ApplicationProcessedNotification")
 public class ApplicationProcessedNotification extends Notification {
 
-    @Column(nullable = false)
     private Long clubId;  // 가입을 요청한 모임 ID
 
     private boolean isApproved;
