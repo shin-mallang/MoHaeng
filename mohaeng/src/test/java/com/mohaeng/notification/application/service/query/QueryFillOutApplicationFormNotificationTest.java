@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("QueryFillOutApplicationFormNotification 은")
+@DisplayName("QueryFillOutApplicationFormNotification(모임 가입 신청 알림 전부 조회i) 은")
 @ApplicationTest
 class QueryFillOutApplicationFormNotificationTest {
 
