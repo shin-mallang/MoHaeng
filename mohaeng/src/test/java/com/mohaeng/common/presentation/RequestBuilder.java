@@ -110,6 +110,14 @@ public class RequestBuilder {
             return new Content();
         }
 
+        public Content login(final long id) {
+            Claims claims = new Claims();
+            claims.addClaims(MEMBER_ID_CLAIM, String.valueOf(id));
+            AccessToken accessToken = new AccessToken(createTokenUseCase.command(new CreateTokenUseCase.Command(claims)));
+            headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.token());
+            return new Content();
+        }
+
         public Content noLogin() {
             return new Content();
         }
