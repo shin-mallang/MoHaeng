@@ -1,6 +1,7 @@
 package com.mohaeng.notification.infrastructure.persistence.repository;
 
 import com.mohaeng.notification.domain.model.Notification;
+import com.mohaeng.notification.domain.model.type.FillOutApplicationFormNotification;
 import com.mohaeng.notification.domain.repository.NotificationQueryRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -27,7 +28,7 @@ public class JpaNotificationQueryRepository implements NotificationQueryReposito
     public Page<Notification> findAllByFilter(final NotificationFilter filter, final Pageable pageable) {
         List<Notification> contents = query.selectFrom(notification)
                 .where(
-                        notification.receiver.receiverId.eq(filter.memberId()),
+                        receiverIdEq(filter.memberId()),
                         readFilter(filter.readFilter())
                 )
                 .offset(pageable.getOffset())
@@ -35,7 +36,11 @@ public class JpaNotificationQueryRepository implements NotificationQueryReposito
                 .fetch();
 
         JPAQuery<Long> countQuery = query.select(notification.count())
-                .from(notification);
+                .from(notification)
+                .where(
+                        receiverIdEq(filter.memberId()),
+                        readFilter(filter.readFilter())
+                );
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
     }
@@ -46,5 +51,33 @@ public class JpaNotificationQueryRepository implements NotificationQueryReposito
             case ONLY_READ -> notification.isRead.isTrue();
             case ONLY_UNREAD -> notification.isRead.isFalse();
         };
+    }
+
+    @Override
+    public Page<FillOutApplicationFormNotification> findAllFillOutApplicationFormNotificationByReceiverId(final Long memberId, final Pageable pageable) {
+        List<FillOutApplicationFormNotification> contents = query.selectFrom(notification)
+                .where(
+                        receiverIdEq(memberId),
+                        notification.instanceOf(FillOutApplicationFormNotification.class)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch()
+                .stream()
+                .map(it -> (FillOutApplicationFormNotification) it)
+                .toList();
+
+        JPAQuery<Long> countQuery = query.select(notification.count())
+                .from(notification)
+                .where(
+                        receiverIdEq(memberId),
+                        notification.instanceOf(FillOutApplicationFormNotification.class)
+                );
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression receiverIdEq(final Long memberId) {
+        return notification.receiver.receiverId.eq(memberId);
     }
 }

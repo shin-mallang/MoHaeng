@@ -37,8 +37,7 @@ public class QueryAllNotificationController {
             @PageableDefault(size = 10) final Pageable pageable
     ) {
         Page<NotificationDto> result = queryAllNotificationUseCase.query(
-                clubSearchRequest.toQuery(memberId),
-                pageable
+                clubSearchRequest.toQuery(memberId, pageable)
         );
         return ResponseEntity.ok(PageResponseAssembler.assemble(result.map(NotificationDto::toResponse)));
     }
@@ -46,11 +45,11 @@ public class QueryAllNotificationController {
     public record ClubSearchRequest(
             NotificationFilter.ReadFilter readFilter
     ) {
-        public QueryAllNotificationUseCase.Query toQuery(final Long memberId) {
+        public QueryAllNotificationUseCase.Query toQuery(final Long memberId, final Pageable pageable) {
             if (readFilter == null) {
-                return new QueryAllNotificationUseCase.Query(new NotificationFilter(memberId, ALL));
+                return new QueryAllNotificationUseCase.Query(new NotificationFilter(memberId, ALL), pageable);
             }
-            return new QueryAllNotificationUseCase.Query(new NotificationFilter(memberId, readFilter));
+            return new QueryAllNotificationUseCase.Query(new NotificationFilter(memberId, readFilter), pageable);
         }
     }
 }

@@ -56,7 +56,7 @@ class SearchClubControllerTest extends ControllerTest {
                 .map(QueryAllClubBySearchCondUseCase.Result::from);
 
         // given
-        BDDMockito.given(queryAllClubBySearchCondUseCase.query(any(), any()))
+        BDDMockito.given(queryAllClubBySearchCondUseCase.query(any()))
                 .willReturn(club);
 
         // when

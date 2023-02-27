@@ -43,8 +43,8 @@ class QueryAllNotificationTest {
     @BeforeEach
     void init() {
         // 각각 8개씩 저장한다
-        unread = new ArrayList<>(NotificationFixture.allKindNotificationsWithReceiverId(myId));
-        read = new ArrayList<>(NotificationFixture.allKindNotificationsWithReceiverId(myId));
+        unread = new ArrayList<>(NotificationFixture.noIdAllKindNotifications(myId));
+        read = new ArrayList<>(NotificationFixture.noIdAllKindNotifications(myId));
         read.remove(0);
         read.forEach(Notification::read);
         unread = notificationRepository.saveAll(unread);
@@ -55,8 +55,7 @@ class QueryAllNotificationTest {
     void 읽은_알림만_조회할_수_있다() {
         // when
         Page<NotificationDto> result = queryAllNotificationUseCase.query(new QueryAllNotificationUseCase.Query(
-                        new NotificationFilter(myId, ONLY_READ)),
-                PageRequest.of(0, 100)
+                new NotificationFilter(myId, ONLY_READ), PageRequest.of(0, 100))
         );
 
         // then
@@ -68,8 +67,7 @@ class QueryAllNotificationTest {
     void 안읽은_알림만_조회할_수_있다() {
         // when
         Page<NotificationDto> result = queryAllNotificationUseCase.query(
-                new QueryAllNotificationUseCase.Query(new NotificationFilter(myId, ONLY_UNREAD)),
-                PageRequest.of(0, 100)
+                new QueryAllNotificationUseCase.Query(new NotificationFilter(myId, ONLY_UNREAD), PageRequest.of(0, 100))
         );
 
         // then
@@ -81,8 +79,7 @@ class QueryAllNotificationTest {
     void 모든_알림을_조회할_수_있다() {
         // when
         Page<NotificationDto> result = queryAllNotificationUseCase.query(new QueryAllNotificationUseCase.Query(
-                        new NotificationFilter(myId, ALL)),
-                PageRequest.of(0, 100)
+                new NotificationFilter(myId, ALL), PageRequest.of(0, 100))
         );
 
         // then
@@ -92,16 +89,15 @@ class QueryAllNotificationTest {
     @Test
     void 내_알림이_아니면_조회되지_않는다() {
         // given
-        List<Notification> otherRead = new ArrayList<>(NotificationFixture.allKindNotificationsWithReceiverId(otherId));
-        List<Notification> otherUnRead = new ArrayList<>(NotificationFixture.allKindNotificationsWithReceiverId(otherId));
+        List<Notification> otherRead = new ArrayList<>(NotificationFixture.noIdAllKindNotifications(otherId));
+        List<Notification> otherUnRead = new ArrayList<>(NotificationFixture.noIdAllKindNotifications(otherId));
         otherRead.forEach(Notification::read);
         otherUnRead = notificationRepository.saveAll(otherUnRead);
         otherRead = notificationRepository.saveAll(otherRead);
 
         // when
         Page<NotificationDto> result = queryAllNotificationUseCase.query(new QueryAllNotificationUseCase.Query(
-                        new NotificationFilter(otherId, ALL)),
-                PageRequest.of(0, 100)
+                new NotificationFilter(otherId, ALL), PageRequest.of(0, 100))
         );
 
         // then - 다른 사람의 알림을 추가하고 읽어도 결과는 자신의 개수와만 동일함

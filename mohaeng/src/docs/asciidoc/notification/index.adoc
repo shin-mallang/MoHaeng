@@ -87,24 +87,31 @@ operation::notification/query/query by id/ParticipantClubRoleChangedNotification
 |ONLY_UNREAD|안읽은 알림만을 조회한다.
 |===
 
-=== - 나의 모든 알림만 조회
+==== - 나의 모든 알림만 조회
 
 operation::notification/query/all/filter ALL[snippets='http-request,request-headers,http-response']
 
-=== - 나의 읽은 알림만 조회
+==== - 나의 읽은 알림만 조회
 
 operation::notification/query/all/filter ONLY_READ[snippets='http-request,http-response']
 
-=== - 나의 안읽은 알림만 조회
+==== - 나의 안읽은 알림만 조회
 
 operation::notification/query/all/filter ONLY_UNREAD[snippets='http-request,http-response']
 
-=== - 필터링 조건이 없는 경우 기본적으로 ALL 로 설정
+==== - 필터링 조건이 없는 경우 기본적으로 ALL 로 설정
 
 operation::notification/query/all/no filter[snippets='http-request,http-response']
 
+==== - Header 에 AccessToken 이 없는 경우
+
+operation::notification/query/all/fail/no access token[snippets='http-request,http-response']
+
+[[Notification-가입-신청-알림만-조회]]
+===  `모임 가입 신청 알림 조회`
+
+operation::notification/query/모임가입신청알림[snippets='http-request,http-response']
 
 ==== - Header 에 AccessToken 이 없는 경우
 
-operation::notification/query/all/filter no access token[snippets='http-request,http-response']
-
+operation::notification/query/모임가입신청알림/fail/no access token[snippets='http-request,http-response']

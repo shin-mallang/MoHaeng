@@ -1,7 +1,6 @@
 package com.mohaeng.notification.application.dto.type;
 
 import com.mohaeng.notification.application.dto.NotificationDto;
-import com.mohaeng.notification.presentation.response.NotificationResponse;
 import com.mohaeng.notification.presentation.response.type.FillOutApplicationFormNotificationResponse;
 
 import java.time.LocalDateTime;
@@ -38,7 +37,7 @@ public class FillOutApplicationFormNotificationDto extends NotificationDto {
     }
 
     @Override
-    public NotificationResponse toResponse() {
+    public FillOutApplicationFormNotificationResponse toResponse() {
         return new FillOutApplicationFormNotificationResponse(id(), createdAt(), isRead(), type(), clubId(), applicantId(), applicationFormId());
     }
 }

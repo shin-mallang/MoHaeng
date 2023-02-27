@@ -42,7 +42,8 @@ public class JpaClubQueryRepository implements ClubQueryRepository {
                 .fetch();
 
         JPAQuery<Long> countQuery = query.select(club.count())
-                .from(club);
+                .from(club)
+                .where(nameLike(clubSearchCond.name()));
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
     }
