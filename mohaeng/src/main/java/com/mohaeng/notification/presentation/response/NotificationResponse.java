@@ -1,5 +1,7 @@
 package com.mohaeng.notification.presentation.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 
 /**
@@ -30,6 +32,7 @@ public abstract class NotificationResponse {
         return createdAt;
     }
 
+    @JsonProperty(value = "isRead")
     public boolean isRead() {
         return isRead;
     }
