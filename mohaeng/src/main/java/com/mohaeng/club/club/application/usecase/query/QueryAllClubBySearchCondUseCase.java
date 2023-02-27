@@ -9,10 +9,11 @@ import java.time.LocalDateTime;
 
 public interface QueryAllClubBySearchCondUseCase {
 
-    Page<Result> query(final Query query, Pageable pageable);
+    Page<Result> query(final Query query);
 
     record Query(
-            ClubSearchCond clubSearchCond
+            ClubSearchCond clubSearchCond,
+            Pageable pageable
     ) {
     }
 

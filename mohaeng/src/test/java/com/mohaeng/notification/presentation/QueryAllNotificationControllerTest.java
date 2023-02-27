@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -30,8 +31,7 @@ import static com.mohaeng.common.presentation.ApiDocumentUtils.getDocumentRespon
 import static com.mohaeng.notification.domain.repository.NotificationQueryRepository.NotificationFilter.ReadFilter.*;
 import static com.mohaeng.notification.presentation.QueryAllNotificationController.QUERY_ALL_NOTIFICATION_URL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -51,6 +51,8 @@ class QueryAllNotificationControllerTest extends ControllerTest {
     @MockBean
     private QueryAllNotificationUseCase queryAllNotificationUseCase;
 
+    private final Pageable pageable = PageRequest.of(100, 100);
+
     @BeforeEach
     void init() {
         List<NotificationDto> reads = List.of(NotificationFixture.expelParticipantNotification(1L, memberId), NotificationFixture.applicationProcessedNotification(2L, memberId)).stream().peek(Notification::read).map(Notification::toDto).toList();
@@ -64,18 +66,15 @@ class QueryAllNotificationControllerTest extends ControllerTest {
         allNotifications = new PageImpl<>(all, PageRequest.of(0, 100), all.size());
 
         given(queryAllNotificationUseCase.query(
-                eq(new QueryAllNotificationUseCase.Query(new NotificationQueryRepository.NotificationFilter(memberId, ALL))),
-                any())
+                refEq(new QueryAllNotificationUseCase.Query(new NotificationQueryRepository.NotificationFilter(memberId, ALL), pageable), "pageable"))
         ).willReturn(allNotifications);
 
         given(queryAllNotificationUseCase.query(
-                eq(new QueryAllNotificationUseCase.Query(new NotificationQueryRepository.NotificationFilter(memberId, ONLY_READ))),
-                any())
+                refEq(new QueryAllNotificationUseCase.Query(new NotificationQueryRepository.NotificationFilter(memberId, ONLY_READ), pageable), "pageable"))
         ).willReturn(readNotifications);
 
         given(queryAllNotificationUseCase.query(
-                eq(new QueryAllNotificationUseCase.Query(new NotificationQueryRepository.NotificationFilter(memberId, ONLY_UNREAD))),
-                any())
+                refEq(new QueryAllNotificationUseCase.Query(new NotificationQueryRepository.NotificationFilter(memberId, ONLY_UNREAD), pageable), "pageable"))
         ).willReturn(unreadNotifications);
     }
 

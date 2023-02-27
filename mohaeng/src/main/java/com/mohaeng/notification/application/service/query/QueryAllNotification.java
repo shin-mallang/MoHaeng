@@ -5,7 +5,6 @@ import com.mohaeng.notification.application.usecase.query.QueryAllNotificationUs
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.repository.NotificationQueryRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +19,8 @@ public class QueryAllNotification implements QueryAllNotificationUseCase {
     }
 
     @Override
-    public Page<NotificationDto> query(final Query query, final Pageable pageable) {
-        return notificationQueryRepository.findAllByFilter(query.filter(), pageable)
+    public Page<NotificationDto> query(final Query query) {
+        return notificationQueryRepository.findAllByFilter(query.filter(), query.pageable())
                 .map(Notification::toDto);
     }
 }

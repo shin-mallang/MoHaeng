@@ -69,8 +69,7 @@ class QueryAllClubBySearchCondTest {
     void 검색_조건중_문자열이_없거나_빈칸인_경우_모든_모임을_조회한다(final String input) {
         // when
         Page<Result> result = queryAllClubBySearchCondUseCase.query(
-                new Query(new ClubQueryRepository.ClubSearchCond(input)),
-                PageRequest.of(0, 10)
+                new Query(new ClubQueryRepository.ClubSearchCond(input), PageRequest.of(0, 10))
         );
 
         // then
@@ -95,8 +94,7 @@ class QueryAllClubBySearchCondTest {
 
         // when
         Page<Result> result = queryAllClubBySearchCondUseCase.query(
-                new Query(new ClubQueryRepository.ClubSearchCond(name)),
-                PageRequest.of(0, size)
+                new Query(new ClubQueryRepository.ClubSearchCond(name), PageRequest.of(0, 10))
         );
 
         // then

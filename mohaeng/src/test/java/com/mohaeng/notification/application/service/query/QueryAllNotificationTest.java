@@ -55,8 +55,7 @@ class QueryAllNotificationTest {
     void 읽은_알림만_조회할_수_있다() {
         // when
         Page<NotificationDto> result = queryAllNotificationUseCase.query(new QueryAllNotificationUseCase.Query(
-                        new NotificationFilter(myId, ONLY_READ)),
-                PageRequest.of(0, 100)
+                new NotificationFilter(myId, ONLY_READ), PageRequest.of(0, 100))
         );
 
         // then
@@ -68,8 +67,7 @@ class QueryAllNotificationTest {
     void 안읽은_알림만_조회할_수_있다() {
         // when
         Page<NotificationDto> result = queryAllNotificationUseCase.query(
-                new QueryAllNotificationUseCase.Query(new NotificationFilter(myId, ONLY_UNREAD)),
-                PageRequest.of(0, 100)
+                new QueryAllNotificationUseCase.Query(new NotificationFilter(myId, ONLY_UNREAD), PageRequest.of(0, 100))
         );
 
         // then
@@ -81,8 +79,7 @@ class QueryAllNotificationTest {
     void 모든_알림을_조회할_수_있다() {
         // when
         Page<NotificationDto> result = queryAllNotificationUseCase.query(new QueryAllNotificationUseCase.Query(
-                        new NotificationFilter(myId, ALL)),
-                PageRequest.of(0, 100)
+                new NotificationFilter(myId, ALL), PageRequest.of(0, 100))
         );
 
         // then
@@ -100,8 +97,7 @@ class QueryAllNotificationTest {
 
         // when
         Page<NotificationDto> result = queryAllNotificationUseCase.query(new QueryAllNotificationUseCase.Query(
-                        new NotificationFilter(otherId, ALL)),
-                PageRequest.of(0, 100)
+                new NotificationFilter(otherId, ALL), PageRequest.of(0, 100))
         );
 
         // then - 다른 사람의 알림을 추가하고 읽어도 결과는 자신의 개수와만 동일함

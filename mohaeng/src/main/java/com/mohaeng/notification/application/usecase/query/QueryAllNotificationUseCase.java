@@ -7,10 +7,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface QueryAllNotificationUseCase {
 
-    Page<NotificationDto> query(final Query query, final Pageable pageable);
+    Page<NotificationDto> query(final Query query);
 
     record Query(
-            NotificationFilter filter
+            NotificationFilter filter,
+            Pageable pageable
     ) {
     }
 }

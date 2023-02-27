@@ -35,7 +35,7 @@ public class SearchClubController {
             @PageableDefault(size = 10) final Pageable pageable
     ) {
         Page<Result> result = queryAllClubBySearchCondUseCase.query(
-                clubSearchRequest.toQuery(), pageable
+                clubSearchRequest.toQuery(pageable)
         );
         return ResponseEntity.ok(PageResponseAssembler.assemble(result.map(ClubResponse::from)));
     }
@@ -43,8 +43,8 @@ public class SearchClubController {
     public record ClubSearchRequest(
             String name
     ) {
-        public Query toQuery() {
-            return new Query(new ClubSearchCond(name));
+        public Query toQuery(final Pageable pageable) {
+            return new Query(new ClubSearchCond(name), pageable);
         }
     }
 
