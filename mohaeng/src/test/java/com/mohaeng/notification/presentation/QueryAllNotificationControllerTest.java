@@ -9,6 +9,7 @@ import com.mohaeng.notification.application.usecase.query.QueryAllNotificationUs
 import com.mohaeng.notification.domain.model.Notification;
 import com.mohaeng.notification.domain.repository.NotificationQueryRepository;
 import com.mohaeng.notification.presentation.response.NotificationResponse;
+import com.mohaeng.notification.presentation.response.NotificationResponseTestImpl;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -21,7 +22,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +53,8 @@ class QueryAllNotificationControllerTest extends ControllerTest {
 
     @BeforeEach
     void init() {
-        List<NotificationDto> reads = List.of(NotificationFixture.expelParticipantNotification(1L), NotificationFixture.applicationProcessedNotification(2L)).stream().peek(Notification::read).map(Notification::toDto).toList();
-        List<NotificationDto> unReads = List.of(NotificationFixture.officerApproveApplicationNotification(34L), NotificationFixture.fillOutApplicationFormNotification(62L)).stream().map(Notification::toDto).toList();
+        List<NotificationDto> reads = List.of(NotificationFixture.expelParticipantNotification(1L, memberId), NotificationFixture.applicationProcessedNotification(2L, memberId)).stream().peek(Notification::read).map(Notification::toDto).toList();
+        List<NotificationDto> unReads = List.of(NotificationFixture.officerApproveApplicationNotification(34L, memberId), NotificationFixture.fillOutApplicationFormNotification(62L, memberId)).stream().map(Notification::toDto).toList();
         List<NotificationDto> all = new ArrayList<>();
         all.addAll(reads);
         all.addAll(unReads);
@@ -80,6 +80,30 @@ class QueryAllNotificationControllerTest extends ControllerTest {
     }
 
     @Test
+    void 필터링_조건에_ALL_을_달았다면_자신의_전체_알림을_조회한다() throws Exception {
+        // when
+        ResultActions resultActions = getRequest()
+                .url(QUERY_ALL_NOTIFICATION_URL + "?readFilter=ALL")
+                .login(memberId)
+                .noContent()
+                .ok();
+
+        // then
+        MvcResult mvcResult = resultActions.andReturn();
+        CommonResponse<List<NotificationResponseTestImpl>> notificationResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<List<NotificationResponseTestImpl>>>() {
+        });
+        assertThat(notificationResponses.data().stream().filter(NotificationResponseTestImpl::isRead).count()).isEqualTo(readNotifications.getTotalElements());
+        assertThat(notificationResponses.data().stream().filter(it -> !it.isRead()).count()).isEqualTo(unreadNotifications.getTotalElements());
+        resultActions.andDo(document("notification/query/all/filter ALL",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestHeaders(
+                        headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
+                )
+        ));
+    }
+
+    @Test
     void 필터링_조건에_아무것도_달지_않았다면_자신의_전체_알림을_조회한다() throws Exception {
         // when
         ResultActions resultActions = getRequest()
@@ -91,40 +115,15 @@ class QueryAllNotificationControllerTest extends ControllerTest {
         // then
 
         MvcResult mvcResult = resultActions.andReturn();
-        CommonResponse<List<MockNotificationResponse>> notificationResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<List<MockNotificationResponse>>>() {
+        CommonResponse<List<NotificationResponseTestImpl>> notificationResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<List<NotificationResponseTestImpl>>>() {
         });
         assertThat(notificationResponses.data().size()).isEqualTo(readNotifications.getTotalElements() + unreadNotifications.getTotalElements());
-        assertThat(notificationResponses.data().stream().filter(MockNotificationResponse::isRead).count()).isEqualTo(readNotifications.getTotalElements());
+        assertThat(notificationResponses.data().stream().filter(NotificationResponseTestImpl::isRead).count()).isEqualTo(readNotifications.getTotalElements());
         assertThat(notificationResponses.data().stream().filter(it -> !it.isRead()).count()).isEqualTo(unreadNotifications.getTotalElements());
         resultActions.andDo(document("notification/query/all/no filter",
                 getDocumentRequest(),
                 getDocumentResponse()
         ));
-    }
-
-    @Test
-    void 필터링_조건에_ALL_을_달았다면_자신의_전체_알림을_조회한다() throws Exception {
-        // when
-        ResultActions resultActions = getRequest()
-                .url(QUERY_ALL_NOTIFICATION_URL + "?readFilter=ALL")
-                .login(memberId)
-                .noContent()
-                .ok();
-
-        // then
-        MvcResult mvcResult = resultActions.andReturn();
-        CommonResponse<List<MockNotificationResponse>> notificationResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<List<MockNotificationResponse>>>() {
-        });
-        assertThat(notificationResponses.data().stream().filter(MockNotificationResponse::isRead).count()).isEqualTo(readNotifications.getTotalElements());
-        assertThat(notificationResponses.data().stream().filter(it -> !it.isRead()).count()).isEqualTo(unreadNotifications.getTotalElements());
-        resultActions.andDo(document("notification/query/all/filter ALL",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
-                )
-        ));
-        ;
     }
 
     @Test
@@ -138,7 +137,7 @@ class QueryAllNotificationControllerTest extends ControllerTest {
 
         // then
         MvcResult mvcResult = resultActions.andReturn();
-        CommonResponse<List<MockNotificationResponse>> notificationResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<List<MockNotificationResponse>>>() {
+        CommonResponse<List<NotificationResponseTestImpl>> notificationResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<List<NotificationResponseTestImpl>>>() {
         });
         assertThat(notificationResponses.data().size()).isEqualTo(readNotifications.getTotalElements());
         assertThat(notificationResponses.data().stream().filter(NotificationResponse::isRead).count()).isEqualTo(readNotifications.getTotalElements());
@@ -159,7 +158,7 @@ class QueryAllNotificationControllerTest extends ControllerTest {
 
         // then
         MvcResult mvcResult = resultActions.andReturn();
-        CommonResponse<List<MockNotificationResponse>> notificationResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<List<MockNotificationResponse>>>() {
+        CommonResponse<List<NotificationResponseTestImpl>> notificationResponses = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<CommonResponse<List<NotificationResponseTestImpl>>>() {
         });
         assertThat(notificationResponses.data().size()).isEqualTo(unreadNotifications.getTotalElements());
         assertThat(notificationResponses.data().stream().filter(it -> !it.isRead()).count()).isEqualTo(unreadNotifications.getTotalElements());
@@ -196,17 +195,9 @@ class QueryAllNotificationControllerTest extends ControllerTest {
                 .unAuthorized();
 
         // then
-        resultActions.andDo(document("notification/query/all/filter no access token",
+        resultActions.andDo(document("notification/query/all/fail/no access token",
                 getDocumentRequest(),
                 getDocumentResponse()
         ));
-    }
-
-    static class MockNotificationResponse extends NotificationResponse {
-
-        public MockNotificationResponse(final Long id, final LocalDateTime createdAt, final boolean read, final String type) {
-            super(id, createdAt, read, type);
-        }
-
     }
 }

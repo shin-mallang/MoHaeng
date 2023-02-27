@@ -43,8 +43,8 @@ class QueryAllNotificationTest {
     @BeforeEach
     void init() {
         // 각각 8개씩 저장한다
-        unread = new ArrayList<>(NotificationFixture.allKindNotificationsWithReceiverId(myId));
-        read = new ArrayList<>(NotificationFixture.allKindNotificationsWithReceiverId(myId));
+        unread = new ArrayList<>(NotificationFixture.noIdAllKindNotifications(myId));
+        read = new ArrayList<>(NotificationFixture.noIdAllKindNotifications(myId));
         read.remove(0);
         read.forEach(Notification::read);
         unread = notificationRepository.saveAll(unread);
@@ -92,8 +92,8 @@ class QueryAllNotificationTest {
     @Test
     void 내_알림이_아니면_조회되지_않는다() {
         // given
-        List<Notification> otherRead = new ArrayList<>(NotificationFixture.allKindNotificationsWithReceiverId(otherId));
-        List<Notification> otherUnRead = new ArrayList<>(NotificationFixture.allKindNotificationsWithReceiverId(otherId));
+        List<Notification> otherRead = new ArrayList<>(NotificationFixture.noIdAllKindNotifications(otherId));
+        List<Notification> otherUnRead = new ArrayList<>(NotificationFixture.noIdAllKindNotifications(otherId));
         otherRead.forEach(Notification::read);
         otherUnRead = notificationRepository.saveAll(otherUnRead);
         otherRead = notificationRepository.saveAll(otherRead);

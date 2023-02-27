@@ -17,14 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.mohaeng.common.fixtures.NotificationFixture.allKindNotificationsWithReceiverId;
-import static com.mohaeng.common.fixtures.NotificationFixture.fillOutApplicationFormNotification;
+import static com.mohaeng.common.fixtures.NotificationFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@DisplayName("QueryFillOutApplicationFormNotification(모임 가입 신청 알림 전부 조회i) 은")
+@DisplayName("QueryFillOutApplicationFormNotification(모임 가입 신청 알림 전부 조회) 은")
 @ApplicationTest
 class QueryFillOutApplicationFormNotificationTest {
 
@@ -37,7 +36,7 @@ class QueryFillOutApplicationFormNotificationTest {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    private Long myId = 1L;
+    private final Long myId = RECEIVER_ID;
 
     private List<Notification> myAllNotifications;
     private List<Notification> myAllFillOutApplicationFormNotifications;
@@ -47,16 +46,16 @@ class QueryFillOutApplicationFormNotificationTest {
 
     @BeforeEach
     void init() {
-        myAllNotifications = new ArrayList<>(allKindNotificationsWithReceiverId(myId));
-        myAllNotifications.addAll(List.of(fillOutApplicationFormNotification(myId), fillOutApplicationFormNotification(myId), fillOutApplicationFormNotification(myId)));
-        myAllNotifications.addAll(Stream.of(fillOutApplicationFormNotification(myId), fillOutApplicationFormNotification(myId), fillOutApplicationFormNotification(myId)).peek(Notification::read).toList());
+        myAllNotifications = new ArrayList<>(noIdAllKindNotifications(myId));
+        myAllNotifications.addAll(List.of(fillOutApplicationFormNotification(null, myId), fillOutApplicationFormNotification(null, myId), fillOutApplicationFormNotification(null, myId)));
+        myAllNotifications.addAll(Stream.of(fillOutApplicationFormNotification(null, myId), fillOutApplicationFormNotification(null, myId), fillOutApplicationFormNotification(null, myId)).peek(Notification::read).toList());
         notificationRepository.saveAll(myAllNotifications);
 
         myAllFillOutApplicationFormNotifications = myAllNotifications.stream().filter(it -> it instanceof FillOutApplicationFormNotification).toList();
         myReadFillOutApplicationFormNotifications = myAllFillOutApplicationFormNotifications.stream().filter(Notification::isRead).toList();
         myUnReadFillOutApplicationFormNotifications = myAllFillOutApplicationFormNotifications.stream().filter(it -> !it.isRead()).toList();
 
-        otherAllNotifications = allKindNotificationsWithReceiverId(11L);
+        otherAllNotifications = noIdAllKindNotifications(11L);
         notificationRepository.saveAll(otherAllNotifications);
         em.flush();
         em.clear();

@@ -40,7 +40,7 @@ class QueryNotificationByIdTest {
 
     @BeforeEach
     void init() {
-        notifications = saveNotifications(notificationRepository, NotificationFixture.allKindNotifications());
+        notifications = saveNotifications(notificationRepository, NotificationFixture.noIdAllKindNotifications(1L));
         em.flush();
         em.clear();
         System.out.println("========== AFTER SETTING ==========");
