@@ -54,6 +54,10 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
+    // Excel
+    implementation 'org.dhatim:fastexcel-reader:0.12.8'
+    implementation 'org.dhatim:fastexcel:0.12.8'
 }
 
 tasks.named('test') {
