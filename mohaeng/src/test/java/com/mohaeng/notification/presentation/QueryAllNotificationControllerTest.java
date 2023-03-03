@@ -181,7 +181,6 @@ class QueryAllNotificationControllerTest extends ControllerTest {
                 .login(memberId)
                 .noContent()
                 .badRequest();
-        // then
     }
 
     @Test
