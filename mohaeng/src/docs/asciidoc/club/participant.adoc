@@ -101,3 +101,21 @@ operation::club/participant/leave-club/fail/Nonexistent Club ID[snippets='http-r
 
 operation::club/participant/leave-club/fail/president requests to leave the club[snippets='http-response']
 
+
+[[Participant-엑셀로-내보내기]]
+=== `참여자 명단 엑셀로 다운`
+
+operation::club/participant/query/export-excel[snippets='http-request,path-parameters,request-headers,http-response']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/participant/query/export-excel/fail/No Access Token[snippets='http-response']
+
+==== - 없는 모임 ID인 경우
+
+operation::club/participant/query/export-excel/fail/Not Found Club[snippets='http-response']
+
+==== - 임원이나 회장이 아닌 일반 회원이 요청한 경우
+
+operation::club/participant/query/export-excel/fail/No Authority[snippets='http-response']
+
