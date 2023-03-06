@@ -5,6 +5,7 @@ import com.mohaeng.club.club.domain.repository.ParticipantQueryRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,6 +29,6 @@ public class JpaParticipantQueryRepository implements ParticipantQueryRepository
                 .join(participant.member).fetchJoin()
                 .fetch();
 
-        return new PageImpl<>(contents);
+        return new PageImpl<>(contents, PageRequest.of(0, contents.size()), contents.size());
     }
 }
