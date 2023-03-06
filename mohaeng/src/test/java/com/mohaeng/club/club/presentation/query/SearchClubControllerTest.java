@@ -86,7 +86,7 @@ class SearchClubControllerTest extends ControllerTest {
                                 fieldWithPath("pageInfo.currentPage").type(NUMBER).description("현제 페이지 번호"),
                                 fieldWithPath("pageInfo.lastPage").type(NUMBER).description("마지막 페이지 번호"),
                                 fieldWithPath("pageInfo.pageSize").type(NUMBER).description("한 페이지의 크기"),
-                                fieldWithPath("pageInfo.totalElements").type(NUMBER).description("생성일")
+                                fieldWithPath("pageInfo.totalElements").type(NUMBER).description("해당 조건을 만족하는 전체 모임의 수")
                         )
                 )
         );
