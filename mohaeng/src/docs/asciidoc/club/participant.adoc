@@ -101,7 +101,6 @@ operation::club/participant/leave-club/fail/Nonexistent Club ID[snippets='http-r
 
 operation::club/participant/leave-club/fail/president requests to leave the club[snippets='http-response']
 
-
 [[Participant-엑셀로-내보내기]]
 === `참여자 명단 엑셀로 다운`
 
@@ -119,3 +118,19 @@ operation::club/participant/query/export-excel/fail/Not Found Club[snippets='htt
 
 operation::club/participant/query/export-excel/fail/No Authority[snippets='http-response']
 
+[[모임에-참여한-참여자-모두-조회]]
+=== `모임에 참여한 참여자 모두 조회`
+
+operation::club/participant/query/byClubId[snippets='http-request,path-parameters,request-headers,http-response,response-fields']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/participant/query/byClubId/fail/no access token[snippets='http-response']
+
+==== - 없는 모임 ID인 경우
+
+operation::club/participant/query/byClubId/fail/not found club[snippets='http-response']
+
+==== - 모임에 가입하지 않은 회원이 요청한 경우
+
+operation::club/participant/query/byClubId/fail/not joined club member request[snippets='http-response']

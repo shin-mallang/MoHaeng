@@ -50,7 +50,7 @@ class ExportParticipantToExcelControllerTest extends ControllerTest {
                 getDocumentRequest(),
                 getDocumentResponse(),
                 pathParameters(
-                        parameterWithName("clubId").description("클럽 ID")
+                        parameterWithName("clubId").description("모임 ID")
                 ),
                 requestHeaders(
                         headerWithName(HttpHeaders.AUTHORIZATION).description("Access Token")
