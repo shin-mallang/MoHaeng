@@ -10,7 +10,9 @@ public interface ClubQueryRepository {
 
     Optional<Club> findById(final Long id);
 
-    Page<Club> findAllBySearchCond(ClubSearchCond clubSearchCond, Pageable pageable);
+    Page<Club> findAllBySearchCond(final ClubSearchCond clubSearchCond, final Pageable pageable);
+
+    Page<Club> findAllByMemberId(final Long memberId, final Pageable pageable);
 
     record ClubSearchCond(
             String name
