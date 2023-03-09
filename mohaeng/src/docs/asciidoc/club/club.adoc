@@ -60,3 +60,12 @@ operation::club/club/query/club by id/fail/not found club[snippets='http-respons
 === `모임검색`
 
 operation::club/club/query/search[snippets='http-request,http-response,response-fields']
+
+[[Club-내가-가입한-모임-조회]]
+=== `내가 가입한 모임 조회`
+
+operation::club/club/query/my[snippets='http-request,http-response,response-fields']
+
+==== - 요청 시 Header에 AccessToken이 없는 경우
+
+operation::club/club/query/my/fail/no access token[snippets='http-response']
