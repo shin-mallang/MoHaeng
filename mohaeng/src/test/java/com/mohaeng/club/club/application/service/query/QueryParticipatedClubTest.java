@@ -55,7 +55,6 @@ class QueryParticipatedClubTest {
         saveClub(clubRepository, new Club("sampleName4", "des", 100, other));
         em.flush();
         em.clear();
-
     }
 
     @Test

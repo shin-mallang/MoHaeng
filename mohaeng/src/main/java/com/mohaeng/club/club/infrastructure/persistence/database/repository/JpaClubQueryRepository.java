@@ -1,7 +1,6 @@
 package com.mohaeng.club.club.infrastructure.persistence.database.repository;
 
 import com.mohaeng.club.club.domain.model.Club;
-import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.domain.repository.ClubQueryRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -52,20 +51,20 @@ public class JpaClubQueryRepository implements ClubQueryRepository {
 
     @Override
     public Page<Club> findAllByMemberId(final Long memberId, final Pageable pageable) {
-        final List<Participant> contents = query.selectFrom(participant)
-                .join(participant.club)
-                .fetchJoin()
+        final List<Club> contents = query.selectFrom(club)
+                .join(participant)
+                .on(participant.club.eq(club))
                 .where(participant.member.id.eq(memberId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Long> countQuery = query.select(participant.count())
-                .from(participant)
+        final JPAQuery<Long> countQuery = query.select(club.count())
+                .join(participant)
+                .on(participant.club.eq(club))
                 .where(participant.member.id.eq(memberId));
 
-        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne)
-                .map(Participant::club);
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
     }
 
     private BooleanExpression nameLike(final String name) {
