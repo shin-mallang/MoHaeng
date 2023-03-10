@@ -105,7 +105,7 @@ class ParticipantsTest {
     @Test
     void register_시_회원을_등록한다() {
         // when
-        Participant participant = participants.register(member(3L), club, clubRoleMap.get(GENERAL));
+        Participant participant = participants.register(member(100L), club, clubRoleMap.get(GENERAL));
 
         // then
         assertThat(participants.participants()).contains(participant);

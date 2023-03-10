@@ -34,6 +34,9 @@ class ClubRoleTest {
             assertThat(clubRoles)
                     .extracting(ClubRole::clubRoleCategory)
                     .containsExactlyInAnyOrder(values());
+            assertThat(clubRoles)
+                    .extracting(ClubRole::isDefault)
+                    .containsOnly(true);
         }
     }
 

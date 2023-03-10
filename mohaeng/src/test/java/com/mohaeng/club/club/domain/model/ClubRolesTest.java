@@ -2,7 +2,12 @@ package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.club.club.exception.ClubRoleException;
 import com.mohaeng.common.exception.BaseExceptionType;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -16,6 +21,7 @@ import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -27,57 +33,89 @@ class ClubRolesTest {
     private final ClubRoles clubRoles = ClubRoles.defaultRoles(club);
 
     @Test
-    void defaultRoles_는_역할의_카테고리별_기본_역할_1개씩을_각각_생성하여_반환한다() {
+    void 기본_역할들을_가지고_생성된다() {
+        // when
+        final ClubRoles clubRoles = ClubRoles.defaultRoles(club);
+
         // then
-        assertThat(clubRoles.clubRoles().stream().map(ClubRole::clubRoleCategory).toList())
-                .containsExactlyInAnyOrderElementsOf(List.of(PRESIDENT, OFFICER, GENERAL));
-        clubRoles.clubRoles().forEach(it -> assertThat(it.isDefault()).isTrue());
+        assertThat(clubRoles.clubRoles())
+                .extracting(ClubRole::clubRoleCategory)
+                .containsExactlyInAnyOrder(ClubRoleCategory.values());
+        assertThat(clubRoles.clubRoles())
+                .extracting(ClubRole::isDefault)
+                .containsOnly(true);
     }
 
-    @Test
-    void findDefaultRoleByCategory_는_주어진_카테고리에_해당하는_역할들_중_기본_역할을_반환한다() {
-        // when & then
-        assertThat(clubRoles.findDefaultRoleByCategory(PRESIDENT).clubRoleCategory()).isEqualTo(PRESIDENT);
-        assertThat(clubRoles.findDefaultRoleByCategory(OFFICER).clubRoleCategory()).isEqualTo(OFFICER);
-        assertThat(clubRoles.findDefaultRoleByCategory(GENERAL).clubRoleCategory()).isEqualTo(GENERAL);
-    }
-
-    @Test
-    void findById_는_id를_통해_역할을_조회한다() {
+    @ParameterizedTest(name = "{0} 카테고리에 속하는 기본 역할을 반환할 수 있다")
+    @EnumSource(mode = EXCLUDE, value = ClubRoleCategory.class)
+    void 카테고리에_속하는_기본_역할을_반환할_수_있다(final ClubRoleCategory category) {
         // given
-        for (int i = 1; i <= clubRoles.clubRoles().size(); i++) {
-            ReflectionTestUtils.setField(clubRoles.clubRoles().get(i - 1), "id", (long) i);
-        }
+        final ClubRoles clubRoles = ClubRoles.defaultRoles(club);
 
         // when
-        assertThat(clubRoles.findById(1L)).isPresent();
-        assertThat(clubRoles.findById(2L)).isPresent();
-        assertThat(clubRoles.findById(3L)).isPresent();
-        assertThat(clubRoles.findById(4L)).isEmpty();
+        final ClubRole defaultRoleByCategory = clubRoles.findDefaultRoleByCategory(category);
+
+        // then
+        assertThat(defaultRoleByCategory.clubRoleCategory()).isEqualTo(category);
+        assertThat(defaultRoleByCategory.isDefault()).isTrue();
     }
 
     @Nested
-    @DisplayName("역할 추가(add) 테스트")
-    class AddRole {
+    class ID_를_통한_조회_테스트 {
 
-        @Test
-        void add_시_기본_역할이_아닌_역할을_생성하여_저장한다() {
-            // when
-            ClubRole 일반역할 = clubRoles.add(club, "새로생성할역할1", GENERAL);
-            ClubRole 임원역할 = clubRoles.add(club, "새로생성할역할2", OFFICER);
+        private final ClubRoles clubRoles = ClubRoles.defaultRoles(mock(Club.class));
+        private final Long existId = 1L;
+        private final Long nonExistId = 100L;
 
-            // then
-            assertThat(clubRoles.clubRoles()).contains(일반역할, 임원역할);
-            assertThat(일반역할.isDefault()).isFalse();
-            assertThat(임원역할.isDefault()).isFalse();
+        @BeforeEach
+        void init() {
+            ReflectionTestUtils.setField(clubRoles.clubRoles().get(0), "id", existId);
         }
 
         @Test
-        void add_시_역할_이름이_중복되면_오류가_발생한다() {
+        void ID_가_일치하는_역할이_존재하면_반환한다() {
+            // when
+            final ClubRole clubRole = clubRoles.findById(existId);
+
+            // that
+            assertThat(clubRole.id()).isEqualTo(existId);
+        }
+
+        @Test
+        void ID_가_일치하는_역할이_존재하지_않으면_예외() {
+            // when
+            final BaseExceptionType baseExceptionType = assertThrows(
+                    ClubRoleException.class,
+                    () -> clubRoles.findById(nonExistId)
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
+        }
+    }
+
+    @Nested
+    class 역할_추가_테스트 {
+
+        @Test
+        void 기본_역할이_아닌_역할을_추가한다() {
+            // when
+            ClubRole 일반역할 = clubRoles.add(club, "역할1", GENERAL);
+            ClubRole 임원역할 = clubRoles.add(club, "역할2", OFFICER);
+
+            // then
+            assertAll(
+                    () -> assertThat(clubRoles.clubRoles()).contains(일반역할, 임원역할),
+                    () -> assertThat(일반역할.isDefault()).isFalse(),
+                    () -> assertThat(임원역할.isDefault()).isFalse()
+            );
+        }
+
+        @Test
+        void 역할_이름이_중복되면_예외() {
             // given
             String duplicatedName = "중복이름";
             clubRoles.add(club, duplicatedName, GENERAL);
-            int size = clubRoles.clubRoles().size();
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
@@ -86,14 +124,10 @@ class ClubRolesTest {
 
             // then
             assertThat(baseExceptionType).isEqualTo(DUPLICATED_NAME);
-            assertThat(clubRoles.clubRoles().size()).isEqualTo(size);
         }
 
         @Test
-        void add_시_회장_역할을_추가하려는_경우_예외가_발생한다() {
-            // given
-            int size = clubRoles.clubRoles().size();
-
+        void 회장_역할을_추가하려는_경우_예외() {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
                     clubRoles.add(club, "something", PRESIDENT)
@@ -101,13 +135,11 @@ class ClubRolesTest {
 
             // then
             assertThat(baseExceptionType).isEqualTo(CAN_NOT_CREATE_PRESIDENT_ROLE);
-            assertThat(clubRoles.clubRoles().size()).isEqualTo(size);
         }
     }
 
     @Nested
-    @DisplayName("역할 이름 변경(changeRoleName) 테스트")
-    class ChangeRoleNameTest {
+    class 역할_이름_변경_테스트 {
 
         private Map<ClubRoleCategory, ClubRole> clubRoleMap;
 
@@ -125,30 +157,27 @@ class ClubRolesTest {
         void 역할_이름을_변경한다() {
             // given
             ClubRole role = clubRoleMap.get(PRESIDENT);
-            String changed = "바꿈";
 
             // when
-            clubRoles.changeRoleName(PRESIDENT, role.id(), changed);
+            clubRoles.changeRoleName(PRESIDENT, role.id(), "바꿈");
 
             // then
-            assertThat(role.name()).isEqualTo(changed);
+            assertThat(role.name()).isEqualTo("바꿈");
         }
 
         @Test
         void 역할_이름_변경_시_변경될_이름이_중복되는_경우_예외가_발생한다() {
             // given
             ClubRole role1 = clubRoleMap.get(PRESIDENT);
+            clubRoles.changeRoleName(PRESIDENT, role1.id(), "중복");
             ClubRole role2 = clubRoleMap.get(OFFICER);
-            String duplicated = "중복";
-            clubRoles.changeRoleName(PRESIDENT, role1.id(), duplicated);
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
-                    clubRoles.changeRoleName(PRESIDENT, role2.id(), duplicated)
+                    clubRoles.changeRoleName(PRESIDENT, role2.id(), "중복")
             ).exceptionType();
 
             // then
-            assertThat(role2.name()).isNotEqualTo(duplicated);
             assertThat(baseExceptionType).isEqualTo(DUPLICATED_NAME);
         }
 
@@ -156,86 +185,75 @@ class ClubRolesTest {
         void 일반_회원은_역할_이름을_변경할_수_없다() {
             // given
             ClubRole role = clubRoleMap.get(GENERAL);
-            String name = "이름입니당";
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
-                    clubRoles.changeRoleName(GENERAL, role.id(), name)
+                    clubRoles.changeRoleName(GENERAL, role.id(), "변경")
             ).exceptionType();
 
             // then
-            assertThat(role.name()).isNotEqualTo(name);
             assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
         }
 
         @Test
-        void 임원은_일반_역할만을_변경할_수_있다() {
+        void 임원은_일반_역할_이름만을_변경할_수_있다() {
             // given
             ClubRole generalRole = clubRoleMap.get(GENERAL);
-            ClubRole officerRole = clubRoleMap.get(OFFICER);
-            ClubRole presidentRole = clubRoleMap.get(PRESIDENT);
-            String name = "이름입니당";
 
             // when
-            clubRoles.changeRoleName(OFFICER, generalRole.id(), name);
-            BaseExceptionType baseExceptionType1 = assertThrows(ClubRoleException.class, () ->
-                    clubRoles.changeRoleName(OFFICER, officerRole.id(), name)
-            ).exceptionType();
-            BaseExceptionType baseExceptionType2 = assertThrows(ClubRoleException.class, () ->
-                    clubRoles.changeRoleName(OFFICER, presidentRole.id(), name)
+            clubRoles.changeRoleName(OFFICER, generalRole.id(), "변경");
+
+            // then
+            assertThat(generalRole.name()).isEqualTo("변경");
+        }
+
+        @ParameterizedTest(name = "임원이 일반 역할이 아닌 다른 역할(ex: {0})의 이름을 변경하는 경우 예외")
+        @EnumSource(mode = EXCLUDE, value = ClubRoleCategory.class, names = {"GENERAL"})
+        void 임원이_일반_역할이_아닌_역할의_이름을_변경하는_경우_예외(final ClubRoleCategory category) {
+            // when
+            BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
+                    clubRoles.changeRoleName(OFFICER, clubRoleMap.get(category).id(), "변경")
             ).exceptionType();
 
             // then
-            assertThat(generalRole.name()).isEqualTo(name);
-            assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
-            assertThat(baseExceptionType2).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
+            assertThat(baseExceptionType).isEqualTo(NO_AUTHORITY_CHANGE_ROLE_NAME);
         }
 
-        @Test
-        void 회장은_모든_역할의_이름을_다_변경할_수_있다() {
+        @ParameterizedTest(name = "회장은_모은_역할의_이름을_다_변경할_수_있다 - ({0} 변경)")
+        @EnumSource(mode = EXCLUDE, value = ClubRoleCategory.class)
+        void 회장은_모든_역할의_이름을_다_변경할_수_있다(final ClubRoleCategory category) {
             // given
-            ClubRole generalRole = clubRoleMap.get(GENERAL);
-            ClubRole officerRole = clubRoleMap.get(OFFICER);
-            ClubRole presidentRole = clubRoleMap.get(PRESIDENT);
-            String name1 = "이름입니당1";
-            String name2 = "이름입니당2";
-            String name3 = "이름입니당3";
+            final ClubRole role = clubRoleMap.get(category);
 
             // when
-            clubRoles.changeRoleName(PRESIDENT, generalRole.id(), name1);
-            clubRoles.changeRoleName(PRESIDENT, officerRole.id(), name2);
-            clubRoles.changeRoleName(PRESIDENT, presidentRole.id(), name3);
+            clubRoles.changeRoleName(PRESIDENT, role.id(), "변경");
 
             // then
-            assertThat(generalRole.name()).isEqualTo(name1);
-            assertThat(officerRole.name()).isEqualTo(name2);
-            assertThat(presidentRole.name()).isEqualTo(name3);
+            assertThat(role.name()).isEqualTo("변경");
         }
 
         @Test
-        void 바꿀_역할을_찾을_수_없는_경우_예외가_발생한다() {
+        void 바꿀_역할을_찾을_수_없는_경우_예외() {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
                     clubRoles.changeRoleName(PRESIDENT, 1000000L, "임시이름")
             ).exceptionType();
 
             // then
-            assertThat(baseExceptionType)
-                    .isEqualTo(NOT_FOUND_ROLE);
+            assertThat(baseExceptionType).isEqualTo(NOT_FOUND_ROLE);
         }
     }
 
     @Nested
     @DisplayName("역할 제거(delete) 테스트")
-    class DeleteTest {
+    class 역할_제거_테스트 {
 
-        ClubRole 임원역할;
-        ClubRole 일반역할;
+        private final ClubRole 일반역할 = clubRoles.add(club, "새로 생성 일반", GENERAL);
+        private final ClubRole 임원역할 = clubRoles.add(club, "새로 생성 임원", OFFICER);
+        private final List<ClubRole> 추가된_역할들 = List.of(일반역할, 임원역할);
 
         @BeforeEach
         void init() {
-            임원역할 = clubRoles.add(club, "임원역할", OFFICER);
-            일반역할 = clubRoles.add(club, "일반역할", GENERAL);
             for (int i = 0; i < clubRoles.clubRoles().size(); i++) {
                 ReflectionTestUtils.setField(clubRoles.clubRoles().get(i), "id", (long) i + 100L);
             }
@@ -244,15 +262,17 @@ class ClubRolesTest {
         @Test
         void 역할을_제거한다() {
             // when
-            clubRoles.delete(임원역할);
-            clubRoles.delete(일반역할);
+            for (final ClubRole role : 추가된_역할들) {
+                clubRoles.delete(role);
+            }
 
             // then
-            assertThat(clubRoles.clubRoles()).doesNotContain(임원역할, 일반역할);
+            assertThat(clubRoles.clubRoles())
+                    .doesNotContain(임원역할, 일반역할);
         }
 
         @ParameterizedTest(name = "기본 역할은 제거할 수 없다")
-        @EnumSource(mode = EnumSource.Mode.EXCLUDE)
+        @EnumSource(mode = EXCLUDE)
         void 기본_역할은_제거할_수_없다(final ClubRoleCategory category) {
             // given
             ClubRole defaultRole = clubRoles.findDefaultRoleByCategory(category);
@@ -269,16 +289,14 @@ class ClubRolesTest {
     }
 
     @Nested
-    @DisplayName("기본 역할 변경(changeDefaultRole) 테스트")
-    class ChangeDefaultRoleTest {
+    class 기본_역할_변경_테스트 {
 
-        ClubRole 임원역할;
-        ClubRole 일반역할;
+        private final ClubRole 일반역할 = clubRoles.add(club, "일반역할", GENERAL);
+        private final ClubRole 임원역할 = clubRoles.add(club, "임원역할", OFFICER);
+        private final List<ClubRole> 추가된_역할들 = List.of(일반역할, 임원역할);
 
         @BeforeEach
         void init() {
-            임원역할 = clubRoles.add(club, "임원역할", OFFICER);
-            일반역할 = clubRoles.add(club, "일반역할", GENERAL);
             for (int i = 0; i < clubRoles.clubRoles().size(); i++) {
                 ReflectionTestUtils.setField(clubRoles.clubRoles().get(i), "id", (long) i + 100L);
             }
@@ -287,8 +305,9 @@ class ClubRolesTest {
         @Test
         void 기본_역할을_변경한다() {
             // when
-            clubRoles.changeDefaultRole(임원역할.id());
-            clubRoles.changeDefaultRole(일반역할.id());
+            for (final ClubRole role : 추가된_역할들) {
+                clubRoles.changeDefaultRole(role.id());
+            }
 
             // then
             assertAll(

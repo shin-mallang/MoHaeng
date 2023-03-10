@@ -7,7 +7,6 @@ import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
 import static jakarta.persistence.CascadeType.ALL;
@@ -56,7 +55,7 @@ public class ClubRoles {
 
     /* Club에서 호출하여 사용하는 용도 */
     void changeRoleName(final ClubRoleCategory requesterRoleCategory, final Long roleId, final String name) {
-        ClubRole role = findById(roleId).orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
+        ClubRole role = findById(roleId);
         // 회장 -> 모두 가능, 임원 -> 일반 역할만 변경 가능
         validateChangeRoleNameAuthority(requesterRoleCategory, role);
         validateDuplicatedName(name);
@@ -92,7 +91,7 @@ public class ClubRoles {
     /* 해당 역할을 기본 역할로 변경한다.
        Club에서 호출하여 사용하는 용도 */
     void changeDefaultRole(final Long id) {
-        ClubRole defaultRoleCandidate = findById(id).orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
+        ClubRole defaultRoleCandidate = findById(id);
         ClubRole originalDefaultRole = findDefaultRoleByCategory(defaultRoleCandidate.clubRoleCategory());
         defaultRoleCandidate.makeDefault();
         originalDefaultRole.makeNonDefault();
@@ -105,10 +104,11 @@ public class ClubRoles {
                 .orElseThrow(() -> new ClubRoleException(ClubRoleExceptionType.NOT_FOUND_DEFAULT_ROLE));
     }
 
-    public Optional<ClubRole> findById(final Long id) {
+    public ClubRole findById(final Long id) {
         return clubRoles().stream()
                 .filter(it -> id.equals(it.id()))
-                .findAny();
+                .findAny()
+                .orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
     }
 
     public List<ClubRole> clubRoles() {

@@ -211,7 +211,7 @@ public class Club extends BaseEntity {
     }
 
     public ClubRole findRoleById(final Long clubRoleId) {
-        return clubRoles.findById(clubRoleId).orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));
+        return clubRoles.findById(clubRoleId);
     }
 
     public Participant findParticipantByMemberId(final Long memberId) {
