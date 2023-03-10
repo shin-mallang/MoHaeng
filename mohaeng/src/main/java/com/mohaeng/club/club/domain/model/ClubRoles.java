@@ -22,7 +22,7 @@ public class ClubRoles {
     protected ClubRoles() {
     }
 
-    public ClubRoles(final List<ClubRole> defaultRoles) {
+    private ClubRoles(final List<ClubRole> defaultRoles) {
         this.clubRoles = new ArrayList<>(defaultRoles);
     }
 

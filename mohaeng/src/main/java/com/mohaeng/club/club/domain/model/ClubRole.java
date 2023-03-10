@@ -1,10 +1,15 @@
 package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.common.domain.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import java.util.List;
 
+import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -40,24 +45,11 @@ public class ClubRole extends BaseEntity {
         this.isDefault = isDefault;
     }
 
-    //== 정적 메서드 ==//
-    private static ClubRole defaultPresidentRole(final Club club) {
-        return new ClubRole(DEFAULT_PRESIDENT_ROLE_NAME, ClubRoleCategory.PRESIDENT, club, true);
-    }
-
-    private static ClubRole defaultOfficerRole(final Club club) {
-        return new ClubRole(DEFAULT_OFFICER_ROLE_NAME, ClubRoleCategory.OFFICER, club, true);
-    }
-
-    private static ClubRole defaultGeneralRole(final Club club) {
-        return new ClubRole(DEFAULT_GENERAL_ROLE_NAME, ClubRoleCategory.GENERAL, club, true);
-    }
-
     public static List<ClubRole> defaultRoles(final Club club) {
         return List.of(
-                defaultPresidentRole(club),
-                defaultOfficerRole(club),
-                defaultGeneralRole(club)
+                new ClubRole(DEFAULT_PRESIDENT_ROLE_NAME, PRESIDENT, club, true),
+                new ClubRole(DEFAULT_OFFICER_ROLE_NAME, OFFICER, club, true),
+                new ClubRole(DEFAULT_GENERAL_ROLE_NAME, GENERAL, club, true)
         );
     }
 

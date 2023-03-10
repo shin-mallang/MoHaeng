@@ -5,7 +5,12 @@ import com.mohaeng.club.club.exception.ClubRoleExceptionType;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
 import com.mohaeng.member.domain.model.Member;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -53,26 +58,23 @@ class ClubTest {
         club.participants().participants().add(general);
     }
 
-    @Test
-    void 생성_시_모임의_기본_역할과_회장을_같이_저장한다() {
-        // when
-        Club club = clubWithMember(presidentMember);
+    @Nested
+    class 모임_생성_테스트 {
 
-        // then
-        assertThat(club.clubRoles().clubRoles().size()).isEqualTo(3);
-        assertThat(club.clubRoles().clubRoles().stream().map(ClubRole::clubRoleCategory).toList())
-                .containsExactlyInAnyOrderElementsOf(List.of(GENERAL, OFFICER, PRESIDENT));
-        assertThat(club.participants().participants().size()).isEqualTo(1);
-        assertThat(club.participants().participants().get(0).clubRole().clubRoleCategory()).isEqualTo(PRESIDENT);
-    }
+        @Test
+        void 생성_시_모임의_기본_역할과_회장을_같이_저장한다() {
+            // when
+            Club club = clubWithMember(presidentMember);
 
-    @Test
-    void 생성_시_모임의_회원_수는_1이다() {
-        // when
-        Club club = clubWithMember(presidentMember);
-
-        // then
-        assertThat(club.currentParticipantCount()).isEqualTo(1);
+            // then
+            assertThat(club.clubRoles().clubRoles())
+                    .extracting(ClubRole::clubRoleCategory)
+                    .containsExactlyInAnyOrder(GENERAL, OFFICER, PRESIDENT);
+            assertThat(club.participants().participants())
+                    .extracting(Participant::clubRole)
+                    .extracting(ClubRole::clubRoleCategory)
+                    .containsExactly(PRESIDENT);
+        }
     }
 
     @Test
