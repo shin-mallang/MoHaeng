@@ -610,8 +610,8 @@ class ClubTest {
     @Nested
     class 모임의_기본_역할_변경_테스트 {
 
-        private final ClubRole 임원역할 = club.clubRoles().add(club, "임원역할", OFFICER);
-        private final ClubRole 일반역할 = club.clubRoles().add(club, "일반역할", GENERAL);
+        private final ClubRole 임원역할 = club.clubRoles().create(club, "임원역할", OFFICER);
+        private final ClubRole 일반역할 = club.clubRoles().create(club, "일반역할", GENERAL);
 
         @BeforeEach
         void init() {

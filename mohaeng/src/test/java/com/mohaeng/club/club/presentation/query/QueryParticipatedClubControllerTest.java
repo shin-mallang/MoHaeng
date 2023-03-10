@@ -3,7 +3,11 @@ package com.mohaeng.club.club.presentation.query;
 import com.mohaeng.club.club.application.usecase.query.QueryParticipatedClubUseCase;
 import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.common.presentation.ControllerTest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,7 +47,7 @@ class QueryParticipatedClubControllerTest extends ControllerTest {
     @BeforeEach
     void init() {
         clubs = IntStream.range(1, 5)
-                .mapToObj(it -> club((long) it, "clubName " + it, "des", 100, 1))
+                .mapToObj(it -> club((long) it, "clubName " + it, "des", 100))
                 .toList();
     }
 

@@ -100,8 +100,8 @@ class ClubRolesTest {
         @Test
         void 기본_역할이_아닌_역할을_추가한다() {
             // when
-            ClubRole 일반역할 = clubRoles.add(club, "역할1", GENERAL);
-            ClubRole 임원역할 = clubRoles.add(club, "역할2", OFFICER);
+            ClubRole 일반역할 = clubRoles.create(club, "역할1", GENERAL);
+            ClubRole 임원역할 = clubRoles.create(club, "역할2", OFFICER);
 
             // then
             assertAll(
@@ -115,11 +115,11 @@ class ClubRolesTest {
         void 역할_이름이_중복되면_예외() {
             // given
             String duplicatedName = "중복이름";
-            clubRoles.add(club, duplicatedName, GENERAL);
+            clubRoles.create(club, duplicatedName, GENERAL);
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
-                    clubRoles.add(club, duplicatedName, OFFICER)
+                    clubRoles.create(club, duplicatedName, OFFICER)
             ).exceptionType();
 
             // then
@@ -130,7 +130,7 @@ class ClubRolesTest {
         void 회장_역할을_추가하려는_경우_예외() {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
-                    clubRoles.add(club, "something", PRESIDENT)
+                    clubRoles.create(club, "something", PRESIDENT)
             ).exceptionType();
 
             // then
@@ -248,8 +248,8 @@ class ClubRolesTest {
     @DisplayName("역할 제거(delete) 테스트")
     class 역할_제거_테스트 {
 
-        private final ClubRole 일반역할 = clubRoles.add(club, "새로 생성 일반", GENERAL);
-        private final ClubRole 임원역할 = clubRoles.add(club, "새로 생성 임원", OFFICER);
+        private final ClubRole 일반역할 = clubRoles.create(club, "새로 생성 일반", GENERAL);
+        private final ClubRole 임원역할 = clubRoles.create(club, "새로 생성 임원", OFFICER);
         private final List<ClubRole> 추가된_역할들 = List.of(일반역할, 임원역할);
 
         @BeforeEach
@@ -291,8 +291,8 @@ class ClubRolesTest {
     @Nested
     class 기본_역할_변경_테스트 {
 
-        private final ClubRole 일반역할 = clubRoles.add(club, "일반역할", GENERAL);
-        private final ClubRole 임원역할 = clubRoles.add(club, "임원역할", OFFICER);
+        private final ClubRole 일반역할 = clubRoles.create(club, "일반역할", GENERAL);
+        private final ClubRole 임원역할 = clubRoles.create(club, "임원역할", OFFICER);
         private final List<ClubRole> 추가된_역할들 = List.of(일반역할, 임원역할);
 
         @BeforeEach

@@ -30,7 +30,7 @@ public class ClubRoles {
     }
 
     /* Club에서 호출하여 사용하는 용도 */
-    ClubRole add(final Club club, final String name, final ClubRoleCategory category) {
+    ClubRole create(final Club club, final String name, final ClubRoleCategory category) {
         validatePresidentRole(category);
         validateDuplicatedName(name);
         ClubRole clubRole = new ClubRole(name, category, club, false);

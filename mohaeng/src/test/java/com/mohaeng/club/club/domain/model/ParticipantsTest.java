@@ -2,7 +2,12 @@ package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -34,7 +39,7 @@ class ParticipantsTest {
 
     @BeforeEach
     void init() {
-        participants = Participants.initWithPresident(president);
+        participants = Participants.initWithPresident(100, president);
         officer = participants.register(member(2L), club, clubRoleMap.get(OFFICER));
         general = participants.register(member(3L), club, clubRoleMap.get(GENERAL));
         ReflectionTestUtils.setField(president, "id", 1L);
@@ -45,7 +50,7 @@ class ParticipantsTest {
     @Test
     void initWithPresident_는_회장만을_포함한_Participants_를_반환한다() {
         // when
-        Participants participants = Participants.initWithPresident(president);
+        Participants participants = Participants.initWithPresident(100, president);
 
         // then
         assertThat(participants.participants().size()).isEqualTo(1);
@@ -56,10 +61,10 @@ class ParticipantsTest {
     void initWithPresident_는_회장이_아닌_경우_예외를_발생한다() {
         // when
         BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
-                Participants.initWithPresident(officer)
+                Participants.initWithPresident(100, officer)
         ).exceptionType();
         BaseExceptionType baseExceptionType2 = assertThrows(ParticipantException.class, () ->
-                Participants.initWithPresident(general)
+                Participants.initWithPresident(100, general)
         ).exceptionType();
 
         // then
@@ -70,10 +75,10 @@ class ParticipantsTest {
     @Test
     void findByMemberId_는_MemberId가_일치하는_참여자를_반환한다() {
         // when & then
-        assertThat(participants.findByMemberId(president.member().id())).isPresent();
-        assertThat(participants.findByMemberId(officer.member().id())).isPresent();
-        assertThat(participants.findByMemberId(general.member().id())).isPresent();
-        assertThat(participants.findByMemberId(1000L)).isEmpty();
+        assertThat(participants.findByMemberId(president.member().id())).isNotNull();
+        assertThat(participants.findByMemberId(officer.member().id())).isNotNull();
+        assertThat(participants.findByMemberId(general.member().id())).isNotNull();
+        assertThrows(ParticipantException.class, () -> participants.findByMemberId(1000L));
     }
 
     @Test
@@ -98,8 +103,8 @@ class ParticipantsTest {
     @Test
     void findById_는_참여자의_id_를_통해_참여자를_찾는다() {
         // when & then
-        assertThat(participants.findById(officer.id()).get()).isEqualTo(officer);
-        assertThat(participants.findById(1000L)).isEmpty();
+        assertThat(participants.findById(officer.id())).isEqualTo(officer);
+        assertThrows(ParticipantException.class, () -> participants.findById(1000L));
     }
 
     @Test
@@ -190,7 +195,7 @@ class ParticipantsTest {
         void 대상자가_해당_모임의_참여자_목록에_없는경우_예외() {
             // when
             BaseExceptionType baseExceptionType = assertThrows(ParticipantException.class, () -> {
-                participants.delegatePresident(officer.member().id(), 112312L, clubRoleMap.get(GENERAL));
+                participants.delegatePresident(president.member().id(), 112312L, clubRoleMap.get(GENERAL));
             }).exceptionType();
 
             // then
