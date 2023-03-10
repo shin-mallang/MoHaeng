@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.mohaeng.club.club.domain.model.QClub.club;
+import static com.mohaeng.club.club.domain.model.QParticipant.participant;
 import static java.util.Optional.ofNullable;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -44,6 +45,24 @@ public class JpaClubQueryRepository implements ClubQueryRepository {
         JPAQuery<Long> countQuery = query.select(club.count())
                 .from(club)
                 .where(nameLike(clubSearchCond.name()));
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<Club> findAllByMemberId(final Long memberId, final Pageable pageable) {
+        final List<Club> contents = query.selectFrom(club)
+                .join(participant)
+                .on(participant.club.eq(club))
+                .where(participant.member.id.eq(memberId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        final JPAQuery<Long> countQuery = query.select(club.count())
+                .join(participant)
+                .on(participant.club.eq(club))
+                .where(participant.member.id.eq(memberId));
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
     }
