@@ -113,13 +113,10 @@ public class Club extends BaseEntity {
     public void deleteRole(final Long memberId, final Long targetRoleId) {
         Participant participant = findParticipantByMemberId(memberId);
         validateAuthorityDeleteRole(participant);
-        ClubRole targetRole = findRoleById(targetRoleId);
 
-        clubRoles.delete(targetRole);
+        final ClubRole deleted = clubRoles.delete(targetRoleId);
         // 쿼리는 나중에 나가므로 삭제 먼저 해도 상관이 없다
-        List<Participant> changeRoleTargets = findAllParticipantByClubRole(targetRole);
-        ClubRole changedRole = findDefaultRoleByCategory(targetRole.clubRoleCategory());
-        changeRoleTargets.forEach(it -> it.changeRole(changedRole));
+        participants.replaceDeletedRoleIntoDefault(deleted);
     }
 
     /* 회장 혹은 임원만이 역할 제거가 가능하다 */
@@ -134,7 +131,7 @@ public class Club extends BaseEntity {
      * 회장과 임원만이 가능하다
      */
     public void changeDefaultRole(final Long memberId, final Long roleId) {
-        Participant participant = findParticipantByMemberId(memberId);
+        final Participant participant = findParticipantByMemberId(memberId);
         validateAuthorityChangeDefaultRole(participant);
         clubRoles.changeDefaultRole(roleId);
     }
@@ -182,10 +179,6 @@ public class Club extends BaseEntity {
 
     public Participant findPresident() {
         return participants.findPresident();
-    }
-
-    private List<Participant> findAllParticipantByClubRole(final ClubRole targetRole) {
-        return participants.findAllParticipantByClubRole(targetRole);
     }
 
     // == Getter ==//

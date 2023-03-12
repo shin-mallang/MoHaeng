@@ -134,6 +134,15 @@ public class Participants {
         originalPresident.changeRole(generalRole);
     }
 
+    /**
+     * 주어진 역할을 가진 참여자들의 역할을 같은 범주의 기본 역할로 변경한다
+     */
+    public void replaceDeletedRoleIntoDefault(final ClubRole deletedRole) {
+        final List<Participant> changeRoleTargets = findAllParticipantByClubRole(deletedRole);
+        final ClubRole changedRole = deletedRole.club().findDefaultRoleByCategory(deletedRole.clubRoleCategory());
+        changeRoleTargets.forEach(it -> it.changeRole(changedRole));
+    }
+
     private void validateDeletePresident(final Participant president) {
         if (!president.isPresident()) {
             throw new ParticipantException(NO_AUTHORITY_DELEGATE_PRESIDENT);
@@ -171,8 +180,8 @@ public class Participants {
                 .filter(it -> it.clubRole().equals(targetRole))
                 .toList();
     }
-
     // == Getter == //
+
     public List<Participant> participants() {
         return participants;
     }

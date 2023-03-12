@@ -263,7 +263,7 @@ class ClubRolesTest {
         void 역할을_제거한다() {
             // when
             for (final ClubRole role : 추가된_역할들) {
-                clubRoles.delete(role);
+                clubRoles.delete(role.id());
             }
 
             // then
@@ -279,7 +279,7 @@ class ClubRolesTest {
 
             // when
             BaseExceptionType baseExceptionType = assertThrows(ClubRoleException.class, () ->
-                    clubRoles.delete(defaultRole)
+                    clubRoles.delete(defaultRole.id())
             ).exceptionType();
 
             // then

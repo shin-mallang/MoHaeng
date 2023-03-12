@@ -206,4 +206,30 @@ class ParticipantsTest {
             );
         }
     }
+
+    @Test
+    void 역할이_제거된_참여자들의_역할을_기본_역할로_변경한다() {
+        // given
+        final ClubRole role = club.createRole(president.member().id(), "새로", GENERAL);
+        participants.register(member(11L), club, role);
+        participants.register(member(12L), club, role);
+
+        assertAll(
+                () -> assertThat(participants.findByMemberId(11L).clubRole())
+                        .isEqualTo(role),
+                () -> assertThat(participants.findByMemberId(12L).clubRole())
+                        .isEqualTo(role)
+        );
+
+        // when
+        participants.replaceDeletedRoleIntoDefault(role);
+
+        // then
+        assertAll(
+                () -> assertThat(participants.findByMemberId(11L).clubRole())
+                        .isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
+                () -> assertThat(participants.findByMemberId(12L).clubRole())
+                        .isEqualTo(club.findDefaultRoleByCategory(GENERAL))
+        );
+    }
 }

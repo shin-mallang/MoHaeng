@@ -76,9 +76,11 @@ public class ClubRoles {
     }
 
     /* Club에서 호출하여 사용하는 용도 */
-    void delete(final ClubRole targetRole) {
+    ClubRole delete(final Long clubRoleId) {
+        ClubRole targetRole = findById(clubRoleId);
         validateDeletedTargetIsDefaultRole(targetRole);
         this.clubRoles().remove(targetRole);
+        return targetRole;
     }
 
     /* 기본 역할은 제거할 수 없다 */
