@@ -54,7 +54,7 @@ class QueryParticipatedClubControllerTest extends ControllerTest {
     @Test
     void 자신이_가입만_모임들을_조회한다() throws Exception {
         Pageable pageable = PageRequest.of(0, 10);
-        club = new PageImpl<>(clubs, pageable, clubs.stream().count())
+        club = new PageImpl<>(clubs, pageable, clubs.size())
                 .map(QueryParticipatedClubUseCase.Result::from);
 
         // given
