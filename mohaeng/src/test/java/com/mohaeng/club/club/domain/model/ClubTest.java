@@ -17,8 +17,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.*;
 import static com.mohaeng.club.club.exception.ClubRoleExceptionType.*;
@@ -38,23 +36,22 @@ import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 class ClubTest {
 
     private final Long presidentMemberId = 1L;
-    private final Long officerMemberId = 2L;
-    private final Long generalMemberId = 3L;
-    private final Long presidentId = 1L;
-    private final Long officerId = 2L;
-    private final Long generalId = 3L;
     private final Member presidentMember = member(presidentMemberId);
     private final Club club = clubWithMember(presidentMember);
-    private final Map<ClubRoleCategory, ClubRole> clubRoleMap =
-            ClubRole.defaultRoles(club).stream()
-                    .collect(Collectors.toMap(ClubRole::clubRoleCategory, it -> it));
     private final Participant president = club.findPresident();
-    private final Participant officer = participantWithId(officerId, member(officerMemberId), club, clubRoleMap.get(OFFICER));
-    private final Participant general = participantWithId(generalId, member(generalMemberId), club, clubRoleMap.get(GENERAL));
+
+    private final Long officerMemberId = 2L;
+    private final Long officerId = 2L;
+
+    private final Long generalMemberId = 3L;
+    private final Long generalId = 3L;
+
+    private final Participant officer = participantWithId(officerId, member(officerMemberId), club, club.findDefaultRoleByCategory(OFFICER));
+    private final Participant general = participantWithId(generalId, member(generalMemberId), club, club.findDefaultRoleByCategory(GENERAL));
 
     @BeforeEach
     void init() {
-        ReflectionTestUtils.setField(president, "id", presidentId);
+        ReflectionTestUtils.setField(president, "id", 1L);
         club.participants().participants().add(officer);
         club.participants().participants().add(general);
     }
@@ -98,7 +95,7 @@ class ClubTest {
     }
 
     @Test
-    void findPresident_는_회장을_반환한다() {
+    void 회장을_찾아_반환한다() {
         // when
         Participant president = club.findPresident();
 
@@ -157,7 +154,7 @@ class ClubTest {
     }
 
     @Nested
-    class 모임_탈퇴_테스트 {
+    class deleteParticipant_로_모임_탈퇴_시 {
 
         @Test
         void 회장이_아닌_회원은_모임에서_탈퇴할_수_있다() {
@@ -191,7 +188,7 @@ class ClubTest {
     }
 
     @Test
-    void findAllParticipant_는_모든_참가자를_반환한다() {
+    void 모든_참가자를_반환한다() {
         // when
         List<Participant> allParticipant = club.findAllParticipant();
 
@@ -200,7 +197,7 @@ class ClubTest {
     }
 
     @Nested
-    class 참여자_추방_테스트 {
+    class expel_로_참여자_추방_시 {
 
         @Test
         void 대상_참여자를_모임에서_추방한다() {
@@ -242,7 +239,7 @@ class ClubTest {
     }
 
     @Nested
-    class 참가자의_역할_변경_테스트 {
+    class changeParticipantRole_로_참가자의_역할_변경_시 {
 
         private final Long presidentRoleId = 1L;
         private final Long officerRoleId = 2L;
@@ -281,10 +278,12 @@ class ClubTest {
             ).exceptionType();
 
             // then
-            assertThat(club.findParticipantById(officerId).isManager()).isTrue();
-            assertThat(club.findParticipantById(generalId).isManager()).isFalse();
-            assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE);
-            assertThat(baseExceptionType2).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE);
+            assertAll(
+                    () -> assertThat(club.findParticipantById(officerId).isManager()).isTrue(),
+                    () -> assertThat(club.findParticipantById(generalId).isManager()).isFalse(),
+                    () -> assertThat(baseExceptionType1).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE),
+                    () -> assertThat(baseExceptionType2).isEqualTo(NO_AUTHORITY_CHANGE_PARTICIPANT_ROLE)
+            );
         }
 
         @Test
@@ -310,9 +309,11 @@ class ClubTest {
             ).exceptionType();
 
             // then
-            assertThat(club.findParticipantById(generalId).isManager()).isFalse();
-            assertThat(baseExceptionType1).isEqualTo(NOT_FOUND_PARTICIPANT);
-            assertThat(baseExceptionType2).isEqualTo(NOT_FOUND_PARTICIPANT);
+            assertAll(
+                    () -> assertThat(club.findParticipantById(generalId).isManager()).isFalse(),
+                    () -> assertThat(baseExceptionType1).isEqualTo(NOT_FOUND_PARTICIPANT),
+                    () -> assertThat(baseExceptionType2).isEqualTo(NOT_FOUND_PARTICIPANT)
+            );
         }
 
         @Test
@@ -328,7 +329,7 @@ class ClubTest {
     }
 
     @Nested
-    class 역할_생성_테스트 {
+    class createRole_로_역할_생성_시 {
 
         @Test
         void 회장과_임원은_모임_역할을_생성할_수_있다() {
@@ -393,7 +394,7 @@ class ClubTest {
     }
 
     @Nested
-    class 역할_이름_변경_테스트 {
+    class changeRoleName_로_역할_이름_변경_시 {
 
         private final Long presidentRoleId = 1L;
         private final Long officerRoleId = 2L;
@@ -509,7 +510,7 @@ class ClubTest {
     }
 
     @Nested
-    class 역할_제거_테스트 {
+    class deleteRole_로_역할_제거_시 {
 
         private final ClubRole 새로생성된_임원_역할1 = club.createRole(presidentMemberId, "새로생성된임원역할1", OFFICER);
         private final ClubRole 새로생성된_임원_역할2 = club.createRole(presidentMemberId, "새로생성된임원역할2", OFFICER);
@@ -609,7 +610,7 @@ class ClubTest {
     }
 
     @Nested
-    class 모임의_기본_역할_변경_테스트 {
+    class changeDefaultRole_모임의_기본_역할_변경_테스트 {
 
         private final ClubRole 임원역할 = club.clubRoles().create(club, "임원역할", OFFICER);
         private final ClubRole 일반역할 = club.clubRoles().create(club, "일반역할", GENERAL);
@@ -668,7 +669,7 @@ class ClubTest {
     }
 
     @Nested
-    class 회장_위임_테스트 {
+    class delegatePresident_회장_위임_테스트 {
 
         @Test
         void 회장은_임임의_회원을_차기_회장으로_위임할_수_있다() {
@@ -738,7 +739,7 @@ class ClubTest {
     }
 
     @Test
-    void 참여자가_존재하는지_여부를_확인할_수_있다() {
+    void contains_는_참여자가_존재하는지_여부를_확인한다() {
         // given
         final Club other = ClubFixture.clubWithMember(member(100L));
         final Participant otherPresident = other.findPresident();

@@ -48,38 +48,43 @@ class ParticipantsTest {
         ReflectionTestUtils.setField(general, "id", 3L);
     }
 
-    @Test
-    void initWithPresident_는_회장만을_포함한_Participants_를_반환한다() {
-        // when
-        Participants participants = Participants.initWithPresident(100, president);
+    @Nested
+    class initWithPresident_로_생성_시 {
+        @Test
+        void 회장만을_포함한_Participants_를_반환한다() {
+            // when
+            Participants participants = Participants.initWithPresident(100, president);
 
-        // then
-        assertThat(participants.participants().size()).isEqualTo(1);
-        assertThat(participants.participants().get(0)).isEqualTo(president);
+            // then
+            assertThat(participants.participants().size()).isEqualTo(1);
+            assertThat(participants.participants().get(0)).isEqualTo(president);
+        }
+
+        @Test
+        void participant_가_회장이_아닌_경우_예외를_발생한다() {
+            // when
+            BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
+                    Participants.initWithPresident(100, officer)
+            ).exceptionType();
+            BaseExceptionType baseExceptionType2 = assertThrows(ParticipantException.class, () ->
+                    Participants.initWithPresident(100, general)
+            ).exceptionType();
+
+            // then
+            assertThat(baseExceptionType1).isEqualTo(NOT_PRESIDENT);
+            assertThat(baseExceptionType2).isEqualTo(NOT_PRESIDENT);
+        }
     }
 
     @Test
-    void initWithPresident_는_회장이_아닌_경우_예외를_발생한다() {
-        // when
-        BaseExceptionType baseExceptionType1 = assertThrows(ParticipantException.class, () ->
-                Participants.initWithPresident(100, officer)
-        ).exceptionType();
-        BaseExceptionType baseExceptionType2 = assertThrows(ParticipantException.class, () ->
-                Participants.initWithPresident(100, general)
-        ).exceptionType();
-
-        // then
-        assertThat(baseExceptionType1).isEqualTo(NOT_PRESIDENT);
-        assertThat(baseExceptionType2).isEqualTo(NOT_PRESIDENT);
-    }
-
-    @Test
-    void findByMemberId_는_MemberId가_일치하는_참여자를_반환한다() {
+    void findByMemberId_는_memberId가_일치하는_참여자를_반환한다() {
         // when & then
-        assertThat(participants.findByMemberId(president.member().id())).isNotNull();
-        assertThat(participants.findByMemberId(officer.member().id())).isNotNull();
-        assertThat(participants.findByMemberId(general.member().id())).isNotNull();
-        assertThrows(ParticipantException.class, () -> participants.findByMemberId(1000L));
+        assertAll(
+                () -> assertThat(participants.findByMemberId(president.member().id())).isNotNull(),
+                () -> assertThat(participants.findByMemberId(officer.member().id())).isNotNull(),
+                () -> assertThat(participants.findByMemberId(general.member().id())).isNotNull(),
+                () -> assertThrows(ParticipantException.class, () -> participants.findByMemberId(1000L))
+        );
     }
 
     @Test

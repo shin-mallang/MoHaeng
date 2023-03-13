@@ -18,7 +18,7 @@ import static org.mockito.Mockito.mock;
 @DisplayName("ClubRole 은")
 class ClubRoleTest {
 
-    private static ClubRole clubRoleWithDefault(final boolean isDefault) {
+    private ClubRole clubRoleWithDefault(final boolean isDefault) {
         return new ClubRole("name", PRESIDENT, mock(Club.class), isDefault);
     }
 
