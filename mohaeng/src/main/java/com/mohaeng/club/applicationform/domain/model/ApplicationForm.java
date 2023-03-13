@@ -5,7 +5,11 @@ import com.mohaeng.club.club.domain.model.Club;
 import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED;
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION;
@@ -52,7 +56,7 @@ public class ApplicationForm extends BaseEntity {
     public void approve(final Participant manager) {
         validateProcess(manager);
         process();
-        club().registerParticipant(this.applicant());
+        club.registerParticipant(applicant);
     }
 
     public void reject(final Participant manager) {
@@ -61,7 +65,7 @@ public class ApplicationForm extends BaseEntity {
     }
 
     private void validateProcess(final Participant manager) {
-        if (!manager.isManager() || !manager.club().equals(club())) {
+        if (!manager.isManager() || !club.contains(manager)) {
             throw new ApplicationFormException(NO_AUTHORITY_PROCESS_APPLICATION);
         }
     }

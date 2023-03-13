@@ -44,7 +44,7 @@ public abstract class ClubCommandTest {
     protected void 모임을_저장하고_한명의_임원진과_한명의_일반_참여자를_저장한다() {
         presidentMember = saveMember(memberRepository, member(null));
         club = saveClub(clubRepository, clubWithMember(presidentMember));
-        president = club.participants().findByMemberId(presidentMember.id()).get();
+        president = club.findParticipantByMemberId(presidentMember.id());
         officer = saveOfficer(memberRepository, club);
         general = saveGeneral(memberRepository, club);
         flushAndClear();

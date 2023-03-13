@@ -41,7 +41,7 @@ class FillOutApplicationFormTest extends ApplicationFormCommandTest {
     @Test
     void 가입이_거절되었더라도_다시_신청할_수_있다() {
         // given
-        president = club.participants().findByMemberId(presidentMember.id()).get();  // equals 비교를 위해 영속성 컨텍스트에 올리기
+        president = club.findParticipantByMemberId(presidentMember.id());  // equals 비교를 위해 영속성 컨텍스트에 올리기
         ApplicationForm saved = applicationFormRepository.save(ApplicationForm.create(club, applicant));
         saved.reject(president);
 

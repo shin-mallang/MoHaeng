@@ -15,10 +15,9 @@ public class ClubFixture {
     public static final int ANA_MAX_PARTICIPANT_COUNT = 100;
     public static final int FULL_PARTICIPANT_COUNT = 1;
 
-    public static Club club(final Long id, final String name, final String des, final int maxParticipantCount, final int currentParticipantCount) {
+    public static Club club(final Long id, final String name, final String des, final int maxParticipantCount) {
         Club club = new Club(name, des, maxParticipantCount, member(1L));
         ReflectionTestUtils.setField(club, "id", id);
-        ReflectionTestUtils.setField(club, "currentParticipantCount", currentParticipantCount);
         ReflectionTestUtils.setField(club, "createdAt", LocalDateTime.now());
         return club;
     }
