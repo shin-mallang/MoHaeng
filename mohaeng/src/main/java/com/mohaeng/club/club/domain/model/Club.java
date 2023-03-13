@@ -149,6 +149,10 @@ public class Club extends BaseEntity {
         participants.delegatePresident(presidentMemberId, candidateParticipantId, findDefaultRoleByCategory(GENERAL));
     }
 
+    public boolean contains(final Participant participant) {
+        return participants.contains(participant);
+    }
+
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
         return clubRoles.findDefaultRoleByCategory(category);
     }

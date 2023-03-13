@@ -199,4 +199,8 @@ public class Participants {
     int size() {
         return participants.size();
     }
+
+    boolean contains(final Participant participant) {
+        return participants.contains(participant);
+    }
 }

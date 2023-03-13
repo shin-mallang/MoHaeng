@@ -2,6 +2,7 @@ package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
+import com.mohaeng.common.fixtures.ClubFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -39,7 +40,7 @@ class ParticipantsTest {
 
     @BeforeEach
     void init() {
-        participants = Participants.initWithPresident(100, president);
+        participants = club.participants();
         officer = participants.register(member(2L), club, clubRoleMap.get(OFFICER));
         general = participants.register(member(3L), club, clubRoleMap.get(GENERAL));
         ReflectionTestUtils.setField(president, "id", 1L);
@@ -230,6 +231,21 @@ class ParticipantsTest {
                         .isEqualTo(club.findDefaultRoleByCategory(GENERAL)),
                 () -> assertThat(participants.findByMemberId(12L).clubRole())
                         .isEqualTo(club.findDefaultRoleByCategory(GENERAL))
+        );
+    }
+
+    @Test
+    void 참여자가_존재하는지_여부를_확인할_수_있다() {
+        // given
+        final Club other = ClubFixture.clubWithMember(member(100L));
+        final Participant otherPresident = other.findPresident();
+
+        // then
+        assertAll(
+                () -> assertThat(club.contains(president)).isTrue(),
+                () -> assertThat(club.contains(officer)).isTrue(),
+                () -> assertThat(club.contains(general)).isTrue(),
+                () -> assertThat(club.contains(otherPresident)).isFalse()
         );
     }
 }

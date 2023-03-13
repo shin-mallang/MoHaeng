@@ -3,46 +3,56 @@ package com.mohaeng.club.applicationform.domain;
 import com.mohaeng.club.applicationform.domain.model.ApplicationForm;
 import com.mohaeng.club.applicationform.exception.ApplicationFormException;
 import com.mohaeng.club.club.domain.model.Club;
+import com.mohaeng.club.club.domain.model.ClubRoleCategory;
 import com.mohaeng.club.club.domain.model.Participant;
 import com.mohaeng.club.club.exception.ClubException;
 import com.mohaeng.club.club.exception.ParticipantException;
 import com.mohaeng.common.exception.BaseExceptionType;
-import com.mohaeng.common.fixtures.ParticipantFixture;
 import com.mohaeng.member.domain.model.Member;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.ALREADY_PROCESSED;
 import static com.mohaeng.club.applicationform.exception.ApplicationFormExceptionType.NO_AUTHORITY_PROCESS_APPLICATION;
 import static com.mohaeng.club.club.exception.ClubExceptionType.CLUB_IS_FULL;
 import static com.mohaeng.club.club.exception.ParticipantExceptionType.ALREADY_EXIST_PARTICIPANT;
 import static com.mohaeng.common.fixtures.ApplicationFormFixture.applicationForm;
-import static com.mohaeng.common.fixtures.ClubFixture.club;
+import static com.mohaeng.common.fixtures.ClubFixture.clubWithMember;
 import static com.mohaeng.common.fixtures.ClubFixture.fullClubWithMember;
 import static com.mohaeng.common.fixtures.MemberFixture.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @DisplayName("ApplicationForm(가입 신청서) 은")
 class ApplicationFormTest {
 
-    private final Member applicant = member(10000L);
-    private final Club club = club(1L);
+    private Member presidentMember;
+    private Member applicant;
+    private Club club;
     private Participant general;
     private Participant president;
-    private ApplicationForm applicationForm = applicationForm(club, applicant);
-    private ApplicationForm applicationForm2 = applicationForm(club, applicant);
+    private ApplicationForm applicationForm;
+    private ApplicationForm applicationForm2;
 
     @BeforeEach
     void init() {
-        this.general = ParticipantFixture.mockGeneral(club);
-        this.president = ParticipantFixture.mockPresident(club);
+        presidentMember = member(1L);
+        applicant = member(2L);
+        club = clubWithMember(presidentMember);
+        general = club.participants().register(member(3L), club, club.findDefaultRoleByCategory(ClubRoleCategory.GENERAL));
+        president = club.findPresident();
+        applicationForm = ApplicationForm.create(club, applicant);
+        applicationForm2 = ApplicationForm.create(club, applicant);
     }
 
     @Test
     void 수락될_수_있다() {
+
         // when
         applicationForm.approve(president);
 
@@ -77,10 +87,9 @@ class ApplicationFormTest {
     @Test
     void 수락_시_모임이_가득_찬_경우_예외가_발생한다() {
         // given
-        Member member = member(10L);
-        Club full = fullClubWithMember(member);
+        Club full = fullClubWithMember(presidentMember);
+        president = full.findPresident();
         ApplicationForm applicationForm = applicationForm(full, applicant);
-        when(president.club()).thenReturn(full);
 
         // when
         BaseExceptionType baseExceptionType =
