@@ -150,33 +150,33 @@ public class Participants {
     }
 
     boolean existByMemberId(final Long id) {
-        return participants().stream()
+        return participants.stream()
                 .anyMatch(it -> id.equals(it.member().id()));
     }
 
     Participant findByMemberId(final Long id) {
-        return participants().stream()
+        return participants.stream()
                 .filter(it -> id.equals(it.member().id()))
                 .findAny()
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
     }
 
     Participant findById(final Long id) {
-        return participants().stream()
+        return participants.stream()
                 .filter(it -> id.equals(it.id()))
                 .findAny()
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PARTICIPANT));
     }
 
     Participant findPresident() {
-        return participants().stream()
+        return participants.stream()
                 .filter(it -> it.clubRole().clubRoleCategory() == ClubRoleCategory.PRESIDENT)
                 .findAny()
                 .orElseThrow(() -> new ParticipantException(NOT_FOUND_PRESIDENT));
     }
 
     List<Participant> findAllParticipantByClubRole(final ClubRole targetRole) {
-        return participants().stream()
+        return participants.stream()
                 .filter(it -> it.clubRole().equals(targetRole))
                 .toList();
     }
@@ -187,13 +187,9 @@ public class Participants {
     }
 
     List<Participant> findAllManager() {
-        return participants().stream()
+        return participants.stream()
                 .filter(Participant::isManager)
                 .toList();
-    }
-
-    int maxParticipantCount() {
-        return maxParticipantCount;
     }
 
     int size() {
@@ -202,5 +198,9 @@ public class Participants {
 
     boolean contains(final Participant participant) {
         return participants.contains(participant);
+    }
+
+    int maxParticipantCount() {
+        return maxParticipantCount;
     }
 }

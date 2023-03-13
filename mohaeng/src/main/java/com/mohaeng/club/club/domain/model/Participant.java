@@ -2,7 +2,11 @@ package com.mohaeng.club.club.domain.model;
 
 import com.mohaeng.common.domain.BaseEntity;
 import com.mohaeng.member.domain.model.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.GENERAL;
 import static com.mohaeng.club.club.domain.model.ClubRoleCategory.PRESIDENT;
@@ -49,10 +53,10 @@ public class Participant extends BaseEntity {
     }
 
     public boolean isManager() {
-        return this.clubRole().clubRoleCategory() != GENERAL;
+        return clubRole.clubRoleCategory() != GENERAL;
     }
 
     public boolean isPresident() {
-        return this.clubRole().clubRoleCategory() == PRESIDENT;
+        return clubRole.clubRoleCategory() == PRESIDENT;
     }
 }

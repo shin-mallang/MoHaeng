@@ -34,7 +34,7 @@ public class ClubRoles {
         validatePresidentRole(category);
         validateDuplicatedName(name);
         ClubRole clubRole = new ClubRole(name, category, club, false);
-        this.clubRoles().add(clubRole);
+        clubRoles.add(clubRole);
         return clubRole;
     }
 
@@ -45,7 +45,7 @@ public class ClubRoles {
     }
 
     private void validateDuplicatedName(final String name) {
-        this.clubRoles().stream()
+        clubRoles.stream()
                 .filter(it -> name.equals(it.name()))
                 .findAny()
                 .ifPresent((it) -> {
@@ -79,7 +79,7 @@ public class ClubRoles {
     ClubRole delete(final Long clubRoleId) {
         ClubRole targetRole = findById(clubRoleId);
         validateDeletedTargetIsDefaultRole(targetRole);
-        this.clubRoles().remove(targetRole);
+        clubRoles.remove(targetRole);
         return targetRole;
     }
 
@@ -100,14 +100,14 @@ public class ClubRoles {
     }
 
     public ClubRole findDefaultRoleByCategory(final ClubRoleCategory category) {
-        return clubRoles().stream().filter(ClubRole::isDefault)
+        return clubRoles.stream().filter(ClubRole::isDefault)
                 .filter(it -> it.clubRoleCategory() == category)
                 .findAny()
                 .orElseThrow(() -> new ClubRoleException(ClubRoleExceptionType.NOT_FOUND_DEFAULT_ROLE));
     }
 
     public ClubRole findById(final Long id) {
-        return clubRoles().stream()
+        return clubRoles.stream()
                 .filter(it -> id.equals(it.id()))
                 .findAny()
                 .orElseThrow(() -> new ClubRoleException(NOT_FOUND_ROLE));

@@ -58,11 +58,11 @@ public class ClubRole extends BaseEntity {
     }
 
     public void makeDefault() {
-        this.isDefault = true;
+        isDefault = true;
     }
 
     public void makeNonDefault() {
-        this.isDefault = false;
+        isDefault = false;
     }
 
     public String name() {
